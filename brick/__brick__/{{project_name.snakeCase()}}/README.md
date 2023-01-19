@@ -1,34 +1,34 @@
-# {{#pascallCase}}{{project_name}}{{/pascalCase}}
+# {{#titleCase}}{{project_name}}{{/titleCase}}
 
 [![ci][ci_badge]][ci_badge_link]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
 
 ---
+
 ## Setting up 💻
 
 ### Installing FVM
- - Windows 
-    1. Install chocolatey from [here][chocolatey_link].
-    2. Then, `choco install fvm`
- - MacOS
-    1. `brew tap leoafarias/fvm`
-    2. `brew install fvm`
 
-
+- Windows
+  1. Install chocolatey from [here][chocolatey_link].
+  2. Then, `choco install fvm`
+- MacOS
+  1. `brew tap leoafarias/fvm`
+  2. `brew install fvm`
 
 ### Installing Make
+
 This project uses a makefile to easily run commands
 
-  - Windows
-    1. Install chocolatey from [here][chocolatey_link].
-    2. Then, `choco install make.`
-  - MacOS
-    1. `brew install make`
+- Windows
+  1. Install chocolatey from [here][chocolatey_link].
+  2. Then, `choco install make.`
+- MacOS
+  1. `brew install make`
 
-**Note**: To learn more about the pre defined `make` commands, see the **Makefile** found in the  root of the project directory.
+**Note**: To learn more about the pre defined `make` commands, see the **Makefile** found in the root of the project directory.
 
- 
 ## Getting Started 🚀
 
 This project contains 3 flavors:
@@ -50,7 +50,6 @@ $ flutter run --flavor staging --target lib/main_staging.dart
 # Production
 $ flutter run --flavor production --target lib/main_production.dart
 ```
-
 
 ---
 
@@ -79,6 +78,7 @@ $ make lcov_report_win
 ```
 
 ### Generating goldens file
+
 ```Mac
 # Generate goldens for macOS
 $ make goldens_mac
@@ -89,17 +89,20 @@ $ make goldens_mac
 $ make goldens_win
 ```
 
-### Updating goldens file
+### Updating Remote Goldens File
+
 1. Update the `goldensVersion` variable found in `flutter_test_config.dart` under **TestConfig** class
 2. Generate the goldens file (`make goldens_mac` or `make goldens_win`)
 
-### Modifying goldens goldenTestsThreshold
+### Modifying Goldens Tests Threshold
+
 1. Modify the `goldenTestsThreshold` variable found in `flutter_test_config.dart` under **TestConfig** class
-2. Update 
+2. Update
 
 ## Static Code Analysis
 
 ### Dart Code Metrics
+
 ```Analyze
 # Generate Dart Code Metrics HTML Report for Windows
 $ make metrics_win
@@ -116,21 +119,22 @@ $ make check_unused_codes
 $ make  check_unused_files
 ```
 
-
 ### Dependency Validator
+
 ```Check unused dependencies
 # Run dependency validator
 $ make dependency_validator
 ```
+
 ---
 
 ## Working with Translations 🌐
 
 This project relies on [flutter_localizations][flutter_localizations_link] and [intl][intl_link] and uses [intl_utils][intl_utils_link] to create a binding between your translations from .arb files and your Flutter app.
 
-
 ### Localization Naming Conventions
-1. For common or general purpose strings: 
+
+1.  For common or general purpose strings:
     - Pattern
     ```
     "common_$string" : "$value"
@@ -140,8 +144,8 @@ This project relies on [flutter_localizations][flutter_localizations_link] and [
          "common_ok": "OK",
          "common_cancel": "Cancel",
         ```
-2. For featured specific strings:
-     - Pattern
+2.  For featured specific strings:
+    - Pattern
     ```
     "$featureName__$where__$string" : "$value"
     ```
@@ -151,7 +155,7 @@ This project relies on [flutter_localizations][flutter_localizations_link] and [
          "login__button_text__sign_up": "Sign Up",
          "registration__label_text__first_name":"First Name",
         ```
-         
+
 ### Adding Strings
 
 1. To add a new localizable string, open the `app_en.arb` file at `assets/l10n/app_en.arb`.
@@ -226,7 +230,7 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
     "login__button_text__sign_in": "Sign In",
     "login__button_text__sign_up": "Sign Up",
     "registration__label_text__first_name":"First Name",
-    
+
 }
 ```
 
@@ -242,6 +246,7 @@ Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info
     "registration__label_text__first_name":"Primer nombre",
 }
 ```
+
 [ci_badge]: https://github.com/VeryGoodOpenSource/very_good_coverage/workflows/ci/badge.svg
 [ci_badge_link]: https://github.com/VeryGoodOpenSource/very_good_coverage/actions
 [flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html

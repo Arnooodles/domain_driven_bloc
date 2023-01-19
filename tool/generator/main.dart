@@ -16,7 +16,7 @@ extension GeneratorStringX on String {
 
     if (isAndroid && filePath.endsWith('build.gradle')) {
       return replaceAll(
-        'com.example.my-app',
+        'com.example.my_app',
         '{{application_id_android}}',
       );
     } else if (isAndroid) {
@@ -25,7 +25,7 @@ extension GeneratorStringX on String {
         '{{org_name.dotCase()}}.{{project_name.snakeCase()}}',
       );
     } else {
-      return replaceAll('com.example.my-app', '{{application_id}}');
+      return replaceAll('com.example.my_app', '{{application_id}}');
     }
   }
 }
