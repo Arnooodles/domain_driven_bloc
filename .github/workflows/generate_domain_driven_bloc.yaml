@@ -40,5 +40,5 @@ jobs:
           labels: bot
           author: VGV Bot <vgvbot@users.noreply.github.com>
           assignees: vgvbot
-          reviewers: ycchuang305
+          reviewers: Arnooodles
           committer: VGV Bot <vgvbot@users.noreply.github.com>

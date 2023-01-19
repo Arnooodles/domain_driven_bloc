@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:path/path.dart' as path;
 
 final _sourcePath = path.join('src');
@@ -15,16 +16,16 @@ extension GeneratorStringX on String {
 
     if (isAndroid && filePath.endsWith('build.gradle')) {
       return replaceAll(
-        'com.example.flutterPrint',
+        'com.example.my-app',
         '{{application_id_android}}',
       );
     } else if (isAndroid) {
       return replaceAll(
-        'com.example.flutterPrint',
+        'com.example.my_app',
         '{{org_name.dotCase()}}.{{project_name.snakeCase()}}',
       );
     } else {
-      return replaceAll('com.example.flutterPrint', '{{application_id}}');
+      return replaceAll('com.example.my-app', '{{application_id}}');
     }
   }
 }
@@ -56,20 +57,32 @@ void main() async {
           return;
         }
 
+        if (file.path.endsWith('Info.plist')) {
+          final contents = await file.readAsString();
+          file = await file.writeAsString(contents.replaceAll(
+            '<string>My App</string>',
+            r'<string>$(FLAVOR_APP_NAME)</string>',
+          ));
+        }
+
         final contents = await file.readAsString();
         file = await file.writeAsString(
           contents
-              .replaceAll('flutterprint', '{{project_name.snakeCase()}}')
-              .replaceAll('flutterprint', '{{project_name.paramCase()}}')
+              .replaceAll('my_app', '{{project_name.snakeCase()}}')
+              .replaceAll('my-app', '{{project_name.paramCase()}}')
               .replaceAll('A new Flutter project.', '{{{description}}}')
-              .replaceAll('Flutterprint', '{{project_name.titleCase()}}')
+              .replaceAll('My App', '{{project_name.titleCase()}}')
+              .replaceAll(
+                  'MyApp', '{{#pascalCase}}{{project_name}}{{/pascalCase}}')
+              .replaceAll(
+                  'myApp', '{{#camelCase}}{{project_name}}{{/camelCase}}')
               .replaceApplicationId(file.path),
         );
 
         final fileSegments = file.path.split('/').sublist(2);
-        if (fileSegments.contains('flutterprint')) {
+        if (fileSegments.contains('my_app')) {
           final newPathSegment = fileSegments.join('/').replaceAll(
-                'flutterprint',
+                'my_app',
                 '{{project_name.snakeCase()}}',
               );
           final newPath = path.join(_targetPath, newPathSegment);
