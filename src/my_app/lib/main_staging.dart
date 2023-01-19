@@ -1,6 +1,7 @@
-import 'package:very_good_core/app/app.dart';
-import 'package:very_good_core/bootstrap.dart';
+import 'package:my_app/app/app.dart';
+import 'package:my_app/app/constants/enum.dart';
+import 'package:my_app/bootstrap.dart';
 
 void main() {
-  bootstrap(() => const App());
+  bootstrap(App.new, Env.staging);
 }

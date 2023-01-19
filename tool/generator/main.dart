@@ -15,16 +15,16 @@ extension GeneratorStringX on String {
 
     if (isAndroid && filePath.endsWith('build.gradle')) {
       return replaceAll(
-        'com.example.veryGoodCore',
+        'com.example.flutterPrint',
         '{{application_id_android}}',
       );
     } else if (isAndroid) {
       return replaceAll(
-        'com.example.veryGoodCore',
+        'com.example.flutterPrint',
         '{{org_name.dotCase()}}.{{project_name.snakeCase()}}',
       );
     } else {
-      return replaceAll('com.example.veryGoodCore', '{{application_id}}');
+      return replaceAll('com.example.flutterPrint', '{{application_id}}');
     }
   }
 }
@@ -56,28 +56,20 @@ void main() async {
           return;
         }
 
-        if (file.path.endsWith('Info.plist')) {
-          final contents = await file.readAsString();
-          file = await file.writeAsString(contents.replaceAll(
-            '<string>Very Good Core</string>',
-            r'<string>$(FLAVOR_APP_NAME)</string>',
-          ));
-        }
-
         final contents = await file.readAsString();
         file = await file.writeAsString(
           contents
-              .replaceAll('very_good_core', '{{project_name.snakeCase()}}')
-              .replaceAll('very-good-core', '{{project_name.paramCase()}}')
+              .replaceAll('flutterprint', '{{project_name.snakeCase()}}')
+              .replaceAll('flutterprint', '{{project_name.paramCase()}}')
               .replaceAll('A new Flutter project.', '{{{description}}}')
-              .replaceAll('Very Good Core', '{{project_name.titleCase()}}')
+              .replaceAll('Flutterprint', '{{project_name.titleCase()}}')
               .replaceApplicationId(file.path),
         );
 
         final fileSegments = file.path.split('/').sublist(2);
-        if (fileSegments.contains('very_good_core')) {
+        if (fileSegments.contains('flutterprint')) {
           final newPathSegment = fileSegments.join('/').replaceAll(
-                'very_good_core',
+                'flutterprint',
                 '{{project_name.snakeCase()}}',
               );
           final newPath = path.join(_targetPath, newPathSegment);

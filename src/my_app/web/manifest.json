@@ -1,11 +1,11 @@
 {
-    "name": "Very Good Core",
-    "short_name": "Very Good Core",
+    "name": "My App",
+    "short_name": "My App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A Very Good App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
