@@ -42,3 +42,4 @@ jobs:
           assignees: vgvbot
           reviewers: Arnooodles
           committer: VGV Bot <vgvbot@users.noreply.github.com>
+          token: ${{ secrets.CREATE_PULL_REQUEST_TOKEN }}
