@@ -1,4 +1,5 @@
-import 'package:dartx/dartx.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:very_good_core/app/constants/enum.dart';
@@ -22,34 +23,42 @@ class ConnectivityChecker extends HookWidget {
         ),
       );
 
+  StreamSubscription<T> useStreamSubscription<T>(
+    Stream<T> stream,
+    void Function(T event) onData,
+  ) {
+    final StreamSubscription<T> subscription =
+        useMemoized(() => stream.listen(onData), <Object>[stream, onData]);
+    useEffect(
+      () => subscription.cancel,
+      <Object>[subscription],
+    );
+
+    return subscription;
+  }
+
   @override
   Widget build(BuildContext context) {
     final ConnectivityUtils connectivityUtils = getIt<ConnectivityUtils>();
+    final ValueNotifier<bool> isDialogShowing = useState<bool>(false);
 
-    useEffect(
-      () {
-        connectivityUtils
-            .internetStatus()
-            .listen((ConnectionStatus event) async {
-          if (event == ConnectionStatus.offline) {
-            await DialogUtils.showSnackbar(
-              context,
-              ConnectionStatus.offline.name.capitalize(),
-            );
-          }
-        }).cancel();
-
-        return null;
+    useStreamSubscription<ConnectionStatus>(
+      connectivityUtils.internetStatus(),
+      (ConnectionStatus event) async {
+        if (event == ConnectionStatus.offline && !isDialogShowing.value) {
+          isDialogShowing.value = true;
+          await DialogUtils.showOfflineDialog(context);
+          isDialogShowing.value = false;
+        }
       },
-      <dynamic>[],
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (await connectivityUtils.checkInternet() == ConnectionStatus.offline) {
-        await DialogUtils.showSnackbar(
-          context,
-          ConnectionStatus.offline.name.capitalize(),
-        );
+      if (await connectivityUtils.checkInternet() == ConnectionStatus.offline &&
+          !isDialogShowing.value) {
+        isDialogShowing.value = true;
+        await DialogUtils.showOfflineDialog(context);
+        isDialogShowing.value = false;
       }
     });
 
