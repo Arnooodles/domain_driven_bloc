@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/app/themes/spacing.dart';
-import 'package:my_app/app/themes/text_styles.dart';
-import 'package:my_app/app/utils/extensions.dart';
+import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
 
 class EmptyPost extends StatelessWidget {
   const EmptyPost({super.key});

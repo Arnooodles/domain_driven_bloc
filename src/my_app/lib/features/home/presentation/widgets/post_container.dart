@@ -3,13 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/app/constants/route.dart';
-import 'package:my_app/app/themes/spacing.dart';
-import 'package:my_app/app/themes/text_styles.dart';
-import 'package:my_app/core/presentation/widgets/my_app_text_url.dart';
-import 'package:my_app/features/home/domain/model/post.dart';
-import 'package:my_app/features/home/presentation/widgets/post_container_footer.dart';
-import 'package:my_app/features/home/presentation/widgets/post_container_header.dart';
+import 'package:very_good_core/app/constants/route.dart';
+import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_text_url.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/features/home/presentation/widgets/post_container_footer.dart';
+import 'package:very_good_core/features/home/presentation/widgets/post_container_header.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostContainer extends StatelessWidget {
@@ -33,7 +33,7 @@ class PostContainer extends StatelessWidget {
                   if (post.urlOverriddenByDest != null)
                     Padding(
                       padding: EdgeInsets.all(Insets.med),
-                      child: MyAppTextUrl(
+                      child: VeryGoodCoreTextUrl(
                         url: post.urlOverriddenByDest!,
                         onTap: () => launchUrl(
                           Uri.parse(post.urlOverriddenByDest!.getOrCrash()),

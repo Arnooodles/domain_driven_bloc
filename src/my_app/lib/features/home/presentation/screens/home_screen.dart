@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:my_app/app/themes/spacing.dart';
-import 'package:my_app/app/utils/dialog_utils.dart';
-import 'package:my_app/app/utils/error_message_utils.dart';
-import 'package:my_app/app/utils/hooks.dart';
-import 'package:my_app/core/presentation/screens/loading_screen.dart';
-import 'package:my_app/features/home/domain/bloc/post/post_bloc.dart';
-import 'package:my_app/features/home/presentation/widgets/empty_post.dart';
-import 'package:my_app/features/home/presentation/widgets/post_container.dart';
+import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/utils/dialog_utils.dart';
+import 'package:very_good_core/app/utils/error_message_utils.dart';
+import 'package:very_good_core/app/utils/hooks.dart';
+import 'package:very_good_core/core/presentation/screens/loading_screen.dart';
+import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
+import 'package:very_good_core/features/home/presentation/widgets/empty_post.dart';
+import 'package:very_good_core/features/home/presentation/widgets/post_container.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});

@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_app/app/generated/l10n.dart';
-import 'package:my_app/app/themes/app_colors.dart';
-import 'package:my_app/app/themes/app_theme.dart';
-import 'package:my_app/app/themes/spacing.dart';
-import 'package:my_app/app/themes/text_styles.dart';
-import 'package:my_app/core/presentation/widgets/my_app_dialogs.dart';
+import 'package:very_good_core/app/generated/l10n.dart';
+import 'package:very_good_core/app/themes/app_colors.dart';
+import 'package:very_good_core/app/themes/app_theme.dart';
+import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_dialogs.dart';
 
 class DialogUtils {
   DialogUtils._();

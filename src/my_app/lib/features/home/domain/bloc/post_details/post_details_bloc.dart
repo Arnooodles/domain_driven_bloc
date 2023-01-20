@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 part 'post_details_bloc.freezed.dart';

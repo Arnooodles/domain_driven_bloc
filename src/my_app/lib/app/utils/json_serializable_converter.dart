@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
-import 'package:my_app/core/data/model/resource_error.dart';
+import 'package:very_good_core/core/data/model/resource_error.dart';
 
 typedef JsonFactory<T> = T Function(Map<String, dynamic> json);
 

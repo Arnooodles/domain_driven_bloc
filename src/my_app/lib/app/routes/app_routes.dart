@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/app/constants/route.dart';
-import 'package:my_app/app/utils/transition_page_utils.dart';
-import 'package:my_app/core/presentation/screens/my_app_screen.dart';
-import 'package:my_app/core/presentation/screens/splash_screen.dart';
-import 'package:my_app/features/auth/presentation/screen/login_screen.dart';
-import 'package:my_app/features/home/domain/model/post.dart';
-import 'package:my_app/features/home/presentation/screens/home_screen.dart';
-import 'package:my_app/features/home/presentation/screens/post_details_webview.dart';
-import 'package:my_app/features/profile/presentation/screens/profile_screen.dart';
+import 'package:very_good_core/app/constants/route.dart';
+import 'package:very_good_core/app/utils/transition_page_utils.dart';
+import 'package:very_good_core/core/presentation/screens/very_good_core_screen.dart';
+import 'package:very_good_core/core/presentation/screens/splash_screen.dart';
+import 'package:very_good_core/features/auth/presentation/screen/login_screen.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/features/home/presentation/screens/home_screen.dart';
+import 'package:very_good_core/features/home/presentation/screens/post_details_webview.dart';
+import 'package:very_good_core/features/profile/presentation/screens/profile_screen.dart';
 
 @injectable
 class AppRoutes {
@@ -37,7 +37,7 @@ class AppRoutes {
         ShellRoute(
           navigatorKey: shellNavigatorKey,
           builder: (BuildContext context, GoRouterState state, Widget child) =>
-              MyAppScreen(child: child),
+              VeryGoodCoreScreen(child: child),
           routes: <RouteBase>[
             GoRoute(
               path: RouteName.home.path,

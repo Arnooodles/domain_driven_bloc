@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:my_app/app/utils/injection.dart';
+import 'package:very_good_core/app/utils/injection.dart';
 
 @lazySingleton
 class GoRouteObserver extends NavigatorObserver {

@@ -2,8 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
-import 'package:my_app/features/home/domain/bloc/post_details/post_details_bloc.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/features/home/domain/bloc/post_details/post_details_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'post_details_bloc_test.mocks.dart';

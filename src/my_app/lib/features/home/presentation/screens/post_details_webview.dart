@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:my_app/app/utils/injection.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
-import 'package:my_app/features/home/domain/bloc/post_details/post_details_bloc.dart';
-import 'package:my_app/features/home/domain/model/post.dart';
+import 'package:very_good_core/app/utils/injection.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/features/home/domain/bloc/post_details/post_details_bloc.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PostDetailsWebview extends HookWidget {

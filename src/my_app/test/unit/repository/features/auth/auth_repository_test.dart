@@ -2,12 +2,12 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_app/core/data/repository/local_storage_repository.dart';
-import 'package:my_app/core/domain/model/failures.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
-import 'package:my_app/features/auth/data/model/login_response.dto.dart';
-import 'package:my_app/features/auth/data/repository/auth_repository.dart';
-import 'package:my_app/features/auth/data/service/auth_service.dart';
+import 'package:very_good_core/core/data/repository/local_storage_repository.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/features/auth/data/model/login_response.dto.dart';
+import 'package:very_good_core/features/auth/data/repository/auth_repository.dart';
+import 'package:very_good_core/features/auth/data/service/auth_service.dart';
 
 import '../../../../utils/test_utils.dart';
 import 'auth_repository_test.mocks.dart';

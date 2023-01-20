@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_app/core/data/repository/local_storage_repository.dart';
+import 'package:very_good_core/core/data/repository/local_storage_repository.dart';
 
 import 'local_repository_test.mocks.dart';
 

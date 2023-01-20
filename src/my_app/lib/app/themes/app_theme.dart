@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/app/themes/app_colors.dart';
-import 'package:my_app/app/themes/text_styles.dart';
+import 'package:very_good_core/app/themes/app_colors.dart';
+import 'package:very_good_core/app/themes/text_styles.dart';
 
 abstract class AppTheme {
   /// Standard `ThemeData` for App UI.

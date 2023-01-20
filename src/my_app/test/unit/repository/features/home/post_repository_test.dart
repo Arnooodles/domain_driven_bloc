@@ -2,11 +2,11 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_app/core/domain/model/failures.dart';
-import 'package:my_app/features/home/data/model/post.dto.dart';
-import 'package:my_app/features/home/data/repository/post_repository.dart';
-import 'package:my_app/features/home/data/service/post_service.dart';
-import 'package:my_app/features/home/domain/model/post.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/features/home/data/model/post.dto.dart';
+import 'package:very_good_core/features/home/data/repository/post_repository.dart';
+import 'package:very_good_core/features/home/data/service/post_service.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
 
 import '../../../../utils/test_utils.dart';
 import 'post_repository_test.mocks.dart';

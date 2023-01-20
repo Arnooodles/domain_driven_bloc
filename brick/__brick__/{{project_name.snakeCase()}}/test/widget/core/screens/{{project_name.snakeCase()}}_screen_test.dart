@@ -99,7 +99,11 @@ void main() {
           GoldenTestDeviceScenario(
             name: 'home',
             builder: () =>
-                build{{#pascalCase}}{{project_name}}{{/pascalCase}}Screen(const HomeScreen(), routerHome, {{#camelCase}}{{project_name}}{{/camelCase}}Bloc),
+                build{{#pascalCase}}{{project_name}}{{/pascalCase}}Screen(
+                  const HomeScreen(),
+                  routerHome, 
+                  {{#camelCase}}{{project_name}}{{/camelCase}}Bloc,
+                ),
           ),
           GoldenTestDeviceScenario(
             name: 'profile',

@@ -3,13 +3,13 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_app/app/constants/enum.dart';
-import 'package:my_app/core/domain/interface/i_local_storage_repository.dart';
-import 'package:my_app/core/domain/model/failures.dart';
-import 'package:my_app/features/home/data/model/post.dto.dart';
-import 'package:my_app/features/home/domain/bloc/post/post_bloc.dart';
-import 'package:my_app/features/home/domain/interface/i_post_repository.dart';
-import 'package:my_app/features/home/domain/model/post.dart';
+import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/features/home/data/model/post.dto.dart';
+import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
+import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
 
 import 'post_bloc_test.mocks.dart';
 

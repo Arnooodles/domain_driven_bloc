@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:my_app/core/domain/model/failures.dart';
-import 'package:my_app/core/domain/model/validators.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/core/domain/model/validators.dart';
 import 'package:uuid/uuid.dart';
 
 @immutable

@@ -4,10 +4,10 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html_unescape/html_unescape.dart';
-import 'package:my_app/app/utils/converters.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
-import 'package:my_app/features/home/domain/model/post.dart';
+import 'package:very_good_core/app/utils/converters.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
 
 part 'post.dto.freezed.dart';
 part 'post.dto.g.dart';

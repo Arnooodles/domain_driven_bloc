@@ -1,7 +1,7 @@
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_app/core/presentation/widgets/app_title.dart';
+import 'package:very_good_core/core/presentation/widgets/app_title.dart';
 
 import '../../../utils/test_utils.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:my_app/app/utils/injection.dart';
+import 'package:very_good_core/app/utils/injection.dart';
 
 @lazySingleton
 class AppBlocObserver extends BlocObserver {

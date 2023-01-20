@@ -1,11 +1,11 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/app/themes/app_colors.dart';
-import 'package:my_app/app/themes/app_theme.dart';
-import 'package:my_app/app/themes/spacing.dart';
-import 'package:my_app/app/themes/text_styles.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/features/home/domain/model/post.dart';
+import 'package:very_good_core/app/themes/app_colors.dart';
+import 'package:very_good_core/app/themes/app_theme.dart';
+import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
 
 class PostContainerHeader extends StatelessWidget {
   const PostContainerHeader({

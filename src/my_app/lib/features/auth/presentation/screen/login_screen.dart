@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:my_app/app/constants/constant.dart';
-import 'package:my_app/app/themes/spacing.dart';
-import 'package:my_app/app/utils/dialog_utils.dart';
-import 'package:my_app/app/utils/error_message_utils.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/app/utils/injection.dart';
-import 'package:my_app/core/domain/bloc/my_app/my_app_bloc.dart';
-import 'package:my_app/core/presentation/widgets/app_title.dart';
-import 'package:my_app/core/presentation/widgets/connectivity_checker.dart';
-import 'package:my_app/core/presentation/widgets/my_app_button.dart';
-import 'package:my_app/core/presentation/widgets/my_app_text_field.dart';
-import 'package:my_app/features/auth/domain/bloc/login_bloc.dart';
+import 'package:very_good_core/app/constants/constant.dart';
+import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/utils/dialog_utils.dart';
+import 'package:very_good_core/app/utils/error_message_utils.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/app/utils/injection.dart';
+import 'package:very_good_core/core/domain/bloc/very_good_core/very_good_core_bloc.dart';
+import 'package:very_good_core/core/presentation/widgets/app_title.dart';
+import 'package:very_good_core/core/presentation/widgets/connectivity_checker.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_text_field.dart';
+import 'package:very_good_core/features/auth/domain/bloc/login_bloc.dart';
 
 class LoginScreen extends HookWidget {
   const LoginScreen({super.key});
@@ -51,7 +51,7 @@ class LoginScreen extends HookWidget {
                     Expanded(
                       child: Column(
                         children: <Widget>[
-                          MyAppTextField(
+                          VeryGoodCoreTextField(
                             labelText: context.l10n.login__label_text__email,
                             controller: emailTextController,
                             autofocus: true,
@@ -62,7 +62,7 @@ class LoginScreen extends HookWidget {
                                 .onEmailAddressChanged(value),
                           ),
                           VSpace.lg,
-                          MyAppTextField(
+                          VeryGoodCoreTextField(
                             labelText: context.l10n.login__label_text__password,
                             controller: passwordTextController,
                             isPassword: true,
@@ -71,7 +71,7 @@ class LoginScreen extends HookWidget {
                                 context.l10n.login__text_field_hint__password,
                           ),
                           VSpace.xxl,
-                          MyAppButton(
+                          VeryGoodCoreButton(
                             isExpanded: true,
                             isEnabled: !state.isLoading,
                             onPressed: () => context.read<LoginBloc>().login(
@@ -95,7 +95,7 @@ class LoginScreen extends HookWidget {
 
   void _loginScreenListener(BuildContext context, LoginState state) {
     if (state.isSuccess) {
-      context.read<MyAppBloc>().authenticate();
+      context.read<VeryGoodCoreBloc>().authenticate();
     } else if (state.failure != null) {
       DialogUtils.showSnackbar(
         context,

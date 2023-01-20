@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/core/domain/model/failures.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
 
 class ErrorMessageUtils {
   ErrorMessageUtils._();

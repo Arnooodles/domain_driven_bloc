@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/app/constants/constant.dart';
-import 'package:my_app/app/themes/text_styles.dart';
+import 'package:very_good_core/app/constants/constant.dart';
+import 'package:very_good_core/app/themes/text_styles.dart';
 
 class AppTitle extends StatelessWidget {
   const AppTitle({super.key});

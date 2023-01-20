@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:dartx/dartx.dart';
 import 'package:faker/faker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_app/app/constants/enum.dart';
-import 'package:my_app/app/utils/converters.dart';
-import 'package:my_app/core/domain/model/user.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
+import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/app/utils/converters.dart';
+import 'package:very_good_core/core/domain/model/user.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
 
 part 'user.dto.freezed.dart';
 part 'user.dto.g.dart';

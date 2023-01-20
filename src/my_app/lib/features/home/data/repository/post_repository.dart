@@ -3,13 +3,13 @@ import 'dart:developer';
 import 'package:chopper/chopper.dart' as chopper;
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/app/constants/enum.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/core/domain/model/failures.dart';
-import 'package:my_app/features/home/data/model/post.dto.dart';
-import 'package:my_app/features/home/data/service/post_service.dart';
-import 'package:my_app/features/home/domain/interface/i_post_repository.dart';
-import 'package:my_app/features/home/domain/model/post.dart';
+import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/features/home/data/model/post.dto.dart';
+import 'package:very_good_core/features/home/data/service/post_service.dart';
+import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
 
 @LazySingleton(as: IPostRepository)
 class PostRepository implements IPostRepository {

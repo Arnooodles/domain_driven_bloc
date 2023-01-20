@@ -1,4 +1,4 @@
-name: my_app
+name: very_good_core
 
 on: [pull_request, push]
 

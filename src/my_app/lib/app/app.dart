@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/app/config/scroll_behavior.dart';
-import 'package:my_app/app/constants/constant.dart';
-import 'package:my_app/app/generated/l10n.dart';
-import 'package:my_app/app/routes/app_router.dart';
-import 'package:my_app/app/themes/app_theme.dart';
-import 'package:my_app/app/utils/injection.dart';
-import 'package:my_app/core/domain/bloc/my_app/my_app_bloc.dart';
+import 'package:very_good_core/app/config/scroll_behavior.dart';
+import 'package:very_good_core/app/constants/constant.dart';
+import 'package:very_good_core/app/generated/l10n.dart';
+import 'package:very_good_core/app/routes/app_router.dart';
+import 'package:very_good_core/app/themes/app_theme.dart';
+import 'package:very_good_core/app/utils/injection.dart';
+import 'package:very_good_core/core/domain/bloc/very_good_core/very_good_core_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class App extends StatelessWidget {
   App({super.key});
 
   final GoRouter routerConfig =
-      getIt<AppRouter>(param1: getIt<MyAppBloc>()).router;
+      getIt<AppRouter>(param1: getIt<VeryGoodCoreBloc>()).router;
 
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
         providers: <BlocProvider<dynamic>>[
-          BlocProvider<MyAppBloc>(
-            create: (BuildContext context) => getIt<MyAppBloc>(),
+          BlocProvider<VeryGoodCoreBloc>(
+            create: (BuildContext context) => getIt<VeryGoodCoreBloc>(),
           ),
         ],
-        child: BlocBuilder<MyAppBloc, MyAppState>(
-          builder: (BuildContext context, MyAppState state) =>
+        child: BlocBuilder<VeryGoodCoreBloc, VeryGoodCoreState>(
+          builder: (BuildContext context, VeryGoodCoreState state) =>
               MaterialApp.router(
             title: Constant.appName,
             theme: AppTheme.lightTheme,

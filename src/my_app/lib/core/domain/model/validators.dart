@@ -4,7 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dartx/dartx.dart';
 import 'package:dartz/dartz.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:my_app/core/domain/model/failures.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
 
 Either<Failure, String> validateEmailAddress(String email) {
   final bool isEmailValid = EmailValidator.validate(email, true);

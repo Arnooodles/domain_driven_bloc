@@ -4,11 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/core/domain/interface/i_local_storage_repository.dart';
-import 'package:my_app/core/domain/model/failures.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
-import 'package:my_app/features/auth/domain/interface/i_auth_repository.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
 part 'login_bloc.freezed.dart';
 part 'login_state.dart';

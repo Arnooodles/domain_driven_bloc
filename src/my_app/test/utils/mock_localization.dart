@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:my_app/app/generated/l10n.dart';
+import 'package:very_good_core/app/generated/l10n.dart';
 
 class MockLocalization extends StatelessWidget {
   const MockLocalization({super.key, required this.child});

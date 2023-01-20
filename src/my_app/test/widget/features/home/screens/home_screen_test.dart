@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_app/features/home/domain/bloc/post/post_bloc.dart';
-import 'package:my_app/features/home/presentation/screens/home_screen.dart';
+import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
+import 'package:very_good_core/features/home/presentation/screens/home_screen.dart';
 
 import '../../../../utils/golden_test_device_scenario.dart';
 import '../../../../utils/mock_material_app.dart';

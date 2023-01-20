@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_app/core/data/model/user.dto.dart';
-import 'package:my_app/core/data/repository/user_repository.dart';
-import 'package:my_app/core/data/service/user_service.dart';
-import 'package:my_app/core/domain/model/user.dart';
+import 'package:very_good_core/core/data/model/user.dto.dart';
+import 'package:very_good_core/core/data/repository/user_repository.dart';
+import 'package:very_good_core/core/data/service/user_service.dart';
+import 'package:very_good_core/core/domain/model/user.dart';
 
 import '../../../utils/test_utils.dart';
 import 'user_repository_test.mocks.dart';

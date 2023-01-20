@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:my_app/app/themes/app_theme.dart';
+import 'package:very_good_core/app/themes/app_theme.dart';
 
 import 'utils/local_file_comparator_with_threshold.dart';
 import 'utils/test_utils.dart';

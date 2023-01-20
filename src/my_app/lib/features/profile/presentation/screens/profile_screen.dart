@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:my_app/app/themes/spacing.dart';
-import 'package:my_app/app/themes/text_styles.dart';
-import 'package:my_app/app/utils/error_message_utils.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/app/utils/hooks.dart';
-import 'package:my_app/core/domain/bloc/my_app/my_app_bloc.dart';
-import 'package:my_app/core/domain/model/user.dart';
-import 'package:my_app/core/presentation/screens/error_screen.dart';
-import 'package:my_app/core/presentation/screens/loading_screen.dart';
-import 'package:my_app/core/presentation/widgets/my_app_avatar.dart';
-import 'package:my_app/core/presentation/widgets/my_app_button.dart';
-import 'package:my_app/core/presentation/widgets/my_app_info_text_field.dart';
+import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/app/utils/error_message_utils.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/app/utils/hooks.dart';
+import 'package:very_good_core/core/domain/bloc/very_good_core/very_good_core_bloc.dart';
+import 'package:very_good_core/core/domain/model/user.dart';
+import 'package:very_good_core/core/presentation/screens/error_screen.dart';
+import 'package:very_good_core/core/presentation/screens/loading_screen.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_avatar.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_info_text_field.dart';
 
 class ProfileScreen extends HookWidget {
   const ProfileScreen({super.key});
@@ -23,8 +23,8 @@ class ProfileScreen extends HookWidget {
   Widget build(BuildContext context) {
     final RefreshController refreshController = useRefreshController();
 
-    return BlocBuilder<MyAppBloc, MyAppState>(
-      builder: (BuildContext context, MyAppState state) {
+    return BlocBuilder<VeryGoodCoreBloc, VeryGoodCoreState>(
+      builder: (BuildContext context, VeryGoodCoreState state) {
         final User user = state.user!;
         final bool hasContactNumber =
             user.contactNumber?.getOrCrash().isNotNullOrBlank ?? false;
@@ -32,7 +32,7 @@ class ProfileScreen extends HookWidget {
           return const LoadingScreen();
         } else if (state.failure != null) {
           return ErrorScreen(
-            onRefresh: () async => context.read<MyAppBloc>().getUser(),
+            onRefresh: () async => context.read<VeryGoodCoreBloc>().getUser(),
             errorMessage: ErrorMessageUtils.generate(context, state.failure),
           );
         }
@@ -40,7 +40,7 @@ class ProfileScreen extends HookWidget {
         return SmartRefresher(
           controller: refreshController,
           header: const ClassicHeader(),
-          onRefresh: () async => context.read<MyAppBloc>().getUser(),
+          onRefresh: () async => context.read<VeryGoodCoreBloc>().getUser(),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: Insets.xl),
             child: Column(
@@ -54,7 +54,7 @@ class ProfileScreen extends HookWidget {
                 VSpace(Insets.med),
                 Row(
                   children: <Widget>[
-                    MyAppAvatar(
+                    VeryGoodCoreAvatar(
                       size: 100,
                       imageUrl: user.avatar?.getOrCrash(),
                     ),
@@ -84,28 +84,28 @@ class ProfileScreen extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       VSpace.sm,
-                      MyAppInfoTextField(
+                      VeryGoodCoreInfoTextField(
                         title: context.l10n.profile__label_text__email,
                         description: user.email.getOrCrash(),
                       ),
                       if (hasContactNumber) VSpace.sm,
                       if (hasContactNumber)
-                        MyAppInfoTextField(
+                        VeryGoodCoreInfoTextField(
                           title: context.l10n.profile__label_text__phone_number,
                           description: user.contactNumber!.getOrCrash(),
                         ),
                       VSpace.sm,
-                      MyAppInfoTextField(
+                      VeryGoodCoreInfoTextField(
                         title: context.l10n.profile__label_text__gender,
                         description: user.gender.name.capitalize(),
                       ),
                       VSpace.sm,
-                      MyAppInfoTextField(
+                      VeryGoodCoreInfoTextField(
                         title: context.l10n.profile__label_text__birthday,
                         description: user.birthday.defaultFormat(),
                       ),
                       VSpace.sm,
-                      MyAppInfoTextField(
+                      VeryGoodCoreInfoTextField(
                         title: context.l10n.profile__label_text__age,
                         description: user.age,
                       ),
@@ -113,12 +113,12 @@ class ProfileScreen extends HookWidget {
                   ),
                 ),
                 Center(
-                  child: MyAppButton(
+                  child: VeryGoodCoreButton(
                     isExpanded: true,
                     padding: EdgeInsets.zero,
                     contentPadding: EdgeInsets.symmetric(vertical: Insets.med),
                     text: context.l10n.profile__button_text__logout,
-                    onPressed: () => context.read<MyAppBloc>().logout(),
+                    onPressed: () => context.read<VeryGoodCoreBloc>().logout(),
                   ),
                 ),
                 VSpace(Insets.lg),

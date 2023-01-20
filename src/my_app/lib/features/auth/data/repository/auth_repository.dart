@@ -3,14 +3,14 @@ import 'dart:developer';
 import 'package:chopper/chopper.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/app/constants/enum.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/core/domain/interface/i_local_storage_repository.dart';
-import 'package:my_app/core/domain/model/failures.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
-import 'package:my_app/features/auth/data/model/login_response.dto.dart';
-import 'package:my_app/features/auth/data/service/auth_service.dart';
-import 'package:my_app/features/auth/domain/interface/i_auth_repository.dart';
+import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
+import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/features/auth/data/model/login_response.dto.dart';
+import 'package:very_good_core/features/auth/data/service/auth_service.dart';
+import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
 @LazySingleton(as: IAuthRepository)
 class AuthRepository implements IAuthRepository {

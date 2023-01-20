@@ -1,7 +1,7 @@
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_app/features/auth/presentation/screen/login_screen.dart';
+import 'package:very_good_core/features/auth/presentation/screen/login_screen.dart';
 
 import '../../../../utils/golden_test_device_scenario.dart';
 import '../../../../utils/mock_material_app.dart';

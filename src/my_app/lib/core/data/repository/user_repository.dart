@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:chopper/chopper.dart';
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_app/app/constants/enum.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/core/data/model/user.dto.dart';
-import 'package:my_app/core/data/service/user_service.dart';
-import 'package:my_app/core/domain/interface/i_user_repository.dart';
-import 'package:my_app/core/domain/model/user.dart';
+import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/core/data/model/user.dto.dart';
+import 'package:very_good_core/core/data/service/user_service.dart';
+import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
+import 'package:very_good_core/core/domain/model/user.dart';
 
 @LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {

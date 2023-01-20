@@ -1,6 +1,6 @@
-import 'package:my_app/app/app.dart';
-import 'package:my_app/app/constants/enum.dart';
-import 'package:my_app/bootstrap.dart';
+import 'package:very_good_core/app/app.dart';
+import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/bootstrap.dart';
 
 void main() {
   bootstrap(App.new, Env.staging);

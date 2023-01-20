@@ -16,16 +16,16 @@ extension GeneratorStringX on String {
 
     if (isAndroid && filePath.endsWith('build.gradle')) {
       return replaceAll(
-        'com.example.my_app',
+        'com.example.veryGoodCore',
         '{{application_id_android}}',
       );
     } else if (isAndroid) {
       return replaceAll(
-        'com.example.my_app',
+        'com.example.veryGoodCore',
         '{{org_name.dotCase()}}.{{project_name.snakeCase()}}',
       );
     } else {
-      return replaceAll('com.example.my_app', '{{application_id}}');
+      return replaceAll('com.example.veryGoodCore', '{{application_id}}');
     }
   }
 }
@@ -60,7 +60,7 @@ void main() async {
         if (file.path.endsWith('Info.plist')) {
           final contents = await file.readAsString();
           file = await file.writeAsString(contents.replaceAll(
-            '<string>My App</string>',
+            '<string>Very Good Core</string>',
             r'<string>$(FLAVOR_APP_NAME)</string>',
           ));
         }
@@ -68,21 +68,17 @@ void main() async {
         final contents = await file.readAsString();
         file = await file.writeAsString(
           contents
-              .replaceAll('my_app', '{{project_name.snakeCase()}}')
-              .replaceAll('my-app', '{{project_name.paramCase()}}')
+              .replaceAll('very_good_core', '{{project_name.snakeCase()}}')
+              .replaceAll('very-good-core', '{{project_name.paramCase()}}')
               .replaceAll('A new Flutter project.', '{{{description}}}')
-              .replaceAll('My App', '{{project_name.titleCase()}}')
-              .replaceAll(
-                  'MyApp', '{{#pascalCase}}{{project_name}}{{/pascalCase}}')
-              .replaceAll(
-                  'myApp', '{{#camelCase}}{{project_name}}{{/camelCase}}')
+              .replaceAll('Very Good Core', '{{project_name.titleCase()}}')
               .replaceApplicationId(file.path),
         );
 
         final fileSegments = file.path.split('/').sublist(2);
-        if (fileSegments.contains('my_app')) {
+        if (fileSegments.contains('very_good_core')) {
           final newPathSegment = fileSegments.join('/').replaceAll(
-                'my_app',
+                'very_good_core',
                 '{{project_name.snakeCase()}}',
               );
           final newPath = path.join(_targetPath, newPathSegment);

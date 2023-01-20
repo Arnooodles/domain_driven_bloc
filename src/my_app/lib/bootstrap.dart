@@ -5,13 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
-import 'package:my_app/app/config/chopper_config.dart';
-import 'package:my_app/app/config/url_strategy_native.dart'
-    if (dart.library.html) 'package:my_app/app/config/url_strategy_web.dart';
-import 'package:my_app/app/constants/enum.dart';
-import 'package:my_app/app/generated/assets.gen.dart';
-import 'package:my_app/app/observers/app_bloc_observer.dart';
-import 'package:my_app/app/utils/injection.dart';
+import 'package:very_good_core/app/config/chopper_config.dart';
+import 'package:very_good_core/app/config/url_strategy_native.dart'
+    if (dart.library.html) 'package:very_good_core/app/config/url_strategy_web.dart';
+import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/app/generated/assets.gen.dart';
+import 'package:very_good_core/app/observers/app_bloc_observer.dart';
+import 'package:very_good_core/app/utils/injection.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   WidgetsFlutterBinding.ensureInitialized();

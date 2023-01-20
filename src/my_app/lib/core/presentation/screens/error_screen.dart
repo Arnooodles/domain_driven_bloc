@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:my_app/app/themes/text_styles.dart';
-import 'package:my_app/app/utils/extensions.dart';
-import 'package:my_app/app/utils/hooks.dart';
+import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/app/utils/hooks.dart';
 
 class ErrorScreen extends HookWidget {
   const ErrorScreen({

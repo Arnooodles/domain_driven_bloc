@@ -1,8 +1,8 @@
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_app/core/domain/model/value_objects.dart';
-import 'package:my_app/features/home/presentation/widgets/post_container_header.dart';
+import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/features/home/presentation/widgets/post_container_header.dart';
 
 import '../../../../utils/mock_localization.dart';
 import '../../../../utils/test_utils.dart';
