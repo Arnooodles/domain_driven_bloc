@@ -4,6 +4,9 @@ import 'package:chopper/chopper.dart' as chopper;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/utils/injection.dart';
 import 'package:very_good_core/bootstrap.dart';
@@ -11,12 +14,8 @@ import 'package:very_good_core/core/data/model/user.dto.dart';
 import 'package:very_good_core/core/domain/model/user.dart';
 import 'package:very_good_core/features/home/data/model/post.dto.dart';
 import 'package:very_good_core/features/home/domain/model/post.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../flutter_test_config.dart';
-
 import 'mock_path_provider_platform.dart';
 
 @GenerateMocks(<Type>[http.Client])
@@ -49,7 +48,7 @@ Post get mockPost => PostDTO(
       uid: '1',
       title: 'Turpis in eu mi bibendum neque egestas congue.',
       author: 'Tempus egestas',
-      permalink: '/r/FlutterDev/comments/101lzzv/',
+      permalink: '/r/FlutterDev/comments/123456/',
       createdUtc: DateTime.fromMillisecondsSinceEpoch(1672689610000),
       linkFlairBackgroundColor: '#7b35f0',
       linkFlairText: 'Lorem',

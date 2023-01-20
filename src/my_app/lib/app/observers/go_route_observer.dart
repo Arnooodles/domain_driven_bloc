@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:very_good_core/app/utils/injection.dart';
 
-@lazySingleton
+@singleton
 class GoRouteObserver extends NavigatorObserver {
   Logger logger = getIt<Logger>();
   @override
