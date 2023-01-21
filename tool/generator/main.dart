@@ -94,6 +94,28 @@ void main() async {
     }),
   );
 
+  // Convert Golden Files to Variables
+
+  await Future.wait(Directory(path.join(_targetPath, 'my_app'))
+      .listSync(recursive: true)
+      .where((element) =>
+          element.path.split('.').last.toLowerCase().contains('png'))
+      .map((element) async {
+    var file = element;
+    final fileSegments = file.path.split('/').sublist(2);
+
+    if (fileSegments
+        .any((String element) => element.contains('very_good_core'))) {
+      final newPathSegment = fileSegments.join('/').replaceAll(
+            'very_good_core',
+            '{{project_name.snakeCase()}}',
+          );
+      final newPath = path.join(_targetPath, newPathSegment);
+      File(newPath).createSync(recursive: true);
+      file.renameSync(newPath);
+    }
+  }));
+
   final mainActivityKt = File(
     path.join(
       _androidKotlinPath.replaceAll('my_app', '{{project_name.snakeCase()}}'),
