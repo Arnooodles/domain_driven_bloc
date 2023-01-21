@@ -1,12 +1,12 @@
-import 'package:dartx/dartx.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/connectivity_utils.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
 
-class ConnectivityChecker extends HookWidget {
+class ConnectivityChecker extends StatefulWidget {
   const ConnectivityChecker({super.key, required this.child});
 
   final Widget child;
@@ -23,36 +23,41 @@ class ConnectivityChecker extends HookWidget {
       );
 
   @override
+  State<ConnectivityChecker> createState() => _ConnectivityCheckerState();
+}
+
+class _ConnectivityCheckerState extends State<ConnectivityChecker> {
+  StreamSubscription<ConnectionStatus>? _connectionSubscription;
+  bool _isDialogShowing = false;
+
+  @override
   Widget build(BuildContext context) {
     final ConnectivityUtils connectivityUtils = getIt<ConnectivityUtils>();
-
-    useEffect(
-      () {
-        connectivityUtils
-            .internetStatus()
-            .listen((ConnectionStatus event) async {
-          if (event == ConnectionStatus.offline) {
-            await DialogUtils.showSnackbar(
-              context,
-              ConnectionStatus.offline.name.capitalize(),
-            );
-          }
-        }).cancel();
-
-        return null;
-      },
-      <dynamic>[],
-    );
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (await connectivityUtils.checkInternet() == ConnectionStatus.offline) {
-        await DialogUtils.showSnackbar(
-          context,
-          ConnectionStatus.offline.name.capitalize(),
-        );
+      if (await connectivityUtils.checkInternet() == ConnectionStatus.offline &&
+          !_isDialogShowing) {
+        _isDialogShowing = true;
+        await DialogUtils.showOfflineDialog(context);
+        _isDialogShowing = false;
       }
+
+      _connectionSubscription ??= connectivityUtils
+          .internetStatus()
+          .listen((ConnectionStatus event) async {
+        if (event == ConnectionStatus.offline && !_isDialogShowing) {
+          _isDialogShowing = true;
+          await DialogUtils.showOfflineDialog(context);
+          _isDialogShowing = false;
+        }
+      });
     });
 
-    return child;
+    return widget.child;
+  }
+
+  @override
+  void dispose() {
+    _connectionSubscription?.cancel();
+    super.dispose();
   }
 }

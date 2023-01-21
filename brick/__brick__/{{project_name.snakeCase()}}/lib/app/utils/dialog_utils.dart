@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:dartx/dartx.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
@@ -12,22 +14,6 @@ import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project
 
 class DialogUtils {
   DialogUtils._();
-
-  static Future<void> showSnackbar(
-    BuildContext context,
-    String message, {
-    Duration? duration,
-  }) async =>
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: AppColors.charcoal,
-          duration: duration ?? const Duration(milliseconds: 4000),
-          content: Text(
-            message,
-            style: AppTextStyle.caption.copyWith(color: AppColors.white),
-          ),
-        ),
-      );
 
   static Future<bool> showExitDialog(BuildContext context) async =>
       await DialogUtils.showConfirmationDialog(
@@ -42,6 +28,37 @@ class DialogUtils {
         },
       ) ??
       false;
+
+  static Future<void>? showOfflineDialog<T>(
+    BuildContext context, {
+    Duration? duration,
+  }) =>
+      showFlash(
+        context: context,
+        duration: duration,
+        builder: (BuildContext context, FlashController<void> controller) =>
+            Flash<void>(
+          controller: controller,
+          behavior: FlashBehavior.fixed,
+          position: FlashPosition.bottom,
+          boxShadows: kElevationToShadow[4],
+          horizontalDismissDirection: HorizontalDismissDirection.horizontal,
+          backgroundColor: AppColors.charcoal,
+          barrierDismissible: false,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Insets.med,
+            ),
+            child: FlashBar(
+              content: Text(
+                ConnectionStatus.offline.name.capitalize(),
+                style: AppTextStyle.bodyText2.copyWith(color: AppColors.white),
+              ),
+              icon: const Icon(Icons.wifi_off, color: AppColors.white),
+            ),
+          ),
+        ),
+      );
 
   static Future<bool?> showConfirmationDialog(
     BuildContext context, {
@@ -106,7 +123,7 @@ class DialogUtils {
                     padding: EdgeInsets.only(right: Insets.sm),
                     child: icon,
                   ),
-                Expanded(
+                Flexible(
                   child: Text(
                     message,
                     style: AppTextStyle.caption,

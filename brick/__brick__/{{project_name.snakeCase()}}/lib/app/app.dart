@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:{{project_name.snakeCase()}}/app/config/scroll_behavior.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
@@ -9,7 +10,6 @@ import 'package:{{project_name.snakeCase()}}/app/routes/app_router.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/{{project_name.snakeCase()}}/{{project_name.snakeCase()}}_bloc.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 class App extends StatelessWidget {
   App({super.key});
