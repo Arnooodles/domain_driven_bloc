@@ -1,16 +1,16 @@
-part of '{{project_name.snakeCase()}}_bloc.dart';
+part of 'very_good_core_bloc.dart';
 
 @freezed
-class {{#pascalCase}}{{project_name}}{{/pascalCase}}State with _${{#pascalCase}}{{project_name}}{{/pascalCase}}State {
-  factory {{#pascalCase}}{{project_name}}{{/pascalCase}}State({
+class VeryGoodCoreState with _$VeryGoodCoreState {
+  factory VeryGoodCoreState({
     required AuthStatus authStatus,
     required ThemeMode themeMode,
     required bool isLoading,
     Failure? failure,
     User? user,
-  }) = _{{#pascalCase}}{{project_name}}{{/pascalCase}}State;
+  }) = _VeryGoodCoreState;
 
-  factory {{#pascalCase}}{{project_name}}{{/pascalCase}}State.initial() => _{{#pascalCase}}{{project_name}}{{/pascalCase}}State(
+  factory VeryGoodCoreState.initial() => _VeryGoodCoreState(
         authStatus: AuthStatus.unknown,
         themeMode: ThemeMode.system,
         isLoading: false,
