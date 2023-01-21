@@ -78,16 +78,14 @@ void main() async {
         );
 
         final fileSegments = file.path.split('/').sublist(2);
-        if (fileSegments.contains('very_good_core')) {
-          final newPathSegment = fileSegments.join('/').replaceAll(
-                'very_good_core',
-                '{{project_name.snakeCase()}}',
-              );
-          final newPath = path.join(_targetPath, newPathSegment);
-          File(newPath).createSync(recursive: true);
-          file.renameSync(newPath);
-          Directory(file.parent.path).deleteSync(recursive: true);
-        }
+        final newPathSegment = fileSegments.join('/').replaceAll(
+              'very_good_core',
+              '{{project_name.snakeCase()}}',
+            );
+        final newPath = path.join(_targetPath, newPathSegment);
+        File(newPath).createSync(recursive: true);
+        file.renameSync(newPath);
+        Directory(file.parent.path).deleteSync(recursive: true);
       } catch (_) {}
     }),
   );
