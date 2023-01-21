@@ -49,8 +49,8 @@ class DialogUtils {
     BuildContext context, {
     Duration? duration,
   }) =>
-      FlashController<T>(
-        context,
+      showFlash(
+        context: context,
         duration: duration,
         builder: (BuildContext context, FlashController<void> controller) =>
             Flash<void>(
@@ -74,7 +74,7 @@ class DialogUtils {
             ),
           ),
         ),
-      ).show();
+      );
 
   static Future<bool?> showConfirmationDialog(
     BuildContext context, {
