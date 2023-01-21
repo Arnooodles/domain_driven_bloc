@@ -1,4 +1,4 @@
-# {{#titleCase}}{{project_name}}{{/titleCase}}
+# {{project_name.titleCase()}}
 
 [![ci][ci_badge]][ci_badge_link]
 [![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]

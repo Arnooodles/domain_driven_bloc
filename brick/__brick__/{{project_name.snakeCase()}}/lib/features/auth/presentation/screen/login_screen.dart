@@ -1,3 +1,4 @@
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -97,9 +98,10 @@ class LoginScreen extends HookWidget {
     if (state.isSuccess) {
       context.read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>().authenticate();
     } else if (state.failure != null) {
-      DialogUtils.showSnackbar(
+      DialogUtils.showToast(
         context,
         ErrorMessageUtils.generate(context, state.failure),
+        position: FlashPosition.bottom,
       );
     }
   }
