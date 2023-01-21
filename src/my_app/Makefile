@@ -60,7 +60,7 @@ lcov_gen_widget: ## Generates lcov for widget tests only
 lcov_report_mac: ## Generates lcov report for macOS
 	lcov  --remove coverage/lcov.info 'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*'   -o coverage/lcov.info
 	genhtml coverage/lcov.info -o coverage/
-	open coverage/html/index.html		
+	open coverage/index.html		
 
 lcov_report_win:  ## Generates lcov report for Windows
 	perl ${LCOV} --remove coverage/lcov.info 'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*'   -o coverage/lcov.info
