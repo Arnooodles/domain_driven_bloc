@@ -105,15 +105,13 @@ void main() {
 
     goldenTest(
       'renders correctly when isPassword is true',
-      fileName:
-          '{{project_name.snakeCase()}}_text_field_password'.goldensVersion,
+      fileName: '{{project_name.snakeCase()}}_text_field_password'.goldensVersion,
       builder: () => buildTextFieldTestGroup(isPassword: true),
     );
 
     goldenTest(
       'renders correctly when is true and password is visible',
-      fileName: '{{project_name.snakeCase()}}_text_field_password_visible'
-          .goldensVersion,
+      fileName: '{{project_name.snakeCase()}}_text_field_password_visible'.goldensVersion,
       pumpBeforeTest: (WidgetTester tester) async {
         for (final Element element in find.byType(GestureDetector).evaluate()) {
           await tester.tapAt(tester.getCenter(find.byWidget(element.widget)));
