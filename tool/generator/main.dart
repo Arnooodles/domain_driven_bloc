@@ -72,11 +72,15 @@ void main() async {
               .replaceAll('very-good-core', '{{project_name.paramCase()}}')
               .replaceAll('A new Flutter project.', '{{{description}}}')
               .replaceAll('Very Good Core', '{{project_name.titleCase()}}')
+              .replaceAll('VeryGoodCore',
+                  '{{#pascalCase}}{{project_name}}{{/pascalCase}}')
+              .replaceAll('veryGoodCore',
+                  '{{#camelCase}}{{project_name}}{{/camelCase}}')
               .replaceApplicationId(file.path),
         );
 
         final fileSegments = file.path.split('/').sublist(2);
-        if (fileSegments.any((element)=> element.contains('very_good_core'))) {
+        if (fileSegments.any((element) => element.contains('very_good_core'))) {
           final newPathSegment = fileSegments.join('/').replaceAll(
                 'very_good_core',
                 '{{project_name.snakeCase()}}',

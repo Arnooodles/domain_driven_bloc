@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:very_good_core/app/constants/route.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/app/themes/text_styles.dart';
@@ -10,7 +11,6 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_text_url
 import 'package:very_good_core/features/home/domain/model/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_footer.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_header.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class PostContainer extends StatelessWidget {
   const PostContainer({super.key, required this.post});
