@@ -16,16 +16,16 @@ extension GeneratorStringX on String {
 
     if (isAndroid && filePath.endsWith('build.gradle')) {
       return replaceAll(
-        'com.example.veryGoodCore',
+        'com.example.very_good_core',
         '{{application_id_android}}',
       );
     } else if (isAndroid) {
       return replaceAll(
-        'com.example.veryGoodCore',
+        'com.example.very_good_core',
         '{{org_name.dotCase()}}.{{project_name.snakeCase()}}',
       );
     } else {
-      return replaceAll('com.example.veryGoodCore', '{{application_id}}');
+      return replaceAll('com.example.very_good_core', '{{application_id}}');
     }
   }
 }
@@ -67,15 +67,15 @@ void main() async {
 
         file = await file.writeAsString(
           contents
-              .replaceAll('very_good_core', '{{project_name.snakeCase()}}')
+              .replaceApplicationId(file.path)
               .replaceAll('very-good-core', '{{project_name.paramCase()}}')
-              .replaceAll('A new Flutter project.', '{{{description}}}')
+              .replaceAll('A Very Good App', '{{{description}}}')
               .replaceAll('Very Good Core', '{{project_name.titleCase()}}')
               .replaceAll('VeryGoodCore',
                   '{{#pascalCase}}{{project_name}}{{/pascalCase}}')
               .replaceAll('veryGoodCore',
                   '{{#camelCase}}{{project_name}}{{/camelCase}}')
-              .replaceApplicationId(file.path),
+              .replaceAll('very_good_core', '{{project_name.snakeCase()}}'),
         );
 
         final fileSegments = file.path.split('/').sublist(2);
@@ -89,7 +89,6 @@ void main() async {
           final newPath = path.join(_targetPath, newPathSegment);
           File(newPath).createSync(recursive: true);
           file.renameSync(newPath);
-          //Directory(file.parent.path).deleteSync(recursive: true);
         }
       } catch (_) {}
     }),
