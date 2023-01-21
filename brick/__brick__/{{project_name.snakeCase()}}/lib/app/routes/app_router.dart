@@ -13,14 +13,14 @@ import 'package:{{project_name.snakeCase()}}/core/domain/bloc/{{project_name.sna
 
 @injectable
 class AppRouter {
-  AppRouter(@factoryParam this.{{#camelCase}}{{project_name}}{{/camelCase}}Bloc);
+  AppRouter(@factoryParam this.veryGoodCoreBloc);
 
   final GlobalKey<NavigatorState> rootNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'root');
   final GlobalKey<NavigatorState> shellNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'shell');
   final ValueKey<String> scaffoldKey = const ValueKey<String>('scaffold');
-  final {{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
+  final VeryGoodCoreBloc veryGoodCoreBloc;
 
   late final GoRouter router = GoRouter(
     debugLogDiagnostics: kDebugMode,
@@ -29,24 +29,24 @@ class AppRouter {
     routes:
         getIt<AppRoutes>(param1: shellNavigatorKey, param2: scaffoldKey).routes,
     redirect: _routeGuard,
-    refreshListenable: GoRouterRefreshStream({{#camelCase}}{{project_name}}{{/camelCase}}Bloc.stream),
+    refreshListenable: GoRouterRefreshStream(veryGoodCoreBloc.stream),
     observers:
         kDebugMode ? <NavigatorObserver>[getIt<GoRouteObserver>()] : null,
   );
 
   String? _routeGuard(_, GoRouterState state) {
-    final {{#pascalCase}}{{project_name}}{{/pascalCase}}State {{#camelCase}}{{project_name}}{{/camelCase}}State = {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state;
+    final VeryGoodCoreState veryGoodCoreState = veryGoodCoreBloc.state;
     final String loginPath = RouteName.login.path;
     final String initialPath = RouteName.initial.path;
     final String homePath = RouteName.home.path;
 
     // Check if app is still initializing
-    if ({{#camelCase}}{{project_name}}{{/camelCase}}State.authStatus == AuthStatus.unknown) {
+    if (veryGoodCoreState.authStatus == AuthStatus.unknown) {
       return initialPath;
     }
 
     final bool authenticated =
-        {{#camelCase}}{{project_name}}{{/camelCase}}State.authStatus == AuthStatus.authenticated;
+        veryGoodCoreState.authStatus == AuthStatus.authenticated;
     // Check if the app is in the login screen
     final bool isLoginScreen = state.subloc == loginPath;
     final bool isSplashScreen = state.subloc == initialPath;

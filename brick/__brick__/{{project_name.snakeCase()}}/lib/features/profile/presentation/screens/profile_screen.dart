@@ -23,8 +23,8 @@ class ProfileScreen extends HookWidget {
   Widget build(BuildContext context) {
     final RefreshController refreshController = useRefreshController();
 
-    return BlocBuilder<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc, {{#pascalCase}}{{project_name}}{{/pascalCase}}State>(
-      builder: (BuildContext context, {{#pascalCase}}{{project_name}}{{/pascalCase}}State state) {
+    return BlocBuilder<VeryGoodCoreBloc, VeryGoodCoreState>(
+      builder: (BuildContext context, VeryGoodCoreState state) {
         final User user = state.user!;
         final bool hasContactNumber =
             user.contactNumber?.getOrCrash().isNotNullOrBlank ?? false;
@@ -32,7 +32,7 @@ class ProfileScreen extends HookWidget {
           return const LoadingScreen();
         } else if (state.failure != null) {
           return ErrorScreen(
-            onRefresh: () async => context.read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>().getUser(),
+            onRefresh: () async => context.read<VeryGoodCoreBloc>().getUser(),
             errorMessage: ErrorMessageUtils.generate(context, state.failure),
           );
         }
@@ -40,7 +40,7 @@ class ProfileScreen extends HookWidget {
         return SmartRefresher(
           controller: refreshController,
           header: const ClassicHeader(),
-          onRefresh: () async => context.read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>().getUser(),
+          onRefresh: () async => context.read<VeryGoodCoreBloc>().getUser(),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: Insets.xl),
             child: Column(
@@ -54,7 +54,7 @@ class ProfileScreen extends HookWidget {
                 VSpace(Insets.med),
                 Row(
                   children: <Widget>[
-                    {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
+                    VeryGoodCoreAvatar(
                       size: 100,
                       imageUrl: user.avatar?.getOrCrash(),
                     ),
@@ -84,28 +84,28 @@ class ProfileScreen extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       VSpace.sm,
-                      {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(
+                      VeryGoodCoreInfoTextField(
                         title: context.l10n.profile__label_text__email,
                         description: user.email.getOrCrash(),
                       ),
                       if (hasContactNumber) VSpace.sm,
                       if (hasContactNumber)
-                        {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(
+                        VeryGoodCoreInfoTextField(
                           title: context.l10n.profile__label_text__phone_number,
                           description: user.contactNumber!.getOrCrash(),
                         ),
                       VSpace.sm,
-                      {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(
+                      VeryGoodCoreInfoTextField(
                         title: context.l10n.profile__label_text__gender,
                         description: user.gender.name.capitalize(),
                       ),
                       VSpace.sm,
-                      {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(
+                      VeryGoodCoreInfoTextField(
                         title: context.l10n.profile__label_text__birthday,
                         description: user.birthday.defaultFormat(),
                       ),
                       VSpace.sm,
-                      {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(
+                      VeryGoodCoreInfoTextField(
                         title: context.l10n.profile__label_text__age,
                         description: user.age,
                       ),
@@ -113,12 +113,12 @@ class ProfileScreen extends HookWidget {
                   ),
                 ),
                 Center(
-                  child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
+                  child: VeryGoodCoreButton(
                     isExpanded: true,
                     padding: EdgeInsets.zero,
                     contentPadding: EdgeInsets.symmetric(vertical: Insets.med),
                     text: context.l10n.profile__button_text__logout,
-                    onPressed: () => context.read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>().logout(),
+                    onPressed: () => context.read<VeryGoodCoreBloc>().logout(),
                   ),
                 ),
                 VSpace(Insets.lg),
