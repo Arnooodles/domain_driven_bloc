@@ -32,7 +32,8 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}Screen extends StatelessWidg
             builder: (BuildContext context, {{#pascalCase}}{{project_name}}{{/pascalCase}}State state) {
               if (state.failure != null) {
                 return ErrorScreen(
-                  onRefresh: () => context.read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>().initialize(),
+                  onRefresh: () =>
+                      context.read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>().initialize(),
                   errorMessage:
                       ErrorMessageUtils.generate(context, state.failure),
                 );
