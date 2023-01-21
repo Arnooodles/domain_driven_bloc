@@ -78,7 +78,7 @@ void main() async {
         );
 
         final fileSegments = file.path.split('/').sublist(2);
-        if (fileSegments.any((element) => element.contains('very_good_core'))) {
+        if (fileSegments.contains('very_good_core')) {
           final newPathSegment = fileSegments.join('/').replaceAll(
                 'very_good_core',
                 '{{project_name.snakeCase()}}',
