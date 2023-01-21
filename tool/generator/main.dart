@@ -48,24 +48,22 @@ void main() async {
     Directory(path.join(_targetPath, 'my_app'))
         .listSync(recursive: true)
         .whereType<File>()
-        .map((_) async {
-      var file = _;
-
+        .map((File element) async {
+      File file = element;
       try {
         if (path.basename(file.path) == 'LICENSE') {
           await file.delete(recursive: true);
           return;
         }
+        final contents = await file.readAsString();
 
         if (file.path.endsWith('Info.plist')) {
-          final contents = await file.readAsString();
           file = await file.writeAsString(contents.replaceAll(
             '<string>Very Good Core</string>',
             r'<string>$(FLAVOR_APP_NAME)</string>',
           ));
         }
 
-        final contents = await file.readAsString();
         file = await file.writeAsString(
           contents
               .replaceAll('very_good_core', '{{project_name.snakeCase()}}')
