@@ -15,17 +15,17 @@ class App extends StatelessWidget {
   App({super.key});
 
   final GoRouter routerConfig =
-      getIt<AppRouter>(param1: getIt<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>()).router;
+      getIt<AppRouter>(param1: getIt<VeryGoodCoreBloc>()).router;
 
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
         providers: <BlocProvider<dynamic>>[
-          BlocProvider<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>(
-            create: (BuildContext context) => getIt<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>(),
+          BlocProvider<VeryGoodCoreBloc>(
+            create: (BuildContext context) => getIt<VeryGoodCoreBloc>(),
           ),
         ],
-        child: BlocBuilder<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc, {{#pascalCase}}{{project_name}}{{/pascalCase}}State>(
-          builder: (BuildContext context, {{#pascalCase}}{{project_name}}{{/pascalCase}}State state) =>
+        child: BlocBuilder<VeryGoodCoreBloc, VeryGoodCoreState>(
+          builder: (BuildContext context, VeryGoodCoreState state) =>
               MaterialApp.router(
             title: Constant.appName,
             theme: AppTheme.lightTheme,

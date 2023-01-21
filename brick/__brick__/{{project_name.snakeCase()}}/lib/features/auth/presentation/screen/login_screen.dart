@@ -51,7 +51,7 @@ class LoginScreen extends HookWidget {
                     Expanded(
                       child: Column(
                         children: <Widget>[
-                          {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+                          VeryGoodCoreTextField(
                             labelText: context.l10n.login__label_text__email,
                             controller: emailTextController,
                             autofocus: true,
@@ -62,7 +62,7 @@ class LoginScreen extends HookWidget {
                                 .onEmailAddressChanged(value),
                           ),
                           VSpace.lg,
-                          {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+                          VeryGoodCoreTextField(
                             labelText: context.l10n.login__label_text__password,
                             controller: passwordTextController,
                             isPassword: true,
@@ -71,7 +71,7 @@ class LoginScreen extends HookWidget {
                                 context.l10n.login__text_field_hint__password,
                           ),
                           VSpace.xxl,
-                          {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
+                          VeryGoodCoreButton(
                             isExpanded: true,
                             isEnabled: !state.isLoading,
                             onPressed: () => context.read<LoginBloc>().login(
@@ -95,7 +95,7 @@ class LoginScreen extends HookWidget {
 
   void _loginScreenListener(BuildContext context, LoginState state) {
     if (state.isSuccess) {
-      context.read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>().authenticate();
+      context.read<VeryGoodCoreBloc>().authenticate();
     } else if (state.failure != null) {
       DialogUtils.showSnackbar(
         context,

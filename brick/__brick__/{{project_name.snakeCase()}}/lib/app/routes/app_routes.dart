@@ -37,7 +37,7 @@ class AppRoutes {
         ShellRoute(
           navigatorKey: shellNavigatorKey,
           builder: (BuildContext context, GoRouterState state, Widget child) =>
-              {{#pascalCase}}{{project_name}}{{/pascalCase}}Screen(child: child),
+              VeryGoodCoreScreen(child: child),
           routes: <RouteBase>[
             GoRoute(
               path: RouteName.home.path,

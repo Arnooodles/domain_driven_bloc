@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-/// Defines the color palette for the {{#pascalCase}}{{project_name}}{{/pascalCase}} UI.
+/// Defines the color palette for the VeryGoodCore UI.
 abstract class AppColors {
   /// Black
   static const Color black = Color(0xFF202124);

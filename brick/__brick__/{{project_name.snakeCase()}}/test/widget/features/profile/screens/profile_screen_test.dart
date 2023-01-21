@@ -13,32 +13,32 @@ import '../../../../utils/mock_material_app.dart';
 import '../../../../utils/test_utils.dart';
 import 'profile_screen_test.mocks.dart';
 
-@GenerateMocks(<Type>[{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc])
+@GenerateMocks(<Type>[VeryGoodCoreBloc])
 void main() {
-  late Mock{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
+  late MockVeryGoodCoreBloc veryGoodCoreBloc;
 
   setUp(() {
-    {{#camelCase}}{{project_name}}{{/camelCase}}Bloc = Mock{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc();
+    veryGoodCoreBloc = MockVeryGoodCoreBloc();
 
-    when({{#camelCase}}{{project_name}}{{/camelCase}}Bloc.stream).thenAnswer(
-      (_) => Stream<{{#pascalCase}}{{project_name}}{{/pascalCase}}State>.fromIterable(<{{#pascalCase}}{{project_name}}{{/pascalCase}}State>[
-        {{#pascalCase}}{{project_name}}{{/pascalCase}}State.initial().copyWith(
+    when(veryGoodCoreBloc.stream).thenAnswer(
+      (_) => Stream<VeryGoodCoreState>.fromIterable(<VeryGoodCoreState>[
+        VeryGoodCoreState.initial().copyWith(
           authStatus: AuthStatus.authenticated,
           user: mockUser,
           isLoading: false,
         ),
       ]),
     );
-    when({{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state).thenAnswer(
-      (_) => {{#pascalCase}}{{project_name}}{{/pascalCase}}State.initial().copyWith(
+    when(veryGoodCoreBloc.state).thenAnswer(
+      (_) => VeryGoodCoreState.initial().copyWith(
         authStatus: AuthStatus.authenticated,
         user: mockUser,
         isLoading: false,
       ),
     );
   });
-  Widget buildProfileScreen() => BlocProvider<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>(
-        create: (BuildContext context) => {{#camelCase}}{{project_name}}{{/camelCase}}Bloc,
+  Widget buildProfileScreen() => BlocProvider<VeryGoodCoreBloc>(
+        create: (BuildContext context) => veryGoodCoreBloc,
         child: const MockMaterialApp(
           child: Scaffold(
             body: ProfileScreen(),

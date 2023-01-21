@@ -33,7 +33,7 @@ class PostContainer extends StatelessWidget {
                   if (post.urlOverriddenByDest != null)
                     Padding(
                       padding: EdgeInsets.all(Insets.med),
-                      child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl(
+                      child: VeryGoodCoreTextUrl(
                         url: post.urlOverriddenByDest!,
                         onTap: () => launchUrl(
                           Uri.parse(post.urlOverriddenByDest!.getOrCrash()),
