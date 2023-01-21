@@ -52,19 +52,6 @@ void main() async {
       File file = element;
       try {
         final contents = await file.readAsString();
-        final fileSegments = file.path.split('/').sublist(2);
-
-        if (fileSegments
-            .any((String element) => element.contains('very_good_core'))) {
-          final newPathSegment = fileSegments.join('/').replaceAll(
-                'very_good_core',
-                '{{project_name.snakeCase()}}',
-              );
-          final newPath = path.join(_targetPath, newPathSegment);
-          File(newPath).createSync(recursive: true);
-          file.renameSync(newPath);
-          Directory(file.parent.path).deleteSync(recursive: true);
-        }
 
         if (path.basename(file.path) == 'LICENSE') {
           await file.delete(recursive: true);
@@ -90,6 +77,20 @@ void main() async {
                   '{{#camelCase}}{{project_name}}{{/camelCase}}')
               .replaceApplicationId(file.path),
         );
+
+        final fileSegments = file.path.split('/').sublist(2);
+
+        if (fileSegments
+            .any((String element) => element.contains('very_good_core'))) {
+          final newPathSegment = fileSegments.join('/').replaceAll(
+                'very_good_core',
+                '{{project_name.snakeCase()}}',
+              );
+          final newPath = path.join(_targetPath, newPathSegment);
+          File(newPath).createSync(recursive: true);
+          file.renameSync(newPath);
+          //Directory(file.parent.path).deleteSync(recursive: true);
+        }
       } catch (_) {}
     }),
   );
