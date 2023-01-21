@@ -15,22 +15,6 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_dialogs.
 class DialogUtils {
   DialogUtils._();
 
-  static Future<void> showSnackbar(
-    BuildContext context,
-    String message, {
-    Duration? duration,
-  }) async =>
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: AppColors.charcoal,
-          duration: duration ?? const Duration(milliseconds: 4000),
-          content: Text(
-            message,
-            style: AppTextStyle.caption.copyWith(color: AppColors.white),
-          ),
-        ),
-      );
-
   static Future<bool> showExitDialog(BuildContext context) async =>
       await DialogUtils.showConfirmationDialog(
         context,
@@ -139,7 +123,7 @@ class DialogUtils {
                     padding: EdgeInsets.only(right: Insets.sm),
                     child: icon,
                   ),
-                Expanded(
+                Flexible(
                   child: Text(
                     message,
                     style: AppTextStyle.caption,

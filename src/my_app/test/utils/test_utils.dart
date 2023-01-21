@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:chopper/chopper.dart' as chopper;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:mockito/annotations.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,15 +17,14 @@ import 'package:very_good_core/features/home/domain/model/post.dart';
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';
 
-@GenerateMocks(<Type>[http.Client])
 Future<void> setupInjection() async {
   await getIt.reset();
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = MockPathProviderPlatform();
+  initializeSingletons();
   await initializeEnvironmentConfig(Env.test);
   SharedPreferences.setMockInitialValues(<String, Object>{});
   await configureDependencies(Env.test);
-  initializeSingletons();
 }
 
 User get mockUser => UserDTO(
