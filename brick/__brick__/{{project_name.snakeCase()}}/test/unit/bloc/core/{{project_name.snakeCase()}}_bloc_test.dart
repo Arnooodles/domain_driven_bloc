@@ -23,7 +23,7 @@ void main() {
   late MockIAuthRepository authRepository;
   late {{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
 
-  setUp(() async {
+  setUp(() {
     userRepository = MockIUserRepository();
     authRepository = MockIAuthRepository();
     {{#camelCase}}{{project_name}}{{/camelCase}}Bloc = {{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc(userRepository, authRepository);
@@ -88,7 +88,7 @@ void main() {
 
         return {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
       },
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.getUser(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.getUser(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,
@@ -111,7 +111,7 @@ void main() {
 
         return {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
       },
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.getUser(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.getUser(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,
@@ -133,7 +133,7 @@ void main() {
 
         return {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
       },
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.getUser(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.getUser(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,
@@ -160,7 +160,7 @@ void main() {
 
         return {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
       },
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.logout(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.logout(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,
@@ -184,7 +184,7 @@ void main() {
 
         return {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
       },
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.logout(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.logout(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,
@@ -205,7 +205,7 @@ void main() {
 
         return {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
       },
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.logout(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.logout(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,
@@ -230,7 +230,7 @@ void main() {
     blocTest<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc, {{#pascalCase}}{{project_name}}{{/pascalCase}}State>(
       'should emit an authenticated user state',
       build: () => {{#camelCase}}{{project_name}}{{/camelCase}}Bloc,
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.authenticate(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.authenticate(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,
@@ -253,7 +253,7 @@ void main() {
 
         return {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
       },
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.authenticate(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.authenticate(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,
@@ -275,7 +275,7 @@ void main() {
 
         return {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
       },
-      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) async => bloc.authenticate(),
+      act: ({{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc bloc) => bloc.authenticate(),
       expect: () => <dynamic>[
         {{#camelCase}}{{project_name}}{{/camelCase}}Bloc.state.copyWith(
           authStatus: AuthStatus.authenticated,

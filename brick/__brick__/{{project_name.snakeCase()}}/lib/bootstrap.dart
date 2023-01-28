@@ -13,6 +13,7 @@ import 'package:{{project_name.snakeCase()}}/app/generated/assets.gen.dart';
 import 'package:{{project_name.snakeCase()}}/app/observers/app_bloc_observer.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
 
+// ignore_for_file: prefer-static-class
 Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   WidgetsFlutterBinding.ensureInitialized();
   urlConfig();
