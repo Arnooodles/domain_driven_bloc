@@ -40,8 +40,8 @@ void main() {
               constraints: const BoxConstraints(minWidth: 200),
               child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
                 text: 'Button',
-                isExpanded: true,
                 isEnabled: false,
+                isExpanded: true,
                 onPressed: () => counter++,
               ),
             ),
@@ -51,10 +51,10 @@ void main() {
     goldenTest(
       'renders correctly in initial state',
       fileName: '{{project_name.snakeCase()}}_button'.goldensVersion,
-      builder: buildButtonTestGroup,
       pumpBeforeTest: (WidgetTester tester) async {
         await tester.pump(const Duration(seconds: 1));
       },
+      builder: buildButtonTestGroup,
     );
   });
 }

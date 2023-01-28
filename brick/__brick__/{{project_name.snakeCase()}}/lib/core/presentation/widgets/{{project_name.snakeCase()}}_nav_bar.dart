@@ -23,8 +23,8 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends StatelessWidg
               label: AppLocalizations.of(context).common_profile.capitalize(),
             ),
           ],
-          currentIndex: _getSelectedIndex(context),
           onTap: (int index) => _onItemTapped(index, context),
+          currentIndex: _getSelectedIndex(context),
         ),
       );
 

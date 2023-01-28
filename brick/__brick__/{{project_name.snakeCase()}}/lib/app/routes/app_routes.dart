@@ -35,7 +35,6 @@ class AppRoutes {
               const LoginScreen(),
         ),
         ShellRoute(
-          navigatorKey: shellNavigatorKey,
           builder: (BuildContext context, GoRouterState state, Widget child) =>
               {{#pascalCase}}{{project_name}}{{/pascalCase}}Screen(child: child),
           routes: <RouteBase>[
@@ -73,6 +72,7 @@ class AppRoutes {
               ),
             ),
           ],
+          navigatorKey: shellNavigatorKey,
         ),
       ];
 }
