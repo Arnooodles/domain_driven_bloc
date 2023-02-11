@@ -13,10 +13,10 @@ import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_au
 import '../../../utils/test_utils.dart';
 import '{{project_name.snakeCase()}}_bloc_test.mocks.dart';
 
-@GenerateMocks(<Type>[
-  IUserRepository,
-  {{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc,
-  IAuthRepository,
+@GenerateNiceMocks(<MockSpec<dynamic>>[
+  MockSpec<IUserRepository>(),
+  MockSpec<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>(),
+  MockSpec<IAuthRepository>(),
 ])
 void main() {
   late MockIUserRepository userRepository;

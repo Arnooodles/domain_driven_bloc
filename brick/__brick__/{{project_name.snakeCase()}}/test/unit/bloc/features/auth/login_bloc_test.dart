@@ -11,7 +11,12 @@ import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_au
 
 import 'login_bloc_test.mocks.dart';
 
-@GenerateMocks(<Type>[IAuthRepository, ILocalStorageRepository])
+@GenerateNiceMocks(
+  <MockSpec<dynamic>>[
+    MockSpec<IAuthRepository>(),
+    MockSpec<ILocalStorageRepository>(),
+  ],
+)
 void main() {
   late MockIAuthRepository authRepository;
   late MockILocalStorageRepository localStorageRepository;

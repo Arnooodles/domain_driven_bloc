@@ -106,6 +106,7 @@ linter:
     lines_longer_than_80_chars: false
     avoid_classes_with_only_static_members: false
     directives_ordering: false
+    always_put_required_named_parameters_first: false
 
 dart_code_metrics:
   anti-patterns:

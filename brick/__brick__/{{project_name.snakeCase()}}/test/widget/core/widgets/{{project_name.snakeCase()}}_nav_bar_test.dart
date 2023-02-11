@@ -12,7 +12,7 @@ import '../../../utils/mock_localization.dart';
 import '../../../utils/test_utils.dart';
 import '{{project_name.snakeCase()}}_nav_bar_test.mocks.dart';
 
-@GenerateMocks(<Type>[GoRouter])
+@GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<GoRouter>()])
 void main() {
   late MockGoRouter routerHome;
   late MockGoRouter routerProfile;

@@ -55,15 +55,14 @@ class _FooterItems extends StatelessWidget {
             Icon(
               leftIcon,
               size: (AppTextStyle.bodySmall.fontSize ?? 14) * 1.5,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+              color: Theme.of(context).colorScheme.secondary,
             ),
             Padding(
               padding: EdgeInsets.all(Insets.xs),
               child: Text(
                 value,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),
@@ -71,7 +70,7 @@ class _FooterItems extends StatelessWidget {
               Icon(
                 rightIcon,
                 size: (AppTextStyle.bodySmall.fontSize ?? 14) * 1.5,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+                color: Theme.of(context).colorScheme.secondary,
               ),
           ],
         ),

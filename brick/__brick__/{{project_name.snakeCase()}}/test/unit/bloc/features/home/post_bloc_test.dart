@@ -13,7 +13,12 @@ import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dar
 
 import 'post_bloc_test.mocks.dart';
 
-@GenerateMocks(<Type>[IPostRepository, ILocalStorageRepository])
+@GenerateNiceMocks(
+  <MockSpec<dynamic>>[
+    MockSpec<IPostRepository>(),
+    MockSpec<ILocalStorageRepository>(),
+  ],
+)
 void main() {
   late MockIPostRepository postRepository;
   late PostBloc postBloc;

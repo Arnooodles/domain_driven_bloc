@@ -12,7 +12,10 @@ import 'package:{{project_name.snakeCase()}}/features/auth/data/service/auth_ser
 import '../../../../utils/test_utils.dart';
 import 'auth_repository_test.mocks.dart';
 
-@GenerateMocks(<Type>[AuthService, LocalStorageRepository])
+@GenerateNiceMocks(<MockSpec<dynamic>>[
+  MockSpec<AuthService>(),
+  MockSpec<LocalStorageRepository>(),
+])
 void main() {
   late MockAuthService authService;
   late MockLocalStorageRepository localStorageRepository;

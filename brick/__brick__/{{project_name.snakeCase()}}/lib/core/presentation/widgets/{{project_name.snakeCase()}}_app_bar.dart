@@ -1,50 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/{{project_name.snakeCase()}}/{{project_name.snakeCase()}}_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_objects.dart';
-import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_avatar.dart';
+import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 
-class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends HookWidget {
+class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar({
     super.key,
-    this.avatar,
+    this.title,
+    this.titleColor,
+    this.actions,
+    this.centerTitle = false,
+    this.backgroundColor,
+    this.leading,
+    this.automaticallyImplyLeading = false,
+    this.scrolledUnderElevation = 0,
+    this.showTitle = true,
   });
 
-  final Url? avatar;
+  final String? title;
+  final List<Widget>? actions;
+  final bool centerTitle;
+  final Color? backgroundColor;
+  final Color? titleColor;
+  final Widget? leading;
+  final bool automaticallyImplyLeading;
+  final double scrolledUnderElevation;
+  final bool showTitle;
 
   @override
   Widget build(BuildContext context) => AppBar(
-        leading: GoRouter.of(context).canPop()
-            ? BackButton(
-                onPressed: () => GoRouter.of(context).canPop()
-                    ? GoRouter.of(context).pop()
-                    : null,
+        leading: leading,
+        automaticallyImplyLeading: automaticallyImplyLeading,
+        title: showTitle
+            ? Padding(
+                padding: EdgeInsets.only(left: Insets.xs),
+                child: Text(
+                  title ?? Constant.appName,
+                  style: AppTextStyle.headlineSmall.copyWith(
+                    color: titleColor,
+                    fontWeight: AppFontWeight.medium,
+                  ),
+                ),
               )
             : null,
-        title: Text(
-          Constant.appName,
-          style: AppTextStyle.headlineSmall.copyWith(color: AppColors.white),
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => context
-                .read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>()
-                .switchTheme(Theme.of(context).brightness),
-            icon: Theme.of(context).brightness == Brightness.dark
-                ? const Icon(Icons.light_mode)
-                : const Icon(Icons.dark_mode),
-          ),
-          {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
-            size: 32,
-            imageUrl: avatar?.getOrCrash(),
-            padding: EdgeInsets.all(Insets.sm),
-          ),
-        ],
+        actions: actions,
+        scrolledUnderElevation: scrolledUnderElevation,
+        backgroundColor: backgroundColor ?? context.colorScheme.background,
+        centerTitle: centerTitle,
       );
 }
