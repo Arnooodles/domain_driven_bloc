@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:leak_tracker/leak_tracker.dart';
 import 'package:logger/logger.dart';
 import 'package:very_good_core/app/config/chopper_config.dart';
 import 'package:very_good_core/app/config/url_strategy_native.dart'
@@ -18,6 +20,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   WidgetsFlutterBinding.ensureInitialized();
   urlConfig();
   initializeSingletons();
+  enableLeakTracking();
   await initializeEnvironmentConfig(env);
   await configureDependencies(env);
 
@@ -27,6 +30,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   FlutterError.onError = (FlutterErrorDetails details) {
     logger.e(details.exceptionAsString(), details, details.stack);
   };
+  MemoryAllocations.instance
+      .addListener((ObjectEvent event) => dispatchObjectEvent(event.toMap()));
 
   await runZonedGuarded(
     () async => runApp(await builder()),
