@@ -13,7 +13,7 @@ import '../../../../utils/mock_material_app.dart';
 import '../../../../utils/test_utils.dart';
 import 'profile_screen_test.mocks.dart';
 
-@GenerateMocks(<Type>[{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc])
+@GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>()])
 void main() {
   late Mock{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
 

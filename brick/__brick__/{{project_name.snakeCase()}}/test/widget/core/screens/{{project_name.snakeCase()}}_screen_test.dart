@@ -19,7 +19,10 @@ import '../../../utils/mock_material_app.dart';
 import '../../../utils/test_utils.dart';
 import '{{project_name.snakeCase()}}_screen_test.mocks.dart';
 
-@GenerateMocks(<Type>[{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc, GoRouter])
+@GenerateNiceMocks(<MockSpec<dynamic>>[
+  MockSpec<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>(),
+  MockSpec<GoRouter>(),
+])
 void main() {
   late Mock{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc {{#camelCase}}{{project_name}}{{/camelCase}}Bloc;
   late Mock{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc {{#camelCase}}{{project_name}}{{/camelCase}}BlocError;

@@ -10,7 +10,7 @@ import 'package:{{project_name.snakeCase()}}/core/domain/model/user.dart';
 import '../../../utils/test_utils.dart';
 import 'user_repository_test.mocks.dart';
 
-@GenerateMocks(<Type>[UserService])
+@GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<UserService>()])
 void main() {
   late UserService userService;
   late UserRepository userRepository;

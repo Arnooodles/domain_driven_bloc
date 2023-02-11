@@ -3,86 +3,120 @@ import 'package:flutter/widgets.dart';
 /// App Text Style Definitions
 abstract class AppTextStyle {
   static const TextStyle _baseTextStyle = TextStyle(
-    //fontFamily: Assets.fonts.openSansRegular,
     fontWeight: AppFontWeight.regular,
   );
 
-  /// Headline 1 Text Style
+  /// Display Large Text Style
   static TextStyle get displayLarge => _baseTextStyle.copyWith(
-        fontSize: 56,
-        fontWeight: AppFontWeight.medium,
-      );
-
-  /// Headline 2 Text Style
-  static TextStyle get displayMedium => _baseTextStyle.copyWith(
-        fontSize: 30,
+        fontSize: 57,
         fontWeight: AppFontWeight.regular,
+        // height: 64,
       );
 
-  /// Headline 3 Text Style
+  /// Display Medium Text Style
+  static TextStyle get displayMedium => _baseTextStyle.copyWith(
+        fontSize: 45,
+        fontWeight: AppFontWeight.regular,
+        // height: 52,
+      );
+
+  /// Display Small Text Style
   static TextStyle get displaySmall => _baseTextStyle.copyWith(
+        fontSize: 36,
+        fontWeight: AppFontWeight.regular,
+        // height: 44,
+      );
+
+  /// Headline Large Text Style
+  static TextStyle get headlineLarge => _baseTextStyle.copyWith(
+        fontSize: 32,
+        fontWeight: AppFontWeight.regular,
+        // height: 40,
+      );
+
+  /// Headline Medium Text Style
+  static TextStyle get headlineMedium => _baseTextStyle.copyWith(
         fontSize: 28,
         fontWeight: AppFontWeight.regular,
+        // height: 36,
       );
 
-  /// Headline 4 Text Style
-  static TextStyle get headlineMedium => _baseTextStyle.copyWith(
-        fontSize: 22,
-        fontWeight: AppFontWeight.bold,
-      );
-
-  /// Headline 5 Text Style
+  /// Headline Small Text Style
   static TextStyle get headlineSmall => _baseTextStyle.copyWith(
-        fontSize: 20,
-        fontWeight: AppFontWeight.medium,
+        fontSize: 24,
+        fontWeight: AppFontWeight.regular,
+        // height: 32,
       );
 
-  /// Headline 6 Text Style
+  /// Title Large Text Style
   static TextStyle get titleLarge => _baseTextStyle.copyWith(
         fontSize: 22,
-        fontWeight: AppFontWeight.bold,
+        fontWeight: AppFontWeight.regular,
+        // height: 28,
       );
 
-  /// Subtitle 1 Text Style
+  /// Title Medium Text Style
   static TextStyle get titleMedium => _baseTextStyle.copyWith(
         fontSize: 16,
-        fontWeight: AppFontWeight.bold,
+        fontWeight: AppFontWeight.medium,
+        letterSpacing: 0.15,
+        // height: 24,
       );
 
-  /// Subtitle 2 Text Style
+  /// Title Small Text Style
   static TextStyle get titleSmall => _baseTextStyle.copyWith(
         fontSize: 14,
-        fontWeight: AppFontWeight.bold,
-      );
-
-  /// Body Text 1 Text Style
-  static TextStyle get bodyLarge => _baseTextStyle.copyWith(
-        fontSize: 18,
         fontWeight: AppFontWeight.medium,
+        letterSpacing: 0.1,
+        // height: 20,
       );
 
-  /// Body Text 2 Text Style (the default)
-  static TextStyle get bodyMedium => _baseTextStyle.copyWith(
+  /// Label Large Text Style
+  static TextStyle get labelLarge => _baseTextStyle.copyWith(
+        fontSize: 14,
+        fontWeight: AppFontWeight.medium,
+        letterSpacing: 0.1,
+        // height: 20,
+      );
+
+  /// Label Medium Text Style
+  static TextStyle get labelMedium => _baseTextStyle.copyWith(
+        fontSize: 12,
+        fontWeight: AppFontWeight.medium,
+        letterSpacing: 0.5,
+        // height: 16,
+      );
+
+  /// Label Small Text Style
+  static TextStyle get labelSmall => _baseTextStyle.copyWith(
+        fontSize: 11,
+        fontWeight: AppFontWeight.medium,
+        letterSpacing: 0.5,
+        // height: 16,
+      );
+
+  /// Body Large Text Style
+  static TextStyle get bodyLarge => _baseTextStyle.copyWith(
         fontSize: 16,
         fontWeight: AppFontWeight.regular,
+        letterSpacing: 0.5,
+        // height: 24,
       );
 
-  /// bodySmall Text Style
-  static TextStyle get bodySmall => _baseTextStyle.copyWith(
+  /// Body Medium Text Style
+  static TextStyle get bodyMedium => _baseTextStyle.copyWith(
         fontSize: 14,
         fontWeight: AppFontWeight.regular,
+        letterSpacing: 0.25,
+        // height: 20,
       );
 
-  /// labelSmall Text Style
-  static TextStyle get labelSmall => _baseTextStyle.copyWith(
-        fontSize: 16,
+  /// Body Small Text Style
+  static TextStyle get bodySmall => _baseTextStyle.copyWith(
+        fontSize: 12,
         fontWeight: AppFontWeight.regular,
-      );
-
-  /// labelLarge Text Style
-  static TextStyle get labelLarge => _baseTextStyle.copyWith(
-        fontSize: 16,
-        fontWeight: AppFontWeight.medium,
+        letterSpacing: 0.4,
+        // height: 16,
       );
 }
 

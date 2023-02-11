@@ -1,24 +1,60 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/value_objects.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/bloc/post_details/post_details_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'post_details_bloc_test.mocks.dart';
+class MockWebViewController extends Mock implements WebViewController {
+  @override
+  Future<void> loadRequest(
+    Uri? uri, {
+    LoadRequestMethod? method = LoadRequestMethod.get,
+    Map<String, String>? headers = const <String, String>{},
+    Uint8List? body,
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #loadRequest,
+          <Object?>[uri],
+          <Symbol, Object?>{
+            #method: method,
+            #headers: headers,
+            #body: body,
+          },
+        ),
+        returnValue: Future<void>.value(),
+        returnValueForMissingStub: Future<void>.value(),
+      ) as Future<void>;
 
-@GenerateMocks(<Type>[WebViewController])
+  @override
+  Future<bool> canGoBack() => super.noSuchMethod(
+        Invocation.method(
+          #canGoBack,
+          <Object?>[],
+        ),
+        returnValue: Future<bool>.value(false),
+        returnValueForMissingStub: Future<bool>.value(false),
+      ) as Future<bool>;
+
+  @override
+  Future<void> goBack() => super.noSuchMethod(
+        Invocation.method(
+          #goBack,
+          <Object?>[],
+        ),
+        returnValue: Future<void>.value(),
+        returnValueForMissingStub: Future<void>.value(),
+      ) as Future<void>;
+}
+
 void main() {
   late Url loadUrl;
   late PostDetailsBloc postDetailsBloc;
-  late WebViewController webViewController;
   setUp(() {
     loadUrl = Url('http://www.example.com');
-
-    webViewController = MockWebViewController();
-
-    postDetailsBloc = PostDetailsBloc(loadUrl, webViewController);
+    postDetailsBloc = PostDetailsBloc(loadUrl, MockWebViewController());
   });
 
   group('PostDetails loadView', () {
