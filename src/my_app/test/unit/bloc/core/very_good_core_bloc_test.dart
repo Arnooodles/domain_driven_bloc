@@ -13,10 +13,10 @@ import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.
 import '../../../utils/test_utils.dart';
 import 'very_good_core_bloc_test.mocks.dart';
 
-@GenerateMocks(<Type>[
-  IUserRepository,
-  VeryGoodCoreBloc,
-  IAuthRepository,
+@GenerateNiceMocks(<MockSpec<dynamic>>[
+  MockSpec<IUserRepository>(),
+  MockSpec<VeryGoodCoreBloc>(),
+  MockSpec<IAuthRepository>(),
 ])
 void main() {
   late MockIUserRepository userRepository;

@@ -11,7 +11,12 @@ import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.
 
 import 'login_bloc_test.mocks.dart';
 
-@GenerateMocks(<Type>[IAuthRepository, ILocalStorageRepository])
+@GenerateNiceMocks(
+  <MockSpec<dynamic>>[
+    MockSpec<IAuthRepository>(),
+    MockSpec<ILocalStorageRepository>(),
+  ],
+)
 void main() {
   late MockIAuthRepository authRepository;
   late MockILocalStorageRepository localStorageRepository;

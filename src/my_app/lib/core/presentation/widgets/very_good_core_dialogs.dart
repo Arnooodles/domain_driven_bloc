@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/app/themes/text_styles.dart';
 import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   const ConfirmationDialog({
@@ -33,28 +35,25 @@ class ConfirmationDialog extends StatelessWidget {
           padding: title != null
               ? EdgeInsets.zero
               : EdgeInsets.only(top: Insets.xxs),
-          child: Text(
-            message,
-            style: AppTextStyle.bodyMedium,
-          ),
+          child: Text(message, style: AppTextStyle.bodyMedium),
         ),
         actions: <Widget>[
-          TextButton(
+          VeryGoodCoreButton(
+            text: negativeButtonText ?? context.l10n.common_no.toUpperCase(),
+            buttonType: ButtonType.text,
             onPressed: onNegativePressed ?? () => Navigator.of(context).pop(),
-            child: Text(
-              negativeButtonText ?? context.l10n.common_no.toUpperCase(),
-              style:
-                  AppTextStyle.labelLarge.copyWith(color: negativeButtonColor),
-            ),
+            padding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.zero,
           ),
-          TextButton(
+          VeryGoodCoreButton(
+            text: positiveButtonText ?? context.l10n.common_yes.toUpperCase(),
+            buttonType: ButtonType.text,
             onPressed: onPositivePressed ?? () => Navigator.of(context).pop(),
-            child: Text(
-              positiveButtonText ?? context.l10n.common_yes.toUpperCase(),
-              style:
-                  AppTextStyle.labelLarge.copyWith(color: positiveButtonColor),
-            ),
+            padding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.zero,
           ),
         ],
+        actionsPadding: EdgeInsets.symmetric(horizontal: Insets.med),
+        buttonPadding: EdgeInsets.zero,
       );
 }

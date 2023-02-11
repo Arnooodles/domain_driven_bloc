@@ -12,7 +12,7 @@ import '../../../../utils/mock_material_app.dart';
 import '../../../../utils/test_utils.dart';
 import 'home_screen_test.mocks.dart';
 
-@GenerateMocks(<Type>[PostBloc])
+@GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<PostBloc>()])
 void main() {
   late MockPostBloc postBlocInitial;
   late MockPostBloc postBlocWithPosts;

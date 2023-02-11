@@ -1,50 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/constants/constant.dart';
-import 'package:very_good_core/app/themes/app_colors.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/app/themes/text_styles.dart';
-import 'package:very_good_core/core/domain/bloc/very_good_core/very_good_core_bloc.dart';
-import 'package:very_good_core/core/domain/model/value_objects.dart';
-import 'package:very_good_core/core/presentation/widgets/very_good_core_avatar.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
 
-class VeryGoodCoreAppBar extends HookWidget {
+class VeryGoodCoreAppBar extends StatelessWidget {
   const VeryGoodCoreAppBar({
     super.key,
-    this.avatar,
+    this.title,
+    this.titleColor,
+    this.actions,
+    this.centerTitle = false,
+    this.backgroundColor,
+    this.leading,
+    this.automaticallyImplyLeading = false,
+    this.scrolledUnderElevation = 0,
+    this.showTitle = true,
   });
 
-  final Url? avatar;
+  final String? title;
+  final List<Widget>? actions;
+  final bool centerTitle;
+  final Color? backgroundColor;
+  final Color? titleColor;
+  final Widget? leading;
+  final bool automaticallyImplyLeading;
+  final double scrolledUnderElevation;
+  final bool showTitle;
 
   @override
   Widget build(BuildContext context) => AppBar(
-        leading: GoRouter.of(context).canPop()
-            ? BackButton(
-                onPressed: () => GoRouter.of(context).canPop()
-                    ? GoRouter.of(context).pop()
-                    : null,
+        leading: leading,
+        automaticallyImplyLeading: automaticallyImplyLeading,
+        title: showTitle
+            ? Padding(
+                padding: EdgeInsets.only(left: Insets.xs),
+                child: Text(
+                  title ?? Constant.appName,
+                  style: AppTextStyle.headlineSmall.copyWith(
+                    color: titleColor,
+                    fontWeight: AppFontWeight.medium,
+                  ),
+                ),
               )
             : null,
-        title: Text(
-          Constant.appName,
-          style: AppTextStyle.headlineSmall.copyWith(color: AppColors.white),
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => context
-                .read<VeryGoodCoreBloc>()
-                .switchTheme(Theme.of(context).brightness),
-            icon: Theme.of(context).brightness == Brightness.dark
-                ? const Icon(Icons.light_mode)
-                : const Icon(Icons.dark_mode),
-          ),
-          VeryGoodCoreAvatar(
-            size: 32,
-            imageUrl: avatar?.getOrCrash(),
-            padding: EdgeInsets.all(Insets.sm),
-          ),
-        ],
+        actions: actions,
+        scrolledUnderElevation: scrolledUnderElevation,
+        backgroundColor: backgroundColor ?? context.colorScheme.background,
+        centerTitle: centerTitle,
       );
 }
