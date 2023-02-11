@@ -11,7 +11,7 @@ import 'package:very_good_core/features/home/domain/model/post.dart';
 import '../../../../utils/test_utils.dart';
 import 'post_repository_test.mocks.dart';
 
-@GenerateMocks(<Type>[PostService])
+@GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<PostService>()])
 void main() {
   late MockPostService postService;
   late PostRepository postRepository;

@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:animations/animations.dart';
 import 'package:dartx/dartx.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/generated/l10n.dart';
-import 'package:very_good_core/app/themes/app_colors.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/app/themes/text_styles.dart';
@@ -38,7 +38,6 @@ class DialogUtils {
         builder: (BuildContext context, FlashController<void> controller) =>
             Flash<void>(
           controller: controller,
-          backgroundColor: AppColors.charcoal,
           boxShadows: kElevationToShadow[4],
           horizontalDismissDirection: HorizontalDismissDirection.horizontal,
           position: FlashPosition.bottom,
@@ -49,11 +48,9 @@ class DialogUtils {
             child: FlashBar(
               content: Text(
                 ConnectionStatus.offline.name.capitalize(),
-                style: AppTextStyle.bodyMedium.copyWith(color: AppColors.white),
               ),
               icon: const Icon(
                 Icons.wifi_off,
-                color: AppColors.white,
               ),
             ),
           ),
@@ -72,7 +69,7 @@ class DialogUtils {
     Color? negativeButtonColor,
     Color? positiveButtonColor,
   }) =>
-      showDialog<bool?>(
+      showModal<bool?>(
         context: context,
         builder: (BuildContext context) => ConfirmationDialog(
           message: message,
@@ -103,7 +100,6 @@ class DialogUtils {
           controller: controller,
           margin: EdgeInsets.all(Insets.med),
           borderRadius: AppTheme.defaultBoardRadius,
-          backgroundColor: Theme.of(context).colorScheme.background,
           boxShadows: const <BoxShadow>[
             BoxShadow(
               color: Color(0x1F000000),

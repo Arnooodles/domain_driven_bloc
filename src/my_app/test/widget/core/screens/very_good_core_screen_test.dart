@@ -19,7 +19,10 @@ import '../../../utils/mock_material_app.dart';
 import '../../../utils/test_utils.dart';
 import 'very_good_core_screen_test.mocks.dart';
 
-@GenerateMocks(<Type>[VeryGoodCoreBloc, GoRouter])
+@GenerateNiceMocks(<MockSpec<dynamic>>[
+  MockSpec<VeryGoodCoreBloc>(),
+  MockSpec<GoRouter>(),
+])
 void main() {
   late MockVeryGoodCoreBloc veryGoodCoreBloc;
   late MockVeryGoodCoreBloc veryGoodCoreBlocError;

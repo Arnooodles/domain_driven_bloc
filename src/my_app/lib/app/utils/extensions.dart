@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_core/app/constants/enum.dart';
@@ -7,6 +7,8 @@ import 'package:very_good_core/app/generated/l10n.dart';
 
 extension AppLocalizationsX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
+
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
 }
 
 extension EitherX<L, R> on Either<L, R> {

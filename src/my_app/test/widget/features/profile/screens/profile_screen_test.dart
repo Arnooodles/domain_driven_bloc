@@ -13,7 +13,7 @@ import '../../../../utils/mock_material_app.dart';
 import '../../../../utils/test_utils.dart';
 import 'profile_screen_test.mocks.dart';
 
-@GenerateMocks(<Type>[VeryGoodCoreBloc])
+@GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<VeryGoodCoreBloc>()])
 void main() {
   late MockVeryGoodCoreBloc veryGoodCoreBloc;
 

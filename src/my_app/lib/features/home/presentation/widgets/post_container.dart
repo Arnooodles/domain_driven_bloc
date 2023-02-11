@@ -45,14 +45,21 @@ class PostContainer extends StatelessWidget {
                   if (post.selftext.getOrCrash().isNotNullOrBlank)
                     Flexible(
                       child: Container(
+                        padding: EdgeInsets.only(bottom: Insets.xs),
                         foregroundDecoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
-                            colors: <Color>[
-                              Theme.of(context).cardColor,
-                              Theme.of(context).cardColor.withOpacity(0),
-                            ],
+                            colors:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? <Color>[
+                                        const Color(0xFFf0f4fa),
+                                        const Color(0xFFf0f4fa).withOpacity(0),
+                                      ]
+                                    : <Color>[
+                                        const Color(0xFF202429),
+                                        const Color(0xFF202429).withOpacity(0),
+                                      ],
                           ),
                         ),
                         constraints: const BoxConstraints(maxHeight: 200),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/app/themes/text_styles.dart';
 import 'package:very_good_core/app/utils/error_message_utils.dart';
@@ -47,15 +48,10 @@ class ProfileScreen extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 VSpace(Insets.lg),
-                Text(
-                  context.l10n.profile__header_text__basic_information,
-                  style: AppTextStyle.headlineMedium,
-                ),
-                VSpace(Insets.med),
                 Row(
                   children: <Widget>[
                     VeryGoodCoreAvatar(
-                      size: 100,
+                      size: 80,
                       imageUrl: user.avatar?.getOrCrash(),
                     ),
                     Expanded(
@@ -66,11 +62,11 @@ class ProfileScreen extends HookWidget {
                           children: <Widget>[
                             Text(
                               user.firstName.getOrCrash(),
-                              style: AppTextStyle.displayMedium,
+                              style: AppTextStyle.headlineMedium,
                             ),
                             Text(
                               user.lastName.getOrCrash(),
-                              style: AppTextStyle.displayMedium,
+                              style: AppTextStyle.headlineMedium,
                             ),
                           ],
                         ),
@@ -116,6 +112,7 @@ class ProfileScreen extends HookWidget {
                   child: VeryGoodCoreButton(
                     text: context.l10n.profile__button_text__logout,
                     isExpanded: true,
+                    buttonType: ButtonType.filled,
                     onPressed: () => context.read<VeryGoodCoreBloc>().logout(),
                     padding: EdgeInsets.zero,
                     contentPadding: EdgeInsets.symmetric(vertical: Insets.med),

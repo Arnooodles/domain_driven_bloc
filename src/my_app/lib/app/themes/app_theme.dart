@@ -5,15 +5,14 @@ import 'package:very_good_core/app/themes/text_styles.dart';
 abstract class AppTheme {
   /// Standard `ThemeData` for App UI.
   static ThemeData get lightTheme => ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+        useMaterial3: true,
+        colorScheme: AppColors.lightColorScheme,
         textTheme: _textTheme,
       );
 
   static ThemeData get darkTheme => ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primary,
-          brightness: Brightness.dark,
-        ),
+        useMaterial3: true,
+        colorScheme: AppColors.darkColorScheme,
         textTheme: _textTheme,
       );
 
@@ -21,6 +20,7 @@ abstract class AppTheme {
         displayLarge: AppTextStyle.displayLarge,
         displayMedium: AppTextStyle.displayMedium,
         displaySmall: AppTextStyle.displaySmall,
+        headlineLarge: AppTextStyle.headlineLarge,
         headlineMedium: AppTextStyle.headlineMedium,
         headlineSmall: AppTextStyle.headlineSmall,
         titleLarge: AppTextStyle.titleLarge,
@@ -30,6 +30,7 @@ abstract class AppTheme {
         bodyMedium: AppTextStyle.bodyMedium,
         bodySmall: AppTextStyle.bodySmall,
         labelLarge: AppTextStyle.labelLarge,
+        labelMedium: AppTextStyle.labelMedium,
         labelSmall: AppTextStyle.labelSmall,
       );
 

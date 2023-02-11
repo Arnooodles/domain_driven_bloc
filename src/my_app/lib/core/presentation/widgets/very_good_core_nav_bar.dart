@@ -12,19 +12,21 @@ class VeryGoodCoreNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 800),
-        child: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.home),
+        child: NavigationBar(
+          selectedIndex: _getSelectedIndex(context),
+          destinations: <Widget>[
+            NavigationDestination(
+              icon: const Icon(Icons.home_outlined),
+              selectedIcon: const Icon(Icons.home),
               label: AppLocalizations.of(context).common_home.capitalize(),
             ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.person),
-              label: AppLocalizations.of(context).common_profile.capitalize(),
+            const NavigationDestination(
+              icon: Icon(Icons.account_circle_outlined),
+              selectedIcon: Icon(Icons.account_circle),
+              label: 'Account',
             ),
           ],
-          onTap: (int index) => _onItemTapped(index, context),
-          currentIndex: _getSelectedIndex(context),
+          onDestinationSelected: (int index) => _onItemTapped(index, context),
         ),
       );
 

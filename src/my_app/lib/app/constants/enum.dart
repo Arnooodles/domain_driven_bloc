@@ -71,3 +71,11 @@ enum Gender {
   female,
   unknown,
 }
+
+enum ButtonType {
+  elevated,
+  filled,
+  tonal,
+  outlined,
+  text,
+}

@@ -12,7 +12,10 @@ import 'package:very_good_core/features/auth/data/service/auth_service.dart';
 import '../../../../utils/test_utils.dart';
 import 'auth_repository_test.mocks.dart';
 
-@GenerateMocks(<Type>[AuthService, LocalStorageRepository])
+@GenerateNiceMocks(<MockSpec<dynamic>>[
+  MockSpec<AuthService>(),
+  MockSpec<LocalStorageRepository>(),
+])
 void main() {
   late MockAuthService authService;
   late MockLocalStorageRepository localStorageRepository;

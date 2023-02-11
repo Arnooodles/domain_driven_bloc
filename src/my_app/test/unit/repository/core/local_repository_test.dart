@@ -7,7 +7,10 @@ import 'package:very_good_core/core/data/repository/local_storage_repository.dar
 
 import 'local_repository_test.mocks.dart';
 
-@GenerateMocks(<Type>[SharedPreferences, FlutterSecureStorage])
+@GenerateNiceMocks(<MockSpec<dynamic>>[
+  MockSpec<SharedPreferences>(),
+  MockSpec<FlutterSecureStorage>(),
+])
 void main() {
   late MockSharedPreferences unsecuredStorage;
   late MockFlutterSecureStorage secureStorage;
