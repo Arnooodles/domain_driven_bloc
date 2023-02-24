@@ -1,3 +1,7 @@
+# 0.1.18
+
+- fix: update brick README.md
+
 # 0.1.17
 
 - docs: add architecture diagram
