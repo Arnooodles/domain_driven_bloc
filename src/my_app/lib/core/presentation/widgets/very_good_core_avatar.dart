@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
 
 class VeryGoodCoreAvatar extends StatelessWidget {
   const VeryGoodCoreAvatar({
@@ -27,7 +28,7 @@ class VeryGoodCoreAvatar extends StatelessWidget {
                   ) =>
                       Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: context.colorScheme.onBackground,
                       image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.cover,

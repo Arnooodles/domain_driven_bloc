@@ -1,3 +1,11 @@
+# 0.1.17
+
+- docs: add architecture diagram
+- chore: update pub packages
+- chore: update unit test folder structure
+- chore: update golden files
+- feat: change info text field background color
+
 # 0.1.16
 
 - feat: implement material 3 widgets

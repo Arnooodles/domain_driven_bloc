@@ -27,8 +27,7 @@ class PostContainerHeader extends StatelessWidget {
                 post.createdUtc.ago,
               ),
               style: AppTextStyle.bodySmall.copyWith(
-                color:
-                    Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                color: context.colorScheme.onBackground.withOpacity(0.5),
               ),
             ),
           ),

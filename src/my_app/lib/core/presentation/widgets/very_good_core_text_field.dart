@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
 
 class VeryGoodCoreTextField extends StatelessWidget {
   const VeryGoodCoreTextField({
@@ -47,7 +48,7 @@ class VeryGoodCoreTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = context.colorScheme;
 
     return Semantics(
       key: Key(labelText),
@@ -130,7 +131,7 @@ class _PasswordTextField extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<bool> isPasswordHidden = useState<bool>(true);
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = context.colorScheme;
 
     return Row(
       children: <Widget>[
