@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
+import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField({
@@ -47,7 +48,7 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField extends StatelessW
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = context.colorScheme;
 
     return Semantics(
       key: Key(labelText),
@@ -130,7 +131,7 @@ class _PasswordTextField extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<bool> isPasswordHidden = useState<bool>(true);
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = context.colorScheme;
 
     return Row(
       children: <Widget>[

@@ -45,7 +45,7 @@ class _FooterItems extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: Insets.xs),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.25),
+            color: context.colorScheme.onBackground.withOpacity(0.25),
           ),
           borderRadius: AppTheme.defaultBoardRadius,
         ),
@@ -55,14 +55,14 @@ class _FooterItems extends StatelessWidget {
             Icon(
               leftIcon,
               size: (AppTextStyle.bodySmall.fontSize ?? 14) * 1.5,
-              color: Theme.of(context).colorScheme.secondary,
+              color: context.colorScheme.secondary,
             ),
             Padding(
               padding: EdgeInsets.all(Insets.xs),
               child: Text(
                 value,
                 style: AppTextStyle.bodySmall.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: context.colorScheme.secondary,
                 ),
               ),
             ),
@@ -70,7 +70,7 @@ class _FooterItems extends StatelessWidget {
               Icon(
                 rightIcon,
                 size: (AppTextStyle.bodySmall.fontSize ?? 14) * 1.5,
-                color: Theme.of(context).colorScheme.secondary,
+                color: context.colorScheme.secondary,
               ),
           ],
         ),
