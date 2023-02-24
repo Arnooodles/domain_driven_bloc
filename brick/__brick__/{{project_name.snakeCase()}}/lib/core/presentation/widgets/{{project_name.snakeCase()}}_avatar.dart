@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar({
@@ -27,7 +28,7 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar extends StatelessWidg
                   ) =>
                       Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: context.colorScheme.onBackground,
                       image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.cover,
