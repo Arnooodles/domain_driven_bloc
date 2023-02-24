@@ -11,7 +11,7 @@ import 'utils/test_utils.dart';
 class TestConfig {
   /// Update this if you want to update the golden files in the remote repository
   /// Format: yyyyMMddHHmm
-  static String get goldensVersion => '202302111600';
+  static String get goldensVersion => '202302240000';
 
   /// Customize your threshold here
   /// For example, the error threshold here is 15%

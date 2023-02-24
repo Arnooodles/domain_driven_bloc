@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
 
 class VeryGoodCoreInfoTextField extends StatelessWidget {
   const VeryGoodCoreInfoTextField({
@@ -23,7 +24,7 @@ class VeryGoodCoreInfoTextField extends StatelessWidget {
           padding:
               EdgeInsets.symmetric(vertical: Insets.sm, horizontal: Insets.med),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
+            color: context.colorScheme.secondaryContainer,
             borderRadius: AppTheme.defaultBoardRadius,
           ),
           width: isExpanded ? double.infinity : null,

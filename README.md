@@ -67,70 +67,70 @@ Out of the box, Domain-Driven Bloc includes:
 - ✅ [Flutter Version Management][fvm_link] - A simple CLI to manage Flutter SDK versions.
 - ✅ [Makefile][makefile_link] - A simple way to organize and standardize project commands
 
-  ## Additional Packages:
+## Additional Packages
 
-  #### State Management
+#### State Management
 
   ✅ [Flutter Bloc](https://pub.dev/packages/flutter_bloc) \
    ✅ [Flutter Hooks](https://pub.dev/packages/flutter_hooks)
 
-  #### Functional Programming
+#### Functional Programming
 
   ✅ [Dartz](https://pub.dev/packages/dartz)
 
-  #### Data Classes
+#### Data Classes
 
   ✅ [Freezed](https://pub.dev/packages/freezed) \
    ✅ [Json Serializable](https://pub.dev/packages/json_serializable)
 
-  #### Navigation
+#### Navigation
 
   ✅ [Go Router](https://pub.dev/packages/go_router)
 
-  #### Dependency Injection
+#### Dependency Injection
 
   ✅ [Injectable](https://pub.dev/packages/injectable) \
    ✅ [Get It](https://pub.dev/packages/get_it)
 
-  #### Responsive
+#### Responsive
 
   ✅ [Responsive Framework](https://pub.dev/packages/responsive_framework)
 
-  #### Environment Variable Management
+#### Environment Variable Management
 
   ✅ [Dotenv](https://pub.dev/packages/flutter_dotenv)
 
-  #### HTTP Client
+#### HTTP Client
 
   ✅ [Chopper](https://pub.dev/packages?q=chopper)
 
-  #### Local Storage
+#### Local Storage
 
   ✅ [Secure Storage](https://pub.dev/packages/flutter_secure_storage) \
    ✅ [Shared Preferences](https://pub.dev/packages/shared_preferences)
 
-  #### Logging
+#### Logging
 
   ✅ [Logger](https://pub.dev/packages/logger)
 
-  #### Localization
+#### Localization
 
   ✅ [Intl](https://pub.dev/packages/intl) \
    ✅ [Intl Utils](https://pub.dev/packages/intl_utils)
 
-  #### Testing
+#### Testing
 
   ✅ [Alchemist](https://pub.dev/packages/alchemist) \
    ✅ [Golden Toolkit](https://pub.dev/packages/golden_toolkit) \
    ✅ [Bloc Test](https://pub.dev/packages/bloc_test)
 
-  #### Mock
+#### Mock
 
   ✅ [Mockito](https://pub.dev/packages/mockito) \
    ✅ [Mocktail Image Network](https://pub.dev/packages/mocktail_image_network) \
    ✅ [Faker](https://pub.dev/packages/faker)
 
-  #### Code Quality
+#### Code Quality
 
   ✅ [Flutter Gen](https://pub.dev/packages/flutter_gen) \
    ✅ [Very Good Analysis](https://pub.dev/packages/flutter_lints) \
@@ -148,6 +148,10 @@ Out of the box, Domain-Driven Bloc includes:
 - ✴️ Dark Mode - Switch between Light and Dark themes
 - ✴️ Unit Testing - Performs a unit test to verify the correctness of a unit of logic under the Bloc and repository layers
 - ✴️ Widget(Goldens) Testing - Performs a widget tests that uses a special matcher that compares your widget with an image file and expects that it looks the same
+
+### Architecture Diagram
+
+<img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/diagram.png" width=460 height=890>
 
 ### Folder Structure 📁
 
@@ -240,16 +244,18 @@ Out of the box, Domain-Driven Bloc includes:
 ├── test
 │   ├── utils
 │   ├── unit
-│   │   ├── bloc
-│   │   │   ├── core
-│   │   │   └── features
+│   │   ├── core
+│   │   │   ├── bloc
+│   │   │   └── repository
 │   │   │       ├── auth
 │   │   │       └── home
-│   │   └── repository
-│   │       ├── core
-│   │       └── features
-│   │           ├── auth
-│   │           └── home
+│   │   └── features
+│   │       ├── auth
+│   │           ├── bloc
+│   │           └── repository
+│   │       └── home
+│   │           ├── bloc
+│   │           └── repository
 │   ├── widget
 │   │   ├── core
 │   │   │   ├── screens
@@ -317,15 +323,10 @@ Out of the box, Domain-Driven Bloc includes:
 [internationalization_link]: https://flutter.dev/docs/development/accessibility-and-localization/internationalization
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
-[logo_white]: https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_white.png#gh-dark-mode-only
 [logging_link]: https://api.flutter.dev/flutter/dart-developer/log.html
 [makefile_link]: https://www.gnu.org/software/make/manual/make.html#Reading
 [mason_cli_link]: https://pub.dev/packages/mason_cli
 [null_safety_link]: https://flutter.dev/docs/null-safety
 [reqres_link]: https://reqres.in/
 [testing_link]: https://flutter.dev/docs/testing
-[very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
-[very_good_cli_blog_link]: https://verygood.ventures/blog/flutter-starter-app-very-good-core-cli
-[very_good_ventures_link_dark]: https://verygood.ventures#gh-dark-mode-only
 [very_good_ventures_link]: https://verygood.ventures
-[very_good_workflows_link]: https://github.com/VeryGoodOpenSource/very_good_workflows

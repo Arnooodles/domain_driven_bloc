@@ -74,7 +74,7 @@ class ProfileScreen extends HookWidget {
                     ),
                   ],
                 ),
-                VSpace(Insets.xl),
+                VSpace(Insets.med),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

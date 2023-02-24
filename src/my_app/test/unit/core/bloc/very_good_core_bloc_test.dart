@@ -11,7 +11,7 @@ import 'package:very_good_core/core/domain/model/failures.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
 import '../../../utils/test_utils.dart';
-import 'very_good_core_bloc_test.mocks.dart';
+import '../very_good_core_bloc_test.mocks.dart';
 
 @GenerateNiceMocks(<MockSpec<dynamic>>[
   MockSpec<IUserRepository>(),

@@ -9,7 +9,7 @@ import 'package:very_good_core/core/domain/model/failures.dart';
 import 'package:very_good_core/features/auth/domain/bloc/login_bloc.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
-import 'login_bloc_test.mocks.dart';
+import '../login_bloc_test.mocks.dart';
 
 @GenerateNiceMocks(
   <MockSpec<dynamic>>[
