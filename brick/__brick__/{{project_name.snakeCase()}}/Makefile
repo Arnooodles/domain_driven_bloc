@@ -46,10 +46,10 @@ lint: ## Analyzes the codebase for issues
 	fvm dart analyze lib test
 
 lcov_gen: ## Generates lcov
-	flutter test --coverage
+	fvm flutter test --coverage
 
 lcov_gen_ci: ## Generates lcov in CI environment
-	flutter test --dart-define=CI=true --coverage
+	fvm flutter test --dart-define=CI=true --coverage
 
 lcov_gen_unit: ## Generates lcov for unit tests only
 	fvm flutter test test/unit --coverage 
@@ -72,7 +72,7 @@ lcov_win: lcov_gen lcov_report_win ## Generates the lcov report and automaticall
 lcov_mac: lcov_gen lcov_report_mac  ## Generates the lcov report and automatically opens the coverage report for macOS
 
 update_goldens: ## Updates the golden files
-	flutter test --update-goldens
+	fvm flutter test --update-goldens
 
 delete_goldens_win: ## Delete the all golden files in Windows
 	CMD /C FOR /d /r "test/widget" %d IN ("goldens") DO @IF EXIST "%d" rd /s /q "%d"
