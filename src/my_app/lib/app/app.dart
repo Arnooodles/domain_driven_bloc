@@ -24,8 +24,9 @@ class App extends StatelessWidget {
             create: (BuildContext context) => getIt<VeryGoodCoreBloc>(),
           ),
         ],
-        child: BlocBuilder<VeryGoodCoreBloc, VeryGoodCoreState>(
-          builder: (BuildContext context, VeryGoodCoreState state) =>
+        child: BlocSelector<VeryGoodCoreBloc, VeryGoodCoreState, ThemeMode>(
+          selector: (VeryGoodCoreState state) => state.themeMode,
+          builder: (BuildContext context, ThemeMode themeMode) =>
               MaterialApp.router(
             routerConfig: routerConfig,
             builder: (BuildContext context, Widget? widget) =>
@@ -54,7 +55,7 @@ class App extends StatelessWidget {
             title: Constant.appName,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: state.themeMode,
+            themeMode: themeMode,
             localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
