@@ -21,13 +21,15 @@ class PostDetailsWebview extends HookWidget {
         param1: post.permalink,
         param2: initializeWebViewController(post.permalink, loadingProgress),
       ),
-      child: BlocBuilder<PostDetailsBloc, PostDetailsState>(
-        builder: (BuildContext context, PostDetailsState state) => WillPopScope(
+      child: BlocSelector<PostDetailsBloc, PostDetailsState, WebViewController>(
+        selector: (PostDetailsState state) => state.controller,
+        builder: (BuildContext context, WebViewController controller) =>
+            WillPopScope(
           onWillPop: () => context.read<PostDetailsBloc>().webViewBack(),
           child: Center(
             child: Stack(
               children: <Widget>[
-                WebViewWidget(controller: state.controller),
+                WebViewWidget(controller: controller),
                 if (loadingProgress.value != 100)
                   LinearProgressIndicator(value: loadingProgress.value / 100),
               ],
