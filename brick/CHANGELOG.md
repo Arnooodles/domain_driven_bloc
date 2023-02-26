@@ -1,3 +1,8 @@
+# 0.1.19
+
+- feat: change BlocBuilder to BlocSelector
+- chore: update makefile to use fvm for flutter tests
+
 # 0.1.18
 
 - fix: update brick README.md
