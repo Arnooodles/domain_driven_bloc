@@ -26,7 +26,7 @@ pub_repair: ## Performs a clean reinstallation of all packages in your system ca
 	fvm flutter pub cache repair
 
 l10n: ## Generates strings
-	flutter pub run intl_utils:generate
+	fvm flutter pub run intl_utils:generate
 
 build_runner: ## This command generates the files for the code generated dependencies
 	fvm flutter pub run build_runner build --delete-conflicting-outputs
