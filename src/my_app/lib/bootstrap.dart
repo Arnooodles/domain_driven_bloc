@@ -30,8 +30,10 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   FlutterError.onError = (FlutterErrorDetails details) {
     logger.e(details.exceptionAsString(), details, details.stack);
   };
-  MemoryAllocations.instance
-      .addListener((ObjectEvent event) => dispatchObjectEvent(event.toMap()));
+
+  MemoryAllocations.instance.addListener((ObjectEvent event) {
+    dispatchObjectEvent(event.toMap());
+  });
 
   await runZonedGuarded(
     () async => runApp(await builder()),

@@ -37,7 +37,7 @@ class UserDTO with _$UserDTO {
         lastName: user.lastName.getOrCrash(),
         avatar: user.avatar?.getOrCrash(),
         gender: user.gender.name,
-        contactNumber: user.contactNumber?.getOrCrash(),
+        contactNumber: user.contactNumber.getOrCrash(),
         birthday: user.birthday,
       );
   static UserDTO userDTOFromJson(String str) =>

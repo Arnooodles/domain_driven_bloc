@@ -16,7 +16,9 @@ void main() {
         children: <Widget>[
           GoldenTestDeviceScenario(
             name: 'default',
-            builder: () => const MockLocalization(child: EmptyPost()),
+            builder: () => const MockLocalization(
+              child: EmptyPost(),
+            ),
           ),
         ],
       ),

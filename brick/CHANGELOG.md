@@ -1,3 +1,13 @@
+# 0.1.20
+
+- feat: implement shimmer pages when loading
+- feat: implement auth,theme and app_core bloc
+- feat: implement app lifecycle bloc
+- feat: implement hideable
+- feat: replace pull_to_refresh with Refresh indicator
+- fix: dark mode text colors
+- chore: update golden files
+
 # 0.1.19
 
 - feat: change BlocBuilder to BlocSelector
