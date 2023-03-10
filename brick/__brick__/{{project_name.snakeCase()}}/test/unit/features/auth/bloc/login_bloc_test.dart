@@ -6,7 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/failures.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/login_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/login/login_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_auth_repository.dart';
 
 import 'login_bloc_test.mocks.dart';

@@ -5,6 +5,12 @@ abstract class AppColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
 
+  /// Default colors for shimmer
+  static const Color lightShimmerHighlight = Color(0xffE6E8EB);
+  static const Color darkShimmerHighlight = Color(0xff2A2C2E);
+  static const Color lightShimmerBase = Color(0xffF9F9FB);
+  static const Color darkShimmerBase = Color(0xff3A3E3F);
+
   static ColorScheme get lightColorScheme => const ColorScheme(
         brightness: Brightness.light,
         primary: Color(0xFF0061A4),

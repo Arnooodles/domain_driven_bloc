@@ -70,6 +70,7 @@ class AuthRepository implements IAuthRepository {
   Future<Either<Failure, Unit>> logout() async {
     try {
       //TODO: add  service to logout
+      await Future<void>.delayed(const Duration(seconds: 2));
 
       //clear auth tokens from the local storage
       if (!await _localStorageRepository.setAccessToken(null)) {

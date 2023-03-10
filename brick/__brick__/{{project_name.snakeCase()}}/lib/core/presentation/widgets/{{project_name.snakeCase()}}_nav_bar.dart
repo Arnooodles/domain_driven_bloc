@@ -1,45 +1,66 @@
 import 'package:dartx/dartx.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hidable/hidable.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/route.dart';
-import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
+import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar({
     super.key,
+    required this.scrollControllers,
   });
+
+  final Map<AppScrollController, ScrollController> scrollControllers;
 
   @override
   Widget build(BuildContext context) => ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 800),
-        child: NavigationBar(
-          selectedIndex: _getSelectedIndex(context),
-          destinations: <Widget>[
-            NavigationDestination(
-              icon: const Icon(Icons.home_outlined),
-              selectedIcon: const Icon(Icons.home),
-              label: AppLocalizations.of(context).common_home.capitalize(),
-            ),
-            const NavigationDestination(
-              icon: Icon(Icons.account_circle_outlined),
-              selectedIcon: Icon(Icons.account_circle),
-              label: 'Account',
-            ),
-          ],
-          onDestinationSelected: (int index) => _onItemTapped(index, context),
+        child: Hidable(
+          controller: _getSelectedPage(context).value2,
+          preferredWidgetSize:
+              const Size.fromHeight(AppTheme.defaultNavBarHeight),
+          child: NavigationBar(
+            selectedIndex: _getSelectedPage(context).value1,
+            destinations: <Widget>[
+              NavigationDestination(
+                icon: const Icon(Icons.home_outlined),
+                selectedIcon: const Icon(Icons.home),
+                label: context.l10n.common_home.capitalize(),
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.account_circle_outlined),
+                selectedIcon: const Icon(Icons.account_circle),
+                label: context.l10n.common_profile.capitalize(),
+              ),
+            ],
+            onDestinationSelected: (int index) => _onItemTapped(index, context),
+          ),
         ),
       );
 
-  int _getSelectedIndex(BuildContext context) {
+  Tuple2<int, ScrollController> _getSelectedPage(BuildContext context) {
     final String location = GoRouter.of(context).location;
     if (location.startsWith(RouteName.home.path)) {
-      return 0;
+      return Tuple2<int, ScrollController>(
+        0,
+        scrollControllers[AppScrollController.home]!,
+      );
     }
     if (location.startsWith(RouteName.profile.path)) {
-      return 1;
+      return Tuple2<int, ScrollController>(
+        1,
+        scrollControllers[AppScrollController.profile]!,
+      );
     }
 
-    return 0;
+    return Tuple2<int, ScrollController>(
+      0,
+      scrollControllers[AppScrollController.home]!,
+    );
   }
 
   void _onItemTapped(int index, BuildContext context) {

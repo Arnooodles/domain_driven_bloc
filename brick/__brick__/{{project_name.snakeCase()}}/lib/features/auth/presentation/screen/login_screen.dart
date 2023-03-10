@@ -9,12 +9,12 @@ import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/error_message_utils.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/{{project_name.snakeCase()}}/{{project_name.snakeCase()}}_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/app_title.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/connectivity_checker.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_button.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text_field.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/login_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/login/login_bloc.dart';
 
 class LoginScreen extends HookWidget {
   const LoginScreen({super.key});
@@ -36,53 +36,60 @@ class LoginScreen extends HookWidget {
               TextPosition(offset: emailTextController.text.length),
             );
 
-          return ConnectivityChecker.scaffold(
-            body: Center(
-              child: Container(
-                padding: EdgeInsets.all(Insets.xl),
-                constraints: const BoxConstraints(
-                  maxWidth: Constant.mobileBreakpoint,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    const Flexible(child: Center(child: AppTitle())),
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
-                            controller: emailTextController,
-                            labelText: context.l10n.login__label_text__email,
-                            hintText:
-                                context.l10n.login__text_field_hint__email,
-                            onChanged: (String value) => context
-                                .read<LoginBloc>()
-                                .onEmailAddressChanged(value),
-                            autofocus: true,
-                          ),
-                          VSpace.lg,
-                          {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
-                            controller: passwordTextController,
-                            labelText: context.l10n.login__label_text__password,
-                            hintText:
-                                context.l10n.login__text_field_hint__password,
-                            textInputType: TextInputType.visiblePassword,
-                            isPassword: true,
-                          ),
-                          VSpace.xxl,
-                          {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
-                            text: context.l10n.login__button_text__login,
-                            isEnabled: !state.isLoading,
-                            isExpanded: true,
-                            buttonType: ButtonType.filled,
-                            onPressed: () => context.read<LoginBloc>().login(
-                                  emailTextController.text,
-                                  passwordTextController.text,
-                                ),
-                          ),
-                        ],
+          return WillPopScope(
+            onWillPop: () => DialogUtils.showExitDialog(context),
+            child: ConnectivityChecker.scaffold(
+              body: Center(
+                child: Container(
+                  padding: EdgeInsets.all(Insets.xl),
+                  color: context.colorScheme.background,
+                  constraints:
+                      const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
+                  child: Column(
+                    children: <Widget>[
+                      const Flexible(child: Center(child: AppTitle())),
+                      Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+                              controller: emailTextController,
+                              labelText: context.l10n.login__label_text__email,
+                              hintText:
+                                  context.l10n.login__text_field_hint__email,
+                              onChanged: (String value) => context
+                                  .read<LoginBloc>()
+                                  .onEmailAddressChanged(value),
+                              autofocus: true,
+                            ),
+                            VSpace.lg,
+                            {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+                              controller: passwordTextController,
+                              labelText:
+                                  context.l10n.login__label_text__password,
+                              hintText:
+                                  context.l10n.login__text_field_hint__password,
+                              textInputType: TextInputType.visiblePassword,
+                              isPassword: true,
+                            ),
+                            VSpace.xxl,
+                            {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
+                              text: context.l10n.login__button_text__login,
+                              isEnabled: !state.isLoading,
+                              isExpanded: true,
+                              buttonType: ButtonType.filled,
+                              onPressed: () => context.read<LoginBloc>().login(
+                                    emailTextController.text,
+                                    passwordTextController.text,
+                                  ),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: Insets.sm,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -95,7 +102,7 @@ class LoginScreen extends HookWidget {
 
   void _loginScreenListener(BuildContext context, LoginState state) {
     if (state.isSuccess) {
-      context.read<{{#pascalCase}}{{project_name}}{{/pascalCase}}Bloc>().authenticate();
+      context.read<AuthBloc>().authenticate();
     } else if (state.failure != null) {
       DialogUtils.showToast(
         context,
