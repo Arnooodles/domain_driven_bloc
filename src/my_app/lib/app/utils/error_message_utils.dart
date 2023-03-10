@@ -25,11 +25,17 @@ class ErrorMessageUtils {
             ? context.l10n.common_error_max_characters
             : context.l10n.common_error_min_characters;
       } else {
-        return error.toString();
+        return errorString(error);
       }
     } else {
-      return error.toString();
+      return errorString(error);
     }
+  }
+
+  static String errorString(dynamic error) {
+    final String errorString = error.toString();
+
+    return errorString != 'null' ? errorString : '';
   }
 
   static String _parseMessage(BuildContext context, dynamic error) {

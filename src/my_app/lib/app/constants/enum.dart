@@ -14,6 +14,11 @@ enum AuthStatus {
   unknown,
 }
 
+enum AppScrollController {
+  home,
+  profile,
+}
+
 enum StatusCode {
   /// OK. Everything worked as expected.
   api200(200),

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
 import 'package:very_good_core/features/home/presentation/screens/home_screen.dart';
 
@@ -12,14 +14,41 @@ import '../../../../utils/mock_material_app.dart';
 import '../../../../utils/test_utils.dart';
 import 'home_screen_test.mocks.dart';
 
-@GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<PostBloc>()])
+@GenerateNiceMocks(
+  <MockSpec<dynamic>>[
+    MockSpec<PostBloc>(),
+    MockSpec<AppCoreBloc>(),
+  ],
+)
 void main() {
   late MockPostBloc postBlocInitial;
   late MockPostBloc postBlocWithPosts;
+  late MockAppCoreBloc appCoreBloc;
+  late Map<AppScrollController, ScrollController> scrollControllers;
 
   setUp(() {
     postBlocInitial = MockPostBloc();
     postBlocWithPosts = MockPostBloc();
+    appCoreBloc = MockAppCoreBloc();
+
+    scrollControllers = <AppScrollController, ScrollController>{
+      AppScrollController.home: ScrollController(),
+      AppScrollController.profile: ScrollController(),
+    };
+
+    when(appCoreBloc.stream).thenAnswer(
+      (_) => Stream<AppCoreState>.fromIterable(
+        <AppCoreState>[
+          AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
+        ],
+      ),
+    );
+    when(appCoreBloc.state).thenAnswer(
+      (_) =>
+          AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
+    );
+    when(appCoreBloc.getScrollController(any))
+        .thenAnswer((_) => ScrollController());
     when(postBlocInitial.stream).thenAnswer(
       (_) => Stream<PostState>.fromIterable(<PostState>[PostState.initial()]),
     );
@@ -33,8 +62,15 @@ void main() {
         .thenAnswer((_) => PostState.initial().copyWith(posts: mockPosts));
   });
 
-  Widget buildHomeScreen(PostBloc postBloc) => BlocProvider<PostBloc>(
-        create: (BuildContext context) => postBloc,
+  Widget buildHomeScreen(PostBloc postBloc) => MultiBlocProvider(
+        providers: <BlocProvider<dynamic>>[
+          BlocProvider<PostBloc>(
+            create: (BuildContext context) => postBloc,
+          ),
+          BlocProvider<AppCoreBloc>(
+            create: (BuildContext context) => appCoreBloc,
+          ),
+        ],
         child: const MockMaterialApp(
           child: Scaffold(
             body: HomeScreen(),

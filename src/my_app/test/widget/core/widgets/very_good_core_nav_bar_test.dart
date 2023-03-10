@@ -4,7 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/constants/route.dart';
+import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_nav_bar.dart';
 
 import '../../../utils/mock_go_router_provider.dart';
@@ -16,12 +18,17 @@ import 'very_good_core_nav_bar_test.mocks.dart';
 void main() {
   late MockGoRouter routerHome;
   late MockGoRouter routerProfile;
+  late Map<AppScrollController, ScrollController> scrollControllers;
 
   setUp(() {
     routerHome = MockGoRouter();
     routerProfile = MockGoRouter();
     when(routerHome.location).thenAnswer((_) => RouteName.home.path);
     when(routerProfile.location).thenAnswer((_) => RouteName.profile.path);
+    scrollControllers = <AppScrollController, ScrollController>{
+      AppScrollController.home: ScrollController(),
+      AppScrollController.profile: ScrollController(),
+    };
   });
   group('VeryGoodCoreNavBar Widget Tests', () {
     goldenTest(
@@ -39,8 +46,10 @@ void main() {
               child: MockGoRouterProvider(
                 router: routerHome,
                 child: PreferredSize(
-                  preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-                  child: const VeryGoodCoreNavBar(),
+                  preferredSize:
+                      const Size.fromHeight(AppTheme.defaultNavBarHeight),
+                  child:
+                      VeryGoodCoreNavBar(scrollControllers: scrollControllers),
                 ),
               ),
             ),
@@ -53,7 +62,8 @@ void main() {
                 router: routerProfile,
                 child: PreferredSize(
                   preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-                  child: const VeryGoodCoreNavBar(),
+                  child:
+                      VeryGoodCoreNavBar(scrollControllers: scrollControllers),
                 ),
               ),
             ),

@@ -6,7 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 import 'package:very_good_core/core/domain/model/failures.dart';
-import 'package:very_good_core/features/auth/domain/bloc/login_bloc.dart';
+import 'package:very_good_core/features/auth/domain/bloc/login/login_bloc.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
 import 'login_bloc_test.mocks.dart';

@@ -9,6 +9,12 @@ extension AppLocalizationsX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
+
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
+  double get screenWidth => MediaQuery.of(this).size.width;
+
+  double get screenHeight => MediaQuery.of(this).size.height;
 }
 
 extension EitherX<L, R> on Either<L, R> {

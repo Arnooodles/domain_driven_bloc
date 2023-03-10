@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/constants/route.dart';
 import 'package:very_good_core/app/utils/transition_page_utils.dart';
+import 'package:very_good_core/core/presentation/screens/main_screen.dart';
 import 'package:very_good_core/core/presentation/screens/splash_screen.dart';
-import 'package:very_good_core/core/presentation/screens/very_good_core_screen.dart';
 import 'package:very_good_core/features/auth/presentation/screen/login_screen.dart';
 import 'package:very_good_core/features/home/domain/model/post.dart';
 import 'package:very_good_core/features/home/presentation/screens/home_screen.dart';
@@ -36,7 +36,7 @@ class AppRoutes {
         ),
         ShellRoute(
           builder: (BuildContext context, GoRouterState state, Widget child) =>
-              VeryGoodCoreScreen(child: child),
+              MainScreen(child: child),
           routes: <RouteBase>[
             GoRoute(
               path: RouteName.home.path,

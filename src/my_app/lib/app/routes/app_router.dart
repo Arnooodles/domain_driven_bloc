@@ -9,24 +9,24 @@ import 'package:very_good_core/app/constants/route.dart';
 import 'package:very_good_core/app/observers/go_route_observer.dart';
 import 'package:very_good_core/app/routes/app_routes.dart';
 import 'package:very_good_core/app/utils/injection.dart';
-import 'package:very_good_core/core/domain/bloc/very_good_core/very_good_core_bloc.dart';
+import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
 @injectable
 class AppRouter {
-  AppRouter(@factoryParam this.veryGoodCoreBloc);
+  AppRouter(@factoryParam this.authBloc);
 
   final GlobalKey<NavigatorState> rootNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'root');
   final GlobalKey<NavigatorState> shellNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'shell');
   final ValueKey<String> scaffoldKey = const ValueKey<String>('scaffold');
-  final VeryGoodCoreBloc veryGoodCoreBloc;
+  final AuthBloc authBloc;
 
   late final GoRouter router = GoRouter(
     routes:
         getIt<AppRoutes>(param1: shellNavigatorKey, param2: scaffoldKey).routes,
     redirect: _routeGuard,
-    refreshListenable: GoRouterRefreshStream(veryGoodCoreBloc.stream),
+    refreshListenable: GoRouterRefreshStream(authBloc.stream),
     initialLocation: RouteName.initial.path,
     observers:
         kDebugMode ? <NavigatorObserver>[getIt<GoRouteObserver>()] : null,
@@ -35,18 +35,15 @@ class AppRouter {
   );
 
   String? _routeGuard(_, GoRouterState state) {
-    final VeryGoodCoreState veryGoodCoreState = veryGoodCoreBloc.state;
+    final AuthState authState = authBloc.state;
     final String loginPath = RouteName.login.path;
     final String initialPath = RouteName.initial.path;
     final String homePath = RouteName.home.path;
 
-    // Check if app is still initializing
-    if (veryGoodCoreState.authStatus == AuthStatus.unknown) {
+    if (authState.status == AuthStatus.unknown) {
       return initialPath;
     }
-
-    final bool authenticated =
-        veryGoodCoreState.authStatus == AuthStatus.authenticated;
+    final bool authenticated = authState.status == AuthStatus.authenticated;
     // Check if the app is in the login screen
     final bool isLoginScreen = state.subloc == loginPath;
     final bool isSplashScreen = state.subloc == initialPath;

@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:very_good_core/app/constants/route.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/app/themes/text_styles.dart';
+import 'package:very_good_core/app/utils/extensions.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text_url.dart';
 import 'package:very_good_core/features/home/domain/model/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_footer.dart';
@@ -66,8 +67,11 @@ class PostContainer extends StatelessWidget {
                         child: IgnorePointer(
                           child: Markdown(
                             data: post.selftext.getOrCrash(),
-                            styleSheet:
-                                MarkdownStyleSheet(p: AppTextStyle.bodyMedium),
+                            styleSheet: MarkdownStyleSheet(
+                              p: AppTextStyle.bodyMedium.copyWith(
+                                color: context.colorScheme.secondary,
+                              ),
+                            ),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                           ),
