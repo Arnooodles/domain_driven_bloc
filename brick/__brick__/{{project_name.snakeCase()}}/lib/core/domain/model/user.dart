@@ -15,7 +15,7 @@ class User with _$User {
     required EmailAddress email,
     required Gender gender,
     required DateTime birthday,
-    required ContactNumber? contactNumber,
+    required ContactNumber contactNumber,
     required Url? avatar,
   }) = _User;
 
@@ -31,6 +31,6 @@ class User with _$User {
       .andThen(lastName.failureOrUnit)
       .andThen(email.failureOrUnit)
       .andThen(email.failureOrUnit)
-      .andThen(contactNumber?.failureOrUnit ?? right(unit))
+      .andThen(contactNumber.failureOrUnit)
       .fold(some, (_) => none());
 }

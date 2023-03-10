@@ -4,16 +4,18 @@ import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
 
 abstract class AppTheme {
   /// Standard `ThemeData` for App UI.
-  static ThemeData get lightTheme => ThemeData(
+  static ThemeData get _baseTheme => ThemeData(
         useMaterial3: true,
-        colorScheme: AppColors.lightColorScheme,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: _textTheme,
       );
 
-  static ThemeData get darkTheme => ThemeData(
-        useMaterial3: true,
+  static ThemeData get lightTheme => _baseTheme.copyWith(
+        colorScheme: AppColors.lightColorScheme,
+      );
+
+  static ThemeData get darkTheme => _baseTheme.copyWith(
         colorScheme: AppColors.darkColorScheme,
-        textTheme: _textTheme,
       );
 
   static TextTheme get _textTheme => TextTheme(
@@ -35,6 +37,8 @@ abstract class AppTheme {
       );
 
   static const double defaultRadius = 16;
+  static const double defaultNavBarHeight = 80;
+  static final double defaultAppBarHeight = AppBar().preferredSize.height;
   static final BorderRadius defaultBoardRadius =
       BorderRadius.circular(defaultRadius);
 }

@@ -304,13 +304,13 @@ class _ButtonContent extends StatelessWidget {
         child: isEnabled
             ? Text(
                 text,
-                style: textStyle ?? AppTextStyle.labelLarge,
+                style: textStyle ?? AppTextStyle.bodyLarge,
                 textAlign: TextAlign.center,
               )
             : Center(
                 child: SizedBox.square(
                   dimension:
-                      textStyle?.fontSize ?? AppTextStyle.labelLarge.fontSize,
+                      textStyle?.fontSize ?? AppTextStyle.bodyLarge.fontSize,
                   child: const CircularProgressIndicator(),
                 ),
               ),

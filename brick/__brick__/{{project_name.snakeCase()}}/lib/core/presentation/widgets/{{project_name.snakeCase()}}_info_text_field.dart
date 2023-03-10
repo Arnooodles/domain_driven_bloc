@@ -10,11 +10,15 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField extends Statel
     required this.title,
     required this.description,
     this.isExpanded = true,
+    this.titleColor,
+    this.descriptionColor,
   });
 
   final String title;
   final String description;
   final bool isExpanded;
+  final Color? titleColor;
+  final Color? descriptionColor;
 
   @override
   Widget build(BuildContext context) => Semantics(
@@ -32,9 +36,20 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField extends Statel
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(title, style: AppTextStyle.bodySmall),
+              Text(
+                title,
+                style: AppTextStyle.bodySmall.copyWith(
+                  color: titleColor ?? context.colorScheme.secondary,
+                ),
+              ),
               VSpace.xxs,
-              Text(description, style: AppTextStyle.titleMedium),
+              Text(
+                description,
+                style: AppTextStyle.titleMedium.copyWith(
+                  color: descriptionColor ??
+                      context.colorScheme.onSecondaryContainer,
+                ),
+              ),
             ],
           ),
         ),

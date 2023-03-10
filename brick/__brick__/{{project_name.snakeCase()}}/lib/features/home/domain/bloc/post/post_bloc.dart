@@ -31,6 +31,7 @@ class PostBloc extends Cubit<PostState> {
 
       final Either<Failure, List<Post>> possibleFailure =
           await _postRepository.getPosts();
+
       emit(
         possibleFailure.fold(
           (Failure failure) =>

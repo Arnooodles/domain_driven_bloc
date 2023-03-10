@@ -1,6 +1,5 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
@@ -27,7 +26,7 @@ class PostContainerHeader extends StatelessWidget {
                 post.createdUtc.ago,
               ),
               style: AppTextStyle.bodySmall.copyWith(
-                color: context.colorScheme.onBackground.withOpacity(0.5),
+                color: context.colorScheme.secondary,
               ),
             ),
           ),
@@ -46,14 +45,16 @@ class PostContainerHeader extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: Insets.xs),
                   child: Text(
                     post.linkFlairText.getOrCrash(),
-                    style:
-                        AppTextStyle.bodySmall.copyWith(color: AppColors.white),
+                    style: AppTextStyle.bodySmall
+                        .copyWith(color: context.colorScheme.onSecondary),
                   ),
                 ),
               Expanded(
                 child: Text(
                   post.title.getOrCrash(),
-                  style: AppTextStyle.titleMedium,
+                  style: AppTextStyle.titleMedium.copyWith(
+                    color: context.colorScheme.onSecondaryContainer,
+                  ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),

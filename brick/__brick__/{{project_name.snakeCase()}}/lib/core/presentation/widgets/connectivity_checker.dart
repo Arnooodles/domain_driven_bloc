@@ -17,7 +17,7 @@ class ConnectivityChecker extends StatefulWidget {
   }) =>
       ConnectivityChecker(
         child: Scaffold(
-          body: SafeArea(child: body),
+          body: body,
           backgroundColor: backgroundColor,
         ),
       );

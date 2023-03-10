@@ -132,6 +132,8 @@ class _PasswordTextField extends HookWidget {
   Widget build(BuildContext context) {
     final ValueNotifier<bool> isPasswordHidden = useState<bool>(true);
     final ColorScheme colorScheme = context.colorScheme;
+    final TextStyle textStyle =
+        AppTextStyle.bodyLarge.copyWith(color: colorScheme.onSurface);
 
     return Row(
       children: <Widget>[
@@ -143,6 +145,7 @@ class _PasswordTextField extends HookWidget {
               decoration: InputDecoration(
                 labelText: labelText,
                 hintText: hintText,
+                hintStyle: textStyle,
                 suffixIcon: GestureDetector(
                   key: const Key('password_icon'),
                   onTap: () => isPasswordHidden.value = !isPasswordHidden.value,
@@ -160,8 +163,7 @@ class _PasswordTextField extends HookWidget {
                 ),
               ),
               textInputAction: textInputAction,
-              style:
-                  AppTextStyle.bodyLarge.copyWith(color: colorScheme.onSurface),
+              style: textStyle,
               textAlign: TextAlign.left,
               autofocus: autofocus,
               obscureText: isPasswordHidden.value,
