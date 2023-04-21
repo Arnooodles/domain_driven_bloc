@@ -111,7 +111,7 @@ Out of the box, Domain-Driven Bloc includes:
 
 #### Logging
 
-  ✅ [Logger](https://pub.dev/packages/logger)
+  ✅ [Logger](https://pub.dev/packages/logger) \
   ✅ [Pretty Chopper Logger](https://pub.dev/packages/pretty_chopper_logger)
 #### Localization
 
