@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 
-part 'failures.freezed.dart';
+part 'failure.freezed.dart';
 
 @freezed
 class Failure with _$Failure {
@@ -28,4 +28,6 @@ class Failure with _$Failure {
       ServerError;
 
   const factory Failure.storageError() = StorageError;
+
+  const factory Failure.userNotFound() = UserNotFound;
 }

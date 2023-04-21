@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:very_good_core/app/utils/extensions.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
 
 class VeryGoodCoreAvatar extends StatelessWidget {
   const VeryGoodCoreAvatar({
-    super.key,
     required this.size,
     this.imageUrl,
     this.padding,
+    super.key,
   });
 
   final String? imageUrl;

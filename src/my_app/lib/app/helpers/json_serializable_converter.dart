@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:chopper/chopper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:very_good_core/core/data/model/resource_error.dart';
 
+// ignore_for_file: argument_type_not_assignable,return_of_invalid_type_from_closure,
+// ignore_for_file: unnecessary_overrides,strict_raw_type,inference_failure_on_function_invocation
 typedef JsonFactory<T> = T Function(Map<String, dynamic> json);
 
 class JsonSerializableConverter extends JsonConverter {
@@ -46,7 +50,6 @@ class JsonSerializableConverter extends JsonConverter {
 
   @override
   // all objects should implements toJson method
-  // ignore: unnecessary_overrides
   Request convertRequest(Request request) => super.convertRequest(request);
 
   @override
@@ -59,5 +62,15 @@ class JsonSerializableConverter extends JsonConverter {
     return jsonRes.copyWith<ResourceError>(
       body: ResourceError.fromJsonFactory(jsonRes.body),
     );
+  }
+
+  @override
+  FutureOr<dynamic> tryDecodeJson(String data) async {
+    try {
+      return compute(jsonDecode, data);
+    } catch (error) {
+      chopperLogger.warning(error);
+      return data;
+    }
   }
 }

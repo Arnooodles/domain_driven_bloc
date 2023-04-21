@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
 
 part 'app_life_cycle_bloc.freezed.dart';
 part 'app_life_cycle_state.dart';
@@ -27,16 +28,16 @@ class AppLifeCycleBloc extends Cubit<AppLifeCycleState>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        emit(const AppLifeCycleState.resumed());
+        safeEmit(const AppLifeCycleState.resumed());
         break;
       case AppLifecycleState.paused:
-        emit(const AppLifeCycleState.paused());
+        safeEmit(const AppLifeCycleState.paused());
         break;
       case AppLifecycleState.inactive:
-        emit(const AppLifeCycleState.inactive());
+        safeEmit(const AppLifeCycleState.inactive());
         break;
       case AppLifecycleState.detached:
-        emit(const AppLifeCycleState.detached());
+        safeEmit(const AppLifeCycleState.detached());
         break;
     }
     if (kDebugMode) {

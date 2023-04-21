@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
 import 'package:very_good_core/core/presentation/widgets/app_title.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -6,6 +7,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: context.colorScheme.background,
         body: SafeArea(
           child: Center(
             child: Column(

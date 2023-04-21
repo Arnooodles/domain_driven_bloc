@@ -1,3 +1,16 @@
+# 0.2.0
+
+- refactor: refactor bloc states into multiple class
+- refactor: fix tests issues related to the refactors  
+- refactor: dialog utils(toast/flash/dialogs)
+- feat: implement pretty_chopper_logger
+- feat: implement new lint rules and remove redundant rules
+- feat: add helpers folder
+- feat: implement compute() in parsing json Response
+- docs: update README file
+- chore: update golden files
+- chore: update packages to latest version
+
 # 0.1.20
 
 - feat: implement shimmer pages when loading

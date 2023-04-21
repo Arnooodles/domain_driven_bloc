@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/core/domain/model/failures.dart';
-import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/core/domain/model/failure.dart';
+import 'package:very_good_core/core/domain/model/value_object.dart';
 
 part 'user.freezed.dart';
 

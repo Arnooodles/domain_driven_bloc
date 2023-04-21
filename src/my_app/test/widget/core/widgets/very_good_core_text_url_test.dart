@@ -1,7 +1,7 @@
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/core/domain/model/value_object.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text_url.dart';
 
 import '../../../utils/test_utils.dart';

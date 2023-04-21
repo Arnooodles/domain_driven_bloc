@@ -5,7 +5,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
-import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
@@ -32,29 +32,30 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit an unauthenticated with null user state',
       build: () {
-        when(userRepository.user).thenAnswer((_) async => none());
+        when(userRepository.user)
+            .thenAnswer((_) async => left(const Failure.userNotFound()));
 
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.initialize(),
-      expect: () => <dynamic>[
-        AuthState.initial().copyWith(isLoading: true),
-        authBloc.state.copyWith(status: AuthStatus.unauthenticated, user: null),
+      expect: () => const <AuthState>[
+        AuthState.initial(),
+        AuthState.failed(Failure.userNotFound()),
+        AuthState.unauthenticated(),
       ],
     );
 
     blocTest<AuthBloc, AuthState>(
       'should emit an authenticated with user state',
       build: () {
-        when(userRepository.user).thenAnswer((_) async => some(mockUser));
+        when(userRepository.user).thenAnswer((_) async => right(mockUser));
 
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.initialize(),
-      expect: () => <dynamic>[
-        AuthState.initial().copyWith(isLoading: true),
-        authBloc.state
-            .copyWith(status: AuthStatus.authenticated, user: mockUser),
+      expect: () => <AuthState>[
+        const AuthState.initial(),
+        AuthState.authenticated(user: mockUser),
       ],
     );
     blocTest<AuthBloc, AuthState>(
@@ -65,10 +66,9 @@ void main() {
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.initialize(),
-      expect: () => <dynamic>[
-        AuthState.initial().copyWith(isLoading: true),
-        authBloc.state
-            .copyWith(failure: Failure.unexpected(throwsException.toString())),
+      expect: () => <AuthState>[
+        const AuthState.initial(),
+        AuthState.failed(Failure.unexpected(throwsException.toString())),
       ],
     );
   });
@@ -76,28 +76,25 @@ void main() {
   group('AuthBloc getUser ', () {
     setUp(() async {
       authBloc = AuthBloc(userRepository, authRepository);
-      when(userRepository.user).thenAnswer((_) async => some(mockUser));
+      when(userRepository.user).thenAnswer((_) async => right(mockUser));
       await authBloc.initialize();
     });
     blocTest<AuthBloc, AuthState>(
       'should emit an unauthenticated with null user state',
       build: () {
-        when(userRepository.user).thenAnswer((_) async => none());
+        when(userRepository.user).thenAnswer(
+          (_) async => left(
+            const Failure.serverError(StatusCode.http401, 'unauthorized'),
+          ),
+        );
 
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.getUser(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLoading: true,
-          failure: null,
-          user: mockUser,
-        ),
-        authBloc.state.copyWith(
-          status: AuthStatus.unauthenticated,
-          user: null,
-          isLoading: false,
+      expect: () => const <AuthState>[
+        AuthState.loading(),
+        AuthState.failed(
+          Failure.serverError(StatusCode.http401, 'unauthorized'),
         ),
       ],
     );
@@ -105,22 +102,15 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit an authenticated with user state',
       build: () {
-        when(userRepository.user).thenAnswer((_) async => some(mockUser));
+        when(userRepository.user).thenAnswer((_) async => right(mockUser));
 
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.getUser(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLoading: true,
-          failure: null,
+      expect: () => <AuthState>[
+        const AuthState.loading(),
+        AuthState.authenticated(
           user: mockUser,
-        ),
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          user: mockUser,
-          isLoading: false,
         ),
       ],
     );
@@ -132,15 +122,9 @@ void main() {
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.getUser(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLoading: true,
-          failure: null,
-          user: mockUser,
-        ),
-        authBloc.state
-            .copyWith(failure: Failure.unexpected(throwsException.toString())),
+      expect: () => <AuthState>[
+        const AuthState.loading(),
+        AuthState.failed(Failure.unexpected(throwsException.toString())),
       ],
     );
   });
@@ -148,7 +132,7 @@ void main() {
   group('AuthBloc logout ', () {
     setUp(() async {
       authBloc = AuthBloc(userRepository, authRepository);
-      when(userRepository.user).thenAnswer((_) async => some(mockUser));
+      when(userRepository.user).thenAnswer((_) async => right(mockUser));
       await authBloc.initialize();
     });
     blocTest<AuthBloc, AuthState>(
@@ -159,18 +143,9 @@ void main() {
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.logout(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLogout: true,
-          failure: null,
-          user: mockUser,
-        ),
-        authBloc.state.copyWith(
-          status: AuthStatus.unauthenticated,
-          user: null,
-          isLogout: false,
-        ),
+      expect: () => const <AuthState>[
+        AuthState.loading(),
+        AuthState.unauthenticated(),
       ],
     );
     blocTest<AuthBloc, AuthState>(
@@ -183,16 +158,10 @@ void main() {
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.logout(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLogout: true,
-          failure: null,
-          user: mockUser,
-        ),
-        authBloc.state.copyWith(
-          isLogout: false,
-          failure: Failure.unexpected(throwsException.toString()),
+      expect: () => <AuthState>[
+        const AuthState.loading(),
+        AuthState.failed(
+          Failure.unexpected(throwsException.toString()),
         ),
       ],
     );
@@ -204,16 +173,10 @@ void main() {
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.logout(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLogout: true,
-          failure: null,
-          user: mockUser,
-        ),
-        authBloc.state.copyWith(
-          isLogout: false,
-          failure: Failure.unexpected(throwsException.toString()),
+      expect: () => <AuthState>[
+        const AuthState.loading(),
+        AuthState.failed(
+          Failure.unexpected(throwsException.toString()),
         ),
       ],
     );
@@ -222,47 +185,38 @@ void main() {
   group('AuthBloc authenticate', () {
     setUp(() async {
       authBloc = AuthBloc(userRepository, authRepository);
-      when(userRepository.user).thenAnswer((_) async => some(mockUser));
+      when(userRepository.user).thenAnswer((_) async => right(mockUser));
       await authBloc.initialize();
     });
     blocTest<AuthBloc, AuthState>(
       'should emit an authenticated user state',
       build: () => authBloc,
       act: (AuthBloc bloc) => bloc.authenticate(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLoading: true,
-          failure: null,
+      expect: () => <AuthState>[
+        const AuthState.loading(),
+        AuthState.authenticated(
           user: mockUser,
-        ),
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          user: mockUser,
-          isLoading: false,
         ),
       ],
     );
     blocTest<AuthBloc, AuthState>(
       'should emit an unauthenticated with null user state',
       build: () {
-        when(userRepository.user).thenAnswer((_) async => none());
+        when(userRepository.user).thenAnswer(
+          (_) async => left(
+            const Failure.serverError(StatusCode.http401, 'unauthorized'),
+          ),
+        );
 
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.authenticate(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLoading: true,
-          failure: null,
-          user: mockUser,
+      expect: () => <AuthState>[
+        const AuthState.loading(),
+        const AuthState.failed(
+          Failure.serverError(StatusCode.http401, 'unauthorized'),
         ),
-        authBloc.state.copyWith(
-          status: AuthStatus.unauthenticated,
-          user: null,
-          isLoading: false,
-        ),
+        const AuthState.unauthenticated(),
       ],
     );
     blocTest<AuthBloc, AuthState>(
@@ -273,15 +227,9 @@ void main() {
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.authenticate(),
-      expect: () => <dynamic>[
-        authBloc.state.copyWith(
-          status: AuthStatus.authenticated,
-          isLoading: true,
-          failure: null,
-          user: mockUser,
-        ),
-        authBloc.state
-            .copyWith(failure: Failure.unexpected(throwsException.toString())),
+      expect: () => <AuthState>[
+        const AuthState.loading(),
+        AuthState.failed(Failure.unexpected(throwsException.toString())),
       ],
     );
   });

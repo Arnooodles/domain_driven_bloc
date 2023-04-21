@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:go_router/go_router.dart';
 
 class MockGoRouterProvider extends StatelessWidget {
@@ -11,8 +10,6 @@ class MockGoRouterProvider extends StatelessWidget {
 
   /// The mock navigator used to mock navigation calls.
   final GoRouter router;
-
-  /// The child [Widget] to render.
   final Widget child;
 
   @override

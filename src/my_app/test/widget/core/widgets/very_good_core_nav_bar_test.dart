@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/app/constants/route.dart';
+import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_nav_bar.dart';
 

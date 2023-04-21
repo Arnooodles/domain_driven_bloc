@@ -50,35 +50,23 @@ void main() {
 
     when(authBlocInitial.stream).thenAnswer(
       (_) => Stream<AuthState>.fromIterable(<AuthState>[
-        AuthState.initial().copyWith(
-          status: AuthStatus.authenticated,
+        AuthState.authenticated(
           user: mockUser,
-          isLoading: false,
         ),
       ]),
     );
     when(authBlocInitial.state).thenAnswer(
-      (_) => AuthState.initial().copyWith(
-        status: AuthStatus.authenticated,
+      (_) => AuthState.authenticated(
         user: mockUser,
-        isLoading: false,
       ),
     );
     when(authBlocLoading.stream).thenAnswer(
       (_) => Stream<AuthState>.fromIterable(<AuthState>[
-        AuthState.initial().copyWith(
-          status: AuthStatus.authenticated,
-          user: mockUser,
-          isLoading: true,
-        ),
+        const AuthState.loading(),
       ]),
     );
     when(authBlocLoading.state).thenAnswer(
-      (_) => AuthState.initial().copyWith(
-        status: AuthStatus.authenticated,
-        user: mockUser,
-        isLoading: true,
-      ),
+      (_) => const AuthState.loading(),
     );
   });
   Widget buildProfileScreen(AuthBloc authBloc) => MultiBlocProvider(
@@ -110,19 +98,8 @@ void main() {
             name: 'default',
             builder: () => buildProfileScreen(authBlocInitial),
           ),
-        ],
-      ),
-    );
-    goldenTest(
-      'renders correctly',
-      fileName: 'profile_screen_loading'.goldensVersion,
-      pumpBeforeTest: (WidgetTester tester) async {
-        await tester.pumpAndSettle();
-      },
-      builder: () => GoldenTestGroup(
-        children: <Widget>[
           GoldenTestDeviceScenario(
-            name: 'default',
+            name: 'loading',
             builder: () => buildProfileScreen(authBlocLoading),
           ),
         ],
