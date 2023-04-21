@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hidable/hidable.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/app/constants/route.dart';
+import 'package:very_good_core/app/constants/route_name.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/app/utils/extensions.dart';
 
 class VeryGoodCoreNavBar extends StatelessWidget {
   const VeryGoodCoreNavBar({
-    super.key,
     required this.scrollControllers,
+    super.key,
   });
 
   final Map<AppScrollController, ScrollController> scrollControllers;

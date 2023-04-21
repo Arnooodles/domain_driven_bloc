@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:very_good_core/app/constants/constant.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/themes/app_text_style.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
-import 'package:very_good_core/app/themes/text_styles.dart';
-import 'package:very_good_core/app/utils/extensions.dart';
 
 class VeryGoodCoreAppBar extends StatelessWidget {
   const VeryGoodCoreAppBar({
@@ -34,10 +34,10 @@ class VeryGoodCoreAppBar extends StatelessWidget {
         automaticallyImplyLeading: automaticallyImplyLeading,
         title: showTitle
             ? Padding(
-                padding: EdgeInsets.only(left: Insets.xs),
+                padding: const EdgeInsets.only(left: Insets.xsmall),
                 child: Text(
                   title ?? Constant.appName,
-                  style: AppTextStyle.headlineSmall.copyWith(
+                  style: context.textTheme.headlineSmall?.copyWith(
                     color: titleColor,
                     fontWeight: AppFontWeight.medium,
                   ),

@@ -50,16 +50,18 @@ void main() {
     when(appCoreBloc.getScrollController(any))
         .thenAnswer((_) => ScrollController());
     when(postBlocInitial.stream).thenAnswer(
-      (_) => Stream<PostState>.fromIterable(<PostState>[PostState.initial()]),
+      (_) => Stream<PostState>.fromIterable(
+        <PostState>[const PostState.loading()],
+      ),
     );
-    when(postBlocInitial.state).thenAnswer((_) => PostState.initial());
+    when(postBlocInitial.state).thenAnswer((_) => const PostState.loading());
     when(postBlocWithPosts.stream).thenAnswer(
       (_) => Stream<PostState>.fromIterable(
-        <PostState>[PostState.initial().copyWith(posts: mockPosts)],
+        <PostState>[PostState.success(mockPosts)],
       ),
     );
     when(postBlocWithPosts.state)
-        .thenAnswer((_) => PostState.initial().copyWith(posts: mockPosts));
+        .thenAnswer((_) => PostState.success(mockPosts));
   });
 
   Widget buildHomeScreen(PostBloc postBloc) => MultiBlocProvider(
@@ -83,7 +85,7 @@ void main() {
       'renders correctly',
       fileName: 'home_screen'.goldensVersion,
       pumpBeforeTest: (WidgetTester tester) async {
-        await tester.pumpAndSettle(const Duration(seconds: 1));
+        await tester.pump(const Duration(seconds: 1));
       },
       builder: () => GoldenTestGroup(
         children: <Widget>[

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
-import 'package:very_good_core/app/themes/text_styles.dart';
-import 'package:very_good_core/app/utils/extensions.dart';
-import 'package:very_good_core/app/utils/shimmer.dart';
+import 'package:very_good_core/core/presentation/widgets/shimmer.dart';
 
 class ProfileLoading extends StatelessWidget {
   const ProfileLoading({super.key});
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: Insets.xl),
+        padding: const EdgeInsets.symmetric(horizontal: Insets.xlarge),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -21,18 +20,20 @@ class ProfileLoading extends StatelessWidget {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.all(Insets.lg),
+                    padding: const EdgeInsets.all(Insets.large),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Shimmer(
                           width: context.screenWidth * 0.5,
-                          height: AppTextStyle.headlineMedium.fontSize ?? 28,
+                          height:
+                              context.textTheme.headlineMedium?.fontSize ?? 28,
                         ),
-                        VSpace.xs,
+                        VSpace.xsmall(),
                         Shimmer(
                           width: context.screenWidth * 0.4,
-                          height: AppTextStyle.headlineMedium.fontSize ?? 28,
+                          height:
+                              context.textTheme.headlineMedium?.fontSize ?? 28,
                         ),
                       ],
                     ),
@@ -40,11 +41,10 @@ class ProfileLoading extends StatelessWidget {
                 ),
               ],
             ),
-            VSpace.med,
+            VSpace.medium(),
             Expanded(
               child: ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
                   final int delay = (index + 1) * 300;
 
@@ -55,7 +55,7 @@ class ProfileLoading extends StatelessWidget {
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) =>
-                    VSpace(Insets.sm),
+                    const VSpace(Insets.small),
                 itemCount: 5,
               ),
             ),
@@ -67,7 +67,7 @@ class ProfileLoading extends StatelessWidget {
                 height: 50,
               ),
             ),
-            VSpace(Insets.lg),
+            const VSpace(Insets.large),
           ],
         ),
       );

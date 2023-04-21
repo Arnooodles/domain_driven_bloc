@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:very_good_core/app/constants/constant.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
-import 'package:very_good_core/app/themes/text_styles.dart';
-import 'package:very_good_core/app/utils/extensions.dart';
-import 'package:very_good_core/app/utils/shimmer.dart';
+import 'package:very_good_core/core/presentation/widgets/shimmer.dart';
 
 class PostContainerLoading extends StatelessWidget {
   const PostContainerLoading({super.key});
 
   @override
   Widget build(BuildContext context) => ListView.separated(
-        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) => Padding(
-          padding: EdgeInsets.symmetric(horizontal: Insets.sm),
-          child: PostContainerLoadingItem(delay: index * 300),
+          padding: const EdgeInsets.symmetric(horizontal: Insets.small),
+          child: _PostContainerLoadingItem(delay: index * 300),
         ),
         separatorBuilder: (BuildContext context, int index) =>
-            VSpace(Insets.sm),
-        itemCount: 8,
+            const VSpace(Insets.small),
+        itemCount: 5,
       );
 }
 
-class PostContainerLoadingItem extends StatelessWidget {
-  const PostContainerLoadingItem({
-    super.key,
+class _PostContainerLoadingItem extends StatelessWidget {
+  const _PostContainerLoadingItem({
     required this.delay,
   });
 
@@ -36,14 +34,14 @@ class PostContainerLoadingItem extends StatelessWidget {
           borderRadius: AppTheme.defaultBoardRadius,
         ),
         child: Padding(
-          padding: EdgeInsets.all(Insets.xs),
+          padding: const EdgeInsets.all(Insets.xsmall),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               _HeaderLoading(delay: delay),
               Padding(
-                padding: EdgeInsets.all(Insets.xs),
+                padding: const EdgeInsets.all(Insets.xsmall),
                 child: Shimmer(
                   millisecondsDelay: delay,
                   width: double.infinity,
@@ -69,22 +67,22 @@ class _HeaderLoading extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(Insets.xs),
+            padding: const EdgeInsets.all(Insets.xsmall),
             child: Shimmer(
               millisecondsDelay: delay,
-              width: context.screenWidth * 0.4,
-              height: AppTextStyle.bodySmall.fontSize ?? 12,
+              width: Constant.mobileBreakpoint * 0.4,
+              height: context.textTheme.bodySmall?.fontSize ?? 12,
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: Insets.xxs,
-              horizontal: Insets.xs,
+            padding: const EdgeInsets.symmetric(
+              vertical: Insets.xxsmall,
+              horizontal: Insets.xsmall,
             ),
             child: Shimmer(
               millisecondsDelay: delay,
               width: double.infinity,
-              height: AppTextStyle.titleMedium.fontSize ?? 16,
+              height: context.textTheme.titleMedium?.fontSize ?? 16,
             ),
           ),
         ],
@@ -101,11 +99,11 @@ class _FooterLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double footerHeight =
-        (AppTextStyle.bodySmall.fontSize ?? 14) * 1.5 + Insets.sm;
+        (context.textTheme.bodySmall?.fontSize ?? 14) * 1.5 + Insets.small;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: Insets.xs),
-      margin: EdgeInsets.symmetric(horizontal: Insets.xxs),
+      padding: const EdgeInsets.symmetric(horizontal: Insets.xsmall),
+      margin: const EdgeInsets.symmetric(horizontal: Insets.xxsmall),
       child: Row(
         children: <Widget>[
           Shimmer(
@@ -114,7 +112,7 @@ class _FooterLoading extends StatelessWidget {
             height: footerHeight,
           ),
           Padding(
-            padding: EdgeInsets.all(Insets.xs),
+            padding: const EdgeInsets.all(Insets.xsmall),
             child: Shimmer(
               millisecondsDelay: delay,
               width: 50,

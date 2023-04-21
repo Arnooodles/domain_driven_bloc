@@ -1,15 +1,14 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/themes/spacing.dart';
-import 'package:very_good_core/app/themes/text_styles.dart';
-import 'package:very_good_core/app/utils/extensions.dart';
 import 'package:very_good_core/features/home/domain/model/post.dart';
 
 class PostContainerHeader extends StatelessWidget {
   const PostContainerHeader({
-    super.key,
     required this.post,
+    super.key,
   });
 
   final Post post;
@@ -19,13 +18,13 @@ class PostContainerHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(Insets.xs),
+            padding: const EdgeInsets.all(Insets.xsmall),
             child: Text(
               context.l10n.post__post_details__author_and_created_date(
                 post.author.getOrCrash(),
                 post.createdUtc.ago,
               ),
-              style: AppTextStyle.bodySmall.copyWith(
+              style: context.textTheme.bodySmall?.copyWith(
                 color: context.colorScheme.secondary,
               ),
             ),
@@ -34,25 +33,25 @@ class PostContainerHeader extends StatelessWidget {
             children: <Widget>[
               if (post.linkFlairText.getOrCrash().isNotNullOrBlank)
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: Insets.xxs,
-                    horizontal: Insets.xs,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Insets.xxsmall,
+                    horizontal: Insets.xsmall,
                   ),
                   decoration: BoxDecoration(
                     color: post.linkFlairBackgroundColor,
                     borderRadius: AppTheme.defaultBoardRadius,
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: Insets.xs),
+                  margin: const EdgeInsets.symmetric(horizontal: Insets.xsmall),
                   child: Text(
                     post.linkFlairText.getOrCrash(),
-                    style: AppTextStyle.bodySmall
-                        .copyWith(color: context.colorScheme.onSecondary),
+                    style: context.textTheme.bodySmall
+                        ?.copyWith(color: context.colorScheme.onSecondary),
                   ),
                 ),
               Expanded(
                 child: Text(
                   post.title.getOrCrash(),
-                  style: AppTextStyle.titleMedium.copyWith(
+                  style: context.textTheme.titleMedium?.copyWith(
                     color: context.colorScheme.onSecondaryContainer,
                   ),
                   overflow: TextOverflow.ellipsis,

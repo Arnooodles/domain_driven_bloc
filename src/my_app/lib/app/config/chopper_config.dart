@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:chopper/chopper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/io_client.dart';
+import 'package:pretty_chopper_logger/pretty_chopper_logger.dart';
 import 'package:very_good_core/app/config/app_config.dart';
-import 'package:very_good_core/app/utils/json_serializable_converter.dart';
+import 'package:very_good_core/app/helpers/json_serializable_converter.dart';
 import 'package:very_good_core/core/data/model/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/features/auth/data/model/login_response.dto.dart';
@@ -22,17 +23,19 @@ class ChopperConfig {
       ];
 
   static JsonSerializableConverter get converter =>
-      const JsonSerializableConverter(<Type,
-          dynamic Function(Map<String, dynamic>)>{
-        LoginResponseDTO: LoginResponseDTO.fromJson,
-        UserDTO: UserDTO.fromJson,
-        PostDTO: PostDTO.fromJson,
-      });
+      const JsonSerializableConverter(
+        <Type, dynamic Function(Map<String, dynamic>)>{
+          LoginResponseDTO: LoginResponseDTO.fromJson,
+          UserDTO: UserDTO.fromJson,
+          PostDTO: PostDTO.fromJson,
+        },
+      );
 
   static List<dynamic> get interceptors => <dynamic>[
         (Request request) async {
           //TODO: uncomment if the API requires Authorization
-          //final String? accessToken = await getIt<ILocalStorageRepository>().getAccessToken();
+          //final String? accessToken = await getIt<ILocalStorageRepository>()
+          //.getAccessToken();
 
           final Map<String, String> headers = <String, String>{}
             ..addEntries(request.headers.entries)
@@ -43,7 +46,7 @@ class ChopperConfig {
 
           return request.copyWith(headers: headers);
         },
-        if (kDebugMode) HttpLoggingInterceptor(),
+        if (kDebugMode) PrettyChopperLogger(),
         if (kDebugMode) CurlInterceptor(),
       ];
 

@@ -2,7 +2,7 @@ import 'package:chopper/chopper.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:very_good_core/app/utils/injection.dart';
+import 'package:very_good_core/app/helpers/injection.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/features/auth/data/service/auth_service.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';

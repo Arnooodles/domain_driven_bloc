@@ -5,7 +5,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
-import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/features/home/data/model/post.dto.dart';
 import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
 import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
@@ -21,7 +21,6 @@ import 'post_bloc_test.mocks.dart';
 )
 void main() {
   late MockIPostRepository postRepository;
-  late PostBloc postBloc;
 
   late Failure failure;
   List<Post> posts = <Post>[];
@@ -29,8 +28,8 @@ void main() {
   setUp(() {
     postRepository = MockIPostRepository();
     failure =
-        const Failure.serverError(StatusCode.api500, 'INTERNAL SERVER ERROR');
-    postBloc = PostBloc(postRepository);
+        const Failure.serverError(StatusCode.http500, 'INTERNAL SERVER ERROR');
+
     posts = <Post>[
       PostDTO(
         uid: '1',
@@ -51,7 +50,7 @@ void main() {
         return PostBloc(postRepository);
       },
       act: (PostBloc bloc) => bloc.getPosts(),
-      expect: () => <dynamic>[PostState.initial().copyWith(posts: posts)],
+      expect: () => <PostState>[PostState.success(posts)],
     );
     blocTest<PostBloc, PostState>(
       'should emit a failed state with posts from local storage ',
@@ -61,8 +60,7 @@ void main() {
         return PostBloc(postRepository);
       },
       act: (PostBloc bloc) => bloc.getPosts(),
-      expect: () =>
-          <dynamic>[postBloc.state.copyWith(posts: <Post>[], failure: failure)],
+      expect: () => <PostState>[PostState.failed(failure)],
     );
 
     blocTest<PostBloc, PostState>(
@@ -73,14 +71,10 @@ void main() {
         return PostBloc(postRepository);
       },
       act: (PostBloc bloc) => bloc.getPosts(),
-      expect: () => <dynamic>[
-        postBloc.state.copyWith(
-          isLoading: true,
-          failure: Failure.unexpected(throwsException.toString()),
-        ),
-        postBloc.state.copyWith(
-          isLoading: false,
-          failure: Failure.unexpected(throwsException.toString()),
+      expect: () => <PostState>[
+        const PostState.loading(),
+        PostState.failed(
+          Failure.unexpected(throwsException.toString()),
         ),
       ],
     );

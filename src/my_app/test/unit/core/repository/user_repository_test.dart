@@ -5,6 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_core/core/data/model/user.dto.dart';
 import 'package:very_good_core/core/data/repository/user_repository.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
+import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/core/domain/model/user.dart';
 
 import '../../../utils/test_utils.dart';
@@ -26,24 +27,22 @@ void main() {
     test(
       'should return some valid user',
       () async {
-        // arrange
         final Map<String, dynamic> data = <String, dynamic>{
           'data': user.toJson(),
         };
         when(userService.getCurrentUser()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 200),
         );
-        // act
-        final Option<User> userRepo = await userRepository.user;
-        // assert
-        expect(userRepo.isSome(), true);
+
+        final Either<Failure, User> userRepo = await userRepository.user;
+
+        expect(userRepo.isRight(), true);
       },
     );
 
     test(
       'should return none when an invalid user is returned',
       () async {
-        // arrange
         final UserDTO invalidUser = user.copyWith(email: 'email');
         final Map<String, dynamic> data = <String, dynamic>{
           'data': invalidUser.toJson(),
@@ -51,37 +50,35 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 200),
         );
-        // act
-        final Option<User> userRepo = await userRepository.user;
-        // assert
-        expect(userRepo.isNone(), true);
+
+        final Either<Failure, User> userRepo = await userRepository.user;
+
+        expect(userRepo.isLeft(), true);
       },
     );
 
     test(
       'should return none when an server error is encountered',
       () async {
-        // arrange
         final Map<String, dynamic> data = <String, dynamic>{'data': ''};
         when(userService.getCurrentUser()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 500),
         );
-        // act
-        final Option<User> userRepo = await userRepository.user;
-        // assert
-        expect(userRepo.isNone(), true);
+
+        final Either<Failure, User> userRepo = await userRepository.user;
+
+        expect(userRepo.isLeft(), true);
       },
     );
 
     test(
       'should return none when an unexpected error occurs',
       () async {
-        // arrange
         when(userService.getCurrentUser()).thenThrow(throwsException);
-        // act
-        final Option<User> userRepo = await userRepository.user;
-        // assert
-        expect(userRepo.isNone(), true);
+
+        final Either<Failure, User> userRepo = await userRepository.user;
+
+        expect(userRepo.isLeft(), true);
       },
     );
   });

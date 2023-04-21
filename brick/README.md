@@ -112,7 +112,7 @@ Out of the box, Domain-Driven Bloc includes:
 #### Logging
 
   ✅ [Logger](https://pub.dev/packages/logger)
-
+  ✅ [Pretty Chopper Logger](https://pub.dev/packages/pretty_chopper_logger)
 #### Localization
 
   ✅ [Intl](https://pub.dev/packages/intl) \
@@ -183,6 +183,7 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   ├── config
 │   │   ├── constants
 │   │   ├── generated
+│   │   ├── helpers
 │   │   ├── observers
 │   │   ├── routes
 │   │   ├── themes

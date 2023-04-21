@@ -1,6 +1,19 @@
 include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
+  strong-mode:
+    implicit-casts: true
+    implicit-dynamic: true
+  errors:
+    invalid_assignment: warning
+    dead_code: info
+    todo: ignore
+    missing_required_param: error
+    missing_return: error
+    unawaited_futures: warning
+    unused_import: warning
+    invalid_annotation_target: ignore
+ 
   exclude:
     - "**.g.dart"
     - "**.freezed.dart"
@@ -10,116 +23,51 @@ analyzer:
     - lib/app/generated/**.dart
     - lib/app/generated/**
     - lib/**/generated_plugin_registrant.dart
-  strong-mode:
-    implicit-casts: true
-    implicit-dynamic: true
-  errors:
-    missing_required_param: error
-    invalid_assignment: warning
-    missing_return: error
-    dead_code: info
-    todo: ignore
-    invalid_annotation_target: ignore
-    use_build_context_synchronously: ignore
-    invalid_reference_to_generative_enum_constructor: ignore
-    return_of_invalid_type_from_closure: ignore
-    argument_type_not_assignable: ignore
-    strict_raw_type: ignore
-    inference_failure_on_function_return_type: ignore
-    inference_failure_on_function_invocation: ignore
   plugins:
     - dart_code_metrics
 
 linter:
   rules:
     # Better readability
-    sort_constructors_first: true
     always_specify_types: true
-    prefer_interpolation_to_compose_strings: true
-    constant_identifier_names: true
-    sort_child_properties_last: true
-    unnecessary_brace_in_string_interps: true
-    await_only_futures: true
-    always_declare_return_types: true
-    prefer_single_quotes: true
-    unawaited_futures: true
-    unsafe_html: true
-    use_full_hex_values_for_flutter_colors: true
-    always_use_package_imports: true
-    avoid_relative_lib_imports: true
-    avoid_positional_boolean_parameters: true
-    avoid_unused_constructor_parameters: true
-    empty_constructor_bodies: true
-    empty_statements: true
-    avoid_empty_else: true
-    prefer_initializing_formals: true
-    prefer_is_empty: true
-    prefer_is_not_empty: true
-    prefer_is_not_operator: true
-    prefer_iterable_whereType: true
-    prefer_spread_collections: true
+    unsafe_html: true 
     prefer_expression_function_bodies: true
 
-    # Remove unnecessary late
-    unnecessary_late: true
-
-    # Use log/logger instead of print
-    avoid_print: true
-
-    # Optimize Performance
-    avoid_unnecessary_containers: true
-    prefer_contains: true
-    sized_box_for_whitespace: true
-    sized_box_shrink_expand: true
-    use_colored_box: true
-    use_decorated_box: true
-
-    prefer_const_constructors: true
-    prefer_const_declarations: true
-    prefer_const_constructors_in_immutables: true
-    prefer_const_literals_to_create_immutables: true
-    unnecessary_const: true
-
-    #Pub Rules
-    sort_pub_dependencies: true
-    package_names: true
-    depend_on_referenced_packages: true
-    secure_pubspec_urls: true
-
-    #Experimental
-    use_enums: true
-    use_late_for_private_fields_and_variables: true
-    unnecessary_nullable_for_final_variable_declarations: true
-    cast_nullable_to_non_nullable: true
-    use_build_context_synchronously: true
-    use_super_parameters: true
-
-    #Documentation
-    public_member_api_docs: false
-
     #Suppressed Lints
-    avoid_dynamic_calls: false
+    public_member_api_docs: false
     flutter_style_todos: false
     one_member_abstracts: false
-    prefer_constructors_over_static_methods: false
     omit_local_variable_types: false
-    lines_longer_than_80_chars: false
     avoid_classes_with_only_static_members: false
-    directives_ordering: false
-    always_put_required_named_parameters_first: false
+    lines_longer_than_80_chars: false
+ 
 
 dart_code_metrics:
   anti-patterns:
     - long-method:
+        severity: warning
         exclude:
           - test/**
+    - long-parameter-list
   metrics:
-    cyclomatic-complexity: 20
-    maximum-nesting-level: 5
-    number-of-parameters: 10
-    source-lines-of-code: 100
+    cyclomatic-complexity: 10
+    lines-of-code: 70
+    maintainability-index: 60
+    maximum-nesting-level: 4
+    number-of-methods: 7
+    number-of-parameters: 4
+    source-lines-of-code: 40
     weight-of-class: 0.33
-    number-of-methods: 10
+
+  technical-debt:
+      threshold: 1
+      todo-cost: 3
+      ignore-cost: 2
+      ignore-for-file-cost: 4
+      as-dynamic-cost: 1
+      deprecated-annotations-cost: 4
+      file-nullsafety-migration-cost: 5
+      unit-type: "MD"
 
   metrics-exclude:
     - "**.g.dart"
@@ -132,49 +80,110 @@ dart_code_metrics:
     - lib/**/generated_plugin_registrant.dart
 
   rules:
-    - double-literal-format
-    - newline-before-return
-    - prefer-conditional-expressions
-    - no-equal-then-else
-    - avoid-unused-parameters
-    - prefer-correct-edge-insets-constructor
-    - prefer-extracting-callbacks
-    - avoid-wrapping-in-padding
-    - no-boolean-literal-compare
-    - no-empty-block
-    - prefer-immediate-return
-    - avoid-redundant-async
-    - avoid-unnecessary-conditionals
-    - prefer-async-await
-    - prefer-first
-    - prefer-last
-    - prefer-static-class
-    - prefer-moving-to-variable
+    # Commons
+    - avoid-cascade-after-if-null
+    - avoid-collection-methods-with-unrelated-types
+    - avoid-double-slash-imports
+    - avoid-duplicate-exports
     - avoid-global-state
-    - missing-test-assertion
-    - arguments-ordering:
-        child-last: true
+    - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions:
         acceptable-level: 3
+    - avoid-redundant-async:
+        severity: info
+    - avoid-top-level-members-in-tests:
+        exclude:
+          - test/utils/**
+          - test/flutter_test_config.dart    
+    - avoid-unnecessary-conditionals
+    - avoid-unnecessary-type-assertions
+    - avoid-unnecessary-type-casts
+    - avoid-unrelated-type-assertions
+    - avoid-unused-parameters
+    - binary-expression-operand-order
+    - double-literal-format:
+        exclude:
+          - test/**
+    - list-all-equatable-fields
     - member-ordering-extended:
         order:
           - constructors
-          - public-fields
-          - private-fields
-          - close-method
-          - dispose-method
+          - named-constructor
+          - factory-constructor
+          - static-public-fields
+          - static-private-fields
+          - fields
+          - methods
         widgets-order:
           - constructor
-          - init-state-method
-          - did-change-dependencies-method
-          - did-update-widget-method
+          - named-constructor
+          - fields
+          - methods
           - build-method
           - dispose-method
+    - missing-test-assertion:
+        include-assertions:
+          - verify
+          - verifyNever
+          - verifyInOrder    
+    - no-boolean-literal-compare
+    - no-empty-block:
+        exclude:
+          - test/**
+    - no-equal-then-else
+    - no-object-declaration
+    - prefer-async-await
+    - prefer-conditional-expressions
     - prefer-correct-identifier-length:
-        max-identifier-length: 30
-        min-identifier-length: 2
+        min-identifier-length: 3
+        max-identifier-length: 30 
+    - prefer-correct-test-file-name:
+        severity: warning     
     - prefer-correct-type-name:
         min-length: 3
         max-length: 40
-    - prefer-trailing-comma:
-        break-on: 4
+    - prefer-first 
+    - prefer-immediate-return
+    - prefer-iterable-of
+    - prefer-last
+    - prefer-match-file-name:
+        severity: warning
+        exclude:
+          - test/**
+          - "**.dto.dart"   
+    - prefer-moving-to-variable      
+    - prefer-static-class:
+        ignore-private: true
+        exclude:
+          - test/** 
+    # Flutter       
+    - tag-name:
+        exclude:
+          - test/**
+    - always-remove-listener      
+    - avoid-expanded-as-spacer
+    - avoid-returning-widgets:
+        severity: warning
+    - avoid-shrink-wrap-in-lists
+    - avoid-unnecessary-setstate
+    - use-setstate-synchronously
+    - avoid-wrapping-in-padding
+    - check-for-equals-in-render-object-setters
+    - consistent-update-render-object         
+    - prefer-correct-edge-insets-constructor
+    - prefer-extracting-callbacks:
+        allowed-line-count: 0
+        ignored-named-arguments:
+          - listener
+          - listenWhen
+          - buildWhen
+          - itemBuilder
+          - builder
+    - prefer-single-widget-per-file:
+        ignore-private-widgets: true
+    - prefer-using-list-view
+    - use-setstate-synchronously
+    # Intl
+    - prefer-intl-name
+    - provide-correct-intl-args
+

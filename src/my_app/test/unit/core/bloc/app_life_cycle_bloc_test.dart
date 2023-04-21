@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_core/core/domain/bloc/app_life_cycle/app_life_cycle_bloc.dart';
 
+// ignore_for_file: no-empty-block
 void main() {
   late AppLifeCycleBloc appLifeCycleBloc;
 
@@ -16,7 +17,6 @@ void main() {
     final ByteData? message =
         const StringCodec().encodeMessage(state.toString());
     await ServicesBinding.instance.defaultBinaryMessenger
-        // ignore: no-empty-block
         .handlePlatformMessage('flutter/lifecycle', message, (_) {});
   }
 

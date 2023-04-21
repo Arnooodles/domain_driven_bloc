@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:very_good_core/app/config/scroll_behavior.dart';
+import 'package:very_good_core/app/config/scroll_behavior_config.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/generated/l10n.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 
 class MockMaterialApp extends StatelessWidget {
-  const MockMaterialApp({super.key, required this.child});
+  const MockMaterialApp({required this.child, super.key});
 
   final Widget child;
 

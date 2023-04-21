@@ -1,15 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:very_good_core/app/utils/injection.dart';
+import 'package:very_good_core/app/helpers/injection.dart';
 
+// ignore_for_file: avoid_dynamic_calls
 @singleton
 class AppBlocObserver extends BlocObserver {
   Logger logger = getIt<Logger>();
+
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
-    logger.i('onChange(${bloc.runtimeType}, $change)');
+    logger
+        .wtf('onChange(${bloc.runtimeType}, ${change.nextState.runtimeType})');
   }
 
   @override

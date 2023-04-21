@@ -1,20 +1,32 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/generated/l10n.dart';
 
-extension AppLocalizationsX on BuildContext {
+// ignore_for_file: prefer-match-file-name,invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_visible_for_testing_member,prefer-enums-by-name
+extension BuildContextX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
+
+  TextTheme get textTheme => Theme.of(this).textTheme;
 
   bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
 
   double get screenWidth => MediaQuery.of(this).size.width;
 
   double get screenHeight => MediaQuery.of(this).size.height;
+}
+
+extension CubitX<S> on Cubit<S> {
+  void safeEmit(S state) {
+    if (isClosed) return;
+    emit(state);
+  }
 }
 
 extension EitherX<L, R> on Either<L, R> {
@@ -29,7 +41,7 @@ extension StatusCodeX on StatusCode {
 extension IntX on int {
   StatusCode get statusCode => StatusCode.values.firstWhere(
         (StatusCode element) => element.value == this,
-        orElse: () => StatusCode.api000,
+        orElse: () => StatusCode.http000,
       );
 }
 

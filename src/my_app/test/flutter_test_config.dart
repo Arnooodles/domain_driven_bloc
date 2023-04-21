@@ -8,10 +8,11 @@ import 'package:very_good_core/app/themes/app_theme.dart';
 import 'utils/local_file_comparator_with_threshold.dart';
 import 'utils/test_utils.dart';
 
+// ignore_for_file: avoid_redundant_argument_values
 class TestConfig {
-  /// Update this if you want to update the golden files in the remote repository
+  /// To update the golden files in the remote repository change goldensVersion
   /// Format: yyyyMMddHHmm
-  static String get goldensVersion => '202303100000';
+  static String get goldensVersion => '202304210000';
 
   /// Customize your threshold here
   /// For example, the error threshold here is 15%
@@ -45,7 +46,6 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   return AlchemistConfig.runWithConfig(
     config: AlchemistConfig(
       platformGoldensConfig: PlatformGoldensConfig(
-        // ignore: avoid_redundant_argument_values
         enabled: !const bool.fromEnvironment('CI', defaultValue: false),
         theme: AppTheme.lightTheme,
       ),

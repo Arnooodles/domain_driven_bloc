@@ -5,7 +5,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
-import 'package:very_good_core/core/domain/model/failures.dart';
+import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/features/auth/domain/bloc/login/login_bloc.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
@@ -43,7 +43,7 @@ void main() {
         return LoginBloc(authRepository, localStorageRepository);
       },
       act: (LoginBloc bloc) => bloc.initialize(),
-      expect: () => <dynamic>[LoginState.initial()],
+      expect: () => <dynamic>[const LoginState.initial(isLoading: false)],
     );
 
     blocTest<LoginBloc, LoginState>(
@@ -56,7 +56,7 @@ void main() {
       },
       act: (LoginBloc bloc) => bloc.initialize(),
       expect: () =>
-          <dynamic>[LoginState.initial().copyWith(emailAddress: email)],
+          <dynamic>[LoginState.initial(isLoading: false, emailAddress: email)],
     );
   });
 
@@ -71,7 +71,7 @@ void main() {
       build: () => loginBloc,
       act: (LoginBloc bloc) async => bloc.onEmailAddressChanged('test_$email'),
       expect: () => <dynamic>[
-        loginBloc.state.copyWith(emailAddress: 'test_$email'),
+        LoginState.initial(isLoading: false, emailAddress: 'test_$email'),
       ],
     );
   });
@@ -81,8 +81,10 @@ void main() {
       when(localStorageRepository.getLastLoggedInEmail())
           .thenAnswer((_) async => null);
       loginBloc = LoginBloc(authRepository, localStorageRepository);
-      failure =
-          const Failure.serverError(StatusCode.api500, 'INTERNAL SERVER ERROR');
+      failure = const Failure.serverError(
+        StatusCode.http500,
+        'INTERNAL SERVER ERROR',
+      );
     });
     blocTest<LoginBloc, LoginState>(
       'should emit an the a success state',
@@ -94,8 +96,8 @@ void main() {
       },
       act: (LoginBloc bloc) => bloc.login(email, password),
       expect: () => <dynamic>[
-        loginBloc.state.copyWith(isLoading: true, isSuccess: false),
-        loginBloc.state.copyWith(isSuccess: true, isLoading: false),
+        const LoginState.initial(isLoading: true),
+        const LoginState.success()
       ],
     );
     blocTest<LoginBloc, LoginState>(
@@ -108,11 +110,9 @@ void main() {
       },
       act: (LoginBloc bloc) => bloc.login(email, password),
       expect: () => <dynamic>[
-        loginBloc.state.copyWith(isLoading: true, isSuccess: false),
-        loginBloc.state
-            .copyWith(isSuccess: false, isLoading: false, failure: failure),
-        loginBloc.state
-            .copyWith(isSuccess: false, isLoading: false, failure: null),
+        const LoginState.initial(isLoading: true),
+        LoginState.failed(failure),
+        LoginState.initial(isLoading: false, emailAddress: email),
       ],
     );
     blocTest<LoginBloc, LoginState>(
@@ -124,14 +124,11 @@ void main() {
       },
       act: (LoginBloc bloc) => bloc.login(email, password),
       expect: () => <dynamic>[
-        loginBloc.state.copyWith(isLoading: true, isSuccess: false),
-        loginBloc.state.copyWith(
-          isSuccess: false,
-          isLoading: false,
-          failure: Failure.unexpected(throwsException.toString()),
+        const LoginState.initial(isLoading: true),
+        LoginState.failed(
+          Failure.unexpected(throwsException.toString()),
         ),
-        loginBloc.state
-            .copyWith(isSuccess: false, isLoading: false, failure: null),
+        LoginState.initial(isLoading: false, emailAddress: email),
       ],
     );
     blocTest<LoginBloc, LoginState>(
@@ -143,14 +140,11 @@ void main() {
       },
       act: (LoginBloc bloc) => bloc.login('email', password),
       expect: () => <dynamic>[
-        loginBloc.state.copyWith(isLoading: true, isSuccess: false),
-        loginBloc.state.copyWith(
-          isSuccess: false,
-          isLoading: false,
-          failure: const Failure.invalidEmailFormat(),
+        const LoginState.initial(isLoading: true),
+        const LoginState.failed(
+          Failure.invalidEmailFormat(),
         ),
-        loginBloc.state
-            .copyWith(isSuccess: false, isLoading: false, failure: null),
+        const LoginState.initial(isLoading: false, emailAddress: 'email'),
       ],
     );
     blocTest<LoginBloc, LoginState>(
@@ -162,14 +156,11 @@ void main() {
       },
       act: (LoginBloc bloc) => bloc.login(email, 'pass'),
       expect: () => <dynamic>[
-        loginBloc.state.copyWith(isLoading: true, isSuccess: false),
-        loginBloc.state.copyWith(
-          isSuccess: false,
-          isLoading: false,
-          failure: const Failure.exceedingCharacterLength(min: 6),
+        const LoginState.initial(isLoading: true),
+        const LoginState.failed(
+          Failure.exceedingCharacterLength(min: 6),
         ),
-        loginBloc.state
-            .copyWith(isSuccess: false, isLoading: false, failure: null),
+        LoginState.initial(isLoading: false, emailAddress: email),
       ],
     );
   });

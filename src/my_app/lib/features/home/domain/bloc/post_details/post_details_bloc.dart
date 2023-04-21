@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:very_good_core/core/domain/model/value_objects.dart';
+import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/core/domain/model/value_object.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 part 'post_details_bloc.freezed.dart';
@@ -19,7 +20,7 @@ class PostDetailsBloc extends Cubit<PostDetailsState> {
 
   Future<void> loadView(Url webviewUrl) async {
     await state.controller.loadRequest(Uri.parse(webviewUrl.getOrCrash()));
-    emit(state.copyWith(webviewUrl: webviewUrl));
+    safeEmit(state.copyWith(webviewUrl: webviewUrl));
   }
 
   Future<bool> webViewBack() async {
