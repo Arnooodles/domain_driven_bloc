@@ -1,41 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_button.dart';
 
+// ignore_for_file: prefer-match-file-name
 class ConfirmationDialog extends StatelessWidget {
   const ConfirmationDialog({
-    super.key,
     required this.message,
     this.title,
+    this.titleColor,
     this.negativeButtonText,
     this.positiveButtonText,
     this.onNegativePressed,
     this.onPositivePressed,
     this.negativeButtonColor,
     this.positiveButtonColor,
+    this.negativeButtonTextColor,
+    this.positiveButtonTextColor,
+    super.key,
   });
   final String message;
   final String? title;
+  final Color? titleColor;
   final String? negativeButtonText;
   final String? positiveButtonText;
   final VoidCallback? onNegativePressed;
   final VoidCallback? onPositivePressed;
   final Color? negativeButtonColor;
   final Color? positiveButtonColor;
+  final Color? negativeButtonTextColor;
+  final Color? positiveButtonTextColor;
 
   @override
   Widget build(BuildContext context) => AlertDialog(
+        backgroundColor: context.colorScheme.background,
+        surfaceTintColor: context.colorScheme.surfaceTint,
+        shape: RoundedRectangleBorder(
+          borderRadius: AppTheme.defaultBoardRadius,
+        ),
         title: title != null
-            ? Text(title!, style: AppTextStyle.titleMedium)
+            ? Text(title!, style: context.textTheme.titleMedium)
             : null,
         content: Padding(
           padding: title != null
               ? EdgeInsets.zero
-              : EdgeInsets.only(top: Insets.xxs),
-          child: Text(message, style: AppTextStyle.bodyMedium),
+              : const EdgeInsets.only(top: Insets.xxsmall),
+          child: Text(
+            message,
+            style: context.textTheme.bodyMedium?.copyWith(
+              color: titleColor ?? context.colorScheme.onBackground,
+            ),
+          ),
         ),
         actions: <Widget>[
           {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
@@ -44,6 +61,9 @@ class ConfirmationDialog extends StatelessWidget {
             onPressed: onNegativePressed ?? () => Navigator.of(context).pop(),
             padding: EdgeInsets.zero,
             contentPadding: EdgeInsets.zero,
+            textStyle: TextStyle(
+              color: negativeButtonTextColor ?? context.colorScheme.primary,
+            ),
           ),
           {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
             text: positiveButtonText ?? context.l10n.common_yes.toUpperCase(),
@@ -51,9 +71,12 @@ class ConfirmationDialog extends StatelessWidget {
             onPressed: onPositivePressed ?? () => Navigator.of(context).pop(),
             padding: EdgeInsets.zero,
             contentPadding: EdgeInsets.zero,
+            textStyle: TextStyle(
+              color: positiveButtonTextColor ?? context.colorScheme.primary,
+            ),
           ),
         ],
-        actionsPadding: EdgeInsets.symmetric(horizontal: Insets.med),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: Insets.medium),
         buttonPadding: EdgeInsets.zero,
       );
 }

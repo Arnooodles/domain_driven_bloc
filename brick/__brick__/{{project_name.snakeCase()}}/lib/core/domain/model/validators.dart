@@ -4,7 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dartx/dartx.dart';
 import 'package:dartz/dartz.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failures.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
 
 // ignore_for_file: prefer-static-class
 Either<Failure, String> validateEmailAddress(String email) {

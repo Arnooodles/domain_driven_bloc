@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 
 class EmptyPost extends StatelessWidget {
   const EmptyPost({super.key});
@@ -10,9 +9,9 @@ class EmptyPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: Insets.lg),
+          padding: const EdgeInsets.symmetric(horizontal: Insets.large),
           color: context.colorScheme.background,
-          width: double.infinity,
+          width: Insets.infinity,
           height: context.screenHeight -
               AppTheme.defaultNavBarHeight -
               AppTheme.defaultAppBarHeight,
@@ -26,10 +25,13 @@ class EmptyPost extends StatelessWidget {
                   color: context.colorScheme.onBackground.withOpacity(0.25),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: Insets.sm, bottom: Insets.xs),
+                  padding: const EdgeInsets.only(
+                    top: Insets.small,
+                    bottom: Insets.xsmall,
+                  ),
                   child: Text(
                     context.l10n.post__empty_post__empty_post_message,
-                    style: AppTextStyle.titleLarge.copyWith(
+                    style: context.textTheme.titleLarge?.copyWith(
                       color: context.colorScheme.onBackground.withOpacity(0.25),
                     ),
                     textAlign: TextAlign.center,

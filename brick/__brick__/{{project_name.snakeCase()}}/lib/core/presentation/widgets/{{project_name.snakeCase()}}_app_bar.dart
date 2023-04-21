@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_text_style.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar({
@@ -34,10 +34,10 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
         automaticallyImplyLeading: automaticallyImplyLeading,
         title: showTitle
             ? Padding(
-                padding: EdgeInsets.only(left: Insets.xs),
+                padding: const EdgeInsets.only(left: Insets.xsmall),
                 child: Text(
                   title ?? Constant.appName,
-                  style: AppTextStyle.headlineSmall.copyWith(
+                  style: context.textTheme.headlineSmall?.copyWith(
                     color: titleColor,
                     fontWeight: AppFontWeight.medium,
                   ),

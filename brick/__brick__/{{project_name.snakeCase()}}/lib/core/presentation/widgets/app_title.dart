@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 
 class AppTitle extends StatelessWidget {
   const AppTitle({super.key});
@@ -9,7 +8,8 @@ class AppTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
         Constant.appName,
-        style: AppTextStyle.displayLarge
-            .copyWith(color: context.colorScheme.primary),
+        textAlign: TextAlign.center,
+        style: context.textTheme.displayLarge
+            ?.copyWith(color: context.colorScheme.primary),
       );
 }

@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failures.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_objects.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
 
 part 'post.freezed.dart';
 

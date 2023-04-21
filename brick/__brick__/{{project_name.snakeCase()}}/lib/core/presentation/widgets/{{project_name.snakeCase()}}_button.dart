@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}Button extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}Button({
-    super.key,
     required this.text,
+    required this.onPressed,
     this.isEnabled = true,
     this.isExpanded = false,
     this.buttonType = ButtonType.elevated,
-    required this.onPressed,
     this.buttonStyle,
     this.textStyle,
     this.padding,
     this.contentPadding,
     this.icon,
     this.iconPadding,
+    super.key,
   });
 
   final String text;
@@ -38,9 +38,10 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}Button extends StatelessWidg
         button: true,
         label: text,
         child: SizedBox(
-          width: isExpanded ? double.infinity : null,
+          width: isExpanded ? Insets.infinity : null,
           child: Padding(
-            padding: padding ?? EdgeInsets.symmetric(horizontal: Insets.med),
+            padding: padding ??
+                const EdgeInsets.symmetric(horizontal: Insets.medium),
             child: icon != null
                 ? _ButtonTypeWithIcon(
                     text: text,
@@ -98,11 +99,11 @@ class _ButtonTypeWithIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final Padding iconWithPadding = Padding(
       padding: iconPadding ??
-          EdgeInsets.fromLTRB(
-            Insets.xs,
-            Insets.med,
-            0,
-            Insets.med,
+          const EdgeInsets.fromLTRB(
+            Insets.xxsmall,
+            Insets.medium,
+            Insets.zero,
+            Insets.medium,
           ),
       child: icon,
     );
@@ -119,6 +120,7 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             text: text,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.primary,
           ),
         );
       case ButtonType.filled:
@@ -133,6 +135,7 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             hasIcon: true,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.onPrimary,
           ),
         );
       case ButtonType.tonal:
@@ -147,6 +150,7 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             hasIcon: true,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.secondary,
           ),
         );
       case ButtonType.outlined:
@@ -161,6 +165,7 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             hasIcon: true,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.primary,
           ),
         );
       case ButtonType.text:
@@ -175,6 +180,7 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             hasIcon: true,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.primary,
           ),
         );
     }
@@ -183,14 +189,14 @@ class _ButtonTypeWithIcon extends StatelessWidget {
 
 class _ButtonType extends StatelessWidget {
   const _ButtonType({
+    required this.text,
+    required this.buttonType,
     this.isEnabled = true,
     this.isExpanded = false,
     this.onPressed,
     this.buttonStyle,
     this.contentPadding,
-    required this.text,
     this.textStyle,
-    required this.buttonType,
   });
 
   final bool isEnabled;
@@ -215,6 +221,7 @@ class _ButtonType extends StatelessWidget {
             text: text,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.primary,
           ),
         );
       case ButtonType.filled:
@@ -227,6 +234,7 @@ class _ButtonType extends StatelessWidget {
             text: text,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.onPrimary,
           ),
         );
       case ButtonType.tonal:
@@ -239,6 +247,7 @@ class _ButtonType extends StatelessWidget {
             text: text,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.secondary,
           ),
         );
       case ButtonType.outlined:
@@ -251,6 +260,7 @@ class _ButtonType extends StatelessWidget {
             text: text,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.primary,
           ),
         );
       case ButtonType.text:
@@ -263,6 +273,7 @@ class _ButtonType extends StatelessWidget {
             text: text,
             textStyle: textStyle,
             isExpanded: isExpanded,
+            defaultTextColor: context.colorScheme.primary,
           ),
         );
     }
@@ -271,18 +282,20 @@ class _ButtonType extends StatelessWidget {
 
 class _ButtonContent extends StatelessWidget {
   const _ButtonContent({
-    this.contentPadding,
     required this.isEnabled,
     required this.text,
+    required this.defaultTextColor,
     this.hasIcon = false,
     this.textStyle,
     this.isExpanded = false,
+    this.contentPadding,
   });
 
   final EdgeInsets? contentPadding;
   final bool isEnabled;
   final String text;
   final TextStyle? textStyle;
+  final Color defaultTextColor;
   final bool hasIcon;
   final bool isExpanded;
 
@@ -290,27 +303,27 @@ class _ButtonContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final EdgeInsets defaultPadding = hasIcon
         ? EdgeInsets.fromLTRB(
-            0,
-            Insets.med,
-            Insets.med,
-            Insets.med,
+            Insets.zero,
+            Insets.medium,
+            isExpanded ? Insets.medium * 2 : Insets.medium,
+            Insets.medium,
           )
-        : EdgeInsets.all(Insets.med);
-
+        : const EdgeInsets.all(Insets.medium);
+    final TextStyle defaultTextStyle =
+        context.textTheme.bodyLarge!.copyWith(color: defaultTextColor);
     return SizedBox(
-      width: isExpanded ? double.infinity : null,
+      width: isExpanded ? Insets.infinity : null,
       child: Padding(
         padding: contentPadding ?? defaultPadding,
         child: isEnabled
             ? Text(
                 text,
-                style: textStyle ?? AppTextStyle.bodyLarge,
+                style: textStyle ?? defaultTextStyle,
                 textAlign: TextAlign.center,
               )
             : Center(
                 child: SizedBox.square(
-                  dimension:
-                      textStyle?.fontSize ?? AppTextStyle.bodyLarge.fontSize,
+                  dimension: textStyle?.fontSize ?? defaultTextStyle.fontSize,
                   child: const CircularProgressIndicator(),
                 ),
               ),

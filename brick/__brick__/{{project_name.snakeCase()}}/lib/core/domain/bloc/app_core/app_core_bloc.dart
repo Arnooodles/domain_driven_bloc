@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 
 part 'app_core_bloc.freezed.dart';
 part 'app_core_state.dart';
@@ -25,7 +26,7 @@ class AppCoreBloc extends Cubit<AppCoreState> {
         in AppScrollController.values) {
       controllers.putIfAbsent(appScrollController, ScrollController.new);
     }
-    emit(state.copyWith(scrollControllers: controllers));
+    safeEmit(state.copyWith(scrollControllers: controllers));
   }
 
   ScrollController getScrollController(
@@ -50,7 +51,7 @@ class AppCoreBloc extends Cubit<AppCoreState> {
       state.scrollControllers,
     );
 
-    emit(
+    safeEmit(
       state.copyWith(
         scrollControllers: scrollControllers
           ..putIfAbsent(appScrollController, () => scrollController),

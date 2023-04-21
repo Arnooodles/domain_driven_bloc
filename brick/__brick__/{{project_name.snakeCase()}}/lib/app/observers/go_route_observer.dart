@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 
 @singleton
 class GoRouteObserver extends NavigatorObserver {
   Logger logger = getIt<Logger>();
+
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    logger.d(
+    logger.v(
       '${route.settings.name} pushed from ${previousRoute?.settings.name}',
     );
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    logger.d(
+    logger.v(
       '${route.settings.name} popped from ${previousRoute?.settings.name}',
     );
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    logger.d('${route.settings.name} removed ${previousRoute?.settings.name}');
+    logger.v(
+      '${route.settings.name} removed ${previousRoute?.settings.name}',
+    );
   }
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    logger.d('${newRoute?.settings.name} replaced ${oldRoute?.settings.name}');
+    logger.v(
+      '${newRoute?.settings.name} replaced ${oldRoute?.settings.name}',
+    );
   }
 }

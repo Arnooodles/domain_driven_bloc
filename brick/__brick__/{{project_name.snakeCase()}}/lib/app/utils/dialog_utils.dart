@@ -1,17 +1,18 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:animations/animations.dart';
-import 'package:dartx/dartx.dart';
 import 'package:flash/flash.dart';
+import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_dialogs.dart';
 
+// ignore_for_file: long-method,long-parameter-list
 class DialogUtils {
   DialogUtils._();
 
@@ -29,35 +30,6 @@ class DialogUtils {
       ) ??
       false;
 
-  static Future<void>? showOfflineDialog<T>(
-    BuildContext context, {
-    Duration? duration,
-  }) =>
-      showFlash(
-        context: context,
-        builder: (BuildContext context, FlashController<void> controller) =>
-            Flash<void>(
-          controller: controller,
-          boxShadows: kElevationToShadow[4],
-          horizontalDismissDirection: HorizontalDismissDirection.horizontal,
-          position: FlashPosition.bottom,
-          behavior: FlashBehavior.fixed,
-          barrierDismissible: false,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: Insets.med),
-            child: FlashBar(
-              content: Text(
-                ConnectionStatus.offline.name.capitalize(),
-              ),
-              icon: const Icon(
-                Icons.wifi_off,
-              ),
-            ),
-          ),
-        ),
-        duration: duration,
-      );
-
   static Future<bool?> showConfirmationDialog(
     BuildContext context, {
     required String message,
@@ -68,72 +40,69 @@ class DialogUtils {
     VoidCallback? onPositivePressed,
     Color? negativeButtonColor,
     Color? positiveButtonColor,
+    Color? negativeButtonTextColor,
+    Color? positiveButtonTextColor,
+    Color? titleColor,
   }) =>
       showModal<bool?>(
         context: context,
         builder: (BuildContext context) => ConfirmationDialog(
           message: message,
           title: title,
+          titleColor: titleColor,
           negativeButtonText: negativeButtonText,
           positiveButtonText: positiveButtonText,
           onNegativePressed: onNegativePressed,
           onPositivePressed: onPositivePressed,
           negativeButtonColor: negativeButtonColor,
           positiveButtonColor: positiveButtonColor,
+          negativeButtonTextColor: negativeButtonTextColor,
+          positiveButtonTextColor: positiveButtonTextColor,
         ),
       );
 
-  static Future<void> showToast(
+  static Future<void> showError(
     BuildContext context,
     String message, {
     Icon? icon,
     Duration? duration,
     FlashPosition? position,
   }) =>
-      showFlash(
-        context: context,
-        builder: (
-          BuildContext context,
-          FlashController<Object?> controller,
-        ) =>
-            Flash<dynamic>.bar(
+      context.showFlash<void>(
+        duration: duration ?? const Duration(seconds: 3),
+        builder: (BuildContext context, FlashController<void> controller) =>
+            FlashBar<void>(
           controller: controller,
-          margin: EdgeInsets.all(Insets.med),
-          borderRadius: AppTheme.defaultBoardRadius,
-          boxShadows: const <BoxShadow>[
-            BoxShadow(
-              color: Color(0x1F000000),
-              offset: Offset(0, 6),
-              blurRadius: 16,
-            ),
-          ],
-          position: position ?? FlashPosition.top,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: Insets.med,
-              horizontal: Insets.lg,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (icon != null)
-                  Padding(
-                    padding: EdgeInsets.only(right: Insets.sm),
-                    child: icon,
-                  ),
-                Flexible(
-                  child: Text(
-                    message,
-                    style: AppTextStyle.bodySmall,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 3,
-                  ),
+          backgroundColor: context.colorScheme.background,
+          surfaceTintColor: context.colorScheme.surfaceTint,
+          enableHorizontalDrag: false,
+          shouldIconPulse: false,
+          position: position ?? FlashPosition.bottom,
+          behavior: FlashBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: AppTheme.defaultBoardRadius,
+          ),
+          margin: const EdgeInsets.symmetric(
+            vertical: Insets.xxxlarge,
+            horizontal: Insets.xxlarge,
+          ),
+          clipBehavior: Clip.antiAlias,
+          icon: Padding(
+            padding:
+                const EdgeInsets.only(left: Insets.small, right: Insets.xsmall),
+            child: icon ??
+                Icon(
+                  Icons.error_outline,
+                  color: context.colorScheme.error,
                 ),
-              ],
-            ),
+          ),
+          content: Text(
+            message,
+            style: context.textTheme.bodyMedium
+                ?.copyWith(color: context.colorScheme.onBackground),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
           ),
         ),
-        duration: duration ?? const Duration(seconds: 2),
       );
 }
