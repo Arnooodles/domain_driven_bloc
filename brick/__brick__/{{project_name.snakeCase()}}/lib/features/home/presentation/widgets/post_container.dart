@@ -4,28 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text_url.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container_footer.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container_header.dart';
 
 class PostContainer extends StatelessWidget {
-  const PostContainer({super.key, required this.post});
+  const PostContainer({required this.post, super.key});
 
   final Post post;
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: Insets.sm),
+        padding: const EdgeInsets.symmetric(horizontal: Insets.small),
         child: GestureDetector(
           onTap: () => launchPostDetails(context),
           child: Card(
             child: Padding(
-              padding: EdgeInsets.all(Insets.xs),
+              padding: const EdgeInsets.all(Insets.xsmall),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +32,7 @@ class PostContainer extends StatelessWidget {
                   PostContainerHeader(post: post),
                   if (post.urlOverriddenByDest != null)
                     Padding(
-                      padding: EdgeInsets.all(Insets.med),
+                      padding: const EdgeInsets.all(Insets.medium),
                       child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl(
                         url: post.urlOverriddenByDest!,
                         onTap: () => launchUrl(
@@ -46,7 +45,7 @@ class PostContainer extends StatelessWidget {
                   if (post.selftext.getOrCrash().isNotNullOrBlank)
                     Flexible(
                       child: Container(
-                        padding: EdgeInsets.only(bottom: Insets.xs),
+                        padding: const EdgeInsets.only(bottom: Insets.xsmall),
                         foregroundDecoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.bottomCenter,
@@ -68,7 +67,7 @@ class PostContainer extends StatelessWidget {
                           child: Markdown(
                             data: post.selftext.getOrCrash(),
                             styleSheet: MarkdownStyleSheet(
-                              p: AppTextStyle.bodyMedium.copyWith(
+                              p: context.textTheme.bodyMedium?.copyWith(
                                 color: context.colorScheme.secondary,
                               ),
                             ),
@@ -93,7 +92,7 @@ class PostContainer extends StatelessWidget {
         webOnlyWindowName: '_blank',
       );
     } else {
-      GoRouter.of(context).pushNamed(
+      await GoRouter.of(context).pushNamed(
         RouteName.postDetails.name,
         params: <String, String>{'postId': post.uid.getOrCrash()},
         extra: post,

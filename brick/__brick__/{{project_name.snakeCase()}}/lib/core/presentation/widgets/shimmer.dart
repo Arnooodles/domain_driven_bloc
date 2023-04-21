@@ -1,20 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 
 class Shimmer extends StatefulWidget {
   const Shimmer({
-    super.key,
+    required this.width,
+    required this.height,
     this.millisecondsDelay = 0,
     this.radius = AppTheme.defaultRadius,
     this.highlightColor,
     this.baseColor,
     this.index = 0,
-    required this.width,
-    required this.height,
+    super.key,
   });
 
   factory Shimmer.round({

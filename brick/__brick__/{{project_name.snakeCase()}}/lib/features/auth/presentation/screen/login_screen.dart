@@ -1,14 +1,13 @@
-import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/error_message_utils.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/app_title.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/connectivity_checker.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_button.dart';
@@ -29,9 +28,16 @@ class LoginScreen extends HookWidget {
     return BlocProvider<LoginBloc>(
       create: (BuildContext context) => getIt<LoginBloc>(),
       child: BlocConsumer<LoginBloc, LoginState>(
+        listener: _onStateChangedListener,
+        buildWhen: _buildWhen,
         builder: (BuildContext context, LoginState state) {
           emailTextController
-            ..value = TextEditingValue(text: state.emailAddress ?? '')
+            ..value = TextEditingValue(
+              text: state.mapOrNull(
+                    initial: (LoginInitial state) => state.emailAddress,
+                  ) ??
+                  '',
+            )
             ..selection = TextSelection.fromPosition(
               TextPosition(offset: emailTextController.text.length),
             );
@@ -39,12 +45,13 @@ class LoginScreen extends HookWidget {
           return WillPopScope(
             onWillPop: () => DialogUtils.showExitDialog(context),
             child: ConnectivityChecker.scaffold(
+              backgroundColor: context.colorScheme.background,
               body: Center(
                 child: Container(
-                  padding: EdgeInsets.all(Insets.xl),
-                  color: context.colorScheme.background,
-                  constraints:
-                      const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
+                  padding: const EdgeInsets.all(Insets.xlarge),
+                  constraints: const BoxConstraints(
+                    maxWidth: Constant.mobileBreakpoint,
+                  ),
                   child: Column(
                     children: <Widget>[
                       const Flexible(child: Center(child: AppTitle())),
@@ -61,7 +68,7 @@ class LoginScreen extends HookWidget {
                                   .onEmailAddressChanged(value),
                               autofocus: true,
                             ),
-                            VSpace.lg,
+                            VSpace.large(),
                             {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
                               controller: passwordTextController,
                               labelText:
@@ -71,18 +78,22 @@ class LoginScreen extends HookWidget {
                               textInputType: TextInputType.visiblePassword,
                               isPassword: true,
                             ),
-                            VSpace.xxl,
+                            VSpace.xxxlarge(),
                             {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
                               text: context.l10n.login__button_text__login,
-                              isEnabled: !state.isLoading,
+                              isEnabled: state.mapOrNull(
+                                    initial: (LoginInitial state) =>
+                                        !state.isLoading,
+                                  ) ??
+                                  true,
                               isExpanded: true,
                               buttonType: ButtonType.filled,
                               onPressed: () => context.read<LoginBloc>().login(
                                     emailTextController.text,
                                     passwordTextController.text,
                                   ),
-                              contentPadding: EdgeInsets.symmetric(
-                                vertical: Insets.sm,
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: Insets.small,
                               ),
                             ),
                           ],
@@ -95,20 +106,23 @@ class LoginScreen extends HookWidget {
             ),
           );
         },
-        listener: _loginScreenListener,
       ),
     );
   }
 
-  void _loginScreenListener(BuildContext context, LoginState state) {
-    if (state.isSuccess) {
-      context.read<AuthBloc>().authenticate();
-    } else if (state.failure != null) {
-      DialogUtils.showToast(
+  void _onStateChangedListener(BuildContext context, LoginState state) {
+    state.mapOrNull(
+      success: (LoginSuccess state) => context.read<AuthBloc>().authenticate(),
+      failed: (LoginFailure state) => DialogUtils.showError(
         context,
         ErrorMessageUtils.generate(context, state.failure),
-        position: FlashPosition.bottom,
-      );
-    }
+      ),
+    );
   }
+
+  bool _buildWhen(_, LoginState current) => current.maybeMap(
+        orElse: () => true,
+        success: (_) => false,
+        failed: (_) => false,
+      );
 }

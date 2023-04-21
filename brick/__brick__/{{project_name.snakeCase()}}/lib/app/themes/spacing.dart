@@ -1,51 +1,57 @@
 import 'package:flutter/material.dart';
 
+// ignore_for_file: prefer-match-file-name,prefer-single-widget-per-file,
+// ignore_for_file: avoid-returning-widgets,prefer-correct-identifier-length
 class VSpace extends StatelessWidget {
   const VSpace(this.size, {super.key});
+
+  factory VSpace.xxsmall() => const VSpace(Insets.xxsmall);
+  factory VSpace.xsmall() => const VSpace(Insets.xsmall);
+  factory VSpace.small() => const VSpace(Insets.small);
+  factory VSpace.medium() => const VSpace(Insets.medium);
+  factory VSpace.large() => const VSpace(Insets.large);
+  factory VSpace.xlarge() => const VSpace(Insets.xlarge);
+  factory VSpace.xxlarge() => const VSpace(Insets.xxlarge);
+  factory VSpace.xxxlarge() => const VSpace(Insets.xxxlarge);
+
   final double size;
 
   @override
   Widget build(BuildContext context) => SizedBox(height: size);
-
-  static VSpace get xxs => VSpace(Insets.xxs);
-  static VSpace get xs => VSpace(Insets.xs);
-  static VSpace get sm => VSpace(Insets.sm);
-  static VSpace get med => VSpace(Insets.med);
-  static VSpace get lg => VSpace(Insets.lg);
-  static VSpace get xl => VSpace(Insets.xl);
-  static VSpace get xxl => VSpace(Insets.xxl);
-  static VSpace get xxxl => VSpace(Insets.xxxl);
 }
 
 class HSpace extends StatelessWidget {
   const HSpace(this.size, {super.key});
+
+  factory HSpace.xxsmall() => const HSpace(Insets.xxsmall);
+  factory HSpace.xsmall() => const HSpace(Insets.xsmall);
+  factory HSpace.small() => const HSpace(Insets.small);
+  factory HSpace.medium() => const HSpace(Insets.medium);
+  factory HSpace.large() => const HSpace(Insets.large);
+  factory HSpace.xlarge() => const HSpace(Insets.xlarge);
+  factory HSpace.xxlarge() => const HSpace(Insets.xxlarge);
+  factory HSpace.xxxlarge() => const HSpace(Insets.xxxlarge);
+
   final double size;
 
   @override
   Widget build(BuildContext context) => SizedBox(width: size);
-
-  static HSpace get xxs => HSpace(Insets.xxs);
-  static HSpace get xs => HSpace(Insets.xs);
-  static HSpace get sm => HSpace(Insets.sm);
-  static HSpace get med => HSpace(Insets.med);
-  static HSpace get lg => HSpace(Insets.lg);
-  static HSpace get xl => HSpace(Insets.xl);
-  static HSpace get xxl => HSpace(Insets.xxl);
-  static HSpace get xxxl => HSpace(Insets.xxxl);
 }
 
-abstract class Insets {
+class Insets {
   const Insets._();
 
   static const double scale = 1;
 
   // Regular paddings
-  static double get xxs => 4 * scale;
-  static double get xs => 8 * scale;
-  static double get sm => 12 * scale;
-  static double get med => 16 * scale;
-  static double get lg => 24 * scale;
-  static double get xl => 32 * scale;
-  static double get xxl => 64 * scale;
-  static double get xxxl => 128 * scale;
+  static const double zero = 0;
+  static const double xxsmall = scale * 4;
+  static const double xsmall = scale * 8;
+  static const double small = scale * 12;
+  static const double medium = scale * 16;
+  static const double large = scale * 24;
+  static const double xlarge = scale * 32;
+  static const double xxlarge = scale * 48;
+  static const double xxxlarge = scale * 64;
+  static const double infinity = double.infinity;
 }

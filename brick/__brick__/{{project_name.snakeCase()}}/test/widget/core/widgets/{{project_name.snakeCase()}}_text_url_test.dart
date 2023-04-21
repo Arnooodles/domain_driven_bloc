@@ -1,7 +1,7 @@
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_objects.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text_url.dart';
 
 import '../../../utils/test_utils.dart';

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_objects.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/bloc/post_details/post_details_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PostDetailsWebview extends HookWidget {
-  const PostDetailsWebview({super.key, required this.post});
+  const PostDetailsWebview({required this.post, super.key});
 
   final Post post;
 

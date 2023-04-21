@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:dartx/dartx.dart';
 import 'package:faker/faker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/converters.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/converters.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/user.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_objects.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
 
 part 'user.dto.freezed.dart';
 part 'user.dto.g.dart';
@@ -40,7 +39,8 @@ class UserDTO with _$UserDTO {
         contactNumber: user.contactNumber.getOrCrash(),
         birthday: user.birthday,
       );
-  static UserDTO userDTOFromJson(String str) =>
+
+  factory UserDTO.userDTOFromJson(String str) =>
       UserDTO.fromJson(json.decode(str) as Map<String, dynamic>);
 
   static String userDTOToJson(UserDTO data) => json.encode(data.toJson());
@@ -58,7 +58,7 @@ class UserDTO with _$UserDTO {
       email: EmailAddress(email),
       gender: Gender.values.firstWhere(
         (Gender element) => element.name == gender?.toLowerCase(),
-        orElse: () => Gender.values[Random().nextInt(Gender.values.length)],
+        orElse: () => Gender.unknown,
       ),
       birthday: birthday ??
           faker.date.dateTime(

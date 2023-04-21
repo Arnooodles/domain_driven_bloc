@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'package:chopper/chopper.dart' as chopper;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-// ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 import 'package:{{project_name.snakeCase()}}/bootstrap.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/model/user.dto.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/user.dart';
@@ -17,7 +16,7 @@ import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dar
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';
 
-// ignore_for_file: prefer-static-class
+// ignore_for_file: prefer-static-class,depend_on_referenced_packages
 Future<void> setupInjection() async {
   await getIt.reset();
   TestWidgetsFlutterBinding.ensureInitialized();

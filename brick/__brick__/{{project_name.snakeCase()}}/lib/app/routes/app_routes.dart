@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/transition_page_utils.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/screens/main_screen.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/screens/splash_screen.dart';
@@ -11,6 +11,7 @@ import 'package:{{project_name.snakeCase()}}/features/home/presentation/screens/
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/screens/post_details_webview.dart';
 import 'package:{{project_name.snakeCase()}}/features/profile/presentation/screens/profile_screen.dart';
 
+// ignore_for_file: long-method
 @injectable
 class AppRoutes {
   AppRoutes(
@@ -51,13 +52,10 @@ class AppRoutes {
                   path: RouteName.postDetails.path,
                   name: RouteName.postDetails.name,
                   builder: (BuildContext context, GoRouterState state) {
-                    if (state.extra is Post) {
-                      final Post post = state.extra! as Post;
+                    if (state.extra is! Post) return const HomeScreen();
+                    final Post post = state.extra! as Post;
 
-                      return PostDetailsWebview(post: post);
-                    }
-
-                    return const HomeScreen();
+                    return PostDetailsWebview(post: post);
                   },
                 ),
               ],

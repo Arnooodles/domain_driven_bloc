@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/text_styles.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_objects.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl({
-    super.key,
     required this.url,
     required this.onTap,
     this.style,
     this.isShowIcon = true,
+    super.key,
   });
 
   final Url url;
@@ -26,8 +27,8 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl extends StatelessWid
               child: Text(
                 url.getOrCrash(),
                 style: style?.copyWith(decoration: TextDecoration.underline) ??
-                    AppTextStyle.bodySmall.copyWith(
-                      color: Colors.lightBlue,
+                    context.textTheme.bodySmall?.copyWith(
+                      color: AppColors.defaultTextUrl,
                       decoration: TextDecoration.underline,
                     ),
                 textAlign: TextAlign.start,
@@ -38,11 +39,12 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl extends StatelessWid
             ),
             if (isShowIcon)
               Padding(
-                padding: EdgeInsets.only(left: Insets.xxs),
+                padding: const EdgeInsets.only(left: Insets.xxsmall),
                 child: Icon(
                   Icons.open_in_new,
-                  size: style?.fontSize ?? AppTextStyle.bodySmall.fontSize,
-                  color: Colors.lightBlue,
+                  size:
+                      style?.fontSize ?? context.textTheme.bodySmall?.fontSize,
+                  color: AppColors.defaultTextUrl,
                 ),
               ),
           ],

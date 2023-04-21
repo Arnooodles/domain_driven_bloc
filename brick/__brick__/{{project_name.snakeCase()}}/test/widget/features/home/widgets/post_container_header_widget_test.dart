@@ -1,7 +1,7 @@
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_objects.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container_header.dart';
 
 import '../../../../utils/mock_localization.dart';

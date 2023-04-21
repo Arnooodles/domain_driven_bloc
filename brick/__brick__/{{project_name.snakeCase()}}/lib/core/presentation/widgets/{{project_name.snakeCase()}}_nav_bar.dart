@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hidable/hidable.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/extensions.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar({
-    super.key,
     required this.scrollControllers,
+    super.key,
   });
 
   final Map<AppScrollController, ScrollController> scrollControllers;

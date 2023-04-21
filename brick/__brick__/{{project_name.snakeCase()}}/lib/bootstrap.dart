@@ -12,20 +12,20 @@ import 'package:{{project_name.snakeCase()}}/app/config/url_strategy_native.dart
     if (dart.library.html) 'package:{{project_name.snakeCase()}}/app/config/url_strategy_web.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/assets.gen.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 import 'package:{{project_name.snakeCase()}}/app/observers/app_bloc_observer.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
 
 // ignore_for_file: prefer-static-class
 Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   WidgetsFlutterBinding.ensureInitialized();
   urlConfig();
-  initializeSingletons();
   enableLeakTracking();
+  initializeSingletons();
   await initializeEnvironmentConfig(env);
   await configureDependencies(env);
 
-  Bloc.observer = getIt<AppBlocObserver>();
   final Logger logger = getIt<Logger>();
+  Bloc.observer = getIt<AppBlocObserver>();
 
   FlutterError.onError = (FlutterErrorDetails details) {
     logger.e(details.exceptionAsString(), details, details.stack);
@@ -51,7 +51,9 @@ void initializeSingletons() {
         output: ConsoleOutput(),
       ),
     )
-    ..registerLazySingleton<ChopperClient>(() => ChopperConfig.client);
+    ..registerLazySingleton<ChopperClient>(
+      () => ChopperConfig.client,
+    );
 }
 
 Future<void> initializeEnvironmentConfig(Env env) async {

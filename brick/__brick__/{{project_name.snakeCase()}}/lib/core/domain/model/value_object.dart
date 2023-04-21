@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failures.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/validators.dart';
 
 @immutable
@@ -123,7 +123,6 @@ class AuthToken extends ValueObject<String> {
 class ContactNumber extends ValueObject<String> {
   factory ContactNumber(String input) => ContactNumber._(
         validateStringEmpty(input, 'ContactNumber') // should not be empty
-
             .andThen(
           validateCharacterLength(
             input,

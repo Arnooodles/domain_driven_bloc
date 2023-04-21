@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+// ignore_for_file: prefer-match-file-name,
 class StringToDateTime implements JsonConverter<DateTime, String> {
   const StringToDateTime();
 

@@ -2,6 +2,7 @@
     package="{{org_name.dotCase()}}.{{project_name.snakeCase()}}">
    <application
         android:label="${appName}"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

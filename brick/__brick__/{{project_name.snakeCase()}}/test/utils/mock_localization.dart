@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
 
 class MockLocalization extends StatelessWidget {
-  const MockLocalization({super.key, required this.child});
+  const MockLocalization({required this.child, super.key});
 
   final Widget child;
 

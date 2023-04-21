@@ -1,14 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 import 'package:{{project_name.snakeCase()}}/app/observers/go_route_observer.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/app_routes.dart';
-import 'package:{{project_name.snakeCase()}}/app/utils/injection.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
 
 @injectable
@@ -28,36 +26,28 @@ class AppRouter {
     redirect: _routeGuard,
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
     initialLocation: RouteName.initial.path,
-    observers:
-        kDebugMode ? <NavigatorObserver>[getIt<GoRouteObserver>()] : null,
-    debugLogDiagnostics: kDebugMode,
+    observers: <NavigatorObserver>[getIt<GoRouteObserver>()],
     navigatorKey: rootNavigatorKey,
   );
 
-  String? _routeGuard(_, GoRouterState state) {
-    final AuthState authState = authBloc.state;
+  String? _routeGuard(_, GoRouterState goRouterState) {
     final String loginPath = RouteName.login.path;
     final String initialPath = RouteName.initial.path;
     final String homePath = RouteName.home.path;
 
-    if (authState.status == AuthStatus.unknown) {
-      return initialPath;
-    }
-    final bool authenticated = authState.status == AuthStatus.authenticated;
-    // Check if the app is in the login screen
-    final bool isLoginScreen = state.subloc == loginPath;
-    final bool isSplashScreen = state.subloc == initialPath;
+    return authBloc.state.mapOrNull(
+      initial: (_) => initialPath,
+      unauthenticated: (_) => loginPath,
+      authenticated: (_) {
+        // Check if the app is in the login screen
+        final bool isLoginScreen = goRouterState.subloc == loginPath;
+        final bool isSplashScreen = goRouterState.subloc == initialPath;
 
-    // Go to login screen if the user is not yet logged in
-    if (!authenticated && (!isLoginScreen || !isSplashScreen)) {
-      return loginPath;
-    }
-    // Go to home screen if the app is authenticated but tries to go to login screen or is still in the splash screen.
-    else if (authenticated && (isLoginScreen || isSplashScreen)) {
-      return homePath;
-    }
-
-    return null;
+        // Go to home screen if the app is authenticated but tries to go to login
+        // screen or is still in the splash screen.
+        return isLoginScreen || isSplashScreen ? homePath : null;
+      },
+    );
   }
 }
 

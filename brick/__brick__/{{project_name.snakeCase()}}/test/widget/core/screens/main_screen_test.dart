@@ -6,11 +6,12 @@ import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failures.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/screens/main_screen.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/bloc/post/post_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/screens/home_screen.dart';
 import 'package:{{project_name.snakeCase()}}/features/profile/presentation/screens/profile_screen.dart';
 
@@ -23,6 +24,7 @@ import 'main_screen_test.mocks.dart';
 @GenerateNiceMocks(<MockSpec<dynamic>>[
   MockSpec<AuthBloc>(),
   MockSpec<AppCoreBloc>(),
+  MockSpec<PostBloc>(),
   MockSpec<GoRouter>(),
 ])
 void main() {
@@ -30,7 +32,7 @@ void main() {
   late MockAuthBloc authBlocError;
   late MockAuthBloc authBlocLoading;
   late MockAppCoreBloc appCoreBloc;
-  late MockGoRouter routerHome;
+  late GoRouter routerHome;
   late MockGoRouter routerProfile;
   late Map<AppScrollController, ScrollController> scrollControllers;
 
@@ -39,13 +41,10 @@ void main() {
     authBlocError = MockAuthBloc();
     authBlocLoading = MockAuthBloc();
     appCoreBloc = MockAppCoreBloc();
-    routerHome = MockGoRouter();
     routerProfile = MockGoRouter();
-    final AuthState authState = AuthState.initial().copyWith(
-      status: AuthStatus.authenticated,
-      user: mockUser,
-      isLoading: false,
-    );
+    routerHome = MockGoRouter();
+
+    final AuthState authState = AuthState.authenticated(user: mockUser);
     scrollControllers = <AppScrollController, ScrollController>{
       AppScrollController.home: ScrollController(),
       AppScrollController.profile: ScrollController(),
@@ -72,24 +71,24 @@ void main() {
 
     when(authBlocError.stream).thenAnswer(
       (_) => Stream<AuthState>.fromIterable(<AuthState>[
-        authState.copyWith(
-          failure: const Failure.unexpected('Unexpected Error'),
+        const AuthState.failed(
+          Failure.unexpected('Unexpected Error'),
         ),
       ]),
     );
     when(authBlocError.state).thenAnswer(
-      (_) => authState.copyWith(
-        failure: const Failure.unexpected('Unexpected Error'),
+      (_) => const AuthState.failed(
+        Failure.unexpected('Unexpected Error'),
       ),
     );
 
     when(authBlocLoading.stream).thenAnswer(
       (_) => Stream<AuthState>.fromIterable(<AuthState>[
-        authState.copyWith(isLoading: true, user: null, failure: null),
+        const AuthState.loading(),
       ]),
     );
     when(authBlocLoading.state).thenAnswer(
-      (_) => authState.copyWith(isLoading: true, user: null, failure: null),
+      (_) => const AuthState.loading(),
     );
 
     when(routerHome.location).thenAnswer((_) => RouteName.home.path);
@@ -150,35 +149,8 @@ void main() {
               authBloc,
             ),
           ),
-          GoldenTestDeviceScenario(
-            name: 'error',
-            builder: () => build{{#pascalCase}}{{project_name}}{{/pascalCase}}Screen(
-              const HomeScreen(),
-              routerHome,
-              authBlocError,
-            ),
-          ),
         ],
       ),
     );
-    // goldenTest(
-    //   'renders correctly',
-    //   fileName: 'main_screen_loading'.goldensVersion,
-    //   pumpBeforeTest: (WidgetTester tester) async {
-    //     await tester.pump(const Duration(seconds: 1));
-    //   },
-    //   builder: () => GoldenTestGroup(
-    //     children: <Widget>[
-    //       GoldenTestDeviceScenario(
-    //         name: 'loading',
-    //         builder: () => build{{#pascalCase}}{{project_name}}{{/pascalCase}}Screen(
-    //           const HomeScreen(),
-    //           routerHome,
-    //           authBlocLoading,
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
   });
 }

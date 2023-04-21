@@ -2,17 +2,12 @@ part of 'login_bloc.dart';
 
 @freezed
 class LoginState with _$LoginState {
-  const factory LoginState({
-    required String? emailAddress,
-    required Failure? failure,
+  const factory LoginState.initial({
     required bool isLoading,
-    required bool isSuccess,
-  }) = _LoginState;
+    String? emailAddress,
+  }) = LoginInitial;
+  const factory LoginState.success() = LoginSuccess;
+  const factory LoginState.failed(Failure failure) = LoginFailure;
 
-  factory LoginState.initial() => const _LoginState(
-        emailAddress: null,
-        failure: null,
-        isLoading: false,
-        isSuccess: false,
-      );
+  const LoginState._();
 }
