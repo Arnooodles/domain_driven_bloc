@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/core/domain/model/value_object.dart';
@@ -26,10 +26,10 @@ class Post with _$Post {
   const Post._();
 
   Option<Failure> get failureOption => uid.failureOrUnit
-      .andThen(author.failureOrUnit)
-      .andThen(permalink.failureOrUnit)
-      .andThen(upvotes.failureOrUnit)
-      .andThen(comments.failureOrUnit)
-      .andThen(urlOverriddenByDest?.failureOrUnit ?? right(unit))
+      .andThen(() => author.failureOrUnit)
+      .andThen(() => permalink.failureOrUnit)
+      .andThen(() => upvotes.failureOrUnit)
+      .andThen(() => comments.failureOrUnit)
+      .andThen(() => urlOverriddenByDest?.failureOrUnit ?? right(unit))
       .fold(some, (_) => none());
 }

@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
@@ -90,7 +90,7 @@ void main() {
       'should emit an the a success state',
       build: () {
         when(authRepository.login(any, any))
-            .thenAnswer((_) async => right(unit));
+            .thenAnswer((_) async => Either<Failure, Unit>.right(unit));
 
         return loginBloc;
       },
@@ -104,7 +104,7 @@ void main() {
       'should emit a failed state',
       build: () {
         when(authRepository.login(any, any))
-            .thenAnswer((_) async => left(failure));
+            .thenAnswer((_) async => Either<Failure, Unit>.left(failure));
 
         return loginBloc;
       },

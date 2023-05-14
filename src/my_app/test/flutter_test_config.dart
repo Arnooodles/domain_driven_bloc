@@ -11,8 +11,8 @@ import 'utils/test_utils.dart';
 // ignore_for_file: avoid_redundant_argument_values
 class TestConfig {
   /// To update the golden files in the remote repository change goldensVersion
-  /// Format: yyyyMMddHHmm
-  static String get goldensVersion => '202304210000';
+  /// Format: yyyyMMdd
+  static String get goldensVersion => '20230514';
 
   /// Customize your threshold here
   /// For example, the error threshold here is 15%

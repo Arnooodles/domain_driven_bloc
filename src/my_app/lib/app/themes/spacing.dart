@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // ignore_for_file: prefer-match-file-name,prefer-single-widget-per-file,
 // ignore_for_file: avoid-returning-widgets,prefer-correct-identifier-length
-class VSpace extends StatelessWidget {
+final class VSpace extends StatelessWidget {
   const VSpace(this.size, {super.key});
 
   factory VSpace.xxsmall() => const VSpace(Insets.xxsmall);
@@ -20,7 +20,7 @@ class VSpace extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(height: size);
 }
 
-class HSpace extends StatelessWidget {
+final class HSpace extends StatelessWidget {
   const HSpace(this.size, {super.key});
 
   factory HSpace.xxsmall() => const HSpace(Insets.xxsmall);
@@ -38,7 +38,7 @@ class HSpace extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(width: size);
 }
 
-class Insets {
+final class Insets {
   const Insets._();
 
   static const double scale = 1;

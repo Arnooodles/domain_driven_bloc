@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 
-abstract class _Keys {
+final class _Keys {
   static const String accessToken = 'access_token';
   static const String refreshToken = 'refresh_token';
   static const String emailAddress = 'email_address';

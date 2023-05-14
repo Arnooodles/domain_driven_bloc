@@ -5,7 +5,7 @@ import 'package:very_good_core/app/helpers/injection.dart';
 
 // ignore_for_file: avoid_dynamic_calls
 @singleton
-class AppBlocObserver extends BlocObserver {
+final class AppBlocObserver extends BlocObserver {
   Logger logger = getIt<Logger>();
 
   @override

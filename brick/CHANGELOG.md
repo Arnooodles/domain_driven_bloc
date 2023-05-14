@@ -1,3 +1,15 @@
+# 0.2.1
+
+- chore: bump Dart SDK to 2.19.0
+- chore: update dependencies to latest version
+- feat: bumped hook to min Dart Sdk 2.19.0
+- feat: updated mason
+- feat: update to flutter 3.10.0
+- refactor: refactor tuples and implement records
+- refactor: removed hideable and implemnt it locally to support dart 3.0
+- refactor: refactor switchs and implement patterns
+- refactor: replace dartz with fpdart
+  
 # 0.2.0
 
 - refactor: refactor bloc states into multiple class

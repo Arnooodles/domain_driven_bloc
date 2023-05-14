@@ -13,7 +13,7 @@ import 'package:very_good_core/features/auth/data/service/auth_service.dart';
 import 'package:very_good_core/features/home/data/model/post.dto.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';
 
-class ChopperConfig {
+final class ChopperConfig {
   static Uri get baseUrl => Uri.parse(AppConfig.baseApiUrl);
 
   static List<ChopperService> get services => <ChopperService>[

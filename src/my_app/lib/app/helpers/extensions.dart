@@ -1,10 +1,11 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/generated/l10n.dart';
+import 'package:very_good_core/app/helpers/hidable_controller.dart';
 
 // ignore_for_file: prefer-match-file-name,invalid_use_of_protected_member
 // ignore_for_file: invalid_use_of_visible_for_testing_member,prefer-enums-by-name
@@ -73,5 +74,23 @@ extension ColorX on Color {
     buffer.write(hexString.replaceFirst('#', ''));
 
     return Color(int.parse(buffer.toString(), radix: 16));
+  }
+}
+
+extension HidableControllerX on ScrollController {
+  static final Map<int, HidableController> hidableControllers =
+      <int, HidableController>{};
+
+  /// Shortcut way of creating hidable controller
+  HidableController hidable(double size) {
+    // If the same instance was created before, we should keep using it.
+    if (hidableControllers.containsKey(hashCode)) {
+      return hidableControllers[hashCode]!;
+    }
+
+    return hidableControllers[hashCode] = HidableController(
+      scrollController: this,
+      size: size,
+    );
   }
 }

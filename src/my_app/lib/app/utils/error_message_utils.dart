@@ -5,9 +5,7 @@ import 'package:very_good_core/app/helpers/extensions.dart';
 import 'package:very_good_core/core/domain/model/failure.dart';
 
 // ignore_for_file: avoid_dynamic_calls
-class ErrorMessageUtils {
-  ErrorMessageUtils._();
-
+final class ErrorMessageUtils {
   static String generate(BuildContext context, dynamic error) {
     if (error is String) {
       return error;
@@ -43,22 +41,20 @@ class ErrorMessageUtils {
     try {
       final Map<String, dynamic> object =
           jsonDecode(error.error?.toString() ?? '{}') as Map<String, dynamic>;
-      if (object['message'] != null) {
-        return context.l10n.common_error_server_error(
-          error.code.value.toString(),
-          object['message'].toString(),
-        );
-      } else if (object['error'] != null) {
-        return context.l10n.common_error_server_error(
-          error.code.value.toString(),
-          object['error'].toString(),
-        );
-      } else {
-        return context.l10n.common_error_server_error(
-          error.code.value.toString(),
-          error.error.toString(),
-        );
-      }
+      final String errorCode = error.code.value.toString();
+      return switch (object) {
+        {'message': final String message} =>
+          context.l10n.common_error_server_error(errorCode, message),
+        {'error': final String errorMessage} =>
+          context.l10n.common_error_server_error(
+            errorCode,
+            errorMessage,
+          ),
+        _ => context.l10n.common_error_server_error(
+            errorCode,
+            error.error.toString(),
+          )
+      };
     } catch (e) {
       return e.toString();
     }
