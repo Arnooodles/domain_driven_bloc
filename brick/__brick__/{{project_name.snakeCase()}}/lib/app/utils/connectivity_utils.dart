@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/subjects.dart';
@@ -12,7 +12,7 @@ import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
 
 @lazySingleton
-class ConnectivityUtils {
+final class ConnectivityUtils {
   ConnectivityUtils() {
     _checkInternetConnection();
   }

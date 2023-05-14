@@ -9,7 +9,7 @@ import 'package:{{project_name.snakeCase()}}/core/data/model/resource_error.dart
 // ignore_for_file: unnecessary_overrides,strict_raw_type,inference_failure_on_function_invocation
 typedef JsonFactory<T> = T Function(Map<String, dynamic> json);
 
-class JsonSerializableConverter extends JsonConverter {
+final class JsonSerializableConverter extends JsonConverter {
   const JsonSerializableConverter(this.factories);
   final Map<Type, JsonFactory> factories;
 

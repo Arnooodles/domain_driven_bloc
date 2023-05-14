@@ -94,7 +94,7 @@ class PostContainer extends StatelessWidget {
     } else {
       await GoRouter.of(context).pushNamed(
         RouteName.postDetails.name,
-        params: <String, String>{'postId': post.uid.getOrCrash()},
+        pathParameters: <String, String>{'postId': post.uid.getOrCrash()},
         extra: post,
       );
     }

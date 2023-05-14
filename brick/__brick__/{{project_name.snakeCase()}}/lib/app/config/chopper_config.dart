@@ -13,7 +13,7 @@ import 'package:{{project_name.snakeCase()}}/features/auth/data/service/auth_ser
 import 'package:{{project_name.snakeCase()}}/features/home/data/model/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/service/post_service.dart';
 
-class ChopperConfig {
+final class ChopperConfig {
   static Uri get baseUrl => Uri.parse(AppConfig.baseApiUrl);
 
   static List<ChopperService> get services => <ChopperService>[

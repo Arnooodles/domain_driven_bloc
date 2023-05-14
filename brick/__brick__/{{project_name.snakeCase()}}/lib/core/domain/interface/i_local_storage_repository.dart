@@ -1,4 +1,4 @@
-abstract class ILocalStorageRepository {
+abstract interface class ILocalStorageRepository {
   Future<String?> getAccessToken();
   Future<bool> setAccessToken(String? accessToken);
 

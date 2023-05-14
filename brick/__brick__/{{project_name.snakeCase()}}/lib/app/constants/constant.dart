@@ -1,4 +1,4 @@
-abstract class Constant {
+final class Constant {
   static const String appName = '{{project_name.titleCase()}}';
   static const double mobileBreakpoint = 480;
   static const double tabletBreakpoint = 800;

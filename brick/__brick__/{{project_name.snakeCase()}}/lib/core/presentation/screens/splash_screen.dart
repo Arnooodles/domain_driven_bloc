@@ -8,10 +8,10 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: context.colorScheme.background,
-        body: SafeArea(
+        body: const SafeArea(
           child: Center(
             child: Column(
-              children: const <Widget>[
+              children: <Widget>[
                 Flexible(
                   child: Center(
                     child: AppTitle(),

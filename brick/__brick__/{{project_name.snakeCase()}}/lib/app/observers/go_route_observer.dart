@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 
 @singleton
-class GoRouteObserver extends NavigatorObserver {
+final class GoRouteObserver extends NavigatorObserver {
   Logger logger = getIt<Logger>();
 
   @override

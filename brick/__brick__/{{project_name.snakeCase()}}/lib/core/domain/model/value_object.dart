@@ -1,5 +1,5 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/validators.dart';
@@ -45,7 +45,9 @@ class UniqueId extends ValueObject<String> {
 class Url extends ValueObject<String> {
   factory Url(String input) => Url._(
         validateLink(input) // try uri parsing of the input
-            .andThen(validateStringEmpty(input, 'URL')), // must not be empty
+            .andThen(
+          () => validateStringEmpty(input, 'URL'),
+        ), // must not be empty
       );
   const Url._(this.value);
   @override
@@ -56,9 +58,7 @@ class EmailAddress extends ValueObject<String> {
   factory EmailAddress(String input) => EmailAddress._(
         validateStringEmpty(input, 'Email Address') // must not be empty
             .andThen(
-          validateEmailAddress(
-            input,
-          ),
+          () => validateEmailAddress(input),
         ), // validate email address using EmailValidator package
       );
   const EmailAddress._(this.value);
@@ -70,14 +70,14 @@ class Password extends ValueObject<String> {
   factory Password(String input, {bool isHashed = false}) => Password._(
         validateStringEmpty(input, 'Password') // must not be empty
             .andThen(
-              validateCharacterLength(
+              () => validateCharacterLength(
                 input,
                 6,
                 255,
               ),
             ) // password must be at least 6 characters and less than 255
             .andThen(
-              encryptPassword(input, isHashed: isHashed),
+              () => encryptPassword(input, isHashed: isHashed),
             ), // encrypt password
       );
   const Password._(this.value);
@@ -93,7 +93,7 @@ class ValueName extends ValueObject<String> {
           255,
         ) // should only be between 1 to 255 characters
             .andThen(
-          validateStringEmpty(input, 'Name'),
+          () => validateStringEmpty(input, 'Name'),
         ), // should not be empty
       );
   const ValueName._(this.value);
@@ -124,7 +124,7 @@ class ContactNumber extends ValueObject<String> {
   factory ContactNumber(String input) => ContactNumber._(
         validateStringEmpty(input, 'ContactNumber') // should not be empty
             .andThen(
-          validateCharacterLength(
+          () => validateCharacterLength(
             input,
             3,
             20,
