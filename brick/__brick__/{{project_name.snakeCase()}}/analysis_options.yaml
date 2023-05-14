@@ -1,9 +1,6 @@
 include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
-  strong-mode:
-    implicit-casts: true
-    implicit-dynamic: true
   errors:
     invalid_assignment: warning
     dead_code: info
@@ -25,6 +22,9 @@ analyzer:
     - lib/**/generated_plugin_registrant.dart
   plugins:
     - dart_code_metrics
+  language:
+    strict-casts: true
+    strict-raw-types: true
 
 linter:
   rules:

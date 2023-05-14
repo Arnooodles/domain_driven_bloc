@@ -13,7 +13,7 @@ import 'package:{{project_name.snakeCase()}}/features/profile/presentation/scree
 
 // ignore_for_file: long-method
 @injectable
-class AppRoutes {
+final class AppRoutes {
   AppRoutes(
     @factoryParam this.shellNavigatorKey,
     @factoryParam this.scaffoldKey,

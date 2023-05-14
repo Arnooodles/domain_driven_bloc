@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
@@ -45,7 +45,8 @@ void main() {
     blocTest<PostBloc, PostState>(
       'should emit a success state with list of posts',
       build: () {
-        when(postRepository.getPosts()).thenAnswer((_) async => right(posts));
+        when(postRepository.getPosts())
+            .thenAnswer((_) async => Either<Failure, List<Post>>.right(posts));
 
         return PostBloc(postRepository);
       },
@@ -55,7 +56,8 @@ void main() {
     blocTest<PostBloc, PostState>(
       'should emit a failed state with posts from local storage ',
       build: () {
-        when(postRepository.getPosts()).thenAnswer((_) async => left(failure));
+        when(postRepository.getPosts())
+            .thenAnswer((_) async => Either<Failure, List<Post>>.left(failure));
 
         return PostBloc(postRepository);
       },

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_text_style.dart';
 
-class AppTheme {
+final class AppTheme {
   /// Standard `ThemeData` for App UI.
   static final ThemeData _baseTheme = ThemeData(
     useMaterial3: true,

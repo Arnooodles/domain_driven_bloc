@@ -13,7 +13,7 @@ import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_dialogs.dart';
 
 // ignore_for_file: long-method,long-parameter-list
-class DialogUtils {
+final class DialogUtils {
   DialogUtils._();
 
   static Future<bool> showExitDialog(BuildContext context) async =>
@@ -75,7 +75,6 @@ class DialogUtils {
           controller: controller,
           backgroundColor: context.colorScheme.background,
           surfaceTintColor: context.colorScheme.surfaceTint,
-          enableHorizontalDrag: false,
           shouldIconPulse: false,
           position: position ?? FlashPosition.bottom,
           behavior: FlashBehavior.floating,

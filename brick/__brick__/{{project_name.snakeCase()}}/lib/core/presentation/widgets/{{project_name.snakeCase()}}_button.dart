@@ -42,36 +42,25 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}Button extends StatelessWidg
           child: Padding(
             padding: padding ??
                 const EdgeInsets.symmetric(horizontal: Insets.medium),
-            child: icon != null
-                ? _ButtonTypeWithIcon(
-                    text: text,
-                    buttonType: buttonType,
-                    icon: icon!,
-                    isEnabled: isEnabled,
-                    isExpanded: isExpanded,
-                    onPressed: onPressed,
-                    buttonStyle: buttonStyle,
-                    iconPadding: iconPadding,
-                    contentPadding: contentPadding,
-                    textStyle: textStyle,
-                  )
-                : _ButtonType(
-                    isEnabled: isEnabled,
-                    isExpanded: isExpanded,
-                    onPressed: onPressed,
-                    buttonStyle: buttonStyle,
-                    contentPadding: contentPadding,
-                    text: text,
-                    textStyle: textStyle,
-                    buttonType: buttonType,
-                  ),
+            child: _ButtonType(
+              text: text,
+              buttonType: buttonType,
+              icon: icon,
+              isEnabled: isEnabled,
+              isExpanded: isExpanded,
+              onPressed: onPressed,
+              buttonStyle: buttonStyle,
+              iconPadding: iconPadding,
+              contentPadding: contentPadding,
+              textStyle: textStyle,
+            ),
           ),
         ),
       );
 }
 
-class _ButtonTypeWithIcon extends StatelessWidget {
-  const _ButtonTypeWithIcon({
+class _ButtonType extends StatelessWidget {
+  const _ButtonType({
     required this.text,
     required this.buttonType,
     required this.icon,
@@ -93,7 +82,7 @@ class _ButtonTypeWithIcon extends StatelessWidget {
   final TextStyle? textStyle;
   final bool isExpanded;
   final ButtonType buttonType;
-  final Widget icon;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +96,12 @@ class _ButtonTypeWithIcon extends StatelessWidget {
           ),
       child: icon,
     );
+    final Color primaryColor = context.colorScheme.primary;
+    final Color secondaryColor = context.colorScheme.secondary;
+    final Color onPrimaryColor = context.colorScheme.onPrimary;
 
-    switch (buttonType) {
-      case ButtonType.elevated:
-        return ElevatedButton.icon(
+    return switch (buttonType) {
+      ButtonType.elevated when icon != null => ElevatedButton.icon(
           onPressed: isEnabled ? onPressed : null,
           style: buttonStyle,
           icon: iconWithPadding,
@@ -120,11 +111,22 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             text: text,
             textStyle: textStyle,
             isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.primary,
+            defaultTextColor: primaryColor,
           ),
-        );
-      case ButtonType.filled:
-        return FilledButton.icon(
+        ),
+      ButtonType.elevated => ElevatedButton(
+          onPressed: isEnabled ? onPressed : null,
+          style: buttonStyle,
+          child: _ButtonContent(
+            contentPadding: contentPadding,
+            isEnabled: isEnabled,
+            text: text,
+            textStyle: textStyle,
+            isExpanded: isExpanded,
+            defaultTextColor: primaryColor,
+          ),
+        ),
+      ButtonType.filled when icon != null => FilledButton.icon(
           onPressed: isEnabled ? onPressed : null,
           style: buttonStyle,
           icon: iconWithPadding,
@@ -135,11 +137,22 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             hasIcon: true,
             textStyle: textStyle,
             isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.onPrimary,
+            defaultTextColor: onPrimaryColor,
           ),
-        );
-      case ButtonType.tonal:
-        return FilledButton.tonalIcon(
+        ),
+      ButtonType.filled => FilledButton(
+          onPressed: isEnabled ? onPressed : null,
+          style: buttonStyle,
+          child: _ButtonContent(
+            contentPadding: contentPadding,
+            isEnabled: isEnabled,
+            text: text,
+            textStyle: textStyle,
+            isExpanded: isExpanded,
+            defaultTextColor: onPrimaryColor,
+          ),
+        ),
+      ButtonType.tonal when icon != null => FilledButton.tonalIcon(
           onPressed: isEnabled ? onPressed : null,
           style: buttonStyle,
           icon: iconWithPadding,
@@ -150,11 +163,22 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             hasIcon: true,
             textStyle: textStyle,
             isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.secondary,
+            defaultTextColor: secondaryColor,
           ),
-        );
-      case ButtonType.outlined:
-        return OutlinedButton.icon(
+        ),
+      ButtonType.tonal => FilledButton.tonal(
+          onPressed: isEnabled ? onPressed : null,
+          style: buttonStyle,
+          child: _ButtonContent(
+            contentPadding: contentPadding,
+            isEnabled: isEnabled,
+            text: text,
+            textStyle: textStyle,
+            isExpanded: isExpanded,
+            defaultTextColor: secondaryColor,
+          ),
+        ),
+      ButtonType.outlined when icon != null => OutlinedButton.icon(
           onPressed: isEnabled ? onPressed : null,
           style: buttonStyle,
           icon: iconWithPadding,
@@ -165,11 +189,22 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             hasIcon: true,
             textStyle: textStyle,
             isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.primary,
+            defaultTextColor: primaryColor,
           ),
-        );
-      case ButtonType.text:
-        return TextButton.icon(
+        ),
+      ButtonType.outlined => OutlinedButton(
+          onPressed: isEnabled ? onPressed : null,
+          style: buttonStyle,
+          child: _ButtonContent(
+            contentPadding: contentPadding,
+            isEnabled: isEnabled,
+            text: text,
+            textStyle: textStyle,
+            isExpanded: isExpanded,
+            defaultTextColor: primaryColor,
+          ),
+        ),
+      ButtonType.text when icon != null => TextButton.icon(
           onPressed: isEnabled ? onPressed : null,
           style: buttonStyle,
           icon: iconWithPadding,
@@ -180,39 +215,10 @@ class _ButtonTypeWithIcon extends StatelessWidget {
             hasIcon: true,
             textStyle: textStyle,
             isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.primary,
+            defaultTextColor: primaryColor,
           ),
-        );
-    }
-  }
-}
-
-class _ButtonType extends StatelessWidget {
-  const _ButtonType({
-    required this.text,
-    required this.buttonType,
-    this.isEnabled = true,
-    this.isExpanded = false,
-    this.onPressed,
-    this.buttonStyle,
-    this.contentPadding,
-    this.textStyle,
-  });
-
-  final bool isEnabled;
-  final VoidCallback? onPressed;
-  final ButtonStyle? buttonStyle;
-  final EdgeInsets? contentPadding;
-  final String text;
-  final TextStyle? textStyle;
-  final bool isExpanded;
-  final ButtonType buttonType;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (buttonType) {
-      case ButtonType.elevated:
-        return ElevatedButton(
+        ),
+      ButtonType.text => TextButton(
           onPressed: isEnabled ? onPressed : null,
           style: buttonStyle,
           child: _ButtonContent(
@@ -221,62 +227,10 @@ class _ButtonType extends StatelessWidget {
             text: text,
             textStyle: textStyle,
             isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.primary,
+            defaultTextColor: primaryColor,
           ),
-        );
-      case ButtonType.filled:
-        return FilledButton(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.onPrimary,
-          ),
-        );
-      case ButtonType.tonal:
-        return FilledButton.tonal(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.secondary,
-          ),
-        );
-      case ButtonType.outlined:
-        return OutlinedButton(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.primary,
-          ),
-        );
-      case ButtonType.text:
-        return TextButton(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: context.colorScheme.primary,
-          ),
-        );
-    }
+        ),
+    };
   }
 }
 

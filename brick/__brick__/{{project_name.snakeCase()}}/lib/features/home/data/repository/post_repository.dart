@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:chopper/chopper.dart' as chopper;
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:chopper/chopper.dart';
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
@@ -28,8 +28,9 @@ class UserRepository implements IUserRepository {
       final StatusCode statusCode = response.statusCode.statusCode;
 
       if (statusCode.isSuccess && response.body != null) {
-        final UserDTO userDTO =
-            UserDTO.fromJson((response.body as Map<String, dynamic>)['data']);
+        final {'data': Map<String, dynamic> data} =
+            response.body as Map<String, dynamic>;
+        final UserDTO userDTO = UserDTO.fromJson(data);
 
         return _validateUserData(userDTO);
       }

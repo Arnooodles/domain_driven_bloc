@@ -13,11 +13,11 @@ void main() {
     appLifeCycleBloc = AppLifeCycleBloc();
   });
 
-  Future<void> setAppLifeCycleState(AppLifecycleState state) async {
+  void setAppLifeCycleState(AppLifecycleState state) {
     final ByteData? message =
         const StringCodec().encodeMessage(state.toString());
-    await ServicesBinding.instance.defaultBinaryMessenger
-        .handlePlatformMessage('flutter/lifecycle', message, (_) {});
+    ServicesBinding.instance.channelBuffers
+        .push('flutter/lifecycle', message, (_) {});
   }
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
