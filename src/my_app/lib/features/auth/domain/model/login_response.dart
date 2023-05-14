@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/core/domain/model/value_object.dart';
@@ -15,6 +15,6 @@ class LoginResponse with _$LoginResponse {
   const LoginResponse._();
 
   Option<Failure> get failureOption => accessToken.failureOrUnit //
-      .andThen(refreshToken.failureOrUnit)
+      .andThen(() => refreshToken.failureOrUnit)
       .fold(some, (_) => none());
 }

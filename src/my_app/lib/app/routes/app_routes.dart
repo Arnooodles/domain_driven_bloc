@@ -13,7 +13,7 @@ import 'package:very_good_core/features/profile/presentation/screens/profile_scr
 
 // ignore_for_file: long-method
 @injectable
-class AppRoutes {
+final class AppRoutes {
   AppRoutes(
     @factoryParam this.shellNavigatorKey,
     @factoryParam this.scaffoldKey,

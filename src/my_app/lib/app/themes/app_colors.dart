@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Defines the color palette for the Shouts UI.
-class AppColors {
+final class AppColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
   static const Color transparent = Colors.transparent;

@@ -10,7 +10,7 @@ import 'package:very_good_core/app/routes/app_routes.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
 @injectable
-class AppRouter {
+final class AppRouter {
   AppRouter(@factoryParam this.authBloc);
 
   final GlobalKey<NavigatorState> rootNavigatorKey =
@@ -40,8 +40,9 @@ class AppRouter {
       unauthenticated: (_) => loginPath,
       authenticated: (_) {
         // Check if the app is in the login screen
-        final bool isLoginScreen = goRouterState.subloc == loginPath;
-        final bool isSplashScreen = goRouterState.subloc == initialPath;
+        final bool isLoginScreen = goRouterState.matchedLocation == loginPath;
+        final bool isSplashScreen =
+            goRouterState.matchedLocation == initialPath;
 
         // Go to home screen if the app is authenticated but tries to go to login
         // screen or is still in the splash screen.

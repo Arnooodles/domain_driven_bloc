@@ -14,7 +14,8 @@ part 'post.dto.g.dart';
 @freezed
 class PostDTO with _$PostDTO {
   const factory PostDTO({
-    @JsonKey(name: 'id') required String uid,
+    @JsonKey(name: 'id')
+        required String uid,
     required String title,
     required String author,
     required String permalink,
@@ -24,10 +25,14 @@ class PostDTO with _$PostDTO {
     String? selftext,
     @JsonKey(name: 'link_flair_background_color')
         String? linkFlairBackgroundColor,
-    @JsonKey(name: 'link_flair_text') String? linkFlairText,
-    @JsonKey(name: 'ups', defaultValue: 0) int? upvotes,
-    @JsonKey(name: 'num_comments', defaultValue: 0) int? comments,
-    @JsonKey(name: 'url_overridden_by_dest') String? urlOverriddenByDest,
+    @JsonKey(name: 'link_flair_text')
+        String? linkFlairText,
+    @JsonKey(name: 'ups', defaultValue: 0)
+        int? upvotes,
+    @JsonKey(name: 'num_comments', defaultValue: 0)
+        int? comments,
+    @JsonKey(name: 'url_overridden_by_dest')
+        String? urlOverriddenByDest,
   }) = _PostDTO;
 
   const PostDTO._();

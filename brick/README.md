@@ -67,21 +67,23 @@ Out of the box, Domain-Driven Bloc includes:
 - ✅ [Flutter Version Management][fvm_link] - A simple CLI to manage Flutter SDK versions.
 - ✅ [Makefile][makefile_link] - A simple way to organize and standardize project commands
 
-## Additional Packages
+### Additional Packages
+
+<br />
 
 #### State Management
 
   ✅ [Flutter Bloc](https://pub.dev/packages/flutter_bloc) \
-   ✅ [Flutter Hooks](https://pub.dev/packages/flutter_hooks)
+  ✅ [Flutter Hooks](https://pub.dev/packages/flutter_hooks)
 
 #### Functional Programming
 
-  ✅ [Dartz](https://pub.dev/packages/dartz)
+  ✅ [Fpdart](https://pub.dev/packages/fpdart)
 
 #### Data Classes
 
   ✅ [Freezed](https://pub.dev/packages/freezed) \
-   ✅ [Json Serializable](https://pub.dev/packages/json_serializable)
+  ✅ [Json Serializable](https://pub.dev/packages/json_serializable)
 
 #### Navigation
 
@@ -90,7 +92,7 @@ Out of the box, Domain-Driven Bloc includes:
 #### Dependency Injection
 
   ✅ [Injectable](https://pub.dev/packages/injectable) \
-   ✅ [Get It](https://pub.dev/packages/get_it)
+  ✅ [Get It](https://pub.dev/packages/get_it)
 
 #### Responsive
 
@@ -107,35 +109,36 @@ Out of the box, Domain-Driven Bloc includes:
 #### Local Storage
 
   ✅ [Secure Storage](https://pub.dev/packages/flutter_secure_storage) \
-   ✅ [Shared Preferences](https://pub.dev/packages/shared_preferences)
+  ✅ [Shared Preferences](https://pub.dev/packages/shared_preferences)
 
 #### Logging
 
   ✅ [Logger](https://pub.dev/packages/logger) \
   ✅ [Pretty Chopper Logger](https://pub.dev/packages/pretty_chopper_logger)
+
 #### Localization
 
   ✅ [Intl](https://pub.dev/packages/intl) \
-   ✅ [Intl Utils](https://pub.dev/packages/intl_utils)
+  ✅ [Intl Utils](https://pub.dev/packages/intl_utils)
 
 #### Testing
 
   ✅ [Alchemist](https://pub.dev/packages/alchemist) \
-   ✅ [Golden Toolkit](https://pub.dev/packages/golden_toolkit) \
-   ✅ [Bloc Test](https://pub.dev/packages/bloc_test)
+  ✅ [Golden Toolkit](https://pub.dev/packages/golden_toolkit) \
+  ✅ [Bloc Test](https://pub.dev/packages/bloc_test)
 
 #### Mock
 
   ✅ [Mockito](https://pub.dev/packages/mockito) \
-   ✅ [Mocktail Image Network](https://pub.dev/packages/mocktail_image_network) \
-   ✅ [Faker](https://pub.dev/packages/faker)
+  ✅ [Mocktail Image Network](https://pub.dev/packages/mocktail_image_network) \
+  ✅ [Faker](https://pub.dev/packages/faker)
 
 #### Code Quality
 
   ✅ [Flutter Gen](https://pub.dev/packages/flutter_gen) \
-   ✅ [Very Good Analysis](https://pub.dev/packages/flutter_lints) \
-   ✅ [Dart Code Metrics](https://pub.dev/packages/dart_code_metrics) \
-   ✅ [Dependency Validator](https://pub.dev/packages/dependency_validator)
+  ✅ [Very Good Analysis](https://pub.dev/packages/flutter_lints) \
+  ✅ [Dart Code Metrics](https://pub.dev/packages/dart_code_metrics) \
+  ✅ [Dependency Validator](https://pub.dev/packages/dependency_validator)
 
 ## Output📦
 
