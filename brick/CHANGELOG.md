@@ -1,3 +1,16 @@
+# 1.0.0
+
+- feat: upgrade to flutter 3.13.0
+- feat: implement go_router's StatefulShellRoute
+- fix: tests due to breaking changes
+- chore: rename screens->views
+- chore: separate extensions.dart into multiple files
+- chore: separate converters.dart into multiple files
+- chore: update dependencies to the latest version
+- chore: remove leak_tracking
+- chore: remove unnecessary 'break' statement.
+- chore: remove dart_code_metrics.
+
 # 0.2.1
 
 - chore: bump Dart SDK to 2.19.0

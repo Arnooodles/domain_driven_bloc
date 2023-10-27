@@ -4,9 +4,9 @@ import 'package:dartx/dartx.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/injection.dart';
-import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/utils/connectivity_utils.dart';
 
 // ignore_for_file: long-parameter-list
@@ -75,13 +75,11 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
           await _showOfflineDialog(context);
           _isDialogShowing = false;
         }
-        break;
       case ConnectionStatus.online:
         if (_isDialogShowing) {
           await _controller?.dismiss();
           _isDialogShowing = false;
         }
-        break;
     }
   }
 

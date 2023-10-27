@@ -59,3 +59,8 @@ enum SlideTransitionType {
   leftToRight,
   rightToLeft,
 }
+
+enum HomeTabs {
+  flutter,
+  dart,
+}

@@ -4,7 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
+import 'package:very_good_core/app/helpers/extensions/either_ext.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/core/domain/model/value_object.dart';
@@ -18,7 +19,7 @@ class LoginBloc extends Cubit<LoginState> {
   LoginBloc(
     this._authRepository,
     this._localStorageRepository,
-  ) : super(const LoginState.initial(isLoading: true)) {
+  ) : super(LoginState.initial()) {
     initialize();
   }
 
@@ -27,15 +28,12 @@ class LoginBloc extends Cubit<LoginState> {
 
   Future<void> initialize() async {
     final String? email = await _localStorageRepository.getLastLoggedInEmail();
-    safeEmit(LoginState.initial(emailAddress: email, isLoading: false));
+    safeEmit(state.copyWith(emailAddress: email, isLoading: false));
   }
 
   Future<void> login(String email, String password) async {
     try {
-      state.mapOrNull(
-        initial: (LoginInitial state) =>
-            safeEmit(state.copyWith(isLoading: true)),
-      );
+      safeEmit(state.copyWith(isLoading: true, emailAddress: email));
       final EmailAddress validEmail = EmailAddress(email);
       final Password validPassword = Password(password);
 
@@ -44,42 +42,36 @@ class LoginBloc extends Cubit<LoginState> {
             await _authRepository.login(validEmail, validPassword);
 
         possibleFailure.fold(
-          (Failure failure) => _emitFailure(
-            email: email,
-            failure: failure,
+          _emitFailure,
+          (_) => safeEmit(
+            state.copyWith(
+              isLoading: false,
+              loginStatus: const LoginStatus.success(),
+            ),
           ),
-          (_) => safeEmit(const LoginState.success()),
         );
       } else {
         _emitFailure(
-          email: email,
-          failure: !validEmail.isValid()
+          !validEmail.isValid()
               ? validEmail.value.asLeft()
               : validPassword.value.asLeft(),
         );
       }
     } catch (error) {
       log(error.toString());
-
-      _emitFailure(
-        email: email,
-        failure: Failure.unexpected(error.toString()),
-      );
+      _emitFailure(Failure.unexpected(error.toString()));
     }
   }
 
-  void _emitFailure({
-    required String email,
-    required Failure failure,
-  }) {
-    safeEmit(LoginState.failed(failure));
+  void _emitFailure(Failure failure) {
     safeEmit(
-      LoginState.initial(isLoading: false, emailAddress: email),
+      state.copyWith(
+        isLoading: false,
+        loginStatus: LoginStatus.failed(failure),
+      ),
     );
   }
 
-  void onEmailAddressChanged(String emailAddress) => state.mapOrNull(
-        initial: (LoginInitial state) =>
-            safeEmit(state.copyWith(emailAddress: emailAddress)),
-      );
+  void onEmailAddressChanged(String emailAddress) =>
+      safeEmit(state.copyWith(emailAddress: emailAddress));
 }

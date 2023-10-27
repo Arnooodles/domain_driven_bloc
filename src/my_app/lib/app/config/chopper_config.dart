@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/io_client.dart';
 import 'package:pretty_chopper_logger/pretty_chopper_logger.dart';
 import 'package:very_good_core/app/config/app_config.dart';
-import 'package:very_good_core/app/helpers/json_serializable_converter.dart';
+import 'package:very_good_core/app/helpers/converters/json_serializable_converter.dart';
 import 'package:very_good_core/core/data/model/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/features/auth/data/model/login_response.dto.dart';
@@ -33,7 +33,14 @@ final class ChopperConfig {
 
   static List<dynamic> get interceptors => <dynamic>[
         (Request request) async {
-          //TODO: uncomment if the API requires Authorization
+          // TODO: added interceptor to accommodate multiple api host
+          if (request.uri.path.contains('FlutterDev.json')) {
+            return request.copyWith(
+              baseUri: Uri(scheme: 'https', host: 'reddit.com'),
+            );
+          }
+
+          // TODO: uncomment if the API requires Authorization
           //final String? accessToken = await getIt<ILocalStorageRepository>()
           //.getAccessToken();
 
@@ -41,7 +48,7 @@ final class ChopperConfig {
             ..addEntries(request.headers.entries)
             ..putIfAbsent('Accept', () => 'application/json')
             ..putIfAbsent('Content-type', () => 'application/json');
-          //TODO: uncomment if the API requires Authorization
+          // TODO: uncomment if the API requires Authorization
           //..putIfAbsent('Authorization', () => 'Bearer $accessToken');
 
           return request.copyWith(headers: headers);

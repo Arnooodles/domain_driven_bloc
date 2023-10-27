@@ -3,12 +3,12 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Setup Commands ----------------------------------------
 
-ensure_flutter_version: ## Ensures flutter version is stable 
-	fvm install stable
-	fvm use stable
-	fvm global stable
+ensure_flutter_version: ## Ensures flutter version is 3.13.9 
+	fvm install 3.13.9
+	fvm use 3.13.9
+	fvm global 3.13.9
 
-## Note: If you are using a specific flutter version, change 'stable' to the desired '{flutter version}' you want to use
+## Note: If you are using a specific flutter version, change '3.13.9' to the desired '{flutter version}' you want to use
 
 clean: ## Delete the build/ and .dart_tool/ directories
 	fvm flutter clean
@@ -58,13 +58,13 @@ lcov_gen_widget: ## Generates lcov for widget tests only
 	fvm flutter test test/widget --coverage 
 
 lcov_report_mac: ## Generates lcov report for macOS
-	lcov  --remove coverage/lcov.info 'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*'   -o coverage/lcov.info
+	lcov --remove coverage/lcov.info '/lib/app/*' '/lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
 	genhtml coverage/lcov.info -o coverage/
 	open coverage/index.html		
 
 lcov_report_win:  ## Generates lcov report for Windows
-	perl ${LCOV} --remove coverage/lcov.info 'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*'   -o coverage/lcov.info
-	perl ${GENHTML} -o coverage\html coverage\lcov.info
+	perl ${LCOV} --remove coverage/lcov.info 'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
+	perl ${GENHTML} -o coverage/html coverage/lcov.info
 	CMD /C start coverage/html/index.html	
 
 lcov_win: lcov_gen lcov_report_win ## Generates the lcov report and automatically opens the coverage report for Windows
@@ -89,25 +89,6 @@ delete_goldens_mac:  ## Delete the all failed golden files in macOS
 goldens_win: delete_goldens_win delete_failures_win update_goldens ## Deletes the existing goldens and failures and update the golden files for Windows
 
 goldens_mac: delete_goldens_mac delete_failures_mac update_goldens ## Deletes the existing goldens and failures and update the golden files for macOS
-
-metrics: ## Generates dart code metrics report
-	fvm flutter pub run dart_code_metrics:metrics analyze lib --reporter=html
-
-launch_metrics_mac: ## Launch code metrics report for macOS
-	open metrics/index.html
-
-launch_metrics_win:	 ## Launch code metrics report for windows
-	CMD /C start metrics/index.html	
-
-metrics_win: metrics launch_metrics_win  ## Generates dart code metrics report and automatically launch code metrics report
-
-metrics_mac: metrics launch_metrics_mac  ## Generates dart code metrics report and automatically launch code metrics report
-
-check_unused_codes: ## Runs the dart code metrics and checks for unused code
-	fvm flutter pub run dart_code_metrics:metrics check-unused-code lib 
-	
-check_unused_files:  ## Runs the dart code metrics and checks for unused files
-	fvm flutter pub run dart_code_metrics:metrics check-unused-files lib 		
 
 dependency_validator: ## This command runs dependency_validator
 	dart run dependency_validator	

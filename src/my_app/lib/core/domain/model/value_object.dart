@@ -23,8 +23,10 @@ abstract class ValueObject<T> {
   Either<Failure, Unit> get failureOrUnit =>
       value.fold(left, (T r) => right(unit));
 
-  T getOrCrash() =>
-      value.fold((Failure failure) => throw Exception(failure.toString()), id);
+  T getOrCrash() => value.fold(
+        (Failure failure) => throw Exception(failure.toString()),
+        identity,
+      );
 
   bool isValid() => value.isRight();
 
@@ -38,6 +40,7 @@ class UniqueId extends ValueObject<String> {
 
   factory UniqueId.fromUniqueString(String uniqueId) =>
       UniqueId._(right(uniqueId));
+
   @override
   final Either<Failure, String> value;
 }

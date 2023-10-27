@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/constants/route_name.dart';
+import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 
 part 'app_core_bloc.freezed.dart';
 part 'app_core_state.dart';
@@ -15,10 +16,6 @@ class AppCoreBloc extends Cubit<AppCoreState> {
   }
 
   void initialize() {
-    initializeScrollControllers();
-  }
-
-  void initializeScrollControllers() {
     final Map<AppScrollController, ScrollController> controllers =
         <AppScrollController, ScrollController>{};
 
@@ -29,33 +26,14 @@ class AppCoreBloc extends Cubit<AppCoreState> {
     safeEmit(state.copyWith(scrollControllers: controllers));
   }
 
-  ScrollController getScrollController(
-    AppScrollController appScrollController,
-  ) {
-    ScrollController? scrollController =
-        state.scrollControllers[appScrollController];
-    if (scrollController == null) {
-      scrollController = ScrollController();
-      setScrollController(appScrollController, scrollController);
+  ScrollController getScrollController(String route) {
+    ScrollController? scrollController;
+    if (route == RouteName.home.path) {
+      scrollController = state.scrollControllers[AppScrollController.home];
+    } else if (route == RouteName.profile.path) {
+      scrollController = state.scrollControllers[AppScrollController.profile];
     }
 
-    return scrollController;
-  }
-
-  void setScrollController(
-    AppScrollController appScrollController,
-    ScrollController scrollController,
-  ) {
-    final Map<AppScrollController, ScrollController> scrollControllers =
-        Map<AppScrollController, ScrollController>.from(
-      state.scrollControllers,
-    );
-
-    safeEmit(
-      state.copyWith(
-        scrollControllers: scrollControllers
-          ..putIfAbsent(appScrollController, () => scrollController),
-      ),
-    );
+    return scrollController ?? ScrollController();
   }
 }

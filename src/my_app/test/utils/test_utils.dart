@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chopper/chopper.dart' as chopper;
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -41,6 +42,12 @@ List<Post> get mockPosts => <Post>[
       mockPost,
       mockPost,
     ];
+
+Map<AppScrollController, ScrollController> mockScrollControllers =
+    <AppScrollController, ScrollController>{
+  AppScrollController.home: ScrollController(),
+  AppScrollController.profile: ScrollController(),
+};
 
 Post get mockPost => PostDTO(
       uid: '1',

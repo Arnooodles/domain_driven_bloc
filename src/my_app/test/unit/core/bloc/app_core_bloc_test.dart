@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 
 void main() {
@@ -14,12 +15,13 @@ void main() {
     test(
       'should initialize a scroll controllers',
       () {
-        appCoreBloc.initializeScrollControllers();
+        appCoreBloc.initialize();
 
         expect(
           appCoreBloc.state.scrollControllers[AppScrollController.home],
           isA<ScrollController>(),
         );
+
         expect(
           appCoreBloc.state.scrollControllers[AppScrollController.profile],
           isA<ScrollController>(),
@@ -33,35 +35,12 @@ void main() {
       'should return a scroll controllers',
       () {
         expect(
-          appCoreBloc.getScrollController(AppScrollController.home),
+          appCoreBloc.getScrollController(RouteName.home.name),
           isA<ScrollController>(),
         );
-        expect(
-          appCoreBloc.getScrollController(AppScrollController.profile),
-          isA<ScrollController>(),
-        );
-      },
-    );
-  });
 
-  group('AppCore setScrollControllers', () {
-    test(
-      'should set a scroll controllers',
-      () {
-        appCoreBloc.setScrollController(
-          AppScrollController.home,
-          ScrollController(),
-        );
         expect(
-          appCoreBloc.state.scrollControllers[AppScrollController.home],
-          isA<ScrollController>(),
-        );
-        appCoreBloc.setScrollController(
-          AppScrollController.profile,
-          ScrollController(),
-        );
-        expect(
-          appCoreBloc.state.scrollControllers[AppScrollController.profile],
+          appCoreBloc.getScrollController(RouteName.profile.name),
           isA<ScrollController>(),
         );
       },

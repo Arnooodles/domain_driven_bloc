@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/helpers/extensions/hidable_controller_ext.dart';
+
 import 'package:very_good_core/app/helpers/hidable_controller.dart';
 
 class Hidable extends StatelessWidget {

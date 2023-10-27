@@ -6,8 +6,7 @@ class AppLifeCycleState with _$AppLifeCycleState {
   const factory AppLifeCycleState.inactive() = _Inactive;
   const factory AppLifeCycleState.paused() = _Paused;
   const factory AppLifeCycleState.resumed() = _Resumed;
+  const factory AppLifeCycleState.hidden() = _Hidden;
 
   const AppLifeCycleState._();
-
-  bool get isResumed => maybeWhen(resumed: () => true, orElse: () => false);
 }

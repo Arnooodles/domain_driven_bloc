@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
-import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/core/domain/model/value_object.dart';
 
 class VeryGoodCoreTextUrl extends StatelessWidget {

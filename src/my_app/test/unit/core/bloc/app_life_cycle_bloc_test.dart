@@ -33,7 +33,11 @@ void main() {
     build: () => appLifeCycleBloc,
     act: (AppLifeCycleBloc bloc) =>
         setAppLifeCycleState(AppLifecycleState.resumed),
-    expect: () => <dynamic>[const AppLifeCycleState.resumed()],
+    expect: () => <dynamic>[
+      const AppLifeCycleState.detached(),
+      const AppLifeCycleState.inactive(),
+      const AppLifeCycleState.resumed(),
+    ],
   );
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
@@ -41,7 +45,7 @@ void main() {
     build: () => appLifeCycleBloc,
     act: (AppLifeCycleBloc bloc) =>
         setAppLifeCycleState(AppLifecycleState.detached),
-    expect: () => <dynamic>[const AppLifeCycleState.detached()],
+    expect: () => <dynamic>[],
   );
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
