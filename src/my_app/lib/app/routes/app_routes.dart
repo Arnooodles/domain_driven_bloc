@@ -1,6 +1,6 @@
 part of 'app_router.dart';
 
-//ignore_for_file: long-method
+// ignore_for_file: long-method
 List<RouteBase> _getRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
     <RouteBase>[
       GoRoute(
@@ -26,11 +26,12 @@ List<RouteBase> _getRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
           // The route branch for the first tab of the bottom navigation bar.
           StatefulShellBranch(
             observers: <NavigatorObserver>[
-              getIt<GoRouteObserver>(param1: 'app'),
+              getIt<GoRouteObserver>(param1: RouteName.home.name),
             ],
             routes: <RouteBase>[
               GoRoute(
                 path: RouteName.home.path,
+                name: RouteName.home.name,
                 builder: (BuildContext context, GoRouterState state) =>
                     const HomeScreen(),
                 routes: <RouteBase>[
@@ -53,6 +54,9 @@ List<RouteBase> _getRoutes(GlobalKey<NavigatorState> rootNavigatorKey) =>
           ),
           // The route branch for the second tab of the bottom navigation bar.
           StatefulShellBranch(
+            observers: <NavigatorObserver>[
+              getIt<GoRouteObserver>(param1: RouteName.profile.name),
+            ],
             routes: <RouteBase>[
               GoRoute(
                 path: RouteName.profile.path,

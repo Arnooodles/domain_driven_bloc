@@ -13,72 +13,71 @@ import 'package:very_good_core/core/domain/bloc/app_life_cycle/app_life_cycle_bl
 import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
-// ignore_for_file: avoid-returning-widgets
 class App extends StatelessWidget {
   App({super.key});
 
-  final AppRouter appRouter = getIt<AppRouter>(param1: getIt<AuthBloc>());
+  final AppRouter _appRouter = getIt<AppRouter>(param1: getIt<AuthBloc>());
 
-  List<BlocProvider<dynamic>> get providers => <BlocProvider<dynamic>>[
-        BlocProvider<AuthBloc>(
-          create: (BuildContext context) => getIt<AuthBloc>(),
-        ),
-        BlocProvider<ThemeBloc>(
-          create: (BuildContext context) => getIt<ThemeBloc>(),
-        ),
-        BlocProvider<AppLifeCycleBloc>(
-          create: (BuildContext context) => getIt<AppLifeCycleBloc>(),
-        ),
-        BlocProvider<AppCoreBloc>(
-          create: (BuildContext context) => getIt<AppCoreBloc>(),
-        ),
-      ];
+  final List<BlocProvider<dynamic>> _providers = <BlocProvider<dynamic>>[
+    BlocProvider<AppCoreBloc>(
+      create: (BuildContext context) => getIt<AppCoreBloc>(),
+    ),
+    BlocProvider<AuthBloc>(
+      create: (BuildContext context) => getIt<AuthBloc>(),
+    ),
+    BlocProvider<ThemeBloc>(
+      create: (BuildContext context) => getIt<ThemeBloc>(),
+    ),
+    BlocProvider<AppLifeCycleBloc>(
+      create: (BuildContext context) => getIt<AppLifeCycleBloc>(),
+    ),
+  ];
 
-  List<ResponsiveBreakpoint> get breakpoints => <ResponsiveBreakpoint>[
-        const ResponsiveBreakpoint.autoScaleDown(
-          Constant.mobileBreakpoint,
-          name: PHONE,
-        ),
-        const ResponsiveBreakpoint.resize(
-          Constant.mobileBreakpoint,
-          name: MOBILE,
-        ),
-        const ResponsiveBreakpoint.resize(
-          Constant.tabletBreakpoint,
-          name: TABLET,
-        ),
-        const ResponsiveBreakpoint.resize(
-          Constant.desktopBreakpoint,
-          name: DESKTOP,
-        ),
-      ];
+  final List<ResponsiveBreakpoint> _breakpoints = <ResponsiveBreakpoint>[
+    const ResponsiveBreakpoint.autoScaleDown(
+      Constant.mobileBreakpoint,
+      name: PHONE,
+    ),
+    const ResponsiveBreakpoint.resize(
+      Constant.mobileBreakpoint,
+      name: MOBILE,
+    ),
+    const ResponsiveBreakpoint.resize(
+      Constant.tabletBreakpoint,
+      name: TABLET,
+    ),
+    const ResponsiveBreakpoint.resize(
+      Constant.desktopBreakpoint,
+      name: DESKTOP,
+    ),
+  ];
 
-  List<LocalizationsDelegate<dynamic>> get localizationsDelegates =>
+  final List<LocalizationsDelegate<dynamic>> _localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
-        providers: providers,
+        providers: _providers,
         child: BlocBuilder<ThemeBloc, ThemeMode>(
           builder: (BuildContext context, ThemeMode themeMode) =>
               MaterialApp.router(
-            routerConfig: appRouter.router,
+            routerConfig: _appRouter.router,
             builder: (BuildContext context, Widget? child) =>
                 ResponsiveWrapper.builder(
               child,
               minWidth: Constant.mobileBreakpoint,
-              breakpoints: breakpoints,
+              breakpoints: _breakpoints,
             ),
             title: Constant.appName,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeMode,
-            localizationsDelegates: localizationsDelegates,
+            localizationsDelegates: _localizationsDelegates,
             supportedLocales: AppLocalizations.delegate.supportedLocales,
             debugShowCheckedModeBanner: false,
             scrollBehavior: ScrollBehaviorConfig(),

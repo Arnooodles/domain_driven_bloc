@@ -43,7 +43,7 @@ class VeryGoodCoreInfoTextField extends StatelessWidget {
                   color: titleColor ?? context.colorScheme.secondary,
                 ),
               ),
-              VSpace.xxsmall(),
+              Gap.xxsmall(),
               Text(
                 description,
                 style: context.textTheme.titleMedium?.copyWith(

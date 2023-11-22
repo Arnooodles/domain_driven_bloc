@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_error_server_error": m1,
         "common_error_unexpected_error":
             MessageLookupByLibrary.simpleMessage("Unexpected Error"),
+        "common_error_unsupported_device": MessageLookupByLibrary.simpleMessage(
+            "This device is not supported by the app"),
         "common_generic_error":
             MessageLookupByLibrary.simpleMessage("Oops! Something went wrong"),
         "common_home": MessageLookupByLibrary.simpleMessage("home"),

@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_core/core/domain/bloc/app_life_cycle/app_life_cycle_bloc.dart';
 
-// ignore_for_file: no-empty-block
 void main() {
   late AppLifeCycleBloc appLifeCycleBloc;
 

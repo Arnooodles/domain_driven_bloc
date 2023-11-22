@@ -120,6 +120,16 @@ class AppLocalizations {
     );
   }
 
+  /// `This device is not supported by the app`
+  String get common_error_unsupported_device {
+    return Intl.message(
+      'This device is not supported by the app',
+      name: 'common_error_unsupported_device',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Oops! Something went wrong`
   String get common_generic_error {
     return Intl.message(

@@ -29,7 +29,7 @@ class ProfileLoading extends StatelessWidget {
                           height:
                               context.textTheme.headlineMedium?.fontSize ?? 28,
                         ),
-                        VSpace.xsmall(),
+                        Gap.xsmall(),
                         Shimmer(
                           width: context.screenWidth * 0.4,
                           height:
@@ -41,7 +41,7 @@ class ProfileLoading extends StatelessWidget {
                 ),
               ],
             ),
-            VSpace.medium(),
+            Gap.medium(),
             Expanded(
               child: ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
@@ -55,7 +55,7 @@ class ProfileLoading extends StatelessWidget {
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) =>
-                    const VSpace(Insets.small),
+                    const Gap(Insets.small),
                 itemCount: 5,
               ),
             ),
@@ -67,7 +67,7 @@ class ProfileLoading extends StatelessWidget {
                 height: 50,
               ),
             ),
-            const VSpace(Insets.large),
+            const Gap(Insets.large),
           ],
         ),
       );

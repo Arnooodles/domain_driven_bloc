@@ -18,7 +18,7 @@ String _appId(HookContext context, {Platform? platform}) {
   var applicationId = context.vars['application_id'] as String?;
   applicationId = (applicationId?.isNotEmpty ?? false)
       ? applicationId
-      : '''$orgName.${projectName.snakeCase}''';
+      : '''$orgName.${platform == Platform.android ? projectName.snakeCase : projectName.paramCase}''';
 
   return applicationId!;
 }

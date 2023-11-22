@@ -14,8 +14,10 @@ class MainScreen extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   @override
-  Widget build(BuildContext context) => WillPopScope(
-        onWillPop: () => DialogUtils.showExitDialog(context),
+  Widget build(BuildContext context) => PopScope(
+        canPop: false,
+        onPopInvoked: (bool didPop) async =>
+            DialogUtils.showExitDialog(context),
         child: ConnectivityChecker.scaffold(
           body: Center(
             child: navigationShell,

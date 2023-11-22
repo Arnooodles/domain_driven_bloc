@@ -111,6 +111,10 @@ Out of the box, Domain-Driven Bloc includes:
   ✅ [Secure Storage](https://pub.dev/packages/flutter_secure_storage) \
   ✅ [Shared Preferences](https://pub.dev/packages/shared_preferences)
 
+#### Security
+
+  ✅ [Safe Device](https://pub.dev/packages/safe_device) 
+
 #### Logging
 
   ✅ [Logger](https://pub.dev/packages/logger) \
@@ -148,6 +152,7 @@ Out of the box, Domain-Driven Bloc includes:
 - ✴️ Home - Displays the post found in the sub-reddit [FlutterDev][flutter_dev_link].
 - ✴️ Profile - Displays the basic information of the mocked user.
 - ✴️ Dark Mode - Switch between Light and Dark themes
+- ✴️ Security - JailBroken and real device detection on iOS/Android. 
 - ✴️ Unit Testing - Performs a unit test to verify the correctness of a unit of logic under the Bloc and repository layers
 - ✴️ Widget(Goldens) Testing - Performs a widget tests that uses a special matcher that compares your widget with an image file and expects that it looks the same
 

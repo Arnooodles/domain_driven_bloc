@@ -17,7 +17,7 @@ import 'package:very_good_core/features/home/domain/model/post.dart';
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';
 
-// ignore_for_file: prefer-static-class,depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages
 Future<void> setupInjection() async {
   await getIt.reset();
   TestWidgetsFlutterBinding.ensureInitialized();

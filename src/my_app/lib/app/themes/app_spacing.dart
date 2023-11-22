@@ -1,48 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart' as gap;
 
-// ignore_for_file: prefer-match-file-name,prefer-single-widget-per-file,
-// ignore_for_file: avoid-returning-widgets,prefer-correct-identifier-length
-final class VSpace extends StatelessWidget {
-  const VSpace(this.size, {super.key});
+// ignore_for_file: prefer-match-file-name, avoid-returning-widgets
+final class Gap extends StatelessWidget {
+  const Gap(this.size, {super.key});
 
-  factory VSpace.xxsmall() => const VSpace(Insets.xxsmall);
-  factory VSpace.xsmall() => const VSpace(Insets.xsmall);
-  factory VSpace.small() => const VSpace(Insets.small);
-  factory VSpace.medium() => const VSpace(Insets.medium);
-  factory VSpace.large() => const VSpace(Insets.large);
-  factory VSpace.xlarge() => const VSpace(Insets.xlarge);
-  factory VSpace.xxlarge() => const VSpace(Insets.xxlarge);
-  factory VSpace.xxxlarge() => const VSpace(Insets.xxxlarge);
-
-  final double size;
-
-  @override
-  Widget build(BuildContext context) => SizedBox(height: size);
-}
-
-final class HSpace extends StatelessWidget {
-  const HSpace(this.size, {super.key});
-
-  factory HSpace.xxsmall() => const HSpace(Insets.xxsmall);
-  factory HSpace.xsmall() => const HSpace(Insets.xsmall);
-  factory HSpace.small() => const HSpace(Insets.small);
-  factory HSpace.medium() => const HSpace(Insets.medium);
-  factory HSpace.large() => const HSpace(Insets.large);
-  factory HSpace.xlarge() => const HSpace(Insets.xlarge);
-  factory HSpace.xxlarge() => const HSpace(Insets.xxlarge);
-  factory HSpace.xxxlarge() => const HSpace(Insets.xxxlarge);
+  factory Gap.xxsmall() => const Gap(Insets.xxsmall);
+  factory Gap.xsmall() => const Gap(Insets.xsmall);
+  factory Gap.small() => const Gap(Insets.small);
+  factory Gap.medium() => const Gap(Insets.medium);
+  factory Gap.large() => const Gap(Insets.large);
+  factory Gap.xlarge() => const Gap(Insets.xlarge);
+  factory Gap.xxlarge() => const Gap(Insets.xxlarge);
+  factory Gap.xxxlarge() => const Gap(Insets.xxxlarge);
 
   final double size;
 
   @override
-  Widget build(BuildContext context) => SizedBox(width: size);
+  Widget build(BuildContext context) => gap.Gap(size);
 }
 
 final class Insets {
   const Insets._();
 
   static const double scale = 1;
-
   // Regular paddings
   static const double zero = 0;
   static const double xxsmall = scale * 4;

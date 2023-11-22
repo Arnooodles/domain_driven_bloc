@@ -23,8 +23,9 @@ part 'app_routes.dart';
 final class AppRouter {
   AppRouter(@factoryParam this.authBloc);
 
+  static const String debugLabel = 'root';
   final GlobalKey<NavigatorState> rootNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'root');
+      GlobalKey<NavigatorState>(debugLabel: debugLabel);
 
   final AuthBloc authBloc;
 
@@ -33,7 +34,7 @@ final class AppRouter {
     redirect: _routeGuard,
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
     initialLocation: RouteName.initial.path,
-    observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: 'root')],
+    observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: debugLabel)],
     navigatorKey: rootNavigatorKey,
   );
 
@@ -42,9 +43,9 @@ final class AppRouter {
     final String initialPath = RouteName.initial.path;
     final String homePath = RouteName.home.path;
 
-    return authBloc.state.mapOrNull(
-      initial: (_) => initialPath,
-      unauthenticated: (_) => loginPath,
+    return authBloc.state.whenOrNull(
+      initial: () => initialPath,
+      unauthenticated: () => loginPath,
       authenticated: (_) {
         // Check if the app is in the login screen
         final bool isLoginScreen = goRouterState.matchedLocation == loginPath;

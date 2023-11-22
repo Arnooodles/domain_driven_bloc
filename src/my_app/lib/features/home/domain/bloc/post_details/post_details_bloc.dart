@@ -39,16 +39,4 @@ class PostDetailsBloc extends Cubit<PostDetailsState> {
     await state.controller.loadRequest(Uri.parse(webviewUrl.getOrCrash()));
     safeEmit(state.copyWith(webviewUrl: webviewUrl));
   }
-
-  Future<bool> webViewBack() async {
-    final bool canGoBack = await state.controller.canGoBack();
-
-    if (canGoBack) {
-      await state.controller.goBack();
-
-      return Future<bool>.value(false);
-    } else {
-      return Future<bool>.value(true);
-    }
-  }
 }

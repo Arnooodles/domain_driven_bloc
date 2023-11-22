@@ -18,9 +18,7 @@ class AuthBloc extends Cubit<AuthState> {
   AuthBloc(
     this._userRepository,
     this._authRepository,
-  ) : super(const AuthState.initial()) {
-    initialize();
-  }
+  ) : super(const AuthState.initial());
 
   final IUserRepository _userRepository;
   final IAuthRepository _authRepository;

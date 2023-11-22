@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
@@ -13,7 +13,6 @@ import 'package:very_good_core/app/generated/assets.gen.dart';
 import 'package:very_good_core/app/helpers/injection.dart';
 import 'package:very_good_core/app/observers/app_bloc_observer.dart';
 
-// ignore_for_file: prefer-static-class
 Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   urlConfig();
   initializeSingletons();
@@ -44,7 +43,7 @@ void initializeSingletons() {
       ),
     )
     ..registerLazySingleton<ChopperClient>(
-      () => ChopperConfig.client,
+      () => ChopperConfig().client,
     );
 }
 

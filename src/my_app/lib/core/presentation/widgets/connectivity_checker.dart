@@ -9,12 +9,8 @@ import 'package:very_good_core/app/helpers/injection.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/utils/connectivity_utils.dart';
 
-// ignore_for_file: long-parameter-list
 class ConnectivityChecker extends StatefulWidget {
-  const ConnectivityChecker({
-    required this.child,
-    super.key,
-  });
+  const ConnectivityChecker({required this.child, super.key});
 
   final Widget child;
 

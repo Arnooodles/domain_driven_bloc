@@ -15,6 +15,18 @@ class PostDetailsWebview extends StatelessWidget {
 
   final Post post;
 
+  Future<void> _onPopInvoked(
+    BuildContext context,
+    WebViewController controller,
+  ) async {
+    if (await controller.canGoBack()) {
+      await controller.goBack();
+    } else {
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) => BlocProvider<PostDetailsBloc>(
         create: (BuildContext context) =>
@@ -23,8 +35,9 @@ class PostDetailsWebview extends StatelessWidget {
             BlocSelector<PostDetailsBloc, PostDetailsState, WebViewController>(
           selector: (PostDetailsState state) => state.controller,
           builder: (BuildContext context, WebViewController controller) =>
-              WillPopScope(
-            onWillPop: () => context.read<PostDetailsBloc>().webViewBack(),
+              PopScope(
+            canPop: false,
+            onPopInvoked: (_) async => _onPopInvoked(context, controller),
             child: ConnectivityChecker.scaffold(
               appBar: PreferredSize(
                 preferredSize: Size.fromHeight(AppTheme.defaultAppBarHeight),

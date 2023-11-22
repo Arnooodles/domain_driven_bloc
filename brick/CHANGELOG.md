@@ -1,8 +1,13 @@
 # 1.0.0
 
-- feat: upgrade to flutter 3.13.0
+- feat: upgrade to flutter 3.16.0
 - feat: implement go_router's StatefulShellRoute
+- feat: implement safe_device
+- feat: implement SSL Certificate Pinning
+- refactor: implement gap instead of using sizebox
 - fix: tests due to breaking changes
+- fix: change launchMode on Android to singleTask
+- test: tested pre_gen hook
 - chore: rename screens->views
 - chore: separate extensions.dart into multiple files
 - chore: separate converters.dart into multiple files

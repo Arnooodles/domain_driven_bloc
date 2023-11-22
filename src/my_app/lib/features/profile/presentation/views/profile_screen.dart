@@ -113,7 +113,7 @@ class ProfileScreen extends HookWidget {
                               vertical: Insets.small,
                             ),
                           ),
-                          const VSpace(Insets.large),
+                          const Gap(Insets.large),
                         ],
                       ),
                     ),
@@ -163,27 +163,27 @@ class _ProfileDetails extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          VSpace.small(),
+          Gap.small(),
           VeryGoodCoreInfoTextField(
             title: context.l10n.profile__label_text__email,
             description: user.email.getOrCrash(),
           ),
-          VSpace.small(),
+          Gap.small(),
           VeryGoodCoreInfoTextField(
             title: context.l10n.profile__label_text__phone_number,
             description: user.contactNumber.getOrCrash(),
           ),
-          VSpace.small(),
+          Gap.small(),
           VeryGoodCoreInfoTextField(
             title: context.l10n.profile__label_text__gender,
             description: user.gender.name.capitalize(),
           ),
-          VSpace.small(),
+          Gap.small(),
           VeryGoodCoreInfoTextField(
             title: context.l10n.profile__label_text__birthday,
             description: user.birthday.defaultFormat(),
           ),
-          VSpace.small(),
+          Gap.small(),
           VeryGoodCoreInfoTextField(
             title: context.l10n.profile__label_text__age,
             description: user.age,

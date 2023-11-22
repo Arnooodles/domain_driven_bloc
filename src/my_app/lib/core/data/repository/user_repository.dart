@@ -12,7 +12,6 @@ import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
 import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/core/domain/model/user.dart';
 
-// ignore_for_file: argument_type_not_assignable
 @LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {
   UserRepository(

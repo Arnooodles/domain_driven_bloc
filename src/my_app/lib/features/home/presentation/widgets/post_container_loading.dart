@@ -10,12 +10,13 @@ class PostContainerLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView.separated(
+        padding: const EdgeInsets.only(top: Insets.medium),
         itemBuilder: (BuildContext context, int index) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: Insets.small),
           child: _PostContainerLoadingItem(delay: index * 300),
         ),
         separatorBuilder: (BuildContext context, int index) =>
-            const VSpace(Insets.small),
+            const Gap(Insets.small),
         itemCount: 5,
       );
 }

@@ -111,6 +111,10 @@ Out of the box, Domain-Driven Bloc includes:
   ✅ [Secure Storage](https://pub.dev/packages/flutter_secure_storage) \
   ✅ [Shared Preferences](https://pub.dev/packages/shared_preferences)
 
+#### Security
+
+  ✅ [Safe Device](https://pub.dev/packages/safe_device) 
+
 #### Logging
 
   ✅ [Logger](https://pub.dev/packages/logger) \

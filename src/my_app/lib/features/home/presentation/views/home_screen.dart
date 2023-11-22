@@ -104,7 +104,7 @@ class _HomeContent extends HookWidget {
                       itemBuilder: (BuildContext context, int index) =>
                           PostContainer(post: posts[index]),
                       separatorBuilder: (BuildContext context, int index) =>
-                          const VSpace(Insets.small),
+                          const Gap(Insets.small),
                       itemCount: posts.length,
                     )
                   : const EmptyPost(),

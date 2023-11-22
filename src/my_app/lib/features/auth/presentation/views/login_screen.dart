@@ -37,8 +37,10 @@ class LoginScreen extends HookWidget {
               TextPosition(offset: emailTextController.text.length),
             );
 
-          return WillPopScope(
-            onWillPop: () => DialogUtils.showExitDialog(context),
+          return PopScope(
+            canPop: false,
+            onPopInvoked: (bool didPop) async =>
+                DialogUtils.showExitDialog(context),
             child: ConnectivityChecker.scaffold(
               backgroundColor: context.colorScheme.background,
               body: Center(
@@ -63,7 +65,7 @@ class LoginScreen extends HookWidget {
                                   .onEmailAddressChanged(value),
                               autofocus: true,
                             ),
-                            VSpace.large(),
+                            Gap.large(),
                             VeryGoodCoreTextField(
                               controller: passwordTextController,
                               labelText:
@@ -73,7 +75,7 @@ class LoginScreen extends HookWidget {
                               textInputType: TextInputType.visiblePassword,
                               isPassword: true,
                             ),
-                            VSpace.xxxlarge(),
+                            Gap.xxxlarge(),
                             VeryGoodCoreButton(
                               text: context.l10n.login__button_text__login,
                               isEnabled: !state.isLoading,
