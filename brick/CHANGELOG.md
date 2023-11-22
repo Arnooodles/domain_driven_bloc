@@ -4,6 +4,7 @@
 - feat: implement go_router's StatefulShellRoute
 - feat: implement safe_device
 - feat: implement SSL Certificate Pinning
+- refactor: migrate responsive_framework to 1.1.1
 - refactor: implement gap instead of using sizebox
 - fix: tests due to breaking changes
 - fix: change launchMode on Android to singleTask

@@ -17,7 +17,7 @@ dependencies:
   dartx: ^1.2.0
   email_validator: ^2.1.17
   faker: ^2.1.0
-  flash: ^3.0.5+2
+  flash: ^3.1.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
@@ -42,7 +42,7 @@ dependencies:
   json_annotation: ^4.8.1
   logger: ^2.0.2+1
   pretty_chopper_logger: ^1.0.8
-  responsive_framework: ^0.2.0
+  responsive_framework: ^1.1.1
   rxdart: ^0.27.7
   safe_device: ^1.1.4
   shared_preferences: ^2.2.2
@@ -68,7 +68,6 @@ dev_dependencies:
   mockito: ^5.4.3
   mocktail_image_network: ^1.0.0
   very_good_analysis: ^5.1.0
-
 
 flutter_gen:
   output: lib/app/generated/

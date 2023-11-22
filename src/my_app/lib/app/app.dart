@@ -33,22 +33,26 @@ class App extends StatelessWidget {
     ),
   ];
 
-  final List<ResponsiveBreakpoint> _breakpoints = <ResponsiveBreakpoint>[
-    const ResponsiveBreakpoint.autoScaleDown(
-      Constant.mobileBreakpoint,
-      name: PHONE,
-    ),
-    const ResponsiveBreakpoint.resize(
-      Constant.mobileBreakpoint,
+  final List<Breakpoint> _breakpoints = <Breakpoint>[
+    const Breakpoint(
+      start: 0,
+      end: Constant.mobileBreakpoint,
       name: MOBILE,
     ),
-    const ResponsiveBreakpoint.resize(
-      Constant.tabletBreakpoint,
+    const Breakpoint(
+      start: Constant.mobileBreakpoint + 1,
+      end: Constant.tabletBreakpoint,
       name: TABLET,
     ),
-    const ResponsiveBreakpoint.resize(
-      Constant.desktopBreakpoint,
+    const Breakpoint(
+      start: Constant.tabletBreakpoint + 1,
+      end: Constant.desktopBreakpoint,
       name: DESKTOP,
+    ),
+    const Breakpoint(
+      start: Constant.desktopBreakpoint + 1,
+      end: double.infinity,
+      name: '4K',
     ),
   ];
 
@@ -68,9 +72,21 @@ class App extends StatelessWidget {
               MaterialApp.router(
             routerConfig: _appRouter.router,
             builder: (BuildContext context, Widget? child) =>
-                ResponsiveWrapper.builder(
-              child,
-              minWidth: Constant.mobileBreakpoint,
+                ResponsiveBreakpoints.builder(
+              child: Builder(
+                builder: (BuildContext context) => ResponsiveScaledBox(
+                  width: ResponsiveValue<double>(
+                    context,
+                    conditionalValues: <Condition<double>>[
+                      Condition<double>.equals(
+                        name: MOBILE,
+                        value: Constant.mobileBreakpoint,
+                      ),
+                    ],
+                  ).value,
+                  child: child!,
+                ),
+              ),
               breakpoints: _breakpoints,
             ),
             title: Constant.appName,

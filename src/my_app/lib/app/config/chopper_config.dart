@@ -60,20 +60,24 @@ final class ChopperConfig {
   ];
 
   /// SSL Pinning
-  final IOClient _securedClient = IOClient(
-    HttpClient()
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
-        if (AppConfig.environment == Env.staging ||
-            AppConfig.environment == Env.production) {
-          final String hash = sha256.convert(cert.pem.codeUnits).toString();
-          return TrustedCertificate.values
-              .map((TrustedCertificate e) => e.value)
-              .toList()
-              .contains(hash);
-        }
-        return true;
-      },
-  );
+  IOClient? get _securedClient => !kIsWeb
+      ? IOClient(
+          HttpClient()
+            ..badCertificateCallback =
+                (X509Certificate cert, String host, int port) {
+              if (AppConfig.environment == Env.staging ||
+                  AppConfig.environment == Env.production) {
+                final String hash =
+                    sha256.convert(cert.pem.codeUnits).toString();
+                return TrustedCertificate.values
+                    .map((TrustedCertificate e) => e.value)
+                    .toList()
+                    .contains(hash);
+              }
+              return true;
+            },
+        )
+      : null;
 
   ChopperClient get client => ChopperClient(
         baseUrl: _baseUrl,
