@@ -124,8 +124,7 @@ release.keystore
 *.mocks.dart
 *.gen.dart
 *.config.dart
-lib/generated/intl/*
-lib/generated/*
+/lib/app/generated/*
 
 # Dart Test Results
 coverage
