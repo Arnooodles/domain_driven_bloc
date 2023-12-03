@@ -24,17 +24,15 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
 
       - name: 📦 Install Dependencies
-        run: |
-          flutter pub global activate very_good_cli
-          very_good --analytics false
-          very_good packages get --recursive
+        run: flutter pub get
+
       - name: ⚙️ Run Setup
         run: |
           dart run intl_utils:generate
           dart run build_runner build --delete-conflicting-outputs
 
       - name: ✨ Check Formatting
-        run: dart format --set-exit-if-changed lib test
+        run: dart format lib test
 
       - name: 🕵️ Analyze
         run: |

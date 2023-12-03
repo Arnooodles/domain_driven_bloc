@@ -119,19 +119,16 @@ app.*.map.json
 *.gr.dart
 *.freezed.dart
 *.chopper.dart
-lib/generated/
+lib/generated/*
 release.keystore
 *.lock
 *.mocks.dart
 *.gen.dart
 *.config.dart
-env.g.dart
+
 
 # Dart Test Results
 coverage
-
-# Dart Code Metrics
-metrics/
 
 # Do not commit local.properties
 local.properties

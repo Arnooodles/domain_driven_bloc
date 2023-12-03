@@ -11,8 +11,10 @@ void main() {
   setUp(() {
     appCoreBloc = AppCoreBloc();
     scrollControllers = <AppScrollController, ScrollController>{
-      AppScrollController.home: ScrollController(debugLabel: AppScrollController.home.name),
-      AppScrollController.profile: ScrollController(debugLabel: AppScrollController.profile.name),
+      AppScrollController.home:
+          ScrollController(debugLabel: AppScrollController.home.name),
+      AppScrollController.profile:
+          ScrollController(debugLabel: AppScrollController.profile.name),
     };
   });
 
@@ -20,7 +22,8 @@ void main() {
     blocTest<AppCoreBloc, AppCoreState>(
       'should set scrollControllers',
       build: () => appCoreBloc,
-      act: (AppCoreBloc bloc) async => bloc.setScrollControllers(scrollControllers),
+      act: (AppCoreBloc bloc) async =>
+          bloc.setScrollControllers(scrollControllers),
       expect: () => <AppCoreState>[
         appCoreBloc.state.copyWith(scrollControllers: scrollControllers),
       ],

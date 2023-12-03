@@ -13,21 +13,25 @@ void main() {
   });
 
   void setAppLifeCycleState(AppLifecycleState state) {
-    final ByteData? message = const StringCodec().encodeMessage(state.toString());
-    ServicesBinding.instance.channelBuffers.push('flutter/lifecycle', message, (_) {});
+    final ByteData? message =
+        const StringCodec().encodeMessage(state.toString());
+    ServicesBinding.instance.channelBuffers
+        .push('flutter/lifecycle', message, (_) {});
   }
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
     'should emit a paused lifecycle state',
     build: () => appLifeCycleBloc,
-    act: (AppLifeCycleBloc bloc) => setAppLifeCycleState(AppLifecycleState.paused),
+    act: (AppLifeCycleBloc bloc) =>
+        setAppLifeCycleState(AppLifecycleState.paused),
     expect: () => <dynamic>[const AppLifeCycleState.paused()],
   );
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
     'should emit a resumed lifecycle state',
     build: () => appLifeCycleBloc,
-    act: (AppLifeCycleBloc bloc) => setAppLifeCycleState(AppLifecycleState.resumed),
+    act: (AppLifeCycleBloc bloc) =>
+        setAppLifeCycleState(AppLifecycleState.resumed),
     expect: () => <dynamic>[
       const AppLifeCycleState.hidden(),
       const AppLifeCycleState.inactive(),
@@ -38,14 +42,16 @@ void main() {
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
     'should emit a detached lifecycle state',
     build: () => appLifeCycleBloc,
-    act: (AppLifeCycleBloc bloc) => setAppLifeCycleState(AppLifecycleState.detached),
+    act: (AppLifeCycleBloc bloc) =>
+        setAppLifeCycleState(AppLifecycleState.detached),
     expect: () => <dynamic>[],
   );
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
     'should emit a inactive lifecycle state',
     build: () => appLifeCycleBloc,
-    act: (AppLifeCycleBloc bloc) => setAppLifeCycleState(AppLifecycleState.inactive),
+    act: (AppLifeCycleBloc bloc) =>
+        setAppLifeCycleState(AppLifecycleState.inactive),
     expect: () => <dynamic>[const AppLifeCycleState.inactive()],
   );
 }

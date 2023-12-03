@@ -70,7 +70,8 @@ final class DialogUtils {
   }) =>
       context.showFlash<void>(
         duration: duration ?? const Duration(seconds: 3),
-        builder: (BuildContext context, FlashController<void> controller) => FlashBar<void>(
+        builder: (BuildContext context, FlashController<void> controller) =>
+            FlashBar<void>(
           controller: controller,
           backgroundColor: context.colorScheme.background,
           shouldIconPulse: false,
@@ -85,7 +86,8 @@ final class DialogUtils {
           ),
           clipBehavior: Clip.antiAlias,
           icon: Padding(
-            padding: const EdgeInsets.only(left: Insets.small, right: Insets.xsmall),
+            padding:
+                const EdgeInsets.only(left: Insets.small, right: Insets.xsmall),
             child: icon ??
                 Icon(
                   Icons.error_outline,
@@ -94,7 +96,8 @@ final class DialogUtils {
           ),
           content: Text(
             message,
-            style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onBackground),
+            style: context.textTheme.bodyMedium
+                ?.copyWith(color: context.colorScheme.onBackground),
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
           ),

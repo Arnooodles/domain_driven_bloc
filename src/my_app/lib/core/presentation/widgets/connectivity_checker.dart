@@ -63,7 +63,8 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
             padding: const EdgeInsets.symmetric(horizontal: Insets.small),
             child: Text(
               context.l10n.common_error_no_internet_connection,
-              style: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.onBackground),
+              style: context.textTheme.bodyLarge
+                  ?.copyWith(color: context.colorScheme.onBackground),
             ),
           ),
         );
@@ -92,7 +93,9 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _onStatusChanged(await connectivityUtils.checkInternet());
-      _connectionSubscription ??= connectivityUtils.internetStatus().listen((ConnectionStatus event) async {
+      _connectionSubscription ??= connectivityUtils
+          .internetStatus()
+          .listen((ConnectionStatus event) async {
         await _onStatusChanged(event);
       });
     });

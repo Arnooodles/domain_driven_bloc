@@ -47,7 +47,8 @@ void main() {
       ),
     );
     when(appCoreBloc.state).thenAnswer(
-      (_) => AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
+      (_) =>
+          AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
     );
     when(hidableBloc.stream).thenAnswer(
       (_) => Stream<bool>.fromIterable(
@@ -67,7 +68,8 @@ void main() {
     navigationShell = MockStatefulNavigationShell();
     currentConfiguration = MockRouteMatchList();
     when(currentConfiguration.uri).thenAnswer((_) => Uri(path: path));
-    when(routerDelegate.currentConfiguration).thenAnswer((_) => currentConfiguration);
+    when(routerDelegate.currentConfiguration)
+        .thenAnswer((_) => currentConfiguration);
     when(router.routerDelegate).thenAnswer((_) => routerDelegate);
     when(navigationShell.currentIndex).thenAnswer((_) => index);
     return router;
@@ -86,7 +88,8 @@ void main() {
           child: MockGoRouterProvider(
             router: router,
             child: PreferredSize(
-              preferredSize: const Size.fromHeight(AppTheme.defaultNavBarHeight),
+              preferredSize:
+                  const Size.fromHeight(AppTheme.defaultNavBarHeight),
               child: VeryGoodCoreNavBar(navigationShell: navigationShell),
             ),
           ),
