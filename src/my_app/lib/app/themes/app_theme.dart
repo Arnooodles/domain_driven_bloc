@@ -5,7 +5,6 @@ import 'package:very_good_core/app/themes/app_text_style.dart';
 final class AppTheme {
   /// Standard `ThemeData` for App UI.
   static final ThemeData _baseTheme = ThemeData(
-    useMaterial3: true,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     textTheme: _textTheme,
   );

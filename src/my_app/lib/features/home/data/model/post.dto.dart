@@ -1,8 +1,9 @@
 import 'package:dartx/dartx.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html_unescape/html_unescape.dart';
-import 'package:very_good_core/app/helpers/converters.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/helpers/converters/timestamp_to_datetime.dart';
+import 'package:very_good_core/app/helpers/extensions/color_ext.dart';
+
 import 'package:very_good_core/app/themes/app_colors.dart';
 import 'package:very_good_core/core/domain/model/validators.dart';
 import 'package:very_good_core/core/domain/model/value_object.dart';
@@ -14,25 +15,20 @@ part 'post.dto.g.dart';
 @freezed
 class PostDTO with _$PostDTO {
   const factory PostDTO({
-    @JsonKey(name: 'id')
-        required String uid,
+    @JsonKey(name: 'id') required String uid,
     required String title,
     required String author,
     required String permalink,
     @TimestampToDateTime()
     @JsonKey(name: 'created_utc')
-        required DateTime createdUtc,
+    required DateTime createdUtc,
     String? selftext,
     @JsonKey(name: 'link_flair_background_color')
-        String? linkFlairBackgroundColor,
-    @JsonKey(name: 'link_flair_text')
-        String? linkFlairText,
-    @JsonKey(name: 'ups', defaultValue: 0)
-        int? upvotes,
-    @JsonKey(name: 'num_comments', defaultValue: 0)
-        int? comments,
-    @JsonKey(name: 'url_overridden_by_dest')
-        String? urlOverriddenByDest,
+    String? linkFlairBackgroundColor,
+    @JsonKey(name: 'link_flair_text') String? linkFlairText,
+    @JsonKey(name: 'ups', defaultValue: 0) int? upvotes,
+    @JsonKey(name: 'num_comments', defaultValue: 0) int? comments,
+    @JsonKey(name: 'url_overridden_by_dest') String? urlOverriddenByDest,
   }) = _PostDTO;
 
   const PostDTO._();
@@ -64,7 +60,7 @@ class PostDTO with _$PostDTO {
         permalink: Url('https://www.reddit.com$permalink'),
         createdUtc: createdUtc,
         linkFlairBackgroundColor: linkFlairBackgroundColor.isNotNullOrBlank
-            ? ColorX.fromHex(linkFlairBackgroundColor!)
+            ? ColorExt.fromHex(linkFlairBackgroundColor!)
             : AppColors.transparent,
         upvotes: Number(upvotes ?? 0),
         comments: Number(comments ?? 0),

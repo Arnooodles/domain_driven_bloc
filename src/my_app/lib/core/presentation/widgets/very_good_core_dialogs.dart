@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
 
 // ignore_for_file: prefer-match-file-name

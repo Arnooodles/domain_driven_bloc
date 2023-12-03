@@ -5,8 +5,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:very_good_core/app/constants/route_name.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
-import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text_url.dart';
 import 'package:very_good_core/features/home/domain/model/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_footer.dart';
@@ -92,7 +92,7 @@ class PostContainer extends StatelessWidget {
         webOnlyWindowName: '_blank',
       );
     } else {
-      await GoRouter.of(context).pushNamed(
+      GoRouter.of(context).goNamed(
         RouteName.postDetails.name,
         pathParameters: <String, String>{'postId': post.uid.getOrCrash()},
         extra: post,

@@ -33,6 +33,7 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit an unauthenticated with null user state',
       build: () {
+        provideDummy(Either<Failure, User>.left(const Failure.userNotFound()));
         when(userRepository.user).thenAnswer(
           (_) async => Either<Failure, User>.left(const Failure.userNotFound()),
         );
@@ -50,6 +51,7 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit an authenticated with user state',
       build: () {
+        provideDummy(Either<Failure, User>.right(mockUser));
         when(userRepository.user)
             .thenAnswer((_) async => Either<Failure, User>.right(mockUser));
 
@@ -79,6 +81,7 @@ void main() {
   group('AuthBloc getUser ', () {
     setUp(() async {
       authBloc = AuthBloc(userRepository, authRepository);
+      provideDummy(Either<Failure, User>.right(mockUser));
       when(userRepository.user)
           .thenAnswer((_) async => Either<Failure, User>.right(mockUser));
       await authBloc.initialize();
@@ -86,6 +89,11 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit an unauthenticated with null user state',
       build: () {
+        provideDummy(
+          Either<Failure, User>.left(
+            const Failure.serverError(StatusCode.http401, 'unauthorized'),
+          ),
+        );
         when(userRepository.user).thenAnswer(
           (_) async => Either<Failure, User>.left(
             const Failure.serverError(StatusCode.http401, 'unauthorized'),
@@ -106,6 +114,7 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit an authenticated with user state',
       build: () {
+        provideDummy(Either<Failure, User>.right(mockUser));
         when(userRepository.user)
             .thenAnswer((_) async => Either<Failure, User>.right(mockUser));
 
@@ -137,6 +146,7 @@ void main() {
   group('AuthBloc logout ', () {
     setUp(() async {
       authBloc = AuthBloc(userRepository, authRepository);
+      provideDummy(Either<Failure, User>.right(mockUser));
       when(userRepository.user)
           .thenAnswer((_) async => Either<Failure, User>.right(mockUser));
       await authBloc.initialize();
@@ -144,6 +154,7 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit an unauthenticated with null user state',
       build: () {
+        provideDummy(Either<Failure, Unit>.right(unit));
         when(authRepository.logout())
             .thenAnswer((_) async => Either<Failure, Unit>.right(unit));
 
@@ -158,6 +169,11 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit a failed state',
       build: () {
+        provideDummy(
+          Either<Failure, Unit>.left(
+            Failure.unexpected(throwsException.toString()),
+          ),
+        );
         when(authRepository.logout()).thenAnswer(
           (_) async => Either<Failure, Unit>.left(
             Failure.unexpected(throwsException.toString()),
@@ -194,6 +210,9 @@ void main() {
   group('AuthBloc authenticate', () {
     setUp(() async {
       authBloc = AuthBloc(userRepository, authRepository);
+      provideDummy(
+        Either<Failure, User>.right(mockUser),
+      );
       when(userRepository.user)
           .thenAnswer((_) async => Either<Failure, User>.right(mockUser));
       await authBloc.initialize();
@@ -212,6 +231,11 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit an unauthenticated with null user state',
       build: () {
+        provideDummy(
+          Either<Failure, User>.left(
+            const Failure.serverError(StatusCode.http401, 'unauthorized'),
+          ),
+        );
         when(userRepository.user).thenAnswer(
           (_) async => Either<Failure, User>.left(
             const Failure.serverError(StatusCode.http401, 'unauthorized'),

@@ -30,6 +30,7 @@ void main() {
         final Map<String, dynamic> data = <String, dynamic>{
           'data': user.toJson(),
         };
+        provideDummy(generateMockResponse<dynamic>(data, 200));
         when(userService.getCurrentUser()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 200),
         );
@@ -47,6 +48,7 @@ void main() {
         final Map<String, dynamic> data = <String, dynamic>{
           'data': invalidUser.toJson(),
         };
+        provideDummy(generateMockResponse<dynamic>(data, 200));
         when(userService.getCurrentUser()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 200),
         );
@@ -61,6 +63,7 @@ void main() {
       'should return none when an server error is encountered',
       () async {
         final Map<String, dynamic> data = <String, dynamic>{'data': ''};
+        provideDummy(generateMockResponse<dynamic>(data, 500));
         when(userService.getCurrentUser()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 500),
         );

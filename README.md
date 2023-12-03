@@ -111,6 +111,10 @@ Out of the box, Domain-Driven Bloc includes:
   ✅ [Secure Storage](https://pub.dev/packages/flutter_secure_storage) \
   ✅ [Shared Preferences](https://pub.dev/packages/shared_preferences)
 
+#### Security
+
+  ✅ [Safe Device](https://pub.dev/packages/safe_device) 
+
 #### Logging
 
   ✅ [Logger](https://pub.dev/packages/logger) \
@@ -137,7 +141,6 @@ Out of the box, Domain-Driven Bloc includes:
 
   ✅ [Flutter Gen](https://pub.dev/packages/flutter_gen) \
   ✅ [Very Good Analysis](https://pub.dev/packages/flutter_lints) \
-  ✅ [Dart Code Metrics](https://pub.dev/packages/dart_code_metrics) \
   ✅ [Dependency Validator](https://pub.dev/packages/dependency_validator)
 
 ## Output📦
@@ -145,7 +148,7 @@ Out of the box, Domain-Driven Bloc includes:
 ### Features ⭐
 
 - ✴️ Domain-Driven-Bloc - A clean architecture based on domain driven design
-- ✴️ Authentication - A mock authentication implementation using [Reqres][reqres_link] API.
+- ✴️ Authentication - A mock authentication implementation using [Reqres][reqres_link] API (e.g. Email: janet.weaver@reqres.in, Password: **password** ).
 - ✴️ Home - Displays the post found in the sub-reddit [FlutterDev][flutter_dev_link].
 - ✴️ Profile - Displays the basic information of the mocked user.
 - ✴️ Dark Mode - Switch between Light and Dark themes
@@ -187,6 +190,8 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   ├── constants
 │   │   ├── generated
 │   │   ├── helpers
+│   │   │   ├── converters
+│   │   │   └── extensions
 │   │   ├── observers
 │   │   ├── routes
 │   │   ├── themes
@@ -202,7 +207,7 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   │   ├── interface
 │   │   │   └── model
 │   │   └── presentation
-│   │       ├── screens
+│   │       ├── views
 │   │       └── widgets
 │   ├── features
 │   │   ├── auth
@@ -215,7 +220,7 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   │   │   ├── interface
 │   │   │   │   └── model
 │   │   │   └── presentation
-│   │   │       ├── screens
+│   │   │       ├── views
 │   │   │       └── widgets
 │   │   ├── home
 │   │   │   ├── data
@@ -227,7 +232,7 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   │   │   ├── interface
 │   │   │   │   └── model
 │   │   │   └── presentation
-│   │   │       ├── screens
+│   │   │       ├── views
 │   │   │       └── widgets
 │   │   └── profile
 │   │       ├── data
@@ -239,7 +244,7 @@ Out of the box, Domain-Driven Bloc includes:
 │   │       │   ├── interface
 │   │       │   └── model
 │   │       └── presentation
-│   │           ├── screens
+│   │           ├── views
 │   │           └── widgets
 │   ├── bootstrap.dart
 │   ├── main_development.dart
@@ -262,7 +267,7 @@ Out of the box, Domain-Driven Bloc includes:
 │   │           └── repository
 │   ├── widget
 │   │   ├── core
-│   │   │   ├── screens
+│   │   │   ├── views
 │   │   │   │   ├── goldens(generated)
 │   │   │   │   └── failures(generated)
 │   │   │   └── widgets
@@ -270,21 +275,21 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   │       └── failures(generated)
 │   │   └── features
 │   │       ├── auth
-│   │       │   ├── screens
+│   │       │   ├── views
 │   │       │   │   ├── goldens(generated)
 │   │       │   │   └── failures(generated)
 │   │       │   └── widgets
 │   │       │       ├── goldens(generated)
 │   │       │       └── failures(generated)
 │   │       ├── home
-│   │       │   ├── screens
+│   │       │   ├── views
 │   │       │   │   ├── goldens(generated)
 │   │       │   │   └── failures(generated)
 │   │       │   └── widgets
 │   │       │       ├── goldens(generated)
 │   │       │       └── failures(generated)
 │   │       └── profile
-│   │           ├── screens
+│   │           ├── views
 │   │           │   ├── goldens(generated)
 │   │           │   └── failures(generated)
 │   │           └── widgets

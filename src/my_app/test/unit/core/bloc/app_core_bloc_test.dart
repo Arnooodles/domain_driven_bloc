@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_core/app/constants/enum.dart';
@@ -5,66 +6,27 @@ import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 
 void main() {
   late AppCoreBloc appCoreBloc;
+  late Map<AppScrollController, ScrollController> scrollControllers;
 
   setUp(() {
     appCoreBloc = AppCoreBloc();
-  });
-
-  group('AppCore initializeScrollControllers', () {
-    test(
-      'should initialize a scroll controllers',
-      () {
-        appCoreBloc.initializeScrollControllers();
-
-        expect(
-          appCoreBloc.state.scrollControllers[AppScrollController.home],
-          isA<ScrollController>(),
-        );
-        expect(
-          appCoreBloc.state.scrollControllers[AppScrollController.profile],
-          isA<ScrollController>(),
-        );
-      },
-    );
-  });
-
-  group('AppCore getScrollControllers', () {
-    test(
-      'should return a scroll controllers',
-      () {
-        expect(
-          appCoreBloc.getScrollController(AppScrollController.home),
-          isA<ScrollController>(),
-        );
-        expect(
-          appCoreBloc.getScrollController(AppScrollController.profile),
-          isA<ScrollController>(),
-        );
-      },
-    );
+    scrollControllers = <AppScrollController, ScrollController>{
+      AppScrollController.home:
+          ScrollController(debugLabel: AppScrollController.home.name),
+      AppScrollController.profile:
+          ScrollController(debugLabel: AppScrollController.profile.name),
+    };
   });
 
   group('AppCore setScrollControllers', () {
-    test(
-      'should set a scroll controllers',
-      () {
-        appCoreBloc.setScrollController(
-          AppScrollController.home,
-          ScrollController(),
-        );
-        expect(
-          appCoreBloc.state.scrollControllers[AppScrollController.home],
-          isA<ScrollController>(),
-        );
-        appCoreBloc.setScrollController(
-          AppScrollController.profile,
-          ScrollController(),
-        );
-        expect(
-          appCoreBloc.state.scrollControllers[AppScrollController.profile],
-          isA<ScrollController>(),
-        );
-      },
+    blocTest<AppCoreBloc, AppCoreState>(
+      'should set scrollControllers',
+      build: () => appCoreBloc,
+      act: (AppCoreBloc bloc) async =>
+          bloc.setScrollControllers(scrollControllers),
+      expect: () => <AppCoreState>[
+        appCoreBloc.state.copyWith(scrollControllers: scrollControllers),
+      ],
     );
   });
 }

@@ -3,9 +3,8 @@ import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/injection.config.dart';
 
-// ignore_for_file: prefer-static-class
 final GetIt getIt = GetIt.instance;
 
 @InjectableInit(preferRelativeImports: false)
 Future<void> configureDependencies(Env env) =>
-    getIt.init(environment: env.value);
+    getIt.init(environment: env.name);

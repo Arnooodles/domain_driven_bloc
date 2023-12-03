@@ -3,30 +3,38 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/app/helpers/injection.dart';
 import 'package:very_good_core/app/observers/go_route_observer.dart';
-import 'package:very_good_core/app/routes/app_routes.dart';
+import 'package:very_good_core/app/utils/transition_page_utils.dart';
+import 'package:very_good_core/core/presentation/views/main_screen.dart';
+import 'package:very_good_core/core/presentation/views/splash_screen.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:very_good_core/features/auth/presentation/views/login_screen.dart';
+import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/features/home/presentation/views/home_screen.dart';
+import 'package:very_good_core/features/home/presentation/views/post_details_webview.dart';
+import 'package:very_good_core/features/profile/presentation/views/profile_screen.dart';
+
+part 'app_routes.dart';
 
 @injectable
 final class AppRouter {
   AppRouter(@factoryParam this.authBloc);
 
+  static const String debugLabel = 'root';
   final GlobalKey<NavigatorState> rootNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'root');
-  final GlobalKey<NavigatorState> shellNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'shell');
-  final ValueKey<String> scaffoldKey = const ValueKey<String>('scaffold');
+      GlobalKey<NavigatorState>(debugLabel: debugLabel);
+
   final AuthBloc authBloc;
 
   late final GoRouter router = GoRouter(
-    routes:
-        getIt<AppRoutes>(param1: shellNavigatorKey, param2: scaffoldKey).routes,
+    routes: _getRoutes(rootNavigatorKey),
     redirect: _routeGuard,
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
     initialLocation: RouteName.initial.path,
-    observers: <NavigatorObserver>[getIt<GoRouteObserver>()],
+    observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: debugLabel)],
     navigatorKey: rootNavigatorKey,
   );
 
@@ -35,9 +43,9 @@ final class AppRouter {
     final String initialPath = RouteName.initial.path;
     final String homePath = RouteName.home.path;
 
-    return authBloc.state.mapOrNull(
-      initial: (_) => initialPath,
-      unauthenticated: (_) => loginPath,
+    return authBloc.state.whenOrNull(
+      initial: () => initialPath,
+      unauthenticated: () => loginPath,
       authenticated: (_) {
         // Check if the app is in the login screen
         final bool isLoginScreen = goRouterState.matchedLocation == loginPath;

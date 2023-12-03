@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
-import 'package:very_good_core/app/themes/spacing.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/themes/app_spacing.dart';
 
 class VeryGoodCoreButton extends StatelessWidget {
   const VeryGoodCoreButton({

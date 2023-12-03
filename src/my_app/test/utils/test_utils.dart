@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chopper/chopper.dart' as chopper;
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -16,7 +17,7 @@ import 'package:very_good_core/features/home/domain/model/post.dart';
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';
 
-// ignore_for_file: prefer-static-class,depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages
 Future<void> setupInjection() async {
   await getIt.reset();
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +42,12 @@ List<Post> get mockPosts => <Post>[
       mockPost,
       mockPost,
     ];
+
+Map<AppScrollController, ScrollController> mockScrollControllers =
+    <AppScrollController, ScrollController>{
+  AppScrollController.home: ScrollController(),
+  AppScrollController.profile: ScrollController(),
+};
 
 Post get mockPost => PostDTO(
       uid: '1',

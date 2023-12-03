@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/app/themes/spacing.dart';
 
 class VeryGoodCoreInfoTextField extends StatelessWidget {
   const VeryGoodCoreInfoTextField({
@@ -43,7 +43,7 @@ class VeryGoodCoreInfoTextField extends StatelessWidget {
                   color: titleColor ?? context.colorScheme.secondary,
                 ),
               ),
-              VSpace.xxsmall(),
+              Gap.xxsmall(),
               Text(
                 description,
                 style: context.textTheme.titleMedium?.copyWith(

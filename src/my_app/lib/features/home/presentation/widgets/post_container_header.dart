@@ -1,8 +1,10 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:very_good_core/app/helpers/extensions.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/helpers/extensions/datetime_ext.dart';
+import 'package:very_good_core/app/themes/app_colors.dart';
+import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/app/themes/spacing.dart';
 import 'package:very_good_core/features/home/domain/model/post.dart';
 
 class PostContainerHeader extends StatelessWidget {
@@ -38,7 +40,10 @@ class PostContainerHeader extends StatelessWidget {
                     horizontal: Insets.xsmall,
                   ),
                   decoration: BoxDecoration(
-                    color: post.linkFlairBackgroundColor,
+                    color: _getBackgroundColor(
+                      context,
+                      post.linkFlairBackgroundColor,
+                    ),
                     borderRadius: AppTheme.defaultBoardRadius,
                   ),
                   margin: const EdgeInsets.symmetric(horizontal: Insets.xsmall),
@@ -48,6 +53,8 @@ class PostContainerHeader extends StatelessWidget {
                         ?.copyWith(color: context.colorScheme.onSecondary),
                   ),
                 ),
+              if (!post.linkFlairText.getOrCrash().isNotNullOrBlank)
+                Gap.medium(),
               Expanded(
                 child: Text(
                   post.title.getOrCrash(),
@@ -62,4 +69,12 @@ class PostContainerHeader extends StatelessWidget {
           ),
         ],
       );
+
+  Color _getBackgroundColor(
+    BuildContext context,
+    Color linkFlairBackgroundColor,
+  ) =>
+      linkFlairBackgroundColor == AppColors.transparent
+          ? context.colorScheme.secondary.withOpacity(0.5)
+          : linkFlairBackgroundColor;
 }
