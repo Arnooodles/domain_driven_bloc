@@ -1,3 +1,4 @@
+import 'package:chopper/chopper.dart' as chopper;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
@@ -42,6 +43,9 @@ void main() {
             ],
           },
         };
+        provideDummy<chopper.Response<dynamic>>(
+          generateMockResponse<Map<String, dynamic>>(data, 200),
+        );
         when(postService.getPosts()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 200),
         );
@@ -64,6 +68,9 @@ void main() {
             ],
           },
         };
+        provideDummy<chopper.Response<dynamic>>(
+          generateMockResponse<Map<String, dynamic>>(data, 200),
+        );
         when(postService.getPosts()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 200),
         );
@@ -86,6 +93,9 @@ void main() {
             ],
           },
         };
+        provideDummy<chopper.Response<dynamic>>(
+          generateMockResponse<Map<String, dynamic>>(data, 500),
+        );
         when(postService.getPosts()).thenAnswer(
           (_) async => generateMockResponse<Map<String, dynamic>>(data, 500),
         );

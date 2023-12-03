@@ -6,10 +6,10 @@ class AuthState with _$AuthState {
   const factory AuthState.loading() = _Loading;
   const factory AuthState.authenticated({
     required User user,
-  }) = Authenticated;
-  const factory AuthState.unauthenticated() = Unauthenticated;
+  }) = _Authenticated;
+  const factory AuthState.unauthenticated() = _Unauthenticated;
 
-  const factory AuthState.failed(Failure failure) = AuthFailure;
+  const factory AuthState.failed(Failure failure) = _AuthFailure;
 
   const AuthState._();
 }

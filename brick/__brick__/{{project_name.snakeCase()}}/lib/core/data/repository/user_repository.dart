@@ -4,14 +4,14 @@ import 'package:chopper/chopper.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/model/user.dto.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/service/user_service.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_user_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/user.dart';
 
-// ignore_for_file: argument_type_not_assignable
 @LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {
   UserRepository(

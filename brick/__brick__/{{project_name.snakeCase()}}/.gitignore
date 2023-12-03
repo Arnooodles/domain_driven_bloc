@@ -54,7 +54,7 @@ flutter_*.png
 linked_*.ds
 unlinked.ds
 unlinked_spec.ds
-.fvm/
+devtools_options.yaml
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -104,6 +104,7 @@ coverage/
 !pubspec.lock
 packages/**/pubspec.lock
 
+
 # Web related
 lib/generated_plugin_registrant.dart
 
@@ -118,18 +119,15 @@ app.*.map.json
 *.gr.dart
 *.freezed.dart
 *.chopper.dart
-lib/generated/
 release.keystore
 *.lock
 *.mocks.dart
 *.gen.dart
 *.config.dart
+/lib/app/generated/*
 
 # Dart Test Results
 coverage
-
-# Dart Code Metrics
-metrics/
 
 # Do not commit local.properties
 local.properties

@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_life_cycle/app_life_cycle_bloc.dart';
 
-// ignore_for_file: no-empty-block
 void main() {
   late AppLifeCycleBloc appLifeCycleBloc;
 
@@ -33,7 +32,11 @@ void main() {
     build: () => appLifeCycleBloc,
     act: (AppLifeCycleBloc bloc) =>
         setAppLifeCycleState(AppLifecycleState.resumed),
-    expect: () => <dynamic>[const AppLifeCycleState.resumed()],
+    expect: () => <dynamic>[
+      const AppLifeCycleState.hidden(),
+      const AppLifeCycleState.inactive(),
+      const AppLifeCycleState.resumed(),
+    ],
   );
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
@@ -41,7 +44,7 @@ void main() {
     build: () => appLifeCycleBloc,
     act: (AppLifeCycleBloc bloc) =>
         setAppLifeCycleState(AppLifecycleState.detached),
-    expect: () => <dynamic>[const AppLifeCycleState.detached()],
+    expect: () => <dynamic>[],
   );
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(

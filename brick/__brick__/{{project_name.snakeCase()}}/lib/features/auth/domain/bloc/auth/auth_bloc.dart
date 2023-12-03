@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/cubit_ext.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_user_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/user.dart';
@@ -18,9 +18,7 @@ class AuthBloc extends Cubit<AuthState> {
   AuthBloc(
     this._userRepository,
     this._authRepository,
-  ) : super(const AuthState.initial()) {
-    initialize();
-  }
+  ) : super(const AuthState.initial());
 
   final IUserRepository _userRepository;
   final IAuthRepository _authRepository;

@@ -1,20 +1,16 @@
 import 'dart:async';
 
-import 'package:dartx/dartx.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/connectivity_utils.dart';
 
-// ignore_for_file: long-parameter-list
 class ConnectivityChecker extends StatefulWidget {
-  const ConnectivityChecker({
-    required this.child,
-    super.key,
-  });
+  const ConnectivityChecker({required this.child, super.key});
 
   final Widget child;
 
@@ -38,10 +34,10 @@ class ConnectivityChecker extends StatefulWidget {
 }
 
 class _ConnectivityCheckerState extends State<ConnectivityChecker> {
+  final ConnectivityUtils connectivityUtils = getIt<ConnectivityUtils>();
   StreamSubscription<ConnectionStatus>? _connectionSubscription;
   bool _isDialogShowing = false;
   FlashController<void>? _controller;
-  final ConnectivityUtils connectivityUtils = getIt<ConnectivityUtils>();
 
   Future<void> _showOfflineDialog(BuildContext context) async {
     await showFlash<void>(
@@ -50,16 +46,25 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
         _controller = controller;
         return FlashBar<void>(
           controller: controller,
-          elevation: 3,
+          position: FlashPosition.top,
+          behavior: FlashBehavior.floating,
+          margin: const EdgeInsets.symmetric(
+            vertical: Insets.xxxlarge,
+            horizontal: Insets.xxxlarge,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: AppTheme.defaultBoardRadius,
+          ),
+          clipBehavior: Clip.antiAlias,
           backgroundColor: context.colorScheme.background,
           surfaceTintColor: context.colorScheme.surfaceTint,
-          indicatorColor: context.colorScheme.error,
           icon: Icon(Icons.wifi_off, color: context.colorScheme.onSurface),
           content: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Insets.medium),
+            padding: const EdgeInsets.symmetric(horizontal: Insets.small),
             child: Text(
-              ConnectionStatus.offline.name.capitalize(),
-              style: TextStyle(color: context.colorScheme.onBackground),
+              context.l10n.common_error_no_internet_connection,
+              style: context.textTheme.bodyLarge
+                  ?.copyWith(color: context.colorScheme.onBackground),
             ),
           ),
         );
@@ -75,30 +80,29 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
           await _showOfflineDialog(context);
           _isDialogShowing = false;
         }
-        break;
       case ConnectionStatus.online:
         if (_isDialogShowing) {
           await _controller?.dismiss();
           _isDialogShowing = false;
         }
-        break;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _onStatusChanged(await connectivityUtils.checkInternet());
-
       _connectionSubscription ??= connectivityUtils
           .internetStatus()
           .listen((ConnectionStatus event) async {
         await _onStatusChanged(event);
       });
     });
-
-    return widget.child;
   }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 
   @override
   void dispose() {

@@ -33,6 +33,9 @@ void main() {
     test(
       'should return a unit when login is successful',
       () async {
+        provideDummy(
+          generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
+        );
         when(authService.login(any)).thenAnswer(
           (_) async =>
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
@@ -56,6 +59,9 @@ void main() {
     test(
       'should return a failure when login encounters a server error',
       () async {
+        provideDummy(
+          generateMockResponse<LoginResponseDTO>(loginResponseDTO, 500),
+        );
         when(authService.login(any)).thenAnswer(
           (_) async =>
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 500),
@@ -98,6 +104,9 @@ void main() {
     test(
       'should return a failure when an error occurs when saving the access token',
       () async {
+        provideDummy(
+          generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
+        );
         when(authService.login(any)).thenAnswer(
           (_) async =>
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
@@ -120,6 +129,9 @@ void main() {
     test(
       'should return a failure when an error occurs when saving the refresh token',
       () async {
+        provideDummy(
+          generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
+        );
         when(authService.login(any)).thenAnswer(
           (_) async =>
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
@@ -142,6 +154,9 @@ void main() {
     test(
       'should return a failure when an error occurs when saving the last logged in email',
       () async {
+        provideDummy(
+          generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
+        );
         when(authService.login(any)).thenAnswer(
           (_) async =>
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),

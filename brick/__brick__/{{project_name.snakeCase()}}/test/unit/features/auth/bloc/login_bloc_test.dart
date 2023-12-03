@@ -43,7 +43,9 @@ void main() {
         return LoginBloc(authRepository, localStorageRepository);
       },
       act: (LoginBloc bloc) => bloc.initialize(),
-      expect: () => <dynamic>[const LoginState.initial(isLoading: false)],
+      expect: () => <dynamic>[
+        LoginState.initial().copyWith(isLoading: false),
+      ],
     );
 
     blocTest<LoginBloc, LoginState>(
@@ -55,8 +57,12 @@ void main() {
         return LoginBloc(authRepository, localStorageRepository);
       },
       act: (LoginBloc bloc) => bloc.initialize(),
-      expect: () =>
-          <dynamic>[LoginState.initial(isLoading: false, emailAddress: email)],
+      expect: () => <dynamic>[
+        LoginState.initial().copyWith(
+          isLoading: false,
+          emailAddress: email,
+        ),
+      ],
     );
   });
 
@@ -71,7 +77,10 @@ void main() {
       build: () => loginBloc,
       act: (LoginBloc bloc) async => bloc.onEmailAddressChanged('test_$email'),
       expect: () => <dynamic>[
-        LoginState.initial(isLoading: false, emailAddress: 'test_$email'),
+        LoginState.initial().copyWith(
+          isLoading: false,
+          emailAddress: 'test_$email',
+        ),
       ],
     );
   });
@@ -89,6 +98,9 @@ void main() {
     blocTest<LoginBloc, LoginState>(
       'should emit an the a success state',
       build: () {
+        provideDummy(
+          Either<Failure, Unit>.right(unit),
+        );
         when(authRepository.login(any, any))
             .thenAnswer((_) async => Either<Failure, Unit>.right(unit));
 
@@ -96,13 +108,20 @@ void main() {
       },
       act: (LoginBloc bloc) => bloc.login(email, password),
       expect: () => <dynamic>[
-        const LoginState.initial(isLoading: true),
-        const LoginState.success()
+        LoginState.initial().copyWith(emailAddress: email),
+        LoginState(
+          isLoading: false,
+          emailAddress: email,
+          loginStatus: const LoginStatus.success(),
+        ),
       ],
     );
     blocTest<LoginBloc, LoginState>(
       'should emit a failed state',
       build: () {
+        provideDummy(
+          Either<Failure, Unit>.left(failure),
+        );
         when(authRepository.login(any, any))
             .thenAnswer((_) async => Either<Failure, Unit>.left(failure));
 
@@ -110,57 +129,84 @@ void main() {
       },
       act: (LoginBloc bloc) => bloc.login(email, password),
       expect: () => <dynamic>[
-        const LoginState.initial(isLoading: true),
-        LoginState.failed(failure),
-        LoginState.initial(isLoading: false, emailAddress: email),
+        LoginState.initial().copyWith(emailAddress: email),
+        LoginState(
+          isLoading: false,
+          emailAddress: email,
+          loginStatus: LoginStatus.failed(failure),
+        ),
       ],
     );
     blocTest<LoginBloc, LoginState>(
       'should emit a unexpected error state',
       build: () {
+        provideDummy(
+          Either<Failure, Unit>.left(
+            Failure.unexpected(throwsException.toString()),
+          ),
+        );
         when(authRepository.login(any, any)).thenThrow(throwsException);
 
         return loginBloc;
       },
       act: (LoginBloc bloc) => bloc.login(email, password),
       expect: () => <dynamic>[
-        const LoginState.initial(isLoading: true),
-        LoginState.failed(
-          Failure.unexpected(throwsException.toString()),
+        LoginState.initial().copyWith(emailAddress: email),
+        LoginState(
+          isLoading: false,
+          emailAddress: email,
+          loginStatus: LoginStatus.failed(
+            Failure.unexpected(throwsException.toString()),
+          ),
         ),
-        LoginState.initial(isLoading: false, emailAddress: email),
       ],
     );
     blocTest<LoginBloc, LoginState>(
       'should emit an invalid email error state',
       build: () {
+        provideDummy(
+          Either<Failure, Unit>.left(
+            const Failure.invalidEmailFormat(),
+          ),
+        );
         when(authRepository.login(any, any)).thenThrow(throwsException);
 
         return loginBloc;
       },
       act: (LoginBloc bloc) => bloc.login('email', password),
       expect: () => <dynamic>[
-        const LoginState.initial(isLoading: true),
-        const LoginState.failed(
-          Failure.invalidEmailFormat(),
+        LoginState.initial().copyWith(emailAddress: 'email'),
+        const LoginState(
+          isLoading: false,
+          emailAddress: 'email',
+          loginStatus: LoginStatus.failed(
+            Failure.invalidEmailFormat(),
+          ),
         ),
-        const LoginState.initial(isLoading: false, emailAddress: 'email'),
       ],
     );
     blocTest<LoginBloc, LoginState>(
       'should emit an invalid password error state',
       build: () {
+        provideDummy(
+          Either<Failure, Unit>.left(
+            const Failure.exceedingCharacterLength(min: 6),
+          ),
+        );
         when(authRepository.login(any, any)).thenThrow(throwsException);
 
         return loginBloc;
       },
       act: (LoginBloc bloc) => bloc.login(email, 'pass'),
       expect: () => <dynamic>[
-        const LoginState.initial(isLoading: true),
-        const LoginState.failed(
-          Failure.exceedingCharacterLength(min: 6),
+        LoginState.initial().copyWith(emailAddress: email),
+        LoginState(
+          isLoading: false,
+          emailAddress: email,
+          loginStatus: const LoginStatus.failed(
+            Failure.exceedingCharacterLength(min: 6),
+          ),
         ),
-        LoginState.initial(isLoading: false, emailAddress: email),
       ],
     );
   });

@@ -4,7 +4,7 @@ import 'package:dartx/dartx.dart';
 import 'package:faker/faker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/converters.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/converters/string_to_datetime.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/user.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
 

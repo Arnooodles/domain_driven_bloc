@@ -1,12 +1,9 @@
 // ignore_for_file: prefer-match-file-name
 enum Env {
-  development('dev'),
-  staging('stg'),
-  production('prod'),
-  test('test');
-
-  const Env(this.value);
-  final String value;
+  development,
+  staging,
+  production,
+  test;
 }
 
 enum AppScrollController {
