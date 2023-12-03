@@ -71,8 +71,8 @@ jobs:
 
       - name: 📃 Generate LCOV Report
         run:  |
-          lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
-          genhtml coverage/lcov.info -o coverage/     
+          lcov --ignore-errors unused --remove  ./src/my_app/coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o ./src/my_app/coverage/lcov.info
+          genhtml ./src/my_app/coverage/lcov.info -o ./src/my_app/coverage/     
 
       - name: 📉 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2
