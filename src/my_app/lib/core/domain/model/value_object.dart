@@ -130,9 +130,9 @@ class ContactNumber extends ValueObject<String> {
           () => validateCharacterLength(
             input,
             3,
-            20,
+            50,
           ),
-        ), // should be between 3 and 20
+        ), // should be between 3 and 50
       );
   const ContactNumber._(this.value);
   @override

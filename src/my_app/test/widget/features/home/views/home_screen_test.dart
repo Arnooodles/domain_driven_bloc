@@ -61,8 +61,6 @@ void main() {
     when(appCoreBloc.state).thenReturn(
       AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
     );
-    when(appCoreBloc.getScrollController(any))
-        .thenAnswer((_) => ScrollController());
   });
 
   MockGoRouter setUpRouter(String path, int index) {

@@ -1,14 +1,13 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/helpers/extensions/go_router_ext.dart';
-import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/presentation/widgets/hidable.dart';
 
-class VeryGoodCoreNavBar extends StatelessWidget {
+class VeryGoodCoreNavBar extends HookWidget {
   const VeryGoodCoreNavBar({
     required this.navigationShell,
     super.key,
@@ -20,11 +19,6 @@ class VeryGoodCoreNavBar extends StatelessWidget {
   Widget build(BuildContext context) => ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 800),
         child: Hidable(
-          controller: context
-              .read<AppCoreBloc>()
-              .getScrollController(context.goRouter.location),
-          preferredWidgetSize:
-              const Size.fromHeight(AppTheme.defaultNavBarHeight),
           child: NavigationBar(
             selectedIndex: navigationShell.currentIndex,
             destinations: <Widget>[
@@ -39,15 +33,20 @@ class VeryGoodCoreNavBar extends StatelessWidget {
                 label: context.l10n.common_profile.capitalize(),
               ),
             ],
-            onDestinationSelected: _onItemTapped,
+            onDestinationSelected: (int index) => _onItemTapped(context, index),
           ),
         ),
       );
 
-  void _onItemTapped(int index) {
-    navigationShell.goBranch(
-      index,
-      initialLocation: index == navigationShell.currentIndex,
-    );
+  void _onItemTapped(
+    BuildContext context,
+    int index,
+  ) {
+    if (index != navigationShell.currentIndex) {
+      navigationShell.goBranch(
+        index,
+        initialLocation: index == navigationShell.currentIndex,
+      );
+    }
   }
 }

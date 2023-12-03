@@ -148,11 +148,10 @@ Out of the box, Domain-Driven Bloc includes:
 ### Features ⭐
 
 - ✴️ Domain-Driven-Bloc - A clean architecture based on domain driven design
-- ✴️ Authentication - A mock authentication implementation using [Reqres][reqres_link] API.
+- ✴️ Authentication - A mock authentication implementation using [Reqres][reqres_link] API (e.g. Email: janet.weaver@reqres.in, Password: **password** ).
 - ✴️ Home - Displays the post found in the sub-reddit [FlutterDev][flutter_dev_link].
 - ✴️ Profile - Displays the basic information of the mocked user.
 - ✴️ Dark Mode - Switch between Light and Dark themes
-- ✴️ Security - JailBroken and real device detection on iOS/Android. 
 - ✴️ Unit Testing - Performs a unit test to verify the correctness of a unit of logic under the Bloc and repository layers
 - ✴️ Widget(Goldens) Testing - Performs a widget tests that uses a special matcher that compares your widget with an image file and expects that it looks the same
 

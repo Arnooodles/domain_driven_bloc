@@ -11,8 +11,7 @@ part 'app_life_cycle_bloc.freezed.dart';
 part 'app_life_cycle_state.dart';
 
 @lazySingleton
-class AppLifeCycleBloc extends Cubit<AppLifeCycleState>
-    with WidgetsBindingObserver {
+class AppLifeCycleBloc extends Cubit<AppLifeCycleState> with WidgetsBindingObserver {
   AppLifeCycleBloc() : super(const AppLifeCycleState.resumed()) {
     WidgetsBinding.instance.addObserver(this);
   }
@@ -36,7 +35,7 @@ class AppLifeCycleBloc extends Cubit<AppLifeCycleState>
       case AppLifecycleState.detached:
         safeEmit(const AppLifeCycleState.detached());
       case AppLifecycleState.hidden:
-        safeEmit(const AppLifeCycleState.detached());
+        safeEmit(const AppLifeCycleState.hidden());
     }
     if (kDebugMode) {
       log('AppLifeCycleState: $state');

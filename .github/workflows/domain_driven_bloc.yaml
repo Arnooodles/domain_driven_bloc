@@ -30,13 +30,15 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
+      - name: Get Flutter SDK version from fvm_config.json
+        uses: kuhnroyal/flutter-fvm-config-action@v1
+        with:
+          path: src/my_app/.fvm/fvm_config.json  
+
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.13.4"
-          channel: stable
-          cache: true
-          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
+          flutter-version: ${{ env.FLUTTER_VERSION }}
 
       - name: 📦 Install Dependencies
         run: |
@@ -45,8 +47,8 @@ jobs:
           very_good packages get --recursive
       - name: ⚙️ Run Setup
         run: |
-          flutter pub run intl_utils:generate
-          flutter pub run build_runner build --delete-conflicting-outputs
+          dart run intl_utils:generate
+          dart run build_runner build --delete-conflicting-outputs
 
       - name: ✨ Check Formatting
         run: dart format --set-exit-if-changed lib test

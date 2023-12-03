@@ -38,8 +38,6 @@ void main() {
       (_) =>
           AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
     );
-    when(appCoreBloc.getScrollController(any))
-        .thenAnswer((_) => ScrollController());
   });
 
   AuthBloc setUpAuthBloc(Stream<AuthState> stream, AuthState state) {

@@ -8,6 +8,7 @@
   "common_error_server_error": "Error {code}: {error}",
   "common_error_unexpected_error": "Unexpected Error",
   "common_error_unsupported_device": "This device is not supported by the app",
+  "common_error_no_internet_connection": "No Internet Connection",
   "common_generic_error": "Oops! Something went wrong",
   "common_home": "home",
   "common_no": "no",

@@ -38,6 +38,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Exceeds the number of allowable characters"),
         "common_error_min_characters": MessageLookupByLibrary.simpleMessage(
             "Does not meet the required character length"),
+        "common_error_no_internet_connection":
+            MessageLookupByLibrary.simpleMessage("No Internet Connection"),
         "common_error_server_error": m1,
         "common_error_unexpected_error":
             MessageLookupByLibrary.simpleMessage("Unexpected Error"),

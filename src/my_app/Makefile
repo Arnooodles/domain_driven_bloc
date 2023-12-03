@@ -5,12 +5,12 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Note: In windows, recommended terminal is cmd 
 
-ensure_flutter_version: ## Ensures flutter version is 3.16.0 
-	fvm install 3.16.0
-	fvm use 3.16.0
-	fvm global 3.16.0
+ensure_flutter_version: ## Ensures flutter version is 3.16.2 
+	fvm install 3.16.2
+	fvm use 3.16.2
+	fvm global 3.16.2
 
-## Note: If you are using a specific flutter version, change '3.16.0' to the desired '{flutter version}' you want to use
+## Note: If you are using a specific flutter version, change '3.16.2' to the desired '{flutter version}' you want to use
 
 clean: ## Delete the build/ and .dart_tool/ directories
 	fvm flutter clean
@@ -60,7 +60,7 @@ lcov_gen_widget: ## Generates lcov for widget tests only
 	fvm flutter test test/widget --coverage 
 
 lcov_report_mac: ## Generates lcov report for macOS
-	lcov --remove coverage/lcov.info '/lib/app/*' '/lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
+	lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
 	genhtml coverage/lcov.info -o coverage/
 	open coverage/index.html		
 

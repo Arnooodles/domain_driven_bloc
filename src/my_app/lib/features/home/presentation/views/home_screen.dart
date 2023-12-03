@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/constants/constant.dart';
+import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/helpers/extensions/go_router_ext.dart';
 import 'package:very_good_core/app/helpers/injection.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
@@ -96,16 +96,25 @@ class _HomeContent extends HookWidget {
                 _onStateChangeListener(context, state, isDialogShowing),
             builder: (BuildContext context, PostState state) => state.maybeWhen(
               success: (List<Post> posts) => posts.isNotEmpty
-                  ? ListView.separated(
-                      padding: const EdgeInsets.only(top: Insets.medium),
-                      controller: context
-                          .read<AppCoreBloc>()
-                          .getScrollController(context.goRouter.location),
-                      itemBuilder: (BuildContext context, int index) =>
-                          PostContainer(post: posts[index]),
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Gap(Insets.small),
-                      itemCount: posts.length,
+                  ? BlocSelector<AppCoreBloc, AppCoreState,
+                      Map<AppScrollController, ScrollController>>(
+                      selector: (AppCoreState state) => state.scrollControllers,
+                      builder: (
+                        BuildContext context,
+                        Map<AppScrollController, ScrollController>
+                            scrollController,
+                      ) =>
+                          ListView.separated(
+                        padding: const EdgeInsets.only(top: Insets.medium),
+                        controller: scrollController.isNotEmpty
+                            ? scrollController[AppScrollController.home]
+                            : ScrollController(),
+                        itemBuilder: (BuildContext context, int index) =>
+                            PostContainer(post: posts[index]),
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Gap(Insets.small),
+                        itemCount: posts.length,
+                      ),
                     )
                   : const EmptyPost(),
               orElse: PostContainerLoading.new,

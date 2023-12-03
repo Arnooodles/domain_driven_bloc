@@ -1,12 +1,14 @@
 # 1.0.0
 
-- feat: upgrade to flutter 3.16.0
+- feat: upgrade to flutter 3.16.2
 - feat: implement go_router's StatefulShellRoute
 - feat: implement safe_device
 - feat: implement SSL Certificate Pinning
 - refactor: migrate responsive_framework to 1.1.1
 - refactor: implement gap instead of using sizebox
-- fix: tests due to breaking changes
+- refactor: remove Hidable and use AnimatedAlign instead 
+- refactor: update workflow to use fvm's flutter version
+- fix: resolve test issues due to breaking changes
 - fix: change launchMode on Android to singleTask
 - test: tested pre_gen hook
 - chore: rename screens->views

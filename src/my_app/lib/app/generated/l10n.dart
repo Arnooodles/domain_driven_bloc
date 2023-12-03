@@ -130,6 +130,16 @@ class AppLocalizations {
     );
   }
 
+  /// `No Internet Connection`
+  String get common_error_no_internet_connection {
+    return Intl.message(
+      'No Internet Connection',
+      name: 'common_error_no_internet_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Oops! Something went wrong`
   String get common_generic_error {
     return Intl.message(

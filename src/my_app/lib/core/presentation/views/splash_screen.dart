@@ -4,23 +4,17 @@ import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:safe_device/safe_device.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/core/presentation/widgets/app_title.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends HookWidget {
   const SplashScreen({super.key});
 
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
+  void _initialize(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (await _isDeviceSafe()) {
         if (!context.mounted) return;
@@ -72,23 +66,33 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: context.colorScheme.background,
-        body: const SafeArea(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Flexible(
-                  child: Center(
-                    child: AppTitle(),
-                  ),
+  Widget build(BuildContext context) {
+    useEffect(
+      () {
+        _initialize(context);
+        return null;
+      },
+      <Object?>[],
+    );
+
+    return Scaffold(
+      backgroundColor: context.colorScheme.background,
+      body: const SafeArea(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                child: Center(
+                  child: AppTitle(),
                 ),
-                Flexible(
-                  child: CircularProgressIndicator(),
-                ),
-              ],
-            ),
+              ),
+              Flexible(
+                child: CircularProgressIndicator(),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }

@@ -10,6 +10,7 @@ import 'package:very_good_core/app/routes/app_router.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/domain/bloc/app_life_cycle/app_life_cycle_bloc.dart';
+import 'package:very_good_core/core/domain/bloc/hidable/hidable_bloc.dart';
 import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
@@ -19,14 +20,17 @@ class App extends StatelessWidget {
   final AppRouter _appRouter = getIt<AppRouter>(param1: getIt<AuthBloc>());
 
   final List<BlocProvider<dynamic>> _providers = <BlocProvider<dynamic>>[
-    BlocProvider<AppCoreBloc>(
-      create: (BuildContext context) => getIt<AppCoreBloc>(),
-    ),
     BlocProvider<AuthBloc>(
       create: (BuildContext context) => getIt<AuthBloc>(),
     ),
     BlocProvider<ThemeBloc>(
       create: (BuildContext context) => getIt<ThemeBloc>(),
+    ),
+    BlocProvider<HidableBloc>(
+      create: (BuildContext context) => getIt<HidableBloc>(),
+    ),
+    BlocProvider<AppCoreBloc>(
+      create: (BuildContext context) => getIt<AppCoreBloc>(),
     ),
     BlocProvider<AppLifeCycleBloc>(
       create: (BuildContext context) => getIt<AppLifeCycleBloc>(),

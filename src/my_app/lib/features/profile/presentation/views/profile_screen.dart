@@ -13,6 +13,7 @@ import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
 import 'package:very_good_core/app/utils/error_message_utils.dart';
+import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
 import 'package:very_good_core/core/domain/model/failure.dart';
 import 'package:very_good_core/core/domain/model/user.dart';
@@ -71,54 +72,65 @@ class ProfileScreen extends HookWidget {
           ),
           child: RefreshIndicator(
             onRefresh: () => context.read<AuthBloc>().getUser(),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: SizedBox(
-                height: context.screenHeight -
-                    AppTheme.defaultNavBarHeight -
-                    AppTheme.defaultAppBarHeight -
-                    Insets.large,
-                child: BlocConsumer<AuthBloc, AuthState>(
-                  listener: (BuildContext context, AuthState state) =>
-                      _onStateChangedListener(
-                    context,
-                    state,
-                    isDialogShowing,
-                  ),
-                  buildWhen: _buildWhen,
-                  builder: (BuildContext context, AuthState authState) =>
-                      authState.maybeWhen(
-                    orElse: () => const ProfileLoading(),
-                    authenticated: (User user) => Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: Insets.xlarge),
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                _ProfileName(user: user),
-                                _ProfileDetails(user: user),
-                              ],
-                            ),
+            child: BlocSelector<AppCoreBloc, AppCoreState,
+                Map<AppScrollController, ScrollController>>(
+              selector: (AppCoreState state) => state.scrollControllers,
+              builder: (
+                BuildContext context,
+                Map<AppScrollController, ScrollController> scrollControllers,
+              ) =>
+                  CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: scrollControllers.isNotEmpty
+                    ? scrollControllers[AppScrollController.profile]
+                    : ScrollController(),
+                slivers: <Widget>[
+                  SliverFillRemaining(
+                    child: BlocConsumer<AuthBloc, AuthState>(
+                      listener: (BuildContext context, AuthState state) =>
+                          _onStateChangedListener(
+                        context,
+                        state,
+                        isDialogShowing,
+                      ),
+                      buildWhen: _buildWhen,
+                      builder: (BuildContext context, AuthState authState) =>
+                          authState.maybeWhen(
+                        orElse: () => const ProfileLoading(),
+                        authenticated: (User user) => Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Insets.xlarge,
                           ),
-                          VeryGoodCoreButton(
-                            text: context.l10n.profile__button_text__logout,
-                            isExpanded: true,
-                            buttonType: ButtonType.filled,
-                            onPressed: () => context.read<AuthBloc>().logout(),
-                            padding: EdgeInsets.zero,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: Insets.small,
-                            ),
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    _ProfileName(user: user),
+                                    _ProfileDetails(user: user),
+                                  ],
+                                ),
+                              ),
+                              VeryGoodCoreButton(
+                                text: context.l10n.profile__button_text__logout,
+                                isExpanded: true,
+                                buttonType: ButtonType.filled,
+                                onPressed: () =>
+                                    context.read<AuthBloc>().logout(),
+                                padding: EdgeInsets.zero,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: Insets.small,
+                                ),
+                              ),
+                              const Gap(Insets.large),
+                            ],
                           ),
-                          const Gap(Insets.large),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
