@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_button.dart';
 
 // ignore_for_file: prefer-match-file-name

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/cubit_ext.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/interface/i_post_repository.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
@@ -16,9 +16,7 @@ part 'post_state.dart';
 class PostBloc extends Cubit<PostState> {
   PostBloc(
     this._postRepository,
-  ) : super(const PostState.initial()) {
-    initialize();
-  }
+  ) : super(const PostState.initial());
 
   final IPostRepository _postRepository;
 

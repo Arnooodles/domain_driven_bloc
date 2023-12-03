@@ -1,81 +1,52 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/hidable.dart';
 
-class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends StatelessWidget {
+class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends HookWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar({
-    required this.scrollControllers,
+    required this.navigationShell,
     super.key,
   });
 
-  final Map<AppScrollController, ScrollController> scrollControllers;
+  final StatefulNavigationShell navigationShell;
 
   @override
-  Widget build(BuildContext context) {
-    final (int index, ScrollController controller) = _getSelectedPage(context);
-
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 800),
-      child: Hidable(
-        controller: controller,
-        preferredWidgetSize:
-            const Size.fromHeight(AppTheme.defaultNavBarHeight),
-        child: NavigationBar(
-          selectedIndex: index,
-          destinations: <Widget>[
-            NavigationDestination(
-              icon: const Icon(Icons.home_outlined),
-              selectedIcon: const Icon(Icons.home),
-              label: context.l10n.common_home.capitalize(),
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.account_circle_outlined),
-              selectedIcon: const Icon(Icons.account_circle),
-              label: context.l10n.common_profile.capitalize(),
-            ),
-          ],
-          onDestinationSelected: (int index) => _onItemTapped(index, context),
+  Widget build(BuildContext context) => ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 800),
+        child: Hidable(
+          child: NavigationBar(
+            selectedIndex: navigationShell.currentIndex,
+            destinations: <Widget>[
+              NavigationDestination(
+                icon: const Icon(Icons.home_outlined),
+                selectedIcon: const Icon(Icons.home),
+                label: context.l10n.common_home.capitalize(),
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.account_circle_outlined),
+                selectedIcon: const Icon(Icons.account_circle),
+                label: context.l10n.common_profile.capitalize(),
+              ),
+            ],
+            onDestinationSelected: (int index) => _onItemTapped(context, index),
+          ),
         ),
-      ),
-    );
-  }
-
-  (int, ScrollController) _getSelectedPage(BuildContext context) {
-    final String location = GoRouter.of(context).location;
-    if (location.startsWith(RouteName.home.path)) {
-      return (
-        0,
-        scrollControllers[AppScrollController.home]!,
       );
-    }
-    if (location.startsWith(RouteName.profile.path)) {
-      return (
-        1,
-        scrollControllers[AppScrollController.profile]!,
+
+  void _onItemTapped(
+    BuildContext context,
+    int index,
+  ) {
+    if (index != navigationShell.currentIndex) {
+      navigationShell.goBranch(
+        index,
+        initialLocation: index == navigationShell.currentIndex,
       );
-    }
-
-    return (
-      0,
-      scrollControllers[AppScrollController.home]!,
-    );
-  }
-
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        GoRouter.of(context).goNamed(RouteName.home.name);
-        break;
-      case 1:
-        GoRouter.of(context).goNamed(RouteName.profile.name);
-        break;
-      default:
-        GoRouter.of(context).goNamed(RouteName.home.name);
     }
   }
 }

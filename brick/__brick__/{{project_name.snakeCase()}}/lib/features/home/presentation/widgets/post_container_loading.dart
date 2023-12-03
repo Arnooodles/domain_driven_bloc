@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/shimmer.dart';
 
 class PostContainerLoading extends StatelessWidget {
@@ -10,12 +10,13 @@ class PostContainerLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView.separated(
+        padding: const EdgeInsets.only(top: Insets.medium),
         itemBuilder: (BuildContext context, int index) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: Insets.small),
           child: _PostContainerLoadingItem(delay: index * 300),
         ),
         separatorBuilder: (BuildContext context, int index) =>
-            const VSpace(Insets.small),
+            const Gap(Insets.small),
         itemCount: 5,
       );
 }

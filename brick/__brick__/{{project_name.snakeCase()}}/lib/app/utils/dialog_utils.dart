@@ -7,9 +7,9 @@ import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/spacing.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_dialogs.dart';
 
 // ignore_for_file: long-method,long-parameter-list
@@ -74,7 +74,6 @@ final class DialogUtils {
             FlashBar<void>(
           controller: controller,
           backgroundColor: context.colorScheme.background,
-          surfaceTintColor: context.colorScheme.surfaceTint,
           shouldIconPulse: false,
           position: position ?? FlashPosition.bottom,
           behavior: FlashBehavior.floating,

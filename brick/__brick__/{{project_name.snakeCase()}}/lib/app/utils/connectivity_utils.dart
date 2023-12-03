@@ -9,7 +9,8 @@ import 'package:injectable/injectable.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
 
 @lazySingleton
 final class ConnectivityUtils {

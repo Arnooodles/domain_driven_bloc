@@ -45,24 +45,32 @@ void main() {
     blocTest<PostBloc, PostState>(
       'should emit a success state with list of posts',
       build: () {
+        provideDummy(
+          Either<Failure, List<Post>>.right(posts),
+        );
         when(postRepository.getPosts())
             .thenAnswer((_) async => Either<Failure, List<Post>>.right(posts));
 
         return PostBloc(postRepository);
       },
       act: (PostBloc bloc) => bloc.getPosts(),
-      expect: () => <PostState>[PostState.success(posts)],
+      expect: () =>
+          <PostState>[const PostState.loading(), PostState.success(posts)],
     );
     blocTest<PostBloc, PostState>(
       'should emit a failed state with posts from local storage ',
       build: () {
+        provideDummy(
+          Either<Failure, List<Post>>.left(failure),
+        );
         when(postRepository.getPosts())
             .thenAnswer((_) async => Either<Failure, List<Post>>.left(failure));
 
         return PostBloc(postRepository);
       },
       act: (PostBloc bloc) => bloc.getPosts(),
-      expect: () => <PostState>[PostState.failed(failure)],
+      expect: () =>
+          <PostState>[const PostState.loading(), PostState.failed(failure)],
     );
 
     blocTest<PostBloc, PostState>(
