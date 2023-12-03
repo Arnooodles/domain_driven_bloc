@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:nested/nested.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
@@ -76,7 +75,7 @@ void main() {
   }
 
   Widget buildNavBar(MockGoRouter router) => MultiBlocProvider(
-        providers: <SingleChildWidget>[
+        providers: <BlocProvider<dynamic>>[
           BlocProvider<AppCoreBloc>(
             create: (BuildContext context) => appCoreBloc,
           ),

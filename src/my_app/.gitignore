@@ -119,13 +119,13 @@ app.*.map.json
 *.gr.dart
 *.freezed.dart
 *.chopper.dart
-lib/generated/*
 release.keystore
 *.lock
 *.mocks.dart
 *.gen.dart
 *.config.dart
-
+lib/generated/intl/*
+lib/generated/*
 
 # Dart Test Results
 coverage
