@@ -82,14 +82,6 @@ flutter_intl:
   arb_dir: assets/l10n/
   output_dir: lib/app/generated/
 
-icons_launcher:
-  image_path: "assets/icons/launcher_icon.png"
-  platforms:
-    android:
-      enable: true
-    ios:
-      enable: true  
-
 flutter:
   generate: true
   uses-material-design: true
