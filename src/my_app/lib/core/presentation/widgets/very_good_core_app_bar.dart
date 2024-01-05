@@ -3,8 +3,10 @@ import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_text_style.dart';
+import 'package:very_good_core/app/themes/app_theme.dart';
 
-class VeryGoodCoreAppBar extends StatelessWidget {
+class VeryGoodCoreAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   const VeryGoodCoreAppBar({
     super.key,
     this.title,
@@ -17,9 +19,11 @@ class VeryGoodCoreAppBar extends StatelessWidget {
     this.scrolledUnderElevation = 2,
     this.showTitle = true,
     this.bottom,
+    this.size,
   });
 
   final String? title;
+  final Size? size;
   final List<Widget>? actions;
   final bool centerTitle;
   final Color? backgroundColor;
@@ -29,6 +33,10 @@ class VeryGoodCoreAppBar extends StatelessWidget {
   final bool automaticallyImplyLeading;
   final double scrolledUnderElevation;
   final bool showTitle;
+
+  @override
+  Size get preferredSize =>
+      size ?? Size.fromHeight(AppTheme.defaultAppBarHeight);
 
   @override
   Widget build(BuildContext context) => AppBar(

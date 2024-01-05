@@ -10,7 +10,6 @@ import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/datetime_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
-import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
 import 'package:very_good_core/app/utils/error_message_utils.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
@@ -34,36 +33,32 @@ class ProfileScreen extends HookWidget {
 
     return Scaffold(
       backgroundColor: context.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(AppTheme.defaultAppBarHeight),
-        child: VeryGoodCoreAppBar(
-          titleColor: context.colorScheme.primary,
-          actions: <Widget>[
-            IconButton(
-              onPressed: () => context
-                  .read<ThemeBloc>()
-                  .switchTheme(Theme.of(context).brightness),
-              icon: Theme.of(context).brightness == Brightness.dark
-                  ? Icon(Icons.light_mode, color: iconColor)
-                  : Icon(Icons.dark_mode, color: iconColor),
-            ),
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (BuildContext context, AuthState state) =>
-                  state.maybeWhen(
-                orElse: SizedBox.shrink,
-                authenticated: (User user) => GestureDetector(
-                  onTap: () =>
-                      GoRouter.of(context).goNamed(RouteName.profile.name),
-                  child: VeryGoodCoreAvatar(
-                    size: 32,
-                    imageUrl: user.avatar?.getOrCrash(),
-                    padding: const EdgeInsets.all(Insets.small),
-                  ),
+      appBar: VeryGoodCoreAppBar(
+        titleColor: context.colorScheme.primary,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () => context
+                .read<ThemeBloc>()
+                .switchTheme(Theme.of(context).brightness),
+            icon: Theme.of(context).brightness == Brightness.dark
+                ? Icon(Icons.light_mode, color: iconColor)
+                : Icon(Icons.dark_mode, color: iconColor),
+          ),
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (BuildContext context, AuthState state) => state.maybeWhen(
+              orElse: SizedBox.shrink,
+              authenticated: (User user) => GestureDetector(
+                onTap: () =>
+                    GoRouter.of(context).goNamed(RouteName.profile.name),
+                child: VeryGoodCoreAvatar(
+                  size: 32,
+                  imageUrl: user.avatar?.getOrCrash(),
+                  padding: const EdgeInsets.all(Insets.small),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       body: Center(
         child: ConstrainedBox(

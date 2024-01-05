@@ -5,12 +5,12 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Note: In windows, recommended terminal is cmd 
 
-ensure_flutter_version: ## Ensures flutter version is 3.16.2 
-	fvm install 3.16.2
-	fvm use 3.16.2
-	fvm global 3.16.2
+ensure_flutter_version: ## Ensures flutter version is 3.16.5 
+	fvm install 3.16.5
+	fvm use 3.16.5
+	fvm global 3.16.5
 
-## Note: If you are using a specific flutter version, change '3.16.2' to the desired '{flutter version}' you want to use
+## Note: If you are using a specific flutter version, change '3.16.5' to the desired '{flutter version}' you want to use
 
 clean: ## Delete the build/ and .dart_tool/ directories
 	fvm flutter clean
@@ -39,13 +39,22 @@ build_runner_watch: ## This command generates the files for the code generated d
 format: ## This command formats the codebase and run import sorter
 	fvm dart format lib test
 
-clean_rebuild: ensure_flutter_version clean pub_clean pub_get l10n build_runner format
+clean_rebuild: ensure_flutter_version clean pub_clean pub_get l10n build_runner format lint fix_lint
 
-rebuild: ensure_flutter_version pub_get l10n build_runner format
+rebuild: ensure_flutter_version pub_get l10n build_runner format lint fix_lint
 
 lint: ## Analyzes the codebase for issues
 	fvm flutter analyze lib test
 	fvm dart analyze lib test
+
+fix_lint: ## Fixes lint issues
+	fvm dart fix --apply
+
+icons_launcher:
+	fvm dart run icons_launcher:create
+
+native_splash:
+	fvm dart run flutter_native_splash:create
 
 lcov_gen: ## Generates lcov
 	fvm flutter test --coverage
