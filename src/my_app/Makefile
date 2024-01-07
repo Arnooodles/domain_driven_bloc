@@ -50,11 +50,14 @@ lint: ## Analyzes the codebase for issues
 fix_lint: ## Fixes lint issues
 	fvm dart fix --apply
 
-icons_launcher:
+icons_launcher: ## This command runs icons_launcher
 	fvm dart run icons_launcher:create
 
-native_splash:
+native_splash: ## This command runs flutter_native_splash
 	fvm dart run flutter_native_splash:create
+
+dependency_validator: ## This command runs dependency_validator
+	fvm dart run dependency_validator		
 
 lcov_gen: ## Generates lcov
 	fvm flutter test --coverage
@@ -74,7 +77,7 @@ lcov_report_mac: ## Generates lcov report for macOS
 	open coverage/index.html		
 
 lcov_report_win:  ## Generates lcov report for Windows
-	perl ${LCOV} --remove coverage/lcov.info 'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
+	perl ${LCOV} lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
 	perl ${GENHTML} -o coverage/html coverage/lcov.info
 	CMD /C start coverage/html/index.html	
 
@@ -101,5 +104,3 @@ goldens_win: delete_goldens_win delete_failures_win update_goldens ## Deletes th
 
 goldens_mac: delete_goldens_mac delete_failures_mac update_goldens ## Deletes the existing goldens and failures and update the golden files for macOS
 
-dependency_validator: ## This command runs dependency_validator
-	dart run dependency_validator	

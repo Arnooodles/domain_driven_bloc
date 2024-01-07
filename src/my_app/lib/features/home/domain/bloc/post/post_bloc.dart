@@ -20,10 +20,6 @@ class PostBloc extends Cubit<PostState> {
 
   final IPostRepository _postRepository;
 
-  Future<void> initialize() async {
-    await getPosts();
-  }
-
   Future<void> getPosts() async {
     try {
       safeEmit(const PostState.loading());
