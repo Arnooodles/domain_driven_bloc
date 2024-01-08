@@ -7,4 +7,6 @@ icons_launcher:
       adaptive_background_color: '#ffffff'
       adaptive_foreground_image: "assets/icons/adaptive_launcher_icon.png"
     ios:
+      enable: true
+    web:
       enable: true  

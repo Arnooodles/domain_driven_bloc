@@ -5,6 +5,6 @@ flutter_native_splash:
   android_12:
     image: assets/icons/splash_icon.png
     color: "#ffffff"
-  web: false
+  web: true
 
 
