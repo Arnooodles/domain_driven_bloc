@@ -3,8 +3,10 @@ import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_text_style.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 
-class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidget {
+class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar({
     super.key,
     this.title,
@@ -17,9 +19,11 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
     this.scrolledUnderElevation = 2,
     this.showTitle = true,
     this.bottom,
+    this.size,
   });
 
   final String? title;
+  final Size? size;
   final List<Widget>? actions;
   final bool centerTitle;
   final Color? backgroundColor;
@@ -29,6 +33,10 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
   final bool automaticallyImplyLeading;
   final double scrolledUnderElevation;
   final bool showTitle;
+
+  @override
+  Size get preferredSize =>
+      size ?? Size.fromHeight(AppTheme.defaultAppBarHeight);
 
   @override
   Widget build(BuildContext context) => AppBar(

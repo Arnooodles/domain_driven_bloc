@@ -18,19 +18,20 @@ class PostDetailsBloc extends Cubit<PostDetailsState> {
 
   final Url loadUrl;
 
-  void initialize() {
-    final WebViewController initialController = state.controller
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(state.webviewUrl.getOrCrash()))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onNavigationRequest: (NavigationRequest request) =>
-              NavigationDecision.navigate,
-          onProgress: updateLoadingProgress,
+  void initialize() => safeEmit(
+        state.copyWith(
+          controller: state.controller
+            ..setJavaScriptMode(JavaScriptMode.unrestricted)
+            ..loadRequest(Uri.parse(state.webviewUrl.getOrCrash()))
+            ..setNavigationDelegate(
+              NavigationDelegate(
+                onNavigationRequest: (NavigationRequest request) =>
+                    NavigationDecision.navigate,
+                onProgress: updateLoadingProgress,
+              ),
+            ),
         ),
       );
-    safeEmit(state.copyWith(controller: initialController));
-  }
 
   void updateLoadingProgress(int progress) =>
       safeEmit(state.copyWith(loadingProgress: progress));

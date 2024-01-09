@@ -54,7 +54,7 @@ class PostContainerHeader extends StatelessWidget {
                   ),
                 ),
               if (!post.linkFlairText.getOrCrash().isNotNullOrBlank)
-                Gap.medium(),
+                Gap.xsmall(),
               Expanded(
                 child: Text(
                   post.title.getOrCrash(),

@@ -7,7 +7,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/hidable/hidable_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_nav_bar.dart';
@@ -86,11 +85,7 @@ void main() {
         child: MockLocalization(
           child: MockGoRouterProvider(
             router: router,
-            child: PreferredSize(
-              preferredSize:
-                  const Size.fromHeight(AppTheme.defaultNavBarHeight),
-              child: {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar(navigationShell: navigationShell),
-            ),
+            child: {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar(navigationShell: navigationShell),
           ),
         ),
       );

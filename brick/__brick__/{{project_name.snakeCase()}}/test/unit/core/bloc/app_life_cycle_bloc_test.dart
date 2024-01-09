@@ -20,6 +20,26 @@ void main() {
   }
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
+    'should emit a detached lifecycle state',
+    build: () => appLifeCycleBloc,
+    act: (AppLifeCycleBloc bloc) =>
+        setAppLifeCycleState(AppLifecycleState.detached),
+    expect: () => <dynamic>[const AppLifeCycleState.detached()],
+  );
+
+  blocTest<AppLifeCycleBloc, AppLifeCycleState>(
+    'should emit a hidden lifecycle state',
+    build: () => appLifeCycleBloc,
+    act: (AppLifeCycleBloc bloc) =>
+        setAppLifeCycleState(AppLifecycleState.hidden),
+    expect: () => <dynamic>[
+      const AppLifeCycleState.resumed(),
+      const AppLifeCycleState.inactive(),
+      const AppLifeCycleState.hidden(),
+    ],
+  );
+
+  blocTest<AppLifeCycleBloc, AppLifeCycleState>(
     'should emit a paused lifecycle state',
     build: () => appLifeCycleBloc,
     act: (AppLifeCycleBloc bloc) =>
@@ -37,21 +57,5 @@ void main() {
       const AppLifeCycleState.inactive(),
       const AppLifeCycleState.resumed(),
     ],
-  );
-
-  blocTest<AppLifeCycleBloc, AppLifeCycleState>(
-    'should emit a detached lifecycle state',
-    build: () => appLifeCycleBloc,
-    act: (AppLifeCycleBloc bloc) =>
-        setAppLifeCycleState(AppLifecycleState.detached),
-    expect: () => <dynamic>[],
-  );
-
-  blocTest<AppLifeCycleBloc, AppLifeCycleState>(
-    'should emit a inactive lifecycle state',
-    build: () => appLifeCycleBloc,
-    act: (AppLifeCycleBloc bloc) =>
-        setAppLifeCycleState(AppLifecycleState.inactive),
-    expect: () => <dynamic>[const AppLifeCycleState.inactive()],
   );
 }

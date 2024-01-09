@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/mock_data.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
@@ -23,7 +25,6 @@ import 'package:{{project_name.snakeCase()}}/features/home/domain/bloc/post/post
 import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/empty_post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container_loading.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({
@@ -36,36 +37,32 @@ class HomeScreen extends HookWidget {
 
     return Scaffold(
       backgroundColor: context.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(AppTheme.defaultAppBarHeight),
-        child: {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(
-          titleColor: context.colorScheme.primary,
-          actions: <Widget>[
-            IconButton(
-              onPressed: () => context
-                  .read<ThemeBloc>()
-                  .switchTheme(Theme.of(context).brightness),
-              icon: Theme.of(context).brightness == Brightness.dark
-                  ? Icon(Icons.light_mode, color: iconColor)
-                  : Icon(Icons.dark_mode, color: iconColor),
-            ),
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (BuildContext context, AuthState state) =>
-                  state.maybeWhen(
-                orElse: SizedBox.shrink,
-                authenticated: (User user) => GestureDetector(
-                  onTap: () =>
-                      GoRouter.of(context).goNamed(RouteName.profile.name),
-                  child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
-                    size: 32,
-                    imageUrl: user.avatar?.getOrCrash(),
-                    padding: const EdgeInsets.all(Insets.small),
-                  ),
+      appBar: {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(
+        titleColor: context.colorScheme.primary,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () => context
+                .read<ThemeBloc>()
+                .switchTheme(Theme.of(context).brightness),
+            icon: Theme.of(context).brightness == Brightness.dark
+                ? Icon(Icons.light_mode, color: iconColor)
+                : Icon(Icons.dark_mode, color: iconColor),
+          ),
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (BuildContext context, AuthState state) => state.maybeWhen(
+              orElse: SizedBox.shrink,
+              authenticated: (User user) => GestureDetector(
+                onTap: () =>
+                    GoRouter.of(context).goNamed(RouteName.profile.name),
+                child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
+                  size: 32,
+                  imageUrl: user.avatar?.getOrCrash(),
+                  padding: const EdgeInsets.all(Insets.small),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       body: Center(
         child: ConstrainedBox(
@@ -96,34 +93,27 @@ class _HomeContent extends HookWidget {
                 _onStateChangeListener(context, state, isDialogShowing),
             builder: (BuildContext context, PostState state) => state.maybeWhen(
               success: (List<Post> posts) => posts.isNotEmpty
-                  ? BlocSelector<AppCoreBloc, AppCoreState,
-                      Map<AppScrollController, ScrollController>>(
-                      selector: (AppCoreState state) => state.scrollControllers,
-                      builder: (
-                        BuildContext context,
-                        Map<AppScrollController, ScrollController>
-                            scrollController,
-                      ) =>
-                          ListView.separated(
-                        padding: const EdgeInsets.only(top: Insets.medium),
-                        controller: scrollController.isNotEmpty
-                            ? scrollController[AppScrollController.home]
-                            : ScrollController(),
-                        itemBuilder: (BuildContext context, int index) =>
-                            PostContainer(post: posts[index]),
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Gap(Insets.small),
-                        itemCount: posts.length,
-                      ),
-                    )
+                  ? _PostList(posts: posts)
                   : const EmptyPost(),
-              orElse: PostContainerLoading.new,
+              orElse: () => Skeletonizer(
+                textBoneBorderRadius:
+                    TextBoneBorderRadius(AppTheme.defaultBoardRadius),
+                justifyMultiLineText: true,
+                child: _PostList(
+                  posts: _generateFakePostData(),
+                ),
+              ),
             ),
           ),
         ),
       ),
     );
   }
+
+  List<Post> _generateFakePostData() => List<Post>.generate(
+        4,
+        (_) => MockData.post,
+      );
 
   Future<void> _onStateChangeListener(
     BuildContext context,
@@ -143,4 +133,33 @@ class _HomeContent extends HookWidget {
       },
     );
   }
+}
+
+class _PostList extends StatelessWidget {
+  const _PostList({
+    required this.posts,
+  });
+
+  final List<Post> posts;
+
+  @override
+  Widget build(BuildContext context) => BlocSelector<AppCoreBloc, AppCoreState,
+          Map<AppScrollController, ScrollController>>(
+        selector: (AppCoreState state) => state.scrollControllers,
+        builder: (
+          BuildContext context,
+          Map<AppScrollController, ScrollController> scrollController,
+        ) =>
+            ListView.separated(
+          padding: const EdgeInsets.only(top: Insets.medium),
+          controller: scrollController.isNotEmpty
+              ? scrollController[AppScrollController.home]
+              : ScrollController(),
+          itemBuilder: (BuildContext context, int index) =>
+              PostContainer(post: posts[index]),
+          separatorBuilder: (BuildContext context, int index) =>
+              const Gap(Insets.small),
+          itemCount: posts.length,
+        ),
+      );
 }

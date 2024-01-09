@@ -5,15 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/hidable.dart';
 
-class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends HookWidget {
+class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends HookWidget implements PreferredSizeWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar({
     required this.navigationShell,
+    this.size,
     super.key,
   });
 
   final StatefulNavigationShell navigationShell;
+  final Size? size;
+
+  @override
+  Size get preferredSize =>
+      size ?? const Size.fromHeight(AppTheme.defaultNavBarHeight);
 
   @override
   Widget build(BuildContext context) => ConstrainedBox(
