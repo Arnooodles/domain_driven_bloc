@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "LaunchImage@1x.png",
+      "filename" : "LaunchImage.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

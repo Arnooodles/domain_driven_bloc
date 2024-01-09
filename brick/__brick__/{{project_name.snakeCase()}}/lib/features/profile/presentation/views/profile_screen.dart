@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/mock_data.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/datetime_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/error_message_utils.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
@@ -22,7 +23,6 @@ import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_button.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_info_text_field.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/features/profile/presentation/widgets/profile_loading.dart';
 
 class ProfileScreen extends HookWidget {
   const ProfileScreen({super.key});
@@ -34,36 +34,32 @@ class ProfileScreen extends HookWidget {
 
     return Scaffold(
       backgroundColor: context.colorScheme.background,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(AppTheme.defaultAppBarHeight),
-        child: {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(
-          titleColor: context.colorScheme.primary,
-          actions: <Widget>[
-            IconButton(
-              onPressed: () => context
-                  .read<ThemeBloc>()
-                  .switchTheme(Theme.of(context).brightness),
-              icon: Theme.of(context).brightness == Brightness.dark
-                  ? Icon(Icons.light_mode, color: iconColor)
-                  : Icon(Icons.dark_mode, color: iconColor),
-            ),
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (BuildContext context, AuthState state) =>
-                  state.maybeWhen(
-                orElse: SizedBox.shrink,
-                authenticated: (User user) => GestureDetector(
-                  onTap: () =>
-                      GoRouter.of(context).goNamed(RouteName.profile.name),
-                  child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
-                    size: 32,
-                    imageUrl: user.avatar?.getOrCrash(),
-                    padding: const EdgeInsets.all(Insets.small),
-                  ),
+      appBar: {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(
+        titleColor: context.colorScheme.primary,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () => context
+                .read<ThemeBloc>()
+                .switchTheme(Theme.of(context).brightness),
+            icon: Theme.of(context).brightness == Brightness.dark
+                ? Icon(Icons.light_mode, color: iconColor)
+                : Icon(Icons.dark_mode, color: iconColor),
+          ),
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (BuildContext context, AuthState state) => state.maybeWhen(
+              orElse: SizedBox.shrink,
+              authenticated: (User user) => GestureDetector(
+                onTap: () =>
+                    GoRouter.of(context).goNamed(RouteName.profile.name),
+                child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
+                  size: 32,
+                  imageUrl: user.avatar?.getOrCrash(),
+                  padding: const EdgeInsets.all(Insets.small),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       body: Center(
         child: ConstrainedBox(
@@ -96,37 +92,11 @@ class ProfileScreen extends HookWidget {
                       buildWhen: _buildWhen,
                       builder: (BuildContext context, AuthState authState) =>
                           authState.maybeWhen(
-                        orElse: () => const ProfileLoading(),
-                        authenticated: (User user) => Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: Insets.xlarge,
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    _ProfileName(user: user),
-                                    _ProfileDetails(user: user),
-                                  ],
-                                ),
-                              ),
-                              {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
-                                text: context.l10n.profile__button_text__logout,
-                                isExpanded: true,
-                                buttonType: ButtonType.filled,
-                                onPressed: () =>
-                                    context.read<AuthBloc>().logout(),
-                                padding: EdgeInsets.zero,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  vertical: Insets.small,
-                                ),
-                              ),
-                              const Gap(Insets.large),
-                            ],
-                          ),
+                        orElse: () => Skeletonizer(
+                          child: _ProfileContent(user: MockData.user),
                         ),
+                        authenticated: (User user) =>
+                            _ProfileContent(user: user),
                       ),
                     ),
                   ),
@@ -161,6 +131,45 @@ class ProfileScreen extends HookWidget {
   bool _buildWhen(_, AuthState current) => current.maybeMap(
         orElse: () => true,
         failed: (_) => false,
+      );
+}
+
+class _ProfileContent extends StatelessWidget {
+  const _ProfileContent({
+    required this.user,
+  });
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Insets.xlarge,
+        ),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _ProfileName(user: user),
+                  _ProfileDetails(user: user),
+                ],
+              ),
+            ),
+            {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
+              text: context.l10n.profile__button_text__logout,
+              isExpanded: true,
+              buttonType: ButtonType.filled,
+              onPressed: () => context.read<AuthBloc>().logout(),
+              padding: EdgeInsets.zero,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: Insets.small,
+              ),
+            ),
+            const Gap(Insets.large),
+          ],
+        ),
       );
 }
 
