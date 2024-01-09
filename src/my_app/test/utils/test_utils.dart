@@ -38,10 +38,7 @@ User get mockUser => UserDTO(
       birthday: DateTime(2000),
     ).toDomain();
 
-List<Post> get mockPosts => <Post>[
-      mockPost,
-      mockPost,
-    ];
+List<Post> get mockPosts => List<Post>.generate(2, (_) => mockPost);
 
 Map<AppScrollController, ScrollController> mockScrollControllers =
     <AppScrollController, ScrollController>{

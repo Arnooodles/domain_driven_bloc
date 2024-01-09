@@ -35,58 +35,46 @@ void main() {
         children: <Widget>[
           GoldenTestScenario(
             name: 'without avatar and back button',
-            child: PreferredSize(
-              preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-              child: MockGoRouterProvider(
-                router: routerWithOutBack,
-                child: const VeryGoodCoreAppBar(),
-              ),
+            child: MockGoRouterProvider(
+              router: routerWithOutBack,
+              child: const VeryGoodCoreAppBar(),
             ),
           ),
           GoldenTestScenario(
             name: 'with action but no leading button',
-            child: PreferredSize(
-              preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-              child: MockGoRouterProvider(
-                router: routerWithOutBack,
-                child: VeryGoodCoreAppBar(
-                  actions: <Widget>[
-                    IconButton(
-                      onPressed: () => counter++,
-                      icon: const Icon(Icons.light_mode),
-                    ),
-                  ],
-                ),
+            child: MockGoRouterProvider(
+              router: routerWithOutBack,
+              child: VeryGoodCoreAppBar(
+                actions: <Widget>[
+                  IconButton(
+                    onPressed: () => counter++,
+                    icon: const Icon(Icons.light_mode),
+                  ),
+                ],
               ),
             ),
           ),
           GoldenTestScenario(
             name: 'without action but have a leading button',
-            child: PreferredSize(
-              preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-              child: MockGoRouterProvider(
-                router: routerWithBack,
-                child: const VeryGoodCoreAppBar(
-                  leading: BackButton(),
-                ),
+            child: MockGoRouterProvider(
+              router: routerWithBack,
+              child: const VeryGoodCoreAppBar(
+                leading: BackButton(),
               ),
             ),
           ),
           GoldenTestScenario(
             name: 'with avatar and back button',
-            child: PreferredSize(
-              preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-              child: MockGoRouterProvider(
-                router: routerWithBack,
-                child: VeryGoodCoreAppBar(
-                  actions: <Widget>[
-                    IconButton(
-                      onPressed: () => counter++,
-                      icon: const Icon(Icons.light_mode),
-                    ),
-                  ],
-                  leading: const BackButton(),
-                ),
+            child: MockGoRouterProvider(
+              router: routerWithBack,
+              child: VeryGoodCoreAppBar(
+                actions: <Widget>[
+                  IconButton(
+                    onPressed: () => counter++,
+                    icon: const Icon(Icons.light_mode),
+                  ),
+                ],
+                leading: const BackButton(),
               ),
             ),
           ),

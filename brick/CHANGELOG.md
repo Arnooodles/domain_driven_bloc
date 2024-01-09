@@ -1,3 +1,11 @@
+# 1.1.0
+
+- feat: upgrade to flutter 3.16.5
+- feat: implement skeletonizer
+- feat: implement flutter_native_splash
+- feat: implement icons_launcher
+- chore: update dependencies to the latest version
+
 # 1.0.0
 
 - feat: upgrade to flutter 3.16.2

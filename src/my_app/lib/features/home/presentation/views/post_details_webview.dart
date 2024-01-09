@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/injection.dart';
-import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/presentation/widgets/connectivity_checker.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_app_bar.dart';
 import 'package:very_good_core/features/home/domain/bloc/post_details/post_details_bloc.dart';
@@ -39,14 +38,11 @@ class PostDetailsWebview extends StatelessWidget {
             canPop: false,
             onPopInvoked: (_) async => _onPopInvoked(context, controller),
             child: ConnectivityChecker.scaffold(
-              appBar: PreferredSize(
-                preferredSize: Size.fromHeight(AppTheme.defaultAppBarHeight),
-                child: VeryGoodCoreAppBar(
-                  titleColor: context.colorScheme.primary,
-                  leading: BackButton(
-                    color: context.colorScheme.primary,
-                    onPressed: () => GoRouter.of(context).pop(),
-                  ),
+              appBar: VeryGoodCoreAppBar(
+                titleColor: context.colorScheme.primary,
+                leading: BackButton(
+                  color: context.colorScheme.primary,
+                  onPressed: () => GoRouter.of(context).pop(),
                 ),
               ),
               body: Center(
