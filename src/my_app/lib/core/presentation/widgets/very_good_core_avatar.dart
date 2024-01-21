@@ -22,6 +22,8 @@ class VeryGoodCoreAvatar extends StatelessWidget {
           child: imageUrl != null
               ? CachedNetworkImage(
                   imageUrl: imageUrl!,
+                  memCacheWidth: size.toInt(),
+                  memCacheHeight: size.toInt(),
                   imageBuilder: (
                     BuildContext context,
                     ImageProvider<Object> imageProvider,

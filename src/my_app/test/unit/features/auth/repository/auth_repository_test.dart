@@ -29,6 +29,11 @@ void main() {
     loginResponseDTO = const LoginResponseDTO(accessToken: 'accessToken');
   });
 
+  tearDown(() {
+    provideDummy(mockChopperClient);
+    authService.client.dispose();
+  });
+
   group('Login', () {
     test(
       'should return a unit when login is successful',

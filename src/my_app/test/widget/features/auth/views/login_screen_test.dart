@@ -9,12 +9,10 @@ import '../../../../utils/test_utils.dart';
 
 void main() {
   Widget buildLoginScreen() => const MockMaterialApp(
-        child: Scaffold(
-          body: LoginScreen(),
-        ),
+        child: LoginScreen(),
       );
 
-  group('Login Screen Tests', () {
+  group(LoginScreen, () {
     goldenTest(
       'renders correctly',
       fileName: 'login_screen'.goldensVersion,

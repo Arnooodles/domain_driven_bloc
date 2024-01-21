@@ -18,6 +18,11 @@ void main() {
     };
   });
 
+  tearDown(() {
+    scrollControllers = <AppScrollController, ScrollController>{};
+    appCoreBloc.close();
+  });
+
   group('AppCore setScrollControllers', () {
     blocTest<AppCoreBloc, AppCoreState>(
       'should set scrollControllers',

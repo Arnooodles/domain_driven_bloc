@@ -10,7 +10,7 @@ import 'package:very_good_core/app/generated/l10n.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/core/presentation/widgets/very_good_core_dialogs.dart';
+import 'package:very_good_core/core/presentation/widgets/dialogs/confirmation_dialog.dart';
 
 // ignore_for_file: long-method,long-parameter-list
 final class DialogUtils {

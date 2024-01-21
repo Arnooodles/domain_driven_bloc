@@ -1,6 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_core/core/domain/bloc/app_life_cycle/app_life_cycle_bloc.dart';
@@ -12,12 +11,12 @@ void main() {
     appLifeCycleBloc = AppLifeCycleBloc();
   });
 
-  void setAppLifeCycleState(AppLifecycleState state) {
-    final ByteData? message =
-        const StringCodec().encodeMessage(state.toString());
-    ServicesBinding.instance.channelBuffers
-        .push('flutter/lifecycle', message, (_) {});
-  }
+  tearDown(() {
+    appLifeCycleBloc.close();
+  });
+
+  void setAppLifeCycleState(AppLifecycleState state) =>
+      TestWidgetsFlutterBinding.instance.handleAppLifecycleStateChanged(state);
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
     'should emit a detached lifecycle state',
@@ -32,11 +31,7 @@ void main() {
     build: () => appLifeCycleBloc,
     act: (AppLifeCycleBloc bloc) =>
         setAppLifeCycleState(AppLifecycleState.hidden),
-    expect: () => <dynamic>[
-      const AppLifeCycleState.resumed(),
-      const AppLifeCycleState.inactive(),
-      const AppLifeCycleState.hidden(),
-    ],
+    expect: () => <dynamic>[const AppLifeCycleState.hidden()],
   );
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
@@ -52,10 +47,6 @@ void main() {
     build: () => appLifeCycleBloc,
     act: (AppLifeCycleBloc bloc) =>
         setAppLifeCycleState(AppLifecycleState.resumed),
-    expect: () => <dynamic>[
-      const AppLifeCycleState.hidden(),
-      const AppLifeCycleState.inactive(),
-      const AppLifeCycleState.resumed(),
-    ],
+    expect: () => <dynamic>[const AppLifeCycleState.resumed()],
   );
 }

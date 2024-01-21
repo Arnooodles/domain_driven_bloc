@@ -1,3 +1,11 @@
+# 1.1.1
+
+- feat: upgrade to flutter 3.16.8
+- chore: update dependencies to the latest version
+- refactor: minor code optimization
+- test: added tear down on some tests
+  
+
 # 1.1.0
 
 - feat: upgrade to flutter 3.16.5

@@ -16,12 +16,14 @@ import 'package:very_good_core/app/observers/app_bloc_observer.dart';
 Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   urlConfig();
   initializeSingletons();
-  await initializeEnvironmentConfig(env);
-  await configureDependencies(env);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Future.wait(<Future<void>>[
+    initializeEnvironmentConfig(env),
+    configureDependencies(env),
+  ]);
 
   final Logger logger = getIt<Logger>();
   Bloc.observer = getIt<AppBlocObserver>();
-
   FlutterError.onError = (FlutterErrorDetails details) {
     logger.f(
       details.exceptionAsString(),
@@ -29,7 +31,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
       stackTrace: details.stack,
     );
   };
-  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(await builder());
 }
 

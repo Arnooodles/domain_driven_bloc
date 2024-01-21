@@ -6,7 +6,7 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_info_tex
 import '../../../utils/test_utils.dart';
 
 void main() {
-  group('VeryGoodCoreInfoTextField Widget Tests', () {
+  group(VeryGoodCoreInfoTextField, () {
     goldenTest(
       'renders correctly',
       fileName: 'very_good_core_info_text_field'.goldensVersion,

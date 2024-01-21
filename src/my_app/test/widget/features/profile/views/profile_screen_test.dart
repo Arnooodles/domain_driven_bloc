@@ -40,6 +40,11 @@ void main() {
     );
   });
 
+  tearDown(() {
+    authBloc.close();
+    appCoreBloc.close();
+  });
+
   AuthBloc setUpAuthBloc(Stream<AuthState> stream, AuthState state) {
     authBloc = MockAuthBloc();
     when(authBloc.stream).thenAnswer((_) => stream);
@@ -57,13 +62,11 @@ void main() {
           ),
         ],
         child: const MockMaterialApp(
-          child: Scaffold(
-            body: ProfileScreen(),
-          ),
+          child: ProfileScreen(),
         ),
       );
 
-  group('Profile Screen Tests', () {
+  group(ProfileScreen, () {
     goldenTest(
       'renders correctly',
       fileName: 'profile_screen'.goldensVersion,

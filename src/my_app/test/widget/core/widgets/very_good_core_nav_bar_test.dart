@@ -60,6 +60,11 @@ void main() {
     );
   });
 
+  tearDown(() {
+    appCoreBloc.close();
+    hidableBloc.close();
+  });
+
   MockGoRouter setUpRouter(String path, int index) {
     router = MockGoRouter();
     routerDelegate = MockGoRouterDelegate();
@@ -90,7 +95,7 @@ void main() {
         ),
       );
 
-  group('VeryGoodCoreNavBar Widget Tests', () {
+  group(VeryGoodCoreNavBar, () {
     goldenTest(
       'renders correctly',
       fileName: 'very_good_core_nav_bar'.goldensVersion,

@@ -19,7 +19,7 @@ void main() {
     focusNode.dispose();
   });
 
-  group('VeryGoodCoreTextField Widget Tests', () {
+  group(VeryGoodCoreTextField, () {
     GoldenTestGroup buildTextFieldTestGroup({bool isPassword = false}) =>
         GoldenTestGroup(
           children: <Widget>[

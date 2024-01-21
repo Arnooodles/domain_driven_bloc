@@ -17,12 +17,15 @@ class PostDetailsWebview extends StatelessWidget {
   Future<void> _onPopInvoked(
     BuildContext context,
     WebViewController controller,
+    bool didPop,
   ) async {
-    if (await controller.canGoBack()) {
-      await controller.goBack();
-    } else {
-      if (!context.mounted) return;
-      Navigator.of(context).pop();
+    if (!didPop) {
+      if (await controller.canGoBack()) {
+        await controller.goBack();
+      } else {
+        if (!context.mounted) return;
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -36,7 +39,8 @@ class PostDetailsWebview extends StatelessWidget {
           builder: (BuildContext context, WebViewController controller) =>
               PopScope(
             canPop: false,
-            onPopInvoked: (_) async => _onPopInvoked(context, controller),
+            onPopInvoked: (bool didPop) async =>
+                _onPopInvoked(context, controller, didPop),
             child: ConnectivityChecker.scaffold(
               appBar: VeryGoodCoreAppBar(
                 titleColor: context.colorScheme.primary,

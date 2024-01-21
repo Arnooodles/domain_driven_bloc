@@ -5,13 +5,13 @@ publish_to: none
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
-  flutter: ">=3.16.5"
+  flutter: ">=3.16.8"
 
 dependencies:
   animations: ^2.0.11
   bloc: ^8.1.2
   cached_network_image: ^3.3.1
-  chopper: ^7.0.10
+  chopper: ^7.1.0+1
   connectivity_plus: ^5.0.2
   crypto: ^3.0.3
   dartx: ^1.2.0
@@ -33,11 +33,11 @@ dependencies:
   fpdart: ^1.1.0
   freezed_annotation: ^2.4.1
   gap: ^3.0.1
-  get_it: ^7.6.4
-  go_router: ^13.0.1
+  get_it: ^7.6.7
+  go_router: ^12.1.3
   html_unescape: ^2.0.0
-  http: ^1.1.2
-  icons_launcher: ^2.1.6
+  http: ^1.2.0
+  icons_launcher: ^2.1.7
   injectable: ^2.3.2
   intl: ^0.18.1
   intl_utils: ^2.8.7
@@ -48,17 +48,17 @@ dependencies:
   rxdart: ^0.27.7
   safe_device: ^1.1.4
   shared_preferences: ^2.2.2
-  skeletonizer: ^1.0.0
+  skeletonizer: ^1.0.1
   timeago: ^3.6.0
-  url_launcher: ^6.2.2
-  uuid: ^4.2.1
-  webview_flutter: ^4.4.3
+  url_launcher: ^6.2.3
+  uuid: ^4.3.3
+  webview_flutter: ^4.4.4
 
 dev_dependencies:
   alchemist: ^0.7.0
   bloc_test: ^9.1.5
-  build_runner: ^2.4.7
-  chopper_generator: ^7.0.7
+  build_runner: ^2.4.8
+  chopper_generator: ^7.1.0
   dependency_validator: ^3.2.3
   flutter_gen_runner: ^5.4.0
   flutter_test:
@@ -68,7 +68,7 @@ dev_dependencies:
   injectable_generator: ^2.4.1
   json_serializable: ^6.7.1
   mockito: ^5.4.4
-  mocktail_image_network: ^1.0.0
+  mocktail_image_network: ^1.1.0
   very_good_analysis: ^5.1.0
 
 flutter_gen:

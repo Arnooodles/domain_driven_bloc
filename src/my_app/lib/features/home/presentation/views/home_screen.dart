@@ -115,12 +115,12 @@ class _HomeContent extends HookWidget {
         (_) => MockData.post,
       );
 
-  Future<void> _onStateChangeListener(
+  void _onStateChangeListener(
     BuildContext context,
     PostState state,
     ValueNotifier<bool> isDialogShowing,
-  ) async {
-    await state.whenOrNull(
+  ) {
+    state.whenOrNull(
       failed: (Failure failure) async {
         isDialogShowing.value = true;
 
