@@ -1,6 +1,6 @@
 void main() async {}
 
-/// TODO(all) : https://stackoverflow.com/questions/77167466/how-to-create-a-widget-test-that-uses-go-routers-statefulnavigationshell
+// TODO(all) : https://stackoverflow.com/questions/77167466/how-to-create-a-widget-test-that-uses-go-routers-statefulnavigationshell
 
 // import 'package:alchemist/alchemist.dart';
 // import 'package:flutter/material.dart';
@@ -12,6 +12,7 @@ void main() async {}
 // import 'package:very_good_core/app/constants/enum.dart';
 // import 'package:very_good_core/app/constants/route_name.dart';
 // import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
+// import 'package:very_good_core/core/domain/bloc/hidable/hidable_bloc.dart';
 // import 'package:very_good_core/core/presentation/views/main_screen.dart';
 // import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 // import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
@@ -22,36 +23,48 @@ void main() async {}
 // import '../../../utils/test_utils.dart';
 // import 'main_screen_test.mocks.dart';
 
-// @GenerateNiceMocks(<MockSpec<dynamic>>[
-//   MockSpec<AuthBloc>(),
-//   MockSpec<AppCoreBloc>(),
-//   MockSpec<PostBloc>(),
-//   MockSpec<GoRouter>(),
-//   MockSpec<GoRouterDelegate>(),
-//   MockSpec<StatefulNavigationShell>(),
-//   MockSpec<RouteMatchList>(),
-// ])
+// @GenerateNiceMocks(
+//   <MockSpec<dynamic>>[
+//     MockSpec<AuthBloc>(),
+//     MockSpec<AppCoreBloc>(),
+//     MockSpec<PostBloc>(),
+//     MockSpec<HidableBloc>(),
+//     MockSpec<GoRouter>(),
+//     MockSpec<GoRouterDelegate>(),
+//     MockSpec<StatefulNavigationShell>(),
+//     MockSpec<RouteMatchList>(),
+//   ],
+// )
 // void main() {
 //   late MockAuthBloc authBloc;
 //   late MockAppCoreBloc appCoreBloc;
+//   late MockHidableBloc hidableBloc;
 //   late MockStatefulNavigationShell navigationShell;
 //   late MockGoRouter router;
 //   late MockGoRouterDelegate routerDelegate;
 //   late MockRouteMatchList currentConfiguration;
-
 //   late Map<AppScrollController, ScrollController> scrollControllers;
 
 //   setUp(() {
 //     authBloc = MockAuthBloc();
 //     appCoreBloc = MockAppCoreBloc();
-//     router = MockGoRouter();
-//     navigationShell = MockStatefulNavigationShell();
+//     hidableBloc = MockHidableBloc();
 
 //     scrollControllers = <AppScrollController, ScrollController>{
-//       AppScrollController.home: ScrollController(),
-//       AppScrollController.profile: ScrollController(),
+//       AppScrollController.home:
+//           ScrollController(debugLabel: AppScrollController.home.name),
+//       AppScrollController.profile:
+//           ScrollController(debugLabel: AppScrollController.profile.name),
 //     };
 
+//     when(hidableBloc.stream).thenAnswer(
+//       (_) => Stream<bool>.fromIterable(
+//         <bool>[
+//           true,
+//         ],
+//       ),
+//     );
+//     when(hidableBloc.state).thenAnswer((_) => true);
 //     when(appCoreBloc.stream).thenAnswer(
 //       (_) => Stream<AppCoreState>.fromIterable(
 //         <AppCoreState>[
@@ -63,8 +76,6 @@ void main() async {}
 //       (_) =>
 //           AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
 //     );
-//     when(appCoreBloc.getScrollController(any))
-//         .thenAnswer((_) => ScrollController());
 //   });
 
 //   AuthBloc setUpAuthBloc() {
@@ -82,7 +93,6 @@ void main() async {}
 //     int index,
 //   ) {
 //     router = MockGoRouter();
-
 //     routerDelegate = MockGoRouterDelegate();
 //     navigationShell = MockStatefulNavigationShell();
 //     currentConfiguration = MockRouteMatchList();
@@ -99,18 +109,21 @@ void main() async {}
 //     (MockGoRouter, MockStatefulNavigationShell) goRouter,
 //     AuthBloc authBloc,
 //   ) =>
-//       MockMaterialApp(
-//         child: MockGoRouterProvider(
-//           router: goRouter.$1,
-//           child: MultiBlocProvider(
-//             providers: <BlocProvider<dynamic>>[
-//               BlocProvider<AuthBloc>(
-//                 create: (BuildContext context) => authBloc,
-//               ),
-//               BlocProvider<AppCoreBloc>(
-//                 create: (BuildContext context) => appCoreBloc,
-//               ),
-//             ],
+//       MultiBlocProvider(
+//         providers: <BlocProvider<dynamic>>[
+//           BlocProvider<AuthBloc>(
+//             create: (BuildContext context) => authBloc,
+//           ),
+//           BlocProvider<AppCoreBloc>(
+//             create: (BuildContext context) => appCoreBloc,
+//           ),
+//           BlocProvider<HidableBloc>(
+//             create: (BuildContext context) => hidableBloc,
+//           ),
+//         ],
+//         child: MockMaterialApp(
+//           child: MockGoRouterProvider(
+//             router: goRouter.$1,
 //             child: MainScreen(
 //               navigationShell: goRouter.$2,
 //             ),
@@ -118,12 +131,12 @@ void main() async {}
 //         ),
 //       );
 
-//   group('VeryGoodCore Screen Tests', () {
+//   group(MainScreen, () {
 //     goldenTest(
 //       'renders correctly',
 //       fileName: 'main_screen'.goldensVersion,
-//       pumpBeforeTest: (WidgetTester tester) async {
-//         await tester.pumpAndSettle(const Duration(seconds: 6));
+//       pumpWidget: (WidgetTester tester, Widget widget) async {
+//         await tester.pumpWidget(widget);
 //       },
 //       builder: () => GoldenTestGroup(
 //         children: <Widget>[

@@ -5,9 +5,9 @@ import 'package:very_good_core/core/domain/bloc/hidable/hidable_bloc.dart';
 void main() {
   late HidableBloc hidableBloc;
 
-  setUp(() {
-    hidableBloc = HidableBloc();
-  });
+  setUp(() => hidableBloc = HidableBloc());
+
+  tearDown(() => hidableBloc.close());
 
   group('Hidable switchTheme ', () {
     blocTest<HidableBloc, bool>(

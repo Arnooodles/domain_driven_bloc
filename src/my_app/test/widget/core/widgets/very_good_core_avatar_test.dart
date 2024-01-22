@@ -7,7 +7,7 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_avatar.d
 import '../../../utils/test_utils.dart';
 
 void main() {
-  group('VeryGoodCoreAvatar Widget Tests', () {
+  group(VeryGoodCoreAvatar, () {
     goldenTest(
       'renders correctly',
       fileName: 'very_good_core_avatar'.goldensVersion,

@@ -69,39 +69,43 @@ class App extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-        providers: _providers,
-        child: BlocBuilder<ThemeBloc, ThemeMode>(
-          builder: (BuildContext context, ThemeMode themeMode) =>
-              MaterialApp.router(
-            routerConfig: _appRouter.router,
-            builder: (BuildContext context, Widget? child) =>
-                ResponsiveBreakpoints.builder(
-              child: Builder(
-                builder: (BuildContext context) => ResponsiveScaledBox(
-                  width: ResponsiveValue<double>(
-                    context,
-                    conditionalValues: <Condition<double>>[
-                      Condition<double>.equals(
-                        name: MOBILE,
-                        value: Constant.mobileBreakpoint,
-                      ),
-                    ],
-                  ).value,
-                  child: child!,
-                ),
+  Widget build(BuildContext context) {
+    /// This will tell you which image is oversized by throwing an exception.
+    debugInvertOversizedImages = true;
+    return MultiBlocProvider(
+      providers: _providers,
+      child: BlocBuilder<ThemeBloc, ThemeMode>(
+        builder: (BuildContext context, ThemeMode themeMode) =>
+            MaterialApp.router(
+          routerConfig: _appRouter.router,
+          builder: (BuildContext context, Widget? child) =>
+              ResponsiveBreakpoints.builder(
+            child: Builder(
+              builder: (BuildContext context) => ResponsiveScaledBox(
+                width: ResponsiveValue<double>(
+                  context,
+                  conditionalValues: <Condition<double>>[
+                    Condition<double>.equals(
+                      name: MOBILE,
+                      value: Constant.mobileBreakpoint,
+                    ),
+                  ],
+                ).value,
+                child: child!,
               ),
-              breakpoints: _breakpoints,
             ),
-            title: Constant.appName,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: themeMode,
-            localizationsDelegates: _localizationsDelegates,
-            supportedLocales: AppLocalizations.delegate.supportedLocales,
-            debugShowCheckedModeBanner: false,
-            scrollBehavior: ScrollBehaviorConfig(),
+            breakpoints: _breakpoints,
           ),
+          title: Constant.appName,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeMode,
+          localizationsDelegates: _localizationsDelegates,
+          supportedLocales: AppLocalizations.delegate.supportedLocales,
+          debugShowCheckedModeBanner: false,
+          scrollBehavior: ScrollBehaviorConfig(),
         ),
-      );
+      ),
+    );
+  }
 }

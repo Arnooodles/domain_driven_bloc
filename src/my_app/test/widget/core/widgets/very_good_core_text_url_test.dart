@@ -7,8 +7,9 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_text_url
 import '../../../utils/test_utils.dart';
 
 void main() {
-  group('VeryGoodCoreTextUrl Widget Tests', () {
+  group(VeryGoodCoreTextUrl, () {
     int count = 0;
+    const String url = 'https://www.example.com';
     goldenTest(
       'renders correctly',
       fileName: 'very_good_core_text_url'.goldensVersion,
@@ -20,7 +21,7 @@ void main() {
             child: SizedBox(
               height: 20,
               child: VeryGoodCoreTextUrl(
-                url: Url('https://www.example.com'),
+                url: Url(url),
                 onTap: () => count++,
               ),
             ),
@@ -30,7 +31,7 @@ void main() {
             child: SizedBox(
               height: 20,
               child: VeryGoodCoreTextUrl(
-                url: Url('https://www.example.com'),
+                url: Url(url),
                 onTap: () => count++,
                 isShowIcon: false,
               ),

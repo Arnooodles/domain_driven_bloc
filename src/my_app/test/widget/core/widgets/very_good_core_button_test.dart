@@ -7,7 +7,7 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_button.d
 import '../../../utils/test_utils.dart';
 
 void main() {
-  group('VeryGoodCoreButton Widget Tests', () {
+  group(VeryGoodCoreButton, () {
     int counter = 0;
 
     List<Widget> buildButtons(Widget? icon, ButtonType buttonType) => <Widget>[

@@ -8,7 +8,7 @@ import '../../../../utils/mock_localization.dart';
 import '../../../../utils/test_utils.dart';
 
 void main() {
-  group('EmptyPost Widget Tests', () {
+  group(EmptyPost, () {
     goldenTest(
       'renders correctly',
       fileName: 'empty_post'.goldensVersion,

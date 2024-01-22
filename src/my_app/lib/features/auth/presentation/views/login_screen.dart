@@ -19,6 +19,12 @@ import 'package:very_good_core/features/auth/domain/bloc/login/login_bloc.dart';
 class LoginScreen extends HookWidget {
   const LoginScreen({super.key});
 
+  void _onPopInvoked(BuildContext context, bool didPop) {
+    if (!didPop) {
+      DialogUtils.showExitDialog(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController passwordTextController =
@@ -26,22 +32,21 @@ class LoginScreen extends HookWidget {
     final TextEditingController emailTextController =
         useTextEditingController();
 
-    return BlocProvider<LoginBloc>(
-      create: (BuildContext context) => getIt<LoginBloc>(),
-      child: BlocConsumer<LoginBloc, LoginState>(
-        listener: _onStateChangedListener,
-        builder: (BuildContext context, LoginState state) {
-          emailTextController
-            ..value = TextEditingValue(text: state.emailAddress ?? '')
-            ..selection = TextSelection.fromPosition(
-              TextPosition(offset: emailTextController.text.length),
-            );
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) => _onPopInvoked(context, didPop),
+      child: BlocProvider<LoginBloc>(
+        create: (BuildContext context) => getIt<LoginBloc>(),
+        child: BlocConsumer<LoginBloc, LoginState>(
+          listener: _onStateChangedListener,
+          builder: (BuildContext context, LoginState state) {
+            emailTextController
+              ..value = TextEditingValue(text: state.emailAddress ?? '')
+              ..selection = TextSelection.fromPosition(
+                TextPosition(offset: emailTextController.text.length),
+              );
 
-          return PopScope(
-            canPop: false,
-            onPopInvoked: (bool didPop) async =>
-                DialogUtils.showExitDialog(context),
-            child: ConnectivityChecker.scaffold(
+            return ConnectivityChecker.scaffold(
               backgroundColor: context.colorScheme.background,
               body: Center(
                 child: Container(
@@ -96,9 +101,9 @@ class LoginScreen extends HookWidget {
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

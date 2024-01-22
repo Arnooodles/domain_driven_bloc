@@ -6,9 +6,9 @@ import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
 void main() {
   late ThemeBloc themeBloc;
 
-  setUp(() {
-    themeBloc = ThemeBloc();
-  });
+  setUp(() => themeBloc = ThemeBloc());
+
+  tearDown(() => themeBloc.close());
 
   group('ThemeBloc switchTheme ', () {
     blocTest<ThemeBloc, ThemeMode>(

@@ -29,7 +29,6 @@ void main() {
     postRepository = MockIPostRepository();
     failure =
         const Failure.serverError(StatusCode.http500, 'INTERNAL SERVER ERROR');
-
     posts = <Post>[
       PostDTO(
         uid: '1',
@@ -40,6 +39,8 @@ void main() {
       ).toDomain(),
     ];
   });
+
+  tearDown(() => posts = <Post>[]);
 
   group('PostBloc getPosts', () {
     blocTest<PostBloc, PostState>(

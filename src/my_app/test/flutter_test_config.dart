@@ -12,7 +12,7 @@ import 'utils/test_utils.dart';
 class TestConfig {
   /// To update the golden files in the remote repository change goldensVersion
   /// Format: yyyyMMdd
-  static String get goldensVersion => '20240106';
+  static String get goldensVersion => '20240121';
 
   /// Customize your threshold here
   /// For example, the error threshold here is 15%
@@ -21,8 +21,11 @@ class TestConfig {
 }
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
-  await loadAppFonts();
-  await setupInjection();
+  await Future.wait(<Future<void>>[
+    loadAppFonts(),
+    setupInjection(),
+  ]);
+
   if (goldenFileComparator is LocalFileComparator) {
     final Uri testUrl = (goldenFileComparator as LocalFileComparator).basedir;
 

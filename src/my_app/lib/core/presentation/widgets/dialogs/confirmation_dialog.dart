@@ -5,7 +5,6 @@ import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
 
-// ignore_for_file: prefer-match-file-name
 class ConfirmationDialog extends StatelessWidget {
   const ConfirmationDialog({
     required this.message,
@@ -21,6 +20,7 @@ class ConfirmationDialog extends StatelessWidget {
     this.positiveButtonTextColor,
     super.key,
   });
+
   final String message;
   final String? title;
   final Color? titleColor;
