@@ -60,6 +60,11 @@ void main() {
     );
   });
 
+  tearDown(() {
+    appCoreBloc.close();
+    hidableBloc.close();
+  });
+
   MockGoRouter setUpRouter(String path, int index) {
     router = MockGoRouter();
     routerDelegate = MockGoRouterDelegate();
@@ -90,7 +95,7 @@ void main() {
         ),
       );
 
-  group('{{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar Widget Tests', () {
+  group({{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar, () {
     goldenTest(
       'renders correctly',
       fileName: '{{project_name.snakeCase()}}_nav_bar'.goldensVersion,

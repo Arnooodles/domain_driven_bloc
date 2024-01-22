@@ -13,18 +13,20 @@ import '{{project_name.snakeCase()}}_app_bar_test.mocks.dart';
 
 @GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<GoRouter>()])
 void main() {
-  late MockGoRouter routerWithBack;
-  late MockGoRouter routerWithOutBack;
+  late MockGoRouter router;
   int counter = 0;
 
-  setUp(() {
-    routerWithBack = MockGoRouter();
-    routerWithOutBack = MockGoRouter();
-    when(routerWithBack.canPop()).thenAnswer((_) => true);
-    when(routerWithOutBack.canPop()).thenAnswer((_) => false);
+  MockGoRouter setUpRouter({required bool canPop}) {
+    router = MockGoRouter();
+    when(router.canPop()).thenAnswer((_) => canPop);
+    return router;
+  }
+
+  tearDown(() {
+    router.dispose();
   });
 
-  group('{{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar Widget Tests', () {
+  group({{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar, () {
     goldenTest(
       'renders correctly',
       fileName: '{{project_name.snakeCase()}}_app_bar'.goldensVersion,
@@ -34,16 +36,16 @@ void main() {
       builder: () => GoldenTestGroup(
         children: <Widget>[
           GoldenTestScenario(
-            name: 'without avatar and back button',
+            name: 'without action and back button',
             child: MockGoRouterProvider(
-              router: routerWithOutBack,
+              router: setUpRouter(canPop: false),
               child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(),
             ),
           ),
           GoldenTestScenario(
-            name: 'with action but no leading button',
+            name: 'with action but no back button',
             child: MockGoRouterProvider(
-              router: routerWithOutBack,
+              router: setUpRouter(canPop: false),
               child: {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(
                 actions: <Widget>[
                   IconButton(
@@ -55,18 +57,18 @@ void main() {
             ),
           ),
           GoldenTestScenario(
-            name: 'without action but have a leading button',
+            name: 'without action but have a back button',
             child: MockGoRouterProvider(
-              router: routerWithBack,
+              router: setUpRouter(canPop: true),
               child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(
                 leading: BackButton(),
               ),
             ),
           ),
           GoldenTestScenario(
-            name: 'with avatar and back button',
+            name: 'with action and back button',
             child: MockGoRouterProvider(
-              router: routerWithBack,
+              router: setUpRouter(canPop: true),
               child: {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(
                 actions: <Widget>[
                   IconButton(

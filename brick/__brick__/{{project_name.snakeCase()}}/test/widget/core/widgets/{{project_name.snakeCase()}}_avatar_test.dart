@@ -7,7 +7,7 @@ import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project
 import '../../../utils/test_utils.dart';
 
 void main() {
-  group('{{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar Widget Tests', () {
+  group({{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar, () {
     goldenTest(
       'renders correctly',
       fileName: '{{project_name.snakeCase()}}_avatar'.goldensVersion,

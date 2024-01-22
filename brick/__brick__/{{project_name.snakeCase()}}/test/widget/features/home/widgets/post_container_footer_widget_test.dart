@@ -8,7 +8,7 @@ import '../../../../utils/mock_localization.dart';
 import '../../../../utils/test_utils.dart';
 
 void main() {
-  group('PostContainerFooter Widget Tests', () {
+  group(PostContainerFooter, () {
     goldenTest(
       'renders correctly',
       fileName: 'post_container_footer'.goldensVersion,

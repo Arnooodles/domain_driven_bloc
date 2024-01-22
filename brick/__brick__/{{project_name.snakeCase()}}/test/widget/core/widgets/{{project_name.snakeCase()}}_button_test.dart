@@ -7,7 +7,7 @@ import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project
 import '../../../utils/test_utils.dart';
 
 void main() {
-  group('{{#pascalCase}}{{project_name}}{{/pascalCase}}Button Widget Tests', () {
+  group({{#pascalCase}}{{project_name}}{{/pascalCase}}Button, () {
     int counter = 0;
 
     List<Widget> buildButtons(Widget? icon, ButtonType buttonType) => <Widget>[

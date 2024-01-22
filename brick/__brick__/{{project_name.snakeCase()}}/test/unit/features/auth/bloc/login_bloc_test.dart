@@ -28,7 +28,6 @@ void main() {
   setUp(() {
     authRepository = MockIAuthRepository();
     localStorageRepository = MockILocalStorageRepository();
-
     email = 'email@example.com';
     password = 'password';
   });

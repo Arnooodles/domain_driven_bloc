@@ -8,7 +8,7 @@ import '../../../../utils/mock_localization.dart';
 import '../../../../utils/test_utils.dart';
 
 void main() {
-  group('PostContainerHeader Widget Tests', () {
+  group(PostContainerHeader, () {
     goldenTest(
       'renders correctly',
       fileName: 'post_container_header'.goldensVersion,

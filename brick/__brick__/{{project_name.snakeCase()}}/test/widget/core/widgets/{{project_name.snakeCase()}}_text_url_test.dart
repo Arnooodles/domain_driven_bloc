@@ -7,8 +7,9 @@ import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project
 import '../../../utils/test_utils.dart';
 
 void main() {
-  group('{{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl Widget Tests', () {
+  group({{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl, () {
     int count = 0;
+    const String url = 'https://www.example.com';
     goldenTest(
       'renders correctly',
       fileName: '{{project_name.snakeCase()}}_text_url'.goldensVersion,
@@ -20,7 +21,7 @@ void main() {
             child: SizedBox(
               height: 20,
               child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl(
-                url: Url('https://www.example.com'),
+                url: Url(url),
                 onTap: () => count++,
               ),
             ),
@@ -30,7 +31,7 @@ void main() {
             child: SizedBox(
               height: 20,
               child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl(
-                url: Url('https://www.example.com'),
+                url: Url(url),
                 onTap: () => count++,
                 isShowIcon: false,
               ),

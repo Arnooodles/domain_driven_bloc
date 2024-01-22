@@ -23,6 +23,11 @@ void main() {
         LocalStorageRepository(secureStorage, unsecuredStorage);
   });
 
+  tearDown(() {
+    unsecuredStorage.clear();
+    secureStorage.deleteAll();
+  });
+
   group('Secure Storage', () {
     group('access token', () {
       test(

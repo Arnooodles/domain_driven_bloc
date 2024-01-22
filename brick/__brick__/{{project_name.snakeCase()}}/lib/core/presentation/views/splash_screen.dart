@@ -14,17 +14,12 @@ import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth
 class SplashScreen extends HookWidget {
   const SplashScreen({super.key});
 
-  void _initialize(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (await _isDeviceSafe()) {
-        if (!context.mounted) return;
-        await context.read<AuthBloc>().initialize();
-      } else {
-        if (!context.mounted) return;
-        await _showUnsupportedDeviceDialog(context);
-      }
-    });
-  }
+  void _initialize(BuildContext context) =>
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) async => await _isDeviceSafe() && context.mounted
+            ? await context.read<AuthBloc>().initialize()
+            : await _showUnsupportedDeviceDialog(context),
+      );
 
   Future<void> _showUnsupportedDeviceDialog(BuildContext context) async {
     await showFlash<void>(
@@ -56,8 +51,13 @@ class SplashScreen extends HookWidget {
     } else {
       final bool isDevice = Platform.isIOS || Platform.isAndroid;
       if (isDevice) {
-        final bool isRealDevice = await SafeDevice.isRealDevice;
-        final bool isJailBroken = await SafeDevice.isJailBroken;
+        final List<bool> results = await Future.wait(<Future<bool>>[
+          SafeDevice.isRealDevice,
+          SafeDevice.isJailBroken,
+        ]);
+
+        final bool isRealDevice = results[0];
+        final bool isJailBroken = results[1];
         return !isJailBroken && isRealDevice;
       } else {
         return true;

@@ -16,6 +16,8 @@ void main() {
     postBloc = PostDetailsBloc(initialUrl);
   });
 
+  tearDown(() => postBloc.close());
+
   group('PostDetials', () {
     blocTest<PostDetailsBloc, PostDetailsState>(
       'should emit a state with the loaded Url',

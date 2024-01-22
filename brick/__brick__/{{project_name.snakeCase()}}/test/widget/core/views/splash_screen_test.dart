@@ -21,11 +21,11 @@ void main() {
   Widget buildSplashScreen(AuthBloc authBloc) => BlocProvider<AuthBloc>(
         create: (BuildContext context) => authBloc,
         child: const MockMaterialApp(
-          child: Scaffold(body: SplashScreen()),
+          child: SplashScreen(),
         ),
       );
 
-  group('Splash Screen Tests', () {
+  group(SplashScreen, () {
     setUp(() {
       authBloc = MockAuthBloc();
 
@@ -35,6 +35,8 @@ void main() {
       );
       when(authBloc.state).thenReturn(authState);
     });
+
+    tearDown(() => authBloc.close());
 
     goldenTest(
       'renders correctly',

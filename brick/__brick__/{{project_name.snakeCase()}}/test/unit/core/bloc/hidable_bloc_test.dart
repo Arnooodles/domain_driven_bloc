@@ -5,9 +5,9 @@ import 'package:{{project_name.snakeCase()}}/core/domain/bloc/hidable/hidable_bl
 void main() {
   late HidableBloc hidableBloc;
 
-  setUp(() {
-    hidableBloc = HidableBloc();
-  });
+  setUp(() => hidableBloc = HidableBloc());
+
+  tearDown(() => hidableBloc.close());
 
   group('Hidable switchTheme ', () {
     blocTest<HidableBloc, bool>(

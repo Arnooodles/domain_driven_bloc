@@ -6,9 +6,9 @@ import 'package:{{project_name.snakeCase()}}/core/domain/bloc/theme/theme_bloc.d
 void main() {
   late ThemeBloc themeBloc;
 
-  setUp(() {
-    themeBloc = ThemeBloc();
-  });
+  setUp(() => themeBloc = ThemeBloc());
+
+  tearDown(() => themeBloc.close());
 
   group('ThemeBloc switchTheme ', () {
     blocTest<ThemeBloc, ThemeMode>(

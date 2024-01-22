@@ -63,6 +63,12 @@ void main() {
     );
   });
 
+  tearDown(() {
+    authBloc.close();
+    postBloc.close();
+    appCoreBloc.close();
+  });
+
   MockGoRouter setUpRouter(String path, int index) {
     router = MockGoRouter();
     routerDelegate = MockGoRouterDelegate();
@@ -109,14 +115,12 @@ void main() {
         child: MockMaterialApp(
           child: MockGoRouterProvider(
             router: setUpRouter(RouteName.home.path, 0),
-            child: const Scaffold(
-              body: HomeScreen(),
-            ),
+            child: const HomeScreen(),
           ),
         ),
       );
 
-  group('Home Screen Tests', () {
+  group(HomeScreen, () {
     goldenTest(
       'renders correctly',
       fileName: 'home_screen'.goldensVersion,
