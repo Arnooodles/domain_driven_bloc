@@ -29,6 +29,8 @@ void main() {
     authBloc = AuthBloc(userRepository, authRepository);
   });
 
+  tearDown(() => authBloc.close());
+
   group('AuthBloc initialize', () {
     blocTest<AuthBloc, AuthState>(
       'should emit an unauthenticated with null user state',

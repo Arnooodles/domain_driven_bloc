@@ -22,6 +22,8 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar extends StatelessWidg
           child: imageUrl != null
               ? CachedNetworkImage(
                   imageUrl: imageUrl!,
+                  memCacheWidth: size.toInt(),
+                  memCacheHeight: size.toInt(),
                   imageBuilder: (
                     BuildContext context,
                     ImageProvider<Object> imageProvider,

@@ -30,6 +30,11 @@ void main() {
     );
   });
 
+  tearDown(() {
+    provideDummy(mockChopperClient);
+    postService.client.dispose();
+  });
+
   group('Get Posts', () {
     test(
       'should return a list of posts',

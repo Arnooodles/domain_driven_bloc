@@ -19,7 +19,7 @@ void main() {
     focusNode.dispose();
   });
 
-  group('{{#pascalCase}}{{project_name}}{{/pascalCase}}TextField Widget Tests', () {
+  group({{#pascalCase}}{{project_name}}{{/pascalCase}}TextField, () {
     GoldenTestGroup buildTextFieldTestGroup({bool isPassword = false}) =>
         GoldenTestGroup(
           children: <Widget>[

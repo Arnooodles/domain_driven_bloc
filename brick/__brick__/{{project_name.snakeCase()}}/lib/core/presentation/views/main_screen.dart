@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
@@ -11,7 +10,7 @@ import 'package:{{project_name.snakeCase()}}/core/domain/bloc/hidable/hidable_bl
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/connectivity_checker.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_nav_bar.dart';
 
-class MainScreen extends HookWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({
     required this.navigationShell,
     super.key,
@@ -19,7 +18,12 @@ class MainScreen extends HookWidget {
 
   final StatefulNavigationShell navigationShell;
 
-  void _initScrollControllers(BuildContext context) {
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  void _initScrollControllers() {
     final Map<AppScrollController, ScrollController> controllers =
         <AppScrollController, ScrollController>{};
     for (final AppScrollController appScrollController
@@ -47,27 +51,32 @@ class MainScreen extends HookWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    useEffect(
-      () {
-        _initScrollControllers(context);
-        return null;
-      },
-      <Object?>[],
-    );
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (bool didPop) async => DialogUtils.showExitDialog(context),
-      child: ConnectivityChecker.scaffold(
-        body: Center(
-          child: navigationShell,
-        ),
-        bottomNavigationBar: {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar(
-          navigationShell: navigationShell,
-        ),
-        backgroundColor: context.colorScheme.background,
-      ),
-    );
+  void _onPopInvoked(bool didPop) {
+    if (!didPop) {
+      if (widget.navigationShell.currentIndex != 0) {
+        widget.navigationShell.goBranch(0);
+      } else {
+        DialogUtils.showExitDialog(context);
+      }
+    }
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _initScrollControllers();
+  }
+
+  @override
+  Widget build(BuildContext context) => PopScope(
+        canPop: false,
+        onPopInvoked: _onPopInvoked,
+        child: ConnectivityChecker.scaffold(
+          body: widget.navigationShell,
+          bottomNavigationBar: {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar(
+            navigationShell: widget.navigationShell,
+          ),
+          backgroundColor: context.colorScheme.background,
+        ),
+      );
 }

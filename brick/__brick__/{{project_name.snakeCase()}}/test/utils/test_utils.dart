@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:{{project_name.snakeCase()}}/app/config/chopper_config.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 import 'package:{{project_name.snakeCase()}}/bootstrap.dart';
@@ -22,10 +23,12 @@ Future<void> setupInjection() async {
   await getIt.reset();
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = MockPathProviderPlatform();
-  initializeSingletons();
-  await initializeEnvironmentConfig(Env.test);
   SharedPreferences.setMockInitialValues(<String, Object>{});
-  await configureDependencies(Env.test);
+  initializeSingletons();
+  await Future.wait(<Future<void>>[
+    initializeEnvironmentConfig(Env.test),
+    configureDependencies(Env.test),
+  ]);
 }
 
 User get mockUser => UserDTO(
@@ -39,6 +42,8 @@ User get mockUser => UserDTO(
     ).toDomain();
 
 List<Post> get mockPosts => List<Post>.generate(2, (_) => mockPost);
+
+chopper.ChopperClient get mockChopperClient => ChopperConfig().client;
 
 Map<AppScrollController, ScrollController> mockScrollControllers =
     <AppScrollController, ScrollController>{

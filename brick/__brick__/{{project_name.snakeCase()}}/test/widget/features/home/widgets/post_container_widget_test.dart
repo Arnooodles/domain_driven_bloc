@@ -9,7 +9,7 @@ import '../../../../utils/mock_localization.dart';
 import '../../../../utils/test_utils.dart';
 
 void main() {
-  group('PostContainer Widget Tests', () {
+  group(PostContainer, () {
     goldenTest(
       'renders correctly',
       fileName: 'post_container'.goldensVersion,

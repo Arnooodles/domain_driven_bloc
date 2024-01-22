@@ -23,6 +23,11 @@ void main() {
     user = UserDTO.fromDomain(mockUser);
   });
 
+  tearDown(() {
+    provideDummy(mockChopperClient);
+    userService.client.dispose();
+  });
+
   group('User', () {
     test(
       'should return some valid user',

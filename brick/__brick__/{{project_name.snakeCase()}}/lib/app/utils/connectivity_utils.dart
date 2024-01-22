@@ -65,7 +65,9 @@ final class ConnectivityUtils {
   }
 
   Future<void> close() async {
-    await _connectionSubscription?.cancel();
-    await _controller.close();
+    await Future.wait(<Future<void>>[
+      if (_connectionSubscription != null) _connectionSubscription!.cancel(),
+      _controller.close(),
+    ]);
   }
 }

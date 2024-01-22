@@ -10,7 +10,7 @@ import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_dialogs.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/dialogs/confirmation_dialog.dart';
 
 // ignore_for_file: long-method,long-parameter-list
 final class DialogUtils {
