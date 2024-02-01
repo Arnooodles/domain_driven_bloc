@@ -16,13 +16,13 @@ import 'package:very_good_core/app/utils/dialog_utils.dart';
 import 'package:very_good_core/app/utils/error_message_utils.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
-import 'package:very_good_core/core/domain/model/user.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/user.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_app_bar.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_avatar.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/empty_post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container.dart';
 

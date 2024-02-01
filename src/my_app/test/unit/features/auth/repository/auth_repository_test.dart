@@ -3,9 +3,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/core/data/repository/local_storage_repository.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
-import 'package:very_good_core/core/domain/model/value_object.dart';
-import 'package:very_good_core/features/auth/data/model/login_response.dto.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/value_object.dart';
+import 'package:very_good_core/features/auth/data/dto/login_response.dto.dart';
 import 'package:very_good_core/features/auth/data/repository/auth_repository.dart';
 import 'package:very_good_core/features/auth/data/service/auth_service.dart';
 
@@ -32,6 +32,8 @@ void main() {
   tearDown(() {
     provideDummy(mockChopperClient);
     authService.client.dispose();
+    reset(authService);
+    reset(localStorageRepository);
   });
 
   group('Login', () {

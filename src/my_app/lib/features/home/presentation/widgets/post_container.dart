@@ -8,7 +8,7 @@ import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text_url.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_footer.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_header.dart';
 

@@ -5,7 +5,7 @@ import 'package:very_good_core/app/helpers/extensions/datetime_ext.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 
 class PostContainerHeader extends StatelessWidget {
   const PostContainerHeader({

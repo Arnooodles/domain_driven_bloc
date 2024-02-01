@@ -6,9 +6,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/either_ext.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/value_object.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
-import 'package:very_good_core/core/domain/model/value_object.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
 part 'login_bloc.freezed.dart';

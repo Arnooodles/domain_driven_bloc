@@ -9,11 +9,11 @@ import 'package:very_good_core/app/config/app_config.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/constants/trusted_cetificate.dart';
 import 'package:very_good_core/app/helpers/converters/json_serializable_converter.dart';
-import 'package:very_good_core/core/data/model/user.dto.dart';
+import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
-import 'package:very_good_core/features/auth/data/model/login_response.dto.dart';
+import 'package:very_good_core/features/auth/data/dto/login_response.dto.dart';
 import 'package:very_good_core/features/auth/data/service/auth_service.dart';
-import 'package:very_good_core/features/home/data/model/post.dto.dart';
+import 'package:very_good_core/features/home/data/dto/post.dto.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';
 
 final class ChopperConfig {

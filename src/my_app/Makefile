@@ -5,12 +5,12 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Note: In windows, recommended terminal is cmd 
 
-ensure_flutter_version: ## Ensures flutter version is 3.16.8 
-	fvm install 3.16.8
-	fvm use 3.16.8
-	fvm global 3.16.8
+ensure_flutter_version: ## Ensures flutter version is 3.16.9 
+	fvm install 3.16.9
+	fvm use 3.16.9
+	fvm global 3.16.9
 
-## Note: If you are using a specific flutter version, change '3.16.8' to the desired '{flutter version}' you want to use
+## Note: If you are using a specific flutter version, change '3.16.9' to the desired '{flutter version}' you want to use
 
 clean: ## Delete the build/ and .dart_tool/ directories
 	fvm flutter clean
@@ -72,12 +72,12 @@ lcov_gen_widget: ## Generates lcov for widget tests only
 	fvm flutter test test/widget --coverage 
 
 lcov_report_mac: ## Generates lcov report for macOS
-	lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
+	lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/entity/*' '**/dto/*' -o coverage/lcov.info
 	genhtml coverage/lcov.info -o coverage/
 	open coverage/index.html		
 
 lcov_report_win:  ## Generates lcov report for Windows
-	perl ${LCOV} lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/model/*' -o coverage/lcov.info
+	perl ${LCOV} lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/dto/*' '**/entity/*' -o coverage/lcov.info
 	perl ${GENHTML} -o coverage/html coverage/lcov.info
 	CMD /C start coverage/html/index.html	
 

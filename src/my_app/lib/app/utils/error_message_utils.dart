@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
 
 // ignore_for_file: avoid_dynamic_calls
 final class ErrorMessageUtils {

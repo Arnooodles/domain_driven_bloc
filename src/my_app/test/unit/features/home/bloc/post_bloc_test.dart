@@ -4,12 +4,12 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
-import 'package:very_good_core/features/home/data/model/post.dto.dart';
+import 'package:very_good_core/features/home/data/dto/post.dto.dart';
 import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
 
 import 'post_bloc_test.mocks.dart';
 
@@ -40,7 +40,9 @@ void main() {
     ];
   });
 
-  tearDown(() => posts = <Post>[]);
+  tearDown(() {
+    reset(postRepository);
+  });
 
   group('PostBloc getPosts', () {
     blocTest<PostBloc, PostState>(

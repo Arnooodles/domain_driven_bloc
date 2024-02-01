@@ -6,7 +6,7 @@ import 'package:very_good_core/app/helpers/injection.dart';
 import 'package:very_good_core/core/presentation/widgets/connectivity_checker.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_app_bar.dart';
 import 'package:very_good_core/features/home/domain/bloc/post_details/post_details_bloc.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PostDetailsWebview extends StatelessWidget {

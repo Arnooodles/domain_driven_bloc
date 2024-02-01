@@ -1,3 +1,14 @@
+# 1.1.2
+
+- feat: upgrade to flutter 3.16.9
+- feat: add vulnerability check(osv_scanner)
+- refactor: optimize some variables by making it private 
+- refactor: rename data model folder to dto
+- refactor: rename domain model folder to entity
+- chore: update dependencies to the latest version
+- test: implement reset on mocked repositories and services
+- docs: update folder structure 
+
 # 1.1.1
 
 - feat: upgrade to flutter 3.16.8

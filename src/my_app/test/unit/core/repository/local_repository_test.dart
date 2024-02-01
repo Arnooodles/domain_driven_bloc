@@ -26,6 +26,8 @@ void main() {
   tearDown(() {
     unsecuredStorage.clear();
     secureStorage.deleteAll();
+    reset(unsecuredStorage);
+    reset(secureStorage);
   });
 
   group('Secure Storage', () {

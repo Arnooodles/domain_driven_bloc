@@ -199,50 +199,50 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   └── app.dart
 │   ├── core
 │   │   ├── data
-│   │   │   ├── model
+│   │   │   ├── dto
 │   │   │   ├── repository
 │   │   │   └── service
 │   │   ├── domain
 │   │   │   ├── bloc
 │   │   │   ├── interface
-│   │   │   └── model
+│   │   │   └── entity
 │   │   └── presentation
 │   │       ├── views
 │   │       └── widgets
 │   ├── features
 │   │   ├── auth
 │   │   │   ├── data
-│   │   │   │   ├── model
+│   │   │   │   ├── dto
 │   │   │   │   ├── repository
 │   │   │   │   └── service
 │   │   │   ├── domain
 │   │   │   │   ├── bloc
 │   │   │   │   ├── interface
-│   │   │   │   └── model
+│   │   │   │   └── entity
 │   │   │   └── presentation
 │   │   │       ├── views
 │   │   │       └── widgets
 │   │   ├── home
 │   │   │   ├── data
-│   │   │   │   ├── model
+│   │   │   │   ├── dto
 │   │   │   │   ├── repository
 │   │   │   │   └── service
 │   │   │   ├── domain
 │   │   │   │   ├── bloc
 │   │   │   │   ├── interface
-│   │   │   │   └── model
+│   │   │   │   └── entity
 │   │   │   └── presentation
 │   │   │       ├── views
 │   │   │       └── widgets
 │   │   └── profile
 │   │       ├── data
-│   │       │   ├── model
+│   │       │   ├── dto
 │   │       │   ├── repository
 │   │       │   └── service
 │   │       ├── domain
 │   │       │   ├── bloc
 │   │       │   ├── interface
-│   │       │   └── model
+│   │       │   └── entity
 │   │       └── presentation
 │   │           ├── views
 │   │           └── widgets

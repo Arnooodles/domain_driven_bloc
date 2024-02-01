@@ -4,9 +4,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/user.dart';
 import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
-import 'package:very_good_core/core/domain/model/user.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
@@ -29,7 +29,11 @@ void main() {
     authBloc = AuthBloc(userRepository, authRepository);
   });
 
-  tearDown(() => authBloc.close());
+  tearDown(() {
+    authBloc.close();
+    reset(userRepository);
+    reset(authRepository);
+  });
 
   group('AuthBloc initialize', () {
     blocTest<AuthBloc, AuthState>(

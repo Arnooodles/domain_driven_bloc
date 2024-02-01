@@ -1,7 +1,7 @@
-import 'package:very_good_core/core/data/model/user.dto.dart';
-import 'package:very_good_core/core/domain/model/user.dart';
-import 'package:very_good_core/features/home/data/model/post.dto.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/core/data/dto/user.dto.dart';
+import 'package:very_good_core/core/domain/entity/user.dart';
+import 'package:very_good_core/features/home/data/dto/post.dto.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 
 final class MockData {
   static final Post post = PostDTO(

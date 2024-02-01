@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:very_good_core/core/domain/model/value_object.dart';
-import 'package:very_good_core/features/auth/domain/model/login_response.dart';
+import 'package:very_good_core/core/domain/entity/value_object.dart';
+import 'package:very_good_core/features/auth/domain/entity/login_response.dart';
 
 part 'login_response.dto.freezed.dart';
 part 'login_response.dto.g.dart';

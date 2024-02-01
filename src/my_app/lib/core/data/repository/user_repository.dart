@@ -6,11 +6,11 @@ import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
-import 'package:very_good_core/core/data/model/user.dto.dart';
+import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/user.dart';
 import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
-import 'package:very_good_core/core/domain/model/user.dart';
 
 @LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {

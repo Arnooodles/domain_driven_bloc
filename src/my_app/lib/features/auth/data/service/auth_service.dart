@@ -1,5 +1,5 @@
 import 'package:chopper/chopper.dart';
-import 'package:very_good_core/features/auth/data/model/login_response.dto.dart';
+import 'package:very_good_core/features/auth/data/dto/login_response.dto.dart';
 
 part 'auth_service.chopper.dart';
 
