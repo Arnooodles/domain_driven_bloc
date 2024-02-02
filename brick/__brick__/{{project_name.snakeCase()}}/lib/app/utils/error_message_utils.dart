@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 
 // ignore_for_file: avoid_dynamic_calls
 final class ErrorMessageUtils {

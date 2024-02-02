@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/data/model/post.dto.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/repository/post_repository.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/service/post_service.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 
 import '../../../../utils/test_utils.dart';
 import 'post_repository_test.mocks.dart';
@@ -33,6 +33,7 @@ void main() {
   tearDown(() {
     provideDummy(mockChopperClient);
     postService.client.dispose();
+    reset(postService);
   });
 
   group('Get Posts', () {

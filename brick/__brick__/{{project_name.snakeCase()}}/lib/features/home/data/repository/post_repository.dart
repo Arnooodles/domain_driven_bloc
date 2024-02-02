@@ -6,11 +6,11 @@ import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/data/model/post.dto.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/service/post_service.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/interface/i_post_repository.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
 
 // ignore_for_file: avoid_dynamic_calls
 @LazySingleton(as: IPostRepository)

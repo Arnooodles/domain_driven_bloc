@@ -27,6 +27,14 @@ void main() {
   );
 
   blocTest<AppLifeCycleBloc, AppLifeCycleState>(
+    'should emit a inactive lifecycle state',
+    build: () => appLifeCycleBloc,
+    act: (AppLifeCycleBloc bloc) =>
+        setAppLifeCycleState(AppLifecycleState.inactive),
+    expect: () => <dynamic>[const AppLifeCycleState.inactive()],
+  );
+
+  blocTest<AppLifeCycleBloc, AppLifeCycleState>(
     'should emit a hidden lifecycle state',
     build: () => appLifeCycleBloc,
     act: (AppLifeCycleBloc bloc) =>

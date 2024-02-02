@@ -9,11 +9,11 @@ import 'package:{{project_name.snakeCase()}}/app/config/app_config.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/trusted_cetificate.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/converters/json_serializable_converter.dart';
-import 'package:{{project_name.snakeCase()}}/core/data/model/user.dto.dart';
+import 'package:{{project_name.snakeCase()}}/core/data/dto/user.dto.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/service/user_service.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/data/model/login_response.dto.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/data/dto/login_response.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/data/service/auth_service.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/data/model/post.dto.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/service/post_service.dart';
 
 final class ChopperConfig {

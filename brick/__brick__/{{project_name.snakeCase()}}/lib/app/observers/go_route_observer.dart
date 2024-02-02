@@ -6,30 +6,30 @@ import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 @injectable
 final class GoRouteObserver extends NavigatorObserver {
   GoRouteObserver(
-    @factoryParam this.navigatorLocation,
+    @factoryParam this._navigatorLocation,
   );
 
-  final String navigatorLocation;
+  final String _navigatorLocation;
   Logger logger = getIt<Logger>();
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     logger.t(
-      '$navigatorLocation:${route.settings.name} pushed from ${previousRoute?.settings.name}',
+      '$_navigatorLocation:${route.settings.name} pushed from ${previousRoute?.settings.name}',
     );
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     logger.t(
-      '$navigatorLocation:${route.settings.name} popped from ${previousRoute?.settings.name}',
+      '$_navigatorLocation:${route.settings.name} popped from ${previousRoute?.settings.name}',
     );
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     logger.t(
-      '$navigatorLocation:${route.settings.name} removed ${previousRoute?.settings.name}',
+      '$_navigatorLocation:${route.settings.name} removed ${previousRoute?.settings.name}',
     );
   }
 

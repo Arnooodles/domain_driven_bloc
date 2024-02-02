@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}TextUrl({

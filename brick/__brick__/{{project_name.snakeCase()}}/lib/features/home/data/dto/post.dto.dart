@@ -3,11 +3,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/converters/timestamp_to_datetime.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/color_ext.dart';
-
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/validators.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/validators.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 
 part 'post.dto.freezed.dart';
 part 'post.dto.g.dart';

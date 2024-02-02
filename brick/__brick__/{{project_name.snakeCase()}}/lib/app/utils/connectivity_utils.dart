@@ -23,7 +23,9 @@ final class ConnectivityUtils {
       BehaviorSubject<ConnectionStatus>.seeded(ConnectionStatus.online);
   StreamSubscription<ConnectivityResult>? _connectionSubscription;
   ConnectionStatus _currentStatus = ConnectionStatus.online;
+
   bool get isConnected => _currentStatus == ConnectionStatus.online;
+
   bool get isNotConnected => !isConnected;
 
   Stream<ConnectionStatus> internetStatus() {

@@ -10,10 +10,10 @@ import 'package:{{project_name.snakeCase()}}/app/config/chopper_config.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 import 'package:{{project_name.snakeCase()}}/bootstrap.dart';
-import 'package:{{project_name.snakeCase()}}/core/data/model/user.dto.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/user.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/data/model/post.dto.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
+import 'package:{{project_name.snakeCase()}}/core/data/dto/user.dto.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';

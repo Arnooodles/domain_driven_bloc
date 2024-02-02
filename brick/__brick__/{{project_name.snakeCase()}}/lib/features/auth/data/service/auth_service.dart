@@ -1,5 +1,5 @@
 import 'package:chopper/chopper.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/data/model/login_response.dto.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/data/dto/login_response.dto.dart';
 
 part 'auth_service.chopper.dart';
 
