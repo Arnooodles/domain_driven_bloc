@@ -8,7 +8,7 @@ import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/error_message_utils.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/app_title.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/connectivity_checker.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_button.dart';

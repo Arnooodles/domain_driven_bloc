@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 
 class PostContainerFooter extends StatelessWidget {
   const PostContainerFooter({

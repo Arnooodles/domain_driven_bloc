@@ -4,8 +4,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/login/login_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_auth_repository.dart';
 
@@ -30,6 +30,11 @@ void main() {
     localStorageRepository = MockILocalStorageRepository();
     email = 'email@example.com';
     password = 'password';
+  });
+
+  tearDown(() {
+    reset(localStorageRepository);
+    reset(authRepository);
   });
 
   group('LoginBloc initialize', () {

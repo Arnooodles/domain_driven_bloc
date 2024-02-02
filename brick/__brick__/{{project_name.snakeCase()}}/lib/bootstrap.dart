@@ -22,10 +22,9 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
     configureDependencies(env),
   ]);
 
-  final Logger logger = getIt<Logger>();
   Bloc.observer = getIt<AppBlocObserver>();
   FlutterError.onError = (FlutterErrorDetails details) {
-    logger.f(
+    getIt<Logger>().f(
       details.exceptionAsString(),
       error: details,
       stackTrace: details.stack,

@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 
 part 'user.freezed.dart';
 

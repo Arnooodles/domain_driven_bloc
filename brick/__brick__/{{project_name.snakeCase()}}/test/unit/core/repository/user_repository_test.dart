@@ -2,11 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:{{project_name.snakeCase()}}/core/data/model/user.dto.dart';
+import 'package:{{project_name.snakeCase()}}/core/data/dto/user.dto.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/repository/user_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/service/user_service.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/user.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 
 import '../../../utils/test_utils.dart';
 import 'user_repository_test.mocks.dart';
@@ -26,6 +26,7 @@ void main() {
   tearDown(() {
     provideDummy(mockChopperClient);
     userService.client.dispose();
+    reset(userService);
   });
 
   group('User', () {

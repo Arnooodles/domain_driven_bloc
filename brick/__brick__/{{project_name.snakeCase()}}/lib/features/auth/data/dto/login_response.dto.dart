@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/model/login_response.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/domain/entity/login_response.dart';
 
 part 'login_response.dto.freezed.dart';
 part 'login_response.dto.g.dart';

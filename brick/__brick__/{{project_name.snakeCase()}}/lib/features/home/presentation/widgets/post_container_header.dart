@@ -5,7 +5,7 @@ import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/datetime_ext
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 
 class PostContainerHeader extends StatelessWidget {
   const PostContainerHeader({

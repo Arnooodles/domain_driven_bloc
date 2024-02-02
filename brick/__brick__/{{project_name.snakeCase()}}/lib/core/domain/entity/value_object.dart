@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/validators.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/validators.dart';
 
 @immutable
 abstract class ValueObject<T> {

@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter/foundation.dart';
-import 'package:{{project_name.snakeCase()}}/core/data/model/resource_error.dart';
+import 'package:{{project_name.snakeCase()}}/core/data/dto/resource_error.dart';
 
 // ignore_for_file: argument_type_not_assignable,return_of_invalid_type_from_closure,
 // ignore_for_file: unnecessary_overrides,strict_raw_type,inference_failure_on_function_invocation

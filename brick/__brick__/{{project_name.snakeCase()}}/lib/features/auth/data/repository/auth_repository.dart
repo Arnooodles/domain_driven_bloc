@@ -6,10 +6,10 @@ import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/failure.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/model/value_object.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/data/model/login_response.dto.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/data/dto/login_response.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/data/service/auth_service.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_auth_repository.dart';
 

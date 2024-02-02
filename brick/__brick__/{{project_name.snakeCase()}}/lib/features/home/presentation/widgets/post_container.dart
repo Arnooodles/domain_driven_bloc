@@ -8,7 +8,7 @@ import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text_url.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/model/post.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container_footer.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container_header.dart';
 
