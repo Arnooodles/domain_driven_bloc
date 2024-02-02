@@ -5,9 +5,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
 
 part 'post_bloc.freezed.dart';
 part 'post_state.dart';

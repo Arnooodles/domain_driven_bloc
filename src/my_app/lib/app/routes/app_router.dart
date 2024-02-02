@@ -12,7 +12,7 @@ import 'package:very_good_core/core/presentation/views/main_screen.dart';
 import 'package:very_good_core/core/presentation/views/splash_screen.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 import 'package:very_good_core/features/auth/presentation/views/login_screen.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/presentation/views/home_screen.dart';
 import 'package:very_good_core/features/home/presentation/views/post_details_webview.dart';
 import 'package:very_good_core/features/profile/presentation/views/profile_screen.dart';
@@ -21,18 +21,18 @@ part 'app_routes.dart';
 
 @injectable
 final class AppRouter {
-  AppRouter(@factoryParam this.authBloc);
+  AppRouter(@factoryParam this._authBloc);
 
   static const String debugLabel = 'root';
   final GlobalKey<NavigatorState> rootNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: debugLabel);
 
-  final AuthBloc authBloc;
+  final AuthBloc _authBloc;
 
   late final GoRouter router = GoRouter(
     routes: _getRoutes(rootNavigatorKey),
     redirect: _routeGuard,
-    refreshListenable: GoRouterRefreshStream(authBloc.stream),
+    refreshListenable: GoRouterRefreshStream(_authBloc.stream),
     initialLocation: RouteName.initial.path,
     observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: debugLabel)],
     navigatorKey: rootNavigatorKey,
@@ -43,7 +43,7 @@ final class AppRouter {
     final String initialPath = RouteName.initial.path;
     final String homePath = RouteName.home.path;
 
-    return authBloc.state.whenOrNull(
+    return _authBloc.state.whenOrNull(
       initial: () => initialPath,
       unauthenticated: () => loginPath,
       authenticated: (_) {

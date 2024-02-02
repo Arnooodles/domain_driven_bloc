@@ -10,10 +10,10 @@ import 'package:very_good_core/app/config/chopper_config.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/injection.dart';
 import 'package:very_good_core/bootstrap.dart';
-import 'package:very_good_core/core/data/model/user.dto.dart';
-import 'package:very_good_core/core/domain/model/user.dart';
-import 'package:very_good_core/features/home/data/model/post.dto.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
+import 'package:very_good_core/core/data/dto/user.dto.dart';
+import 'package:very_good_core/core/domain/entity/user.dart';
+import 'package:very_good_core/features/home/data/dto/post.dto.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';

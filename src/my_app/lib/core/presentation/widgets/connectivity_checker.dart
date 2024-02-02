@@ -34,7 +34,7 @@ class ConnectivityChecker extends StatefulWidget {
 }
 
 class _ConnectivityCheckerState extends State<ConnectivityChecker> {
-  final ConnectivityUtils connectivityUtils = getIt<ConnectivityUtils>();
+  final ConnectivityUtils _connectivityUtils = getIt<ConnectivityUtils>();
   StreamSubscription<ConnectionStatus>? _connectionSubscription;
   bool _isDialogShowing = false;
   FlashController<void>? _controller;
@@ -92,8 +92,8 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _onStatusChanged(await connectivityUtils.checkInternet());
-      _connectionSubscription ??= connectivityUtils
+      await _onStatusChanged(await _connectivityUtils.checkInternet());
+      _connectionSubscription ??= _connectivityUtils
           .internetStatus()
           .listen((ConnectionStatus event) async {
         await _onStatusChanged(event);

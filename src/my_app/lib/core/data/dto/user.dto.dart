@@ -5,8 +5,8 @@ import 'package:faker/faker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/converters/string_to_datetime.dart';
-import 'package:very_good_core/core/domain/model/user.dart';
-import 'package:very_good_core/core/domain/model/value_object.dart';
+import 'package:very_good_core/core/domain/entity/user.dart';
+import 'package:very_good_core/core/domain/entity/value_object.dart';
 
 part 'user.dto.freezed.dart';
 part 'user.dto.g.dart';

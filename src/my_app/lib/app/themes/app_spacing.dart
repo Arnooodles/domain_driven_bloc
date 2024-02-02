@@ -3,7 +3,7 @@ import 'package:gap/gap.dart' as gap;
 
 // ignore_for_file: prefer-match-file-name, avoid-returning-widgets
 final class Gap extends StatelessWidget {
-  const Gap(this.size, {super.key});
+  const Gap(this._size, {super.key});
 
   factory Gap.xxsmall() => const Gap(Insets.xxsmall);
   factory Gap.xsmall() => const Gap(Insets.xsmall);
@@ -14,10 +14,10 @@ final class Gap extends StatelessWidget {
   factory Gap.xxlarge() => const Gap(Insets.xxlarge);
   factory Gap.xxxlarge() => const Gap(Insets.xxxlarge);
 
-  final double size;
+  final double _size;
 
   @override
-  Widget build(BuildContext context) => gap.Gap(size);
+  Widget build(BuildContext context) => gap.Gap(_size);
 }
 
 final class Insets {

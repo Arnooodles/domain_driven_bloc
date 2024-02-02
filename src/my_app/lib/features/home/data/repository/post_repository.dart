@@ -6,11 +6,11 @@ import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
-import 'package:very_good_core/features/home/data/model/post.dto.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/features/home/data/dto/post.dto.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';
+import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
-import 'package:very_good_core/features/home/domain/model/post.dart';
 
 // ignore_for_file: avoid_dynamic_calls
 @LazySingleton(as: IPostRepository)

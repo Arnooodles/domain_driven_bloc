@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:very_good_core/core/domain/model/value_object.dart';
+import 'package:very_good_core/core/domain/entity/value_object.dart';
 import 'package:very_good_core/features/home/domain/bloc/post_details/post_details_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -22,10 +22,10 @@ void main() {
     blocTest<PostDetailsBloc, PostDetailsState>(
       'should emit a state with the loaded Url',
       build: () => postBloc,
-      act: (PostDetailsBloc bloc) => bloc.initialize(),
+      act: (PostDetailsBloc bloc) => bloc.initialize(initialUrl),
       expect: () => <PostDetailsState>[],
       verify: (PostDetailsBloc postBloc) {
-        expect(postBloc.loadUrl, initialUrl);
+        expect(postBloc.state.webviewUrl, initialUrl);
       },
     );
 

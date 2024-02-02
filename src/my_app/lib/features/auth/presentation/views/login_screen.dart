@@ -8,7 +8,7 @@ import 'package:very_good_core/app/helpers/injection.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
 import 'package:very_good_core/app/utils/error_message_utils.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/presentation/widgets/app_title.dart';
 import 'package:very_good_core/core/presentation/widgets/connectivity_checker.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';

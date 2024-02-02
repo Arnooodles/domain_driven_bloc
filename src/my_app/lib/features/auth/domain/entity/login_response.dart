@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:very_good_core/core/domain/model/failure.dart';
-import 'package:very_good_core/core/domain/model/value_object.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/value_object.dart';
 
 part 'login_response.freezed.dart';
 
