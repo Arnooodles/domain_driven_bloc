@@ -5,12 +5,12 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Note: In windows, recommended terminal is cmd 
 
-ensure_flutter_version: ## Ensures flutter version is 3.16.9 
-	fvm install 3.16.9
-	fvm use 3.16.9
-	fvm global 3.16.9
+ensure_flutter_version: ## Ensures flutter version is 3.19.1 
+	fvm install 3.19.1
+	fvm use 3.19.1
+	fvm global 3.19.1
 
-## Note: If you are using a specific flutter version, change '3.16.9' to the desired '{flutter version}' you want to use
+## Note: If you are using a specific flutter version, change '3.19.1' to the desired '{flutter version}' you want to use
 
 clean: ## Delete the build/ and .dart_tool/ directories
 	fvm flutter clean

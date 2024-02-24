@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:{{project_name.snakeCase()}}/app/config/scroll_behavior_config.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/app_router.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
@@ -50,23 +50,32 @@ class App extends StatelessWidget {
     ),
     const Breakpoint(
       start: Constant.tabletBreakpoint + 1,
-      end: Constant.desktopBreakpoint,
-      name: DESKTOP,
-    ),
-    const Breakpoint(
-      start: Constant.desktopBreakpoint + 1,
       end: double.infinity,
-      name: '4K',
+      name: DESKTOP,
     ),
   ];
 
-  final List<LocalizationsDelegate<dynamic>> _localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
+  final List<LocalizationsDelegate<dynamic>> _localizationsDelegates = <LocalizationsDelegate<dynamic>>[
     AppLocalizations.delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
   ];
+
+  List<Condition<double>> _getResponsiveWidth(BuildContext context) => <Condition<double>>[
+        Condition<double>.equals(
+          name: MOBILE,
+          value: Constant.mobileBreakpoint,
+        ),
+        Condition<double>.equals(
+          name: TABLET,
+          value: Constant.tabletBreakpoint,
+        ),
+        Condition<double>.equals(
+          name: DESKTOP,
+          value: context.screenWidth,
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -75,21 +84,15 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: _providers,
       child: BlocBuilder<ThemeBloc, ThemeMode>(
-        builder: (BuildContext context, ThemeMode themeMode) =>
-            MaterialApp.router(
+        builder: (BuildContext context, ThemeMode themeMode) => MaterialApp.router(
           routerConfig: _appRouter.router,
-          builder: (BuildContext context, Widget? child) =>
-              ResponsiveBreakpoints.builder(
+          builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
             child: Builder(
               builder: (BuildContext context) => ResponsiveScaledBox(
                 width: ResponsiveValue<double>(
                   context,
-                  conditionalValues: <Condition<double>>[
-                    Condition<double>.equals(
-                      name: MOBILE,
-                      value: Constant.mobileBreakpoint,
-                    ),
-                  ],
+                  defaultValue: Constant.mobileBreakpoint,
+                  conditionalValues: _getResponsiveWidth(context),
                 ).value,
                 child: child!,
               ),
@@ -103,7 +106,6 @@ class App extends StatelessWidget {
           localizationsDelegates: _localizationsDelegates,
           supportedLocales: AppLocalizations.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
-          scrollBehavior: ScrollBehaviorConfig(),
         ),
       ),
     );
