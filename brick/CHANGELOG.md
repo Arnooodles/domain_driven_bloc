@@ -1,3 +1,10 @@
+# 1.1.3
+
+- feat: upgrade to flutter 3.16.9
+- chore: update dependencies to the latest version
+- fix: responsive width conditions
+- refactor: remove scroll_behavior_config
+
 # 1.1.2
 
 - feat: upgrade to flutter 3.16.9
