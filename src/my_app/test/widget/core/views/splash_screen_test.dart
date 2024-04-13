@@ -41,6 +41,7 @@ void main() {
       appCoreBloc = MockAppCoreBloc();
 
       final AuthState authState = AuthState.authenticated(user: mockUser);
+      provideDummy(authState);
       when(authBloc.stream).thenAnswer(
         (_) => Stream<AuthState>.fromIterable(<AuthState>[authState]),
       );

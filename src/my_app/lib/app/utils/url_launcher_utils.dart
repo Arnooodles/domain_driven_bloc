@@ -1,6 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 
-class UrlLauncherUtils {
+final class UrlLauncherUtils {
   static Future<void> makePhoneCall(String phoneNumber) async {
     final Uri phoneNumberUri = Uri(
       scheme: 'tel',

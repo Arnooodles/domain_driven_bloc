@@ -1,7 +1,7 @@
 part of 'post_details_bloc.dart';
 
 @freezed
-class PostDetailsState with _$PostDetailsState {
+sealed class PostDetailsState with _$PostDetailsState {
   factory PostDetailsState({
     required Url? webviewUrl,
     required int loadingProgress,

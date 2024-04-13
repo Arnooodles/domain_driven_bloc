@@ -7,7 +7,7 @@ import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dar
 part 'user.freezed.dart';
 
 @freezed
-class User with _$User {
+sealed class User with _$User {
   const factory User({
     required UniqueId uid,
     required ValueName firstName,

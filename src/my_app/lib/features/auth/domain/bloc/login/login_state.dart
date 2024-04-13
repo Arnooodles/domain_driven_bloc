@@ -1,7 +1,7 @@
 part of 'login_bloc.dart';
 
 @freezed
-class LoginState with _$LoginState {
+sealed class LoginState with _$LoginState {
   const factory LoginState({
     required bool isLoading,
     required LoginStatus loginStatus,
@@ -17,7 +17,7 @@ class LoginState with _$LoginState {
 }
 
 @freezed
-class LoginStatus with _$LoginStatus {
+sealed class LoginStatus with _$LoginStatus {
   const factory LoginStatus.initial() = _Initial;
   const factory LoginStatus.success() = _Success;
   const factory LoginStatus.failed(Failure failure) = _Failure;

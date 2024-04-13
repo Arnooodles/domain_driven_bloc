@@ -37,6 +37,7 @@ void main() {
     appCoreBloc = MockAppCoreBloc();
     hidableBloc = MockHidableBloc();
     scrollControllers = mockScrollControllers;
+    provideDummy(AppCoreState.initial());
     when(appCoreBloc.stream).thenAnswer(
       (_) => Stream<AppCoreState>.fromIterable(
         <AppCoreState>[

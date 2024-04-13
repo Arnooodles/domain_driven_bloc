@@ -47,6 +47,8 @@ void main() {
     appCoreBloc = MockAppCoreBloc();
     scrollControllers = mockScrollControllers;
     final AuthState authState = AuthState.authenticated(user: mockUser);
+    provideDummy(authState);
+    provideDummy(AppCoreState.initial());
     when(authBloc.stream).thenAnswer(
       (_) => Stream<AuthState>.fromIterable(<AuthState>[authState]),
     );
@@ -92,6 +94,7 @@ void main() {
     } else {
       getIt.registerFactory<PostBloc>(() => postBloc);
     }
+    provideDummy(state);
     when(postBloc.stream).thenAnswer(
       (_) => stream,
     );

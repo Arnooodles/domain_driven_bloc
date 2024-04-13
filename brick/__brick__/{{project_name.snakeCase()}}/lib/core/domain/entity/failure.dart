@@ -4,7 +4,7 @@ import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 part 'failure.freezed.dart';
 
 @freezed
-class Failure with _$Failure {
+sealed class Failure with _$Failure {
   const factory Failure.emptyString({required String? property}) = EmptyString;
 
   const factory Failure.exceedingCharacterLength({int? min, int? max}) =

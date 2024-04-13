@@ -5,25 +5,25 @@
 - feat: add package_info_plus
 - feat: add flutter_svg
 - feat: add app sizes class
-- feat: add core icon widget that supports svg or icon data
+- feat: add core icon widget that supports SVG or icon data
 - feat: add core webview widget
 - feat: implement url launcher utils
 - feat: implement common app utils
-- feat: implement svg preloader 
+- feat: implement SVG preloader 
 - refactor: change some bloc builders to instead use context.watch()
 - refactor: change local_storage setters from bool to void
 - refactor: dependency injection folder structure 
 - refactor: migrate deprecated imperative apply of Flutter's Gradle plugins
 - refactor: service locator and modules 
+- refactor: add sealed class modifier to freezed classes
 - test: add widget test for core icon
 - test: add unit test for device repository
-- test: fix tests that were affect with the updates
+- test: fix tests that were affected by the updates
 - chore: update dependencies to the latest version
 - chore: update workflow dependencies to the latest version
-- chore: update minimum sdk to 3.3.0
+- chore: update minimum SDK to 3.3.0
 - chore: update goldens files
 - docs: update README with regards to the updates
-
 # 1.1.3
 
 - feat: upgrade to flutter 3.16.9
