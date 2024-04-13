@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch development",
+      "name": "[Debug] Launch development",
       "request": "launch",
       "type": "dart",
       "program": "lib/main_development.dart",
@@ -17,14 +17,27 @@
       ]
     },
     {
-      "name": "Launch staging",
+      "name": "[Profile] Launch development",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "program": "lib/main_development.dart",
+      "args": [
+        "--flavor",
+        "development",
+        "--target",
+        "lib/main_development.dart",
+      ]
+    },
+    {
+      "name": "[Debug] Launch staging",
       "request": "launch",
       "type": "dart",
       "program": "lib/main_staging.dart",
       "args": ["--flavor", "staging", "--target", "lib/main_staging.dart"]
     },
     {
-      "name": "Launch production",
+      "name": "[Debug] Launch production",
       "request": "launch",
       "type": "dart",
       "program": "lib/main_production.dart",

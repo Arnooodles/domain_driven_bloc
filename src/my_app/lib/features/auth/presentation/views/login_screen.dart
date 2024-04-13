@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/helpers/injection.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
 import 'package:very_good_core/app/utils/error_message_utils.dart';

@@ -4,7 +4,7 @@ import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/helpers/injection.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/utils/connectivity_utils.dart';

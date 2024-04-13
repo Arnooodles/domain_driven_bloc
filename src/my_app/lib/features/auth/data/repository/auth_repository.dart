@@ -42,15 +42,11 @@ class AuthRepository implements IAuthRepository {
 
       if (statusCode.isSuccess && response.body != null) {
         // Save tokens to local storage
-        final List<bool> results = await Future.wait(<Future<bool>>[
+        await Future.wait(<Future<void>>[
           _localStorageRepository.setAccessToken(response.body!.accessToken),
           _localStorageRepository.setRefreshToken(response.body!.refreshToken),
           _localStorageRepository.setLastLoggedInEmail(emailAddress),
         ]);
-
-        if (results.contains(false)) {
-          return left(const Failure.storageError());
-        }
 
         return right(unit);
       } else {
@@ -72,14 +68,10 @@ class AuthRepository implements IAuthRepository {
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
       //clear auth tokens from the local storage
-      final List<bool> results = await Future.wait(<Future<bool>>[
+      await Future.wait(<Future<void>>[
         _localStorageRepository.setAccessToken(null),
         _localStorageRepository.setRefreshToken(null),
       ]);
-
-      if (results.contains(false)) {
-        return left(const Failure.storageError());
-      }
 
       return right(unit);
     } catch (error) {

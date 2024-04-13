@@ -5,7 +5,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/generated/l10n.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/helpers/injection.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/routes/app_router.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
@@ -17,9 +17,9 @@ import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 class App extends StatelessWidget {
   App({super.key});
 
-  final AppRouter _appRouter = getIt<AppRouter>(param1: getIt<AuthBloc>());
+  final AppRouter _appRouter = getIt<AppRouter>();
 
-  final List<BlocProvider<dynamic>> _providers = <BlocProvider<dynamic>>[
+  final List<BlocProvider<dynamic>> _globalProviders = <BlocProvider<dynamic>>[
     BlocProvider<AuthBloc>(
       create: (BuildContext context) => getIt<AuthBloc>(),
     ),
@@ -55,19 +55,21 @@ class App extends StatelessWidget {
     ),
   ];
 
-  final List<LocalizationsDelegate<dynamic>> _localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  final List<LocalizationsDelegate<dynamic>> _localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     AppLocalizations.delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
   ];
 
-  List<Condition<double>> _getResponsiveWidth(BuildContext context) => <Condition<double>>[
-        Condition<double>.equals(
+  List<Condition<double>> _getResponsiveWidth(BuildContext context) =>
+      <Condition<double>>[
+        const Condition<double>.equals(
           name: MOBILE,
           value: Constant.mobileBreakpoint,
         ),
-        Condition<double>.equals(
+        const Condition<double>.equals(
           name: TABLET,
           value: Constant.tabletBreakpoint,
         ),
@@ -82,11 +84,12 @@ class App extends StatelessWidget {
     /// This will tell you which image is oversized by throwing an exception.
     debugInvertOversizedImages = true;
     return MultiBlocProvider(
-      providers: _providers,
-      child: BlocBuilder<ThemeBloc, ThemeMode>(
-        builder: (BuildContext context, ThemeMode themeMode) => MaterialApp.router(
+      providers: _globalProviders,
+      child: Builder(
+        builder: (BuildContext context) => MaterialApp.router(
           routerConfig: _appRouter.router,
-          builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
+          builder: (BuildContext context, Widget? child) =>
+              ResponsiveBreakpoints.builder(
             child: Builder(
               builder: (BuildContext context) => ResponsiveScaledBox(
                 width: ResponsiveValue<double>(
@@ -102,7 +105,9 @@ class App extends StatelessWidget {
           title: Constant.appName,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: themeMode,
+          themeMode: context.watch<ThemeBloc>().state,
+          themeAnimationCurve: Curves.fastOutSlowIn,
+          themeAnimationDuration: const Duration(milliseconds: 500),
           localizationsDelegates: _localizationsDelegates,
           supportedLocales: AppLocalizations.delegate.supportedLocales,
           debugShowCheckedModeBanner: false,
