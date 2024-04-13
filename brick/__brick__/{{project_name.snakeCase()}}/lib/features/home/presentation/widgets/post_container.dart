@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
+import 'package:{{project_name.snakeCase()}}/app/utils/url_launcher_utils.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text_url.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container_footer.dart';
@@ -87,7 +88,7 @@ class PostContainer extends StatelessWidget {
 
   Future<void> launchPostDetails(BuildContext context) async {
     if (kIsWeb) {
-      await launchUrl(
+      await UrlLauncherUtils.launch(
         Uri.parse(post.permalink.getOrCrash()),
         webOnlyWindowName: '_blank',
       );

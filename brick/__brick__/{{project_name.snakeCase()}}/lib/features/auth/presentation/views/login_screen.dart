@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/error_message_utils.dart';

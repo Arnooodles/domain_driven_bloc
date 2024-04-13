@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 
 @injectable
 final class GoRouteObserver extends NavigatorObserver {
@@ -14,29 +15,37 @@ final class GoRouteObserver extends NavigatorObserver {
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _logger.t(
-      '$_navigatorLocation:${route.settings.name} pushed from ${previousRoute?.settings.name}',
-    );
+    if (kDebugMode) {
+      _logger.t(
+        '$_navigatorLocation:${route.settings.name} pushed from ${previousRoute?.settings.name}',
+      );
+    }
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _logger.t(
-      '$_navigatorLocation:${route.settings.name} popped from ${previousRoute?.settings.name}',
-    );
+    if (kDebugMode) {
+      _logger.t(
+        '$_navigatorLocation:${route.settings.name} popped from ${previousRoute?.settings.name}',
+      );
+    }
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _logger.t(
-      '$_navigatorLocation:${route.settings.name} removed ${previousRoute?.settings.name}',
-    );
+    if (kDebugMode) {
+      _logger.t(
+        '$_navigatorLocation:${route.settings.name} removed ${previousRoute?.settings.name}',
+      );
+    }
   }
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    _logger.t(
-      '${newRoute?.settings.name} replaced ${oldRoute?.settings.name}',
-    );
+    if (kDebugMode) {
+      _logger.t(
+        '${newRoute?.settings.name} replaced ${oldRoute?.settings.name}',
+      );
+    }
   }
 }

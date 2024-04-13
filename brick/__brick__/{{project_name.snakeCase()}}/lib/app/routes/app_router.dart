@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/app/observers/go_route_observer.dart';
+import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/transition_page_utils.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/views/main_screen.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/views/splash_screen.dart';
@@ -14,14 +14,14 @@ import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth
 import 'package:{{project_name.snakeCase()}}/features/auth/presentation/views/login_screen.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/views/home_screen.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/presentation/views/post_details_webview.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/presentation/views/post_details_screen.dart';
 import 'package:{{project_name.snakeCase()}}/features/profile/presentation/views/profile_screen.dart';
 
 part 'app_routes.dart';
 
 @injectable
 final class AppRouter {
-  AppRouter(@factoryParam this._authBloc);
+  AppRouter(this._authBloc);
 
   static const String debugLabel = 'root';
   final GlobalKey<NavigatorState> rootNavigatorKey =
@@ -61,18 +61,18 @@ final class AppRouter {
 }
 
 class GoRouterRefreshStream extends ChangeNotifier {
-  GoRouterRefreshStream(Stream<dynamic> stream) {
+  GoRouterRefreshStream(Stream<AuthState> auntStateStream) {
     notifyListeners();
-    _subscription = stream.asBroadcastStream().listen((_) {
+    _authStreamSubscription = auntStateStream.asBroadcastStream().listen((_) {
       notifyListeners();
     });
   }
 
-  late final StreamSubscription<dynamic> _subscription;
+  late final StreamSubscription<AuthState> _authStreamSubscription;
 
   @override
   void dispose() {
-    _subscription.cancel();
+    _authStreamSubscription.cancel();
     super.dispose();
   }
 }

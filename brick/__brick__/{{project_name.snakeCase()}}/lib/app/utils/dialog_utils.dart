@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:flash/flash.dart';
 import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
+import 'package:{{project_name.snakeCase()}}/app/utils/app_utils.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/dialogs/confirmation_dialog.dart';
 
 // ignore_for_file: long-method,long-parameter-list
@@ -20,13 +19,7 @@ final class DialogUtils {
       await DialogUtils.showConfirmationDialog(
         context,
         message: AppLocalizations.of(context).dialog__message__exit_message,
-        onPositivePressed: () {
-          if (Platform.isAndroid) {
-            SystemNavigator.pop();
-          } else if (Platform.isIOS) {
-            exit(0);
-          }
-        },
+        onPositivePressed: AppUtils.closeApp,
       ) ??
       false;
 
