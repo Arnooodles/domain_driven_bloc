@@ -6,7 +6,7 @@ import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dar
 part 'login_response.freezed.dart';
 
 @freezed
-class LoginResponse with _$LoginResponse {
+sealed class LoginResponse with _$LoginResponse {
   const factory LoginResponse({
     required AuthToken accessToken,
     required AuthToken refreshToken,

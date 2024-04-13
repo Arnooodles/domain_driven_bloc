@@ -27,6 +27,7 @@ void main() {
     authBloc = MockAuthBloc();
     appCoreBloc = MockAppCoreBloc();
     scrollControllers = mockScrollControllers;
+    provideDummy(AppCoreState.initial());
     when(appCoreBloc.stream).thenAnswer(
       (_) => Stream<AppCoreState>.fromIterable(
         <AppCoreState>[
@@ -47,6 +48,7 @@ void main() {
 
   AuthBloc setUpAuthBloc(Stream<AuthState> stream, AuthState state) {
     authBloc = MockAuthBloc();
+    provideDummy(state);
     when(authBloc.stream).thenAnswer((_) => stream);
     when(authBloc.state).thenAnswer((_) => state);
     return authBloc;

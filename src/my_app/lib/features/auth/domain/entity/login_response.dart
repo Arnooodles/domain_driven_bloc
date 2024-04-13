@@ -6,7 +6,7 @@ import 'package:very_good_core/core/domain/entity/value_object.dart';
 part 'login_response.freezed.dart';
 
 @freezed
-class LoginResponse with _$LoginResponse {
+sealed class LoginResponse with _$LoginResponse {
   const factory LoginResponse({
     required AuthToken accessToken,
     required AuthToken refreshToken,

@@ -8,7 +8,7 @@ import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dar
 part 'post.freezed.dart';
 
 @freezed
-class Post with _$Post {
+sealed class Post with _$Post {
   const factory Post({
     required UniqueId uid,
     required ValueString title,

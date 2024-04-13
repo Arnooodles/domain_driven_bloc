@@ -19,6 +19,9 @@ on:
       - "tool/generator/**"
 
 jobs:
+  verify-semantic-pull-request:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+
   build:
     defaults:
       run:

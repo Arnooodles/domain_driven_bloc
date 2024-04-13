@@ -8,7 +8,7 @@ part 'login_response.dto.freezed.dart';
 part 'login_response.dto.g.dart';
 
 @freezed
-class LoginResponseDTO with _$LoginResponseDTO {
+sealed class LoginResponseDTO with _$LoginResponseDTO {
   const factory LoginResponseDTO({
     @JsonKey(name: 'token') required String accessToken,
     String? refreshToken,

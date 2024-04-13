@@ -39,7 +39,7 @@ linter:
     omit_local_variable_types: false
     avoid_classes_with_only_static_members: false
     lines_longer_than_80_chars: false
- 
+    no_default_cases: false
 
 
 

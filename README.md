@@ -125,6 +125,16 @@ Out of the box, Domain-Driven Bloc includes:
   ✅ [Intl](https://pub.dev/packages/intl) \
   ✅ [Intl Utils](https://pub.dev/packages/intl_utils)
 
+#### Package & Device Info
+
+  ✅ [Package Info Plus](https://pub.dev/packages/package_info_plus) \
+  ✅ [Device Info Plus](https://pub.dev/packages/device_info_plus)  
+
+#### Assets
+
+  ✅ [Flutter Svg](https://pub.dev/packages/flutter_svg) \
+  ✅ [Flutter Gen](https://pub.dev/packages/flutter_gen)
+
 #### Testing
 
   ✅ [Alchemist](https://pub.dev/packages/alchemist) \
@@ -139,7 +149,6 @@ Out of the box, Domain-Driven Bloc includes:
 
 #### Code Quality
 
-  ✅ [Flutter Gen](https://pub.dev/packages/flutter_gen) \
   ✅ [Very Good Analysis](https://pub.dev/packages/flutter_lints) \
   ✅ [Dependency Validator](https://pub.dev/packages/dependency_validator)
 
@@ -191,7 +200,8 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   ├── generated
 │   │   ├── helpers
 │   │   │   ├── converters
-│   │   │   └── extensions
+│   │   │   ├── extensions
+│   │   │   └── injection
 │   │   ├── observers
 │   │   ├── routes
 │   │   ├── themes

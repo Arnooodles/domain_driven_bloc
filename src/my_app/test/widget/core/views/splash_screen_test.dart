@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/presentation/views/splash_screen.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
@@ -14,12 +15,21 @@ import 'splash_screen_test.mocks.dart';
 
 @GenerateNiceMocks(<MockSpec<dynamic>>[
   MockSpec<AuthBloc>(),
+  MockSpec<AppCoreBloc>(),
 ])
 void main() {
   late MockAuthBloc authBloc;
+  late MockAppCoreBloc appCoreBloc;
 
-  Widget buildSplashScreen(AuthBloc authBloc) => BlocProvider<AuthBloc>(
-        create: (BuildContext context) => authBloc,
+  Widget buildSplashScreen(AuthBloc authBloc) => MultiBlocProvider(
+        providers: <BlocProvider<dynamic>>[
+          BlocProvider<AuthBloc>(
+            create: (BuildContext context) => authBloc,
+          ),
+          BlocProvider<AppCoreBloc>(
+            create: (BuildContext context) => appCoreBloc,
+          ),
+        ],
         child: const MockMaterialApp(
           child: SplashScreen(),
         ),
@@ -28,8 +38,10 @@ void main() {
   group(SplashScreen, () {
     setUp(() {
       authBloc = MockAuthBloc();
+      appCoreBloc = MockAppCoreBloc();
 
       final AuthState authState = AuthState.authenticated(user: mockUser);
+      provideDummy(authState);
       when(authBloc.stream).thenAnswer(
         (_) => Stream<AuthState>.fromIterable(<AuthState>[authState]),
       );

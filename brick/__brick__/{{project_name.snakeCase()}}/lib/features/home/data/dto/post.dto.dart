@@ -12,7 +12,7 @@ part 'post.dto.freezed.dart';
 part 'post.dto.g.dart';
 
 @freezed
-class PostDTO with _$PostDTO {
+sealed class PostDTO with _$PostDTO {
   const factory PostDTO({
     @JsonKey(name: 'id') required String uid,
     required String title,

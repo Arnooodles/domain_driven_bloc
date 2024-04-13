@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:safe_device/safe_device.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
+import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/presentation/widgets/app_title.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
@@ -17,9 +16,18 @@ class SplashScreen extends HookWidget {
   void _initialize(BuildContext context) =>
       WidgetsBinding.instance.addPostFrameCallback(
         (_) async => await _isDeviceSafe() && context.mounted
-            ? await context.read<AuthBloc>().initialize()
+            ? await _initializeBlocs(context)
             : await _showUnsupportedDeviceDialog(context),
       );
+
+  Future<void> _initializeBlocs(BuildContext context) async {
+    if (context.mounted) {
+      await Future.wait(<Future<void>>[
+        context.read<AppCoreBloc>().initialize(),
+        context.read<AuthBloc>().initialize(),
+      ]);
+    }
+  }
 
   Future<void> _showUnsupportedDeviceDialog(BuildContext context) async {
     await showFlash<void>(
@@ -46,10 +54,11 @@ class SplashScreen extends HookWidget {
   }
 
   Future<bool> _isDeviceSafe() async {
-    if (kDebugMode) {
+    if (kDebugMode || kProfileMode) {
       return true;
     } else {
-      final bool isDevice = Platform.isIOS || Platform.isAndroid;
+      final bool isDevice = defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.android;
       if (isDevice) {
         final List<bool> results = await Future.wait(<Future<bool>>[
           SafeDevice.isRealDevice,

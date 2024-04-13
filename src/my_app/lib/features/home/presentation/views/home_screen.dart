@@ -7,9 +7,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/constants/mock_data.dart';
-import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/helpers/injection.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
+import 'package:very_good_core/app/routes/route_name.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
@@ -41,7 +41,9 @@ class HomeScreen extends HookWidget {
         titleColor: context.colorScheme.primary,
         actions: <Widget>[
           IconButton(
-            onPressed: () => context.read<ThemeBloc>().switchTheme(Theme.of(context).brightness),
+            onPressed: () => context
+                .read<ThemeBloc>()
+                .switchTheme(Theme.of(context).brightness),
             icon: Theme.of(context).brightness == Brightness.dark
                 ? Icon(Icons.light_mode, color: iconColor)
                 : Icon(Icons.dark_mode, color: iconColor),
@@ -50,7 +52,8 @@ class HomeScreen extends HookWidget {
             builder: (BuildContext context, AuthState state) => state.maybeWhen(
               orElse: SizedBox.shrink,
               authenticated: (User user) => GestureDetector(
-                onTap: () => GoRouter.of(context).goNamed(RouteName.profile.name),
+                onTap: () =>
+                    GoRouter.of(context).goNamed(RouteName.profile.name),
                 child: VeryGoodCoreAvatar(
                   size: 32,
                   imageUrl: user.avatar?.getOrCrash(),
@@ -89,9 +92,12 @@ class _HomeContent extends HookWidget {
             listener: (BuildContext context, PostState state) =>
                 _onStateChangeListener(context, state, isDialogShowing),
             builder: (BuildContext context, PostState state) => state.maybeWhen(
-              success: (List<Post> posts) => posts.isNotEmpty ? _PostList(posts: posts) : const EmptyPost(),
+              success: (List<Post> posts) => posts.isNotEmpty
+                  ? _PostList(posts: posts)
+                  : const EmptyPost(),
               orElse: () => Skeletonizer(
-                textBoneBorderRadius: TextBoneBorderRadius(AppTheme.defaultBoardRadius),
+                textBoneBorderRadius:
+                    TextBoneBorderRadius(AppTheme.defaultBoardRadius),
                 justifyMultiLineText: true,
                 child: _PostList(
                   posts: _generateFakePostData(),
@@ -137,8 +143,8 @@ class _PostList extends StatelessWidget {
   final List<Post> posts;
 
   @override
-  Widget build(BuildContext context) =>
-      BlocSelector<AppCoreBloc, AppCoreState, Map<AppScrollController, ScrollController>>(
+  Widget build(BuildContext context) => BlocSelector<AppCoreBloc, AppCoreState,
+          Map<AppScrollController, ScrollController>>(
         selector: (AppCoreState state) => state.scrollControllers,
         builder: (
           BuildContext context,
@@ -146,9 +152,13 @@ class _PostList extends StatelessWidget {
         ) =>
             ListView.separated(
           padding: const EdgeInsets.only(top: Insets.medium),
-          controller: scrollController.isNotEmpty ? scrollController[AppScrollController.home] : ScrollController(),
-          itemBuilder: (BuildContext context, int index) => PostContainer(post: posts[index]),
-          separatorBuilder: (BuildContext context, int index) => const Gap(Insets.small),
+          controller: scrollController.isNotEmpty
+              ? scrollController[AppScrollController.home]
+              : ScrollController(),
+          itemBuilder: (BuildContext context, int index) =>
+              PostContainer(post: posts[index]),
+          separatorBuilder: (BuildContext context, int index) =>
+              const Gap(Insets.small),
           itemCount: posts.length,
         ),
       );

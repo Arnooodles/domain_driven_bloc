@@ -7,7 +7,7 @@ import 'package:very_good_core/core/domain/entity/value_object.dart';
 part 'user.freezed.dart';
 
 @freezed
-class User with _$User {
+sealed class User with _$User {
   const factory User({
     required UniqueId uid,
     required ValueName firstName,

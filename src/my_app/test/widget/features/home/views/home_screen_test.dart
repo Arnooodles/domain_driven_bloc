@@ -6,8 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/app/constants/route_name.dart';
-import 'package:very_good_core/app/helpers/injection.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
+import 'package:very_good_core/app/routes/route_name.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
@@ -47,6 +47,8 @@ void main() {
     appCoreBloc = MockAppCoreBloc();
     scrollControllers = mockScrollControllers;
     final AuthState authState = AuthState.authenticated(user: mockUser);
+    provideDummy(authState);
+    provideDummy(AppCoreState.initial());
     when(authBloc.stream).thenAnswer(
       (_) => Stream<AuthState>.fromIterable(<AuthState>[authState]),
     );
@@ -92,6 +94,7 @@ void main() {
     } else {
       getIt.registerFactory<PostBloc>(() => postBloc);
     }
+    provideDummy(state);
     when(postBloc.stream).thenAnswer(
       (_) => stream,
     );

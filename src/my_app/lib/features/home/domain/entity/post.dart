@@ -8,7 +8,7 @@ import 'package:very_good_core/core/domain/entity/value_object.dart';
 part 'post.freezed.dart';
 
 @freezed
-class Post with _$Post {
+sealed class Post with _$Post {
   const factory Post({
     required UniqueId uid,
     required ValueString title,

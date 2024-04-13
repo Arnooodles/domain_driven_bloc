@@ -1,14 +1,17 @@
 import 'dart:convert';
 
 import 'package:chopper/chopper.dart' as chopper;
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:very_good_core/app/config/chopper_config.dart';
+import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/constants/enum.dart';
-import 'package:very_good_core/app/helpers/injection.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/bootstrap.dart';
 import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
@@ -24,12 +27,83 @@ Future<void> setupInjection() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = MockPathProviderPlatform();
   SharedPreferences.setMockInitialValues(<String, Object>{});
-  initializeSingletons();
+  _mockPackageInfo();
   await Future.wait(<Future<void>>[
     initializeEnvironmentConfig(Env.test),
     configureDependencies(Env.test),
   ]);
 }
+
+void _mockPackageInfo() {
+  PackageInfo.setMockInitialValues(
+    appName: Constant.appName,
+    packageName: 'com.example.example',
+    version: '1.0',
+    buildNumber: '1',
+    buildSignature: 'buildSignature',
+  );
+}
+
+AndroidDeviceInfo mockAndroidDeviceInfo({
+  String? phoneModel,
+  String? version,
+}) =>
+    AndroidDeviceInfo.fromMap(<String, dynamic>{
+      'model': phoneModel ?? 'model',
+      'version': <String, dynamic>{
+        'baseOS': 'baseOS',
+        'codename': 'codename',
+        'incremental': 'incremental',
+        'previewSdkInt': 1,
+        'release': version ?? 'release',
+        'sdkInt': 1,
+        'securityPatch': 'securityPatch',
+      },
+      'board': 'board',
+      'bootloader': 'bootloader',
+      'brand': 'brand',
+      'device': 'device',
+      'display': 'display',
+      'fingerprint': 'fingerprint',
+      'hardware': 'hardware',
+      'host': 'host',
+      'id': 'id',
+      'manufacturer': 'manufacturer',
+      'product': 'product',
+      'tags': 'tags',
+      'type': 'type',
+      'isPhysicalDevice': false,
+      'serialNumber': 'serialNumber',
+      'isLowRamDevice': false,
+      'displayMetrics': <String, double>{
+        'widthPx': 0.0,
+        'heightPx': 0.0,
+        'xDpi': 0.0,
+        'yDpi': 0.0,
+      },
+    });
+
+IosDeviceInfo mockIosDeviceInfo({
+  String? phoneModel,
+  String? os,
+  String? version,
+}) =>
+    IosDeviceInfo.fromMap(<String, dynamic>{
+      'data': <String, dynamic>{},
+      'name': 'name',
+      'systemName': os ?? 'systemName',
+      'systemVersion': version ?? 'systemVersion',
+      'model': phoneModel ?? 'model',
+      'localizedModel': 'localizedModel',
+      'isPhysicalDevice': false,
+      'utsname': <String, dynamic>{
+        'sysname': 'sysname',
+        'nodename': 'nodename',
+        'release': 'release',
+        'version': 'version',
+        'machine': 'machine',
+      },
+    });
 
 User get mockUser => UserDTO(
       uid: 1,

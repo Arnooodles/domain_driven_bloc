@@ -4,7 +4,7 @@ import 'package:very_good_core/app/constants/enum.dart';
 part 'failure.freezed.dart';
 
 @freezed
-class Failure with _$Failure {
+sealed class Failure with _$Failure {
   const factory Failure.emptyString({required String? property}) = EmptyString;
 
   const factory Failure.exceedingCharacterLength({int? min, int? max}) =
@@ -26,8 +26,6 @@ class Failure with _$Failure {
 
   const factory Failure.serverError(StatusCode code, String? error) =
       ServerError;
-
-  const factory Failure.storageError() = StorageError;
 
   const factory Failure.userNotFound() = UserNotFound;
 }

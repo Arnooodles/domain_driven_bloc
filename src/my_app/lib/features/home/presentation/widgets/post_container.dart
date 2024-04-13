@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:very_good_core/app/constants/route_name.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/routes/route_name.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
+import 'package:very_good_core/app/utils/url_launcher_utils.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text_url.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_footer.dart';
@@ -87,7 +88,7 @@ class PostContainer extends StatelessWidget {
 
   Future<void> launchPostDetails(BuildContext context) async {
     if (kIsWeb) {
-      await launchUrl(
+      await UrlLauncherUtils.launch(
         Uri.parse(post.permalink.getOrCrash()),
         webOnlyWindowName: '_blank',
       );
