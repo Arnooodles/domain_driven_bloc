@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/route_name.dart';
+import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/hidable/hidable_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_nav_bar.dart';
@@ -37,6 +37,7 @@ void main() {
     appCoreBloc = MockAppCoreBloc();
     hidableBloc = MockHidableBloc();
     scrollControllers = mockScrollControllers;
+    provideDummy(AppCoreState.initial());
     when(appCoreBloc.stream).thenAnswer(
       (_) => Stream<AppCoreState>.fromIterable(
         <AppCoreState>[

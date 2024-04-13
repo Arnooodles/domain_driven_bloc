@@ -27,7 +27,5 @@ sealed class Failure with _$Failure {
   const factory Failure.serverError(StatusCode code, String? error) =
       ServerError;
 
-  const factory Failure.storageError() = StorageError;
-
   const factory Failure.userNotFound() = UserNotFound;
 }

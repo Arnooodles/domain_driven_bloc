@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
 
 final class _Keys {
@@ -22,20 +23,19 @@ class LocalStorageRepository implements ILocalStorageRepository {
   final FlutterSecureStorage _securedStorage;
   final SharedPreferences _unsecuredStorage;
 
+  Logger get _logger => getIt<Logger>();
+
   /// Secured Storage services
   @override
   Future<String?> getAccessToken() =>
       _securedStorage.read(key: _Keys.accessToken);
   @override
-  Future<bool> setAccessToken(String? value) async {
+  Future<void> setAccessToken(String? value) async {
     try {
       await _securedStorage.write(key: _Keys.accessToken, value: value);
-
-      return true;
     } catch (error) {
-      log(error.toString());
-
-      return false;
+      _logger.e(error.toString());
+      throw Exception(error);
     }
   }
 
@@ -43,15 +43,12 @@ class LocalStorageRepository implements ILocalStorageRepository {
   Future<String?> getRefreshToken() =>
       _securedStorage.read(key: _Keys.refreshToken);
   @override
-  Future<bool> setRefreshToken(String? value) async {
+  Future<void> setRefreshToken(String? value) async {
     try {
       await _securedStorage.write(key: _Keys.refreshToken, value: value);
-
-      return true;
     } catch (error) {
-      log(error.toString());
-
-      return false;
+      _logger.e(error.toString());
+      throw Exception(error);
     }
   }
 
@@ -60,13 +57,12 @@ class LocalStorageRepository implements ILocalStorageRepository {
   Future<String?> getLastLoggedInEmail() async =>
       _unsecuredStorage.getString(_Keys.emailAddress);
   @override
-  Future<bool> setLastLoggedInEmail(String? value) async {
+  Future<void> setLastLoggedInEmail(String? value) async {
     try {
-      return _unsecuredStorage.setString(_Keys.emailAddress, value ?? '');
+      await _unsecuredStorage.setString(_Keys.emailAddress, value ?? '');
     } catch (error) {
-      log(error.toString());
-
-      return false;
+      _logger.e(error.toString());
+      throw Exception(error);
     }
   }
 }

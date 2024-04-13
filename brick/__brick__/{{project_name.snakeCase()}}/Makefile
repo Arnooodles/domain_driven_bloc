@@ -5,12 +5,12 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Note: In windows, recommended terminal is cmd 
 
-ensure_flutter_version: ## Ensures flutter version is 3.19.1 
-	fvm install 3.19.1
-	fvm use 3.19.1
-	fvm global 3.19.1
+ensure_flutter_version: ## Ensures flutter version is 3.19.5 
+	fvm install 3.19.5
+	fvm use 3.19.5
+	fvm global 3.19.5
 
-## Note: If you are using a specific flutter version, change '3.19.1' to the desired '{flutter version}' you want to use
+## Note: If you are using a specific flutter version, change '3.19.5' to the desired '{flutter version}' you want to use
 
 clean: ## Delete the build/ and .dart_tool/ directories
 	fvm flutter clean
@@ -28,13 +28,13 @@ pub_repair: ## Performs a clean reinstallation of all packages in your system ca
 	fvm flutter pub cache repair
 
 l10n: ## Generates strings
-	fvm flutter pub run intl_utils:generate
+	fvm dart run intl_utils:generate
 
 build_runner: ## This command generates the files for the code generated dependencies
-	fvm flutter pub run build_runner build --delete-conflicting-outputs
+	fvm dart run build_runner build --delete-conflicting-outputs
 
 build_runner_watch: ## This command generates the files for the code generated dependencies 'automatically during development' 
-	fvm flutter pub run build_runner watch --delete-conflicting-outputs
+	fvm dart run build_runner watch --delete-conflicting-outputs
 
 format: ## This command formats the codebase and run import sorter
 	fvm dart format lib test

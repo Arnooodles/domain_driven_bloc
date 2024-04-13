@@ -23,6 +23,15 @@ void main() {
     appCoreBloc.close();
   });
 
+  group('initialize', () {
+    blocTest<AppCoreBloc, AppCoreState>(
+      'should emit initial state',
+      build: () => appCoreBloc,
+      act: (AppCoreBloc bloc) async => bloc.initialize(),
+      expect: () => <AppCoreState>[],
+    );
+  });
+
   group('AppCore setScrollControllers', () {
     blocTest<AppCoreBloc, AppCoreState>(
       'should set scrollControllers',

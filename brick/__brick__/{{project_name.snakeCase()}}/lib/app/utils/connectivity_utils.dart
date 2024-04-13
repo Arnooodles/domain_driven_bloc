@@ -21,7 +21,7 @@ final class ConnectivityUtils {
   final Connectivity _connectivity = Connectivity();
   final BehaviorSubject<ConnectionStatus> _controller =
       BehaviorSubject<ConnectionStatus>.seeded(ConnectionStatus.online);
-  StreamSubscription<ConnectivityResult>? _connectionSubscription;
+  StreamSubscription<List<ConnectivityResult>>? _connectionSubscription;
   ConnectionStatus _currentStatus = ConnectionStatus.online;
 
   bool get isConnected => _currentStatus == ConnectionStatus.online;

@@ -48,11 +48,11 @@ void main() {
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
         );
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setLastLoggedInEmail(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
 
         final Either<Failure, Unit> result = await authRepository.login(
           EmailAddress('email@example.com'),
@@ -74,11 +74,11 @@ void main() {
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 500),
         );
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setLastLoggedInEmail(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
 
         final Either<Failure, Unit> result = await authRepository.login(
           EmailAddress('email@example.com'),
@@ -94,11 +94,11 @@ void main() {
       () async {
         when(authService.login(any)).thenThrow(throwsException);
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setLastLoggedInEmail(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
 
         final Either<Failure, Unit> result = await authRepository.login(
           EmailAddress('email@example.com'),
@@ -119,11 +119,11 @@ void main() {
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
         );
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => false);
+            .thenThrow(throwsException);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setLastLoggedInEmail(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
 
         final Either<Failure, Unit> result = await authRepository.login(
           EmailAddress('email@example.com'),
@@ -144,11 +144,11 @@ void main() {
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
         );
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => false);
+            .thenThrow(throwsException);
         when(localStorageRepository.setLastLoggedInEmail(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
 
         final Either<Failure, Unit> result = await authRepository.login(
           EmailAddress('email@example.com'),
@@ -169,11 +169,11 @@ void main() {
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
         );
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setLastLoggedInEmail(any))
-            .thenAnswer((_) async => false);
+            .thenThrow(throwsException);
 
         final Either<Failure, Unit> result = await authRepository.login(
           EmailAddress('email@example.com'),
@@ -189,9 +189,9 @@ void main() {
       'should return a unit when logout is successful',
       () async {
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
 
         final Either<Failure, Unit> result = await authRepository.logout();
 
@@ -205,7 +205,7 @@ void main() {
         when(localStorageRepository.setAccessToken(any))
             .thenThrow(throwsException);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
 
         final Either<Failure, Unit> result = await authRepository.logout();
 
@@ -216,9 +216,9 @@ void main() {
       'should return a failure when an error occurs when clearing the access token',
       () async {
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => false);
+            .thenThrow(throwsException);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
 
         final Either<Failure, Unit> result = await authRepository.logout();
 
@@ -229,9 +229,9 @@ void main() {
       'should return a failure when an error occurs when clearing the refresh token',
       () async {
         when(localStorageRepository.setAccessToken(any))
-            .thenAnswer((_) async => true);
+            .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenAnswer((_) async => false);
+            .thenThrow(throwsException);
 
         final Either<Failure, Unit> result = await authRepository.logout();
 

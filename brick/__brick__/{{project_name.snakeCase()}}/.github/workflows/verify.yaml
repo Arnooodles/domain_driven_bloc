@@ -1,6 +1,6 @@
-name: {{project_name.snakeCase()}}
+name: verify
 
-on: [pull_request, push]
+on: [push]
 
 jobs:
   verify-semantic-pull-request:
@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🔧 Get Flutter SDK version from fvm_config.json
-        uses: kuhnroyal/flutter-fvm-config-action@v1
+        uses: kuhnroyal/flutter-fvm-config-action@v2
         with:
           path: .fvm/fvm_config.json  
 
@@ -43,7 +43,7 @@ jobs:
         run: flutter test --dart-define=CI=true --coverage
         
       - name: 📤 Upload Failed Goldens
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: goldens-failures

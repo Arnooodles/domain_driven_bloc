@@ -55,14 +55,14 @@ void main() {
             ),
           ).thenAnswer((_) async => true);
 
-          final bool result =
-              await localStorageRepository.setAccessToken('access_token');
+          await localStorageRepository.setAccessToken('access_token');
 
-          expect(result, true);
+          verify(localStorageRepository.setAccessToken('access_token'))
+              .called(1);
         },
       );
       test(
-        'should return false if an unexpected error occurs when saving',
+        'should throw an exception if an unexpected error occurs when saving',
         () async {
           when(
             secureStorage.write(
@@ -71,10 +71,10 @@ void main() {
             ),
           ).thenThrow(throwsException);
 
-          final bool result =
-              await localStorageRepository.setAccessToken('access_token');
-
-          expect(result, false);
+          expect(
+            () => localStorageRepository.setAccessToken('access_token'),
+            throwsA(isA<Exception>()),
+          );
         },
       );
     });
@@ -103,14 +103,14 @@ void main() {
             ),
           ).thenAnswer((_) async => true);
 
-          final bool result =
-              await localStorageRepository.setRefreshToken('refresh_token');
+          await localStorageRepository.setRefreshToken('refresh_token');
 
-          expect(result, true);
+          verify(localStorageRepository.setRefreshToken('refresh_token'))
+              .called(1);
         },
       );
       test(
-        'should return false if an unexpected error occurs when saving',
+        'should throws an exception if an unexpected error occurs when saving',
         () async {
           when(
             secureStorage.write(
@@ -119,10 +119,10 @@ void main() {
             ),
           ).thenThrow(throwsException);
 
-          final bool result =
-              await localStorageRepository.setRefreshToken('refresh_token');
-
-          expect(result, false);
+          expect(
+            () => localStorageRepository.setRefreshToken('refresh_token'),
+            throwsA(isA<Exception>()),
+          );
         },
       );
     });
@@ -148,22 +148,25 @@ void main() {
           when(unsecuredStorage.setString('email_address', any))
               .thenAnswer((_) async => true);
 
-          final bool result = await localStorageRepository
+          await localStorageRepository
               .setLastLoggedInEmail('email@example.com');
 
-          expect(result, true);
+          verify(
+            localStorageRepository.setLastLoggedInEmail('email@example.com'),
+          ).called(1);
         },
       );
       test(
-        'should return false if an unexpected error occurs when saving',
+        'should throws an exception if an unexpected error occurs when saving',
         () async {
           when(unsecuredStorage.setString('email_address', any))
               .thenThrow(throwsException);
 
-          final bool result = await localStorageRepository
-              .setLastLoggedInEmail('email@example.com');
-
-          expect(result, false);
+          expect(
+            () => localStorageRepository
+                .setLastLoggedInEmail('email@example.com'),
+            throwsA(isA<Exception>()),
+          );
         },
       );
     });

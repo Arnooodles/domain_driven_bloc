@@ -132,11 +132,14 @@ coverage
 # Do not commit local.properties
 local.properties
 
-# Do not commit store_certificates/
-store_certificates/
+
 
 # FVM
 .fvm/flutter_sdk
+.fvm/versions
+.fvm/release
+.fvm/version
+.fvmrc
 
 # Fastlane
 ios/fastlane/README.md

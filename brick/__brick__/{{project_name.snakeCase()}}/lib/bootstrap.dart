@@ -1,28 +1,35 @@
 import 'dart:async';
 
-import 'package:chopper/chopper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
-import 'package:{{project_name.snakeCase()}}/app/config/chopper_config.dart';
 import 'package:{{project_name.snakeCase()}}/app/config/url_strategy_native.dart'
     if (dart.library.html) 'package:{{project_name.snakeCase()}}/app/config/url_strategy_web.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/assets.gen.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/injection.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/app/observers/app_bloc_observer.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
-  urlConfig();
-  initializeSingletons();
   WidgetsFlutterBinding.ensureInitialized();
+  urlConfig();
   await Future.wait(<Future<void>>[
     initializeEnvironmentConfig(env),
     configureDependencies(env),
   ]);
 
-  Bloc.observer = getIt<AppBlocObserver>();
+  if (kDebugMode) {
+    Bloc.observer = getIt<AppBlocObserver>();
+  }
+
+  _handleErrors();
+
+  runApp(await builder());
+}
+
+void _handleErrors() {
   FlutterError.onError = (FlutterErrorDetails details) {
     getIt<Logger>().f(
       details.exceptionAsString(),
@@ -30,22 +37,14 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
       stackTrace: details.stack,
     );
   };
-
-  runApp(await builder());
-}
-
-void initializeSingletons() {
-  getIt
-    ..registerLazySingleton<Logger>(
-      () => Logger(
-        filter: ProductionFilter(),
-        printer: PrettyPrinter(),
-        output: ConsoleOutput(),
-      ),
-    )
-    ..registerLazySingleton<ChopperClient>(
-      () => ChopperConfig().client,
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stackTrace) {
+    getIt<Logger>().f(
+      error.toString(),
+      error: error,
+      stackTrace: stackTrace,
     );
+    return true;
+  };
 }
 
 Future<void> initializeEnvironmentConfig(Env env) async {
