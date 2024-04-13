@@ -1,4 +1,4 @@
-name: very_good_core
+name: verify
 
 on: [push]
 

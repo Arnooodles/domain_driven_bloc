@@ -7,6 +7,7 @@
 - feat: add app sizes class
 - feat: add core icon widget that supports SVG or icon data
 - feat: add core webview widget
+- feat: add vulnerability_check workflow
 - feat: implement url launcher utils
 - feat: implement common app utils
 - feat: implement SVG preloader 
