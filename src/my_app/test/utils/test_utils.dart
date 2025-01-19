@@ -10,13 +10,14 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:very_good_core/app/config/chopper_config.dart';
 import 'package:very_good_core/app/constants/constant.dart';
-import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
-import 'package:very_good_core/bootstrap.dart';
 import 'package:very_good_core/core/data/dto/user.dto.dart';
+import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
+import 'package:very_good_core/core/domain/entity/enum/env.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
+import 'package:very_good_core/main.dart';
 
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';
@@ -94,7 +95,9 @@ IosDeviceInfo mockIosDeviceInfo({
       'systemName': os ?? 'systemName',
       'systemVersion': version ?? 'systemVersion',
       'model': phoneModel ?? 'model',
+      'modelName': 'modelName',
       'localizedModel': 'localizedModel',
+      'isiOSAppOnMac': false,
       'isPhysicalDevice': false,
       'utsname': <String, dynamic>{
         'sysname': 'sysname',
@@ -117,7 +120,7 @@ User get mockUser => UserDTO(
 
 List<Post> get mockPosts => List<Post>.generate(2, (_) => mockPost);
 
-chopper.ChopperClient get mockChopperClient => ChopperConfig().client;
+chopper.ChopperClient get mockChopperClient => getIt<ChopperConfig>().client;
 
 Map<AppScrollController, ScrollController> mockScrollControllers =
     <AppScrollController, ScrollController>{

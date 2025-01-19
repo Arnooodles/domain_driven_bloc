@@ -7,4 +7,7 @@ abstract interface class ILocalStorageRepository {
 
   Future<String?> getLastLoggedInEmail();
   Future<void> setLastLoggedInEmail(String? emailAddress);
+
+  Future<bool?> getIsDarkMode();
+  Future<void> setIsDarkMode({required bool isDarkMode});
 }

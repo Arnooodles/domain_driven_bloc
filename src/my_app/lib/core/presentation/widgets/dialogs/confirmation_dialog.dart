@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
+import 'package:very_good_core/core/domain/entity/enum/button_type.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   const ConfirmationDialog({
@@ -35,28 +36,29 @@ class ConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        backgroundColor: context.colorScheme.background,
+        backgroundColor: context.colorScheme.surface,
         surfaceTintColor: context.colorScheme.surfaceTint,
         shape: RoundedRectangleBorder(
           borderRadius: AppTheme.defaultBoardRadius,
         ),
         title: title != null
-            ? Text(title!, style: context.textTheme.titleMedium)
+            ? VeryGoodCoreText(
+                text: title!,
+                style: context.textTheme.titleMedium,
+              )
             : null,
         content: Padding(
-          padding: title != null
-              ? EdgeInsets.zero
-              : const EdgeInsets.only(top: Insets.xxsmall),
-          child: Text(
-            message,
+          padding: title != null ? EdgeInsets.zero : Paddings.topXxSmall,
+          child: VeryGoodCoreText(
+            text: message,
             style: context.textTheme.bodyMedium?.copyWith(
-              color: titleColor ?? context.colorScheme.onBackground,
+              color: titleColor,
             ),
           ),
         ),
         actions: <Widget>[
           VeryGoodCoreButton(
-            text: negativeButtonText ?? context.l10n.common_no.toUpperCase(),
+            text: negativeButtonText ?? context.i18n.common.no.toUpperCase(),
             buttonType: ButtonType.text,
             onPressed: onNegativePressed ?? () => Navigator.of(context).pop(),
             padding: EdgeInsets.zero,
@@ -66,7 +68,7 @@ class ConfirmationDialog extends StatelessWidget {
             ),
           ),
           VeryGoodCoreButton(
-            text: positiveButtonText ?? context.l10n.common_yes.toUpperCase(),
+            text: positiveButtonText ?? context.i18n.common.yes.toUpperCase(),
             buttonType: ButtonType.text,
             onPressed: onPositivePressed ?? () => Navigator.of(context).pop(),
             padding: EdgeInsets.zero,
@@ -76,7 +78,7 @@ class ConfirmationDialog extends StatelessWidget {
             ),
           ),
         ],
-        actionsPadding: const EdgeInsets.symmetric(horizontal: Insets.medium),
+        actionsPadding: Paddings.horizontalMedium,
         buttonPadding: EdgeInsets.zero,
       );
 }

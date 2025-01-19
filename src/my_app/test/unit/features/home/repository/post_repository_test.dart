@@ -1,18 +1,15 @@
 import 'package:chopper/chopper.dart' as chopper;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
 import 'package:very_good_core/features/home/data/repository/post_repository.dart';
-import 'package:very_good_core/features/home/data/service/post_service.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 
+import '../../../../utils/generated_mocks.mocks.dart';
 import '../../../../utils/test_utils.dart';
-import 'post_repository_test.mocks.dart';
 
-@GenerateNiceMocks(<MockSpec<dynamic>>[MockSpec<PostService>()])
 void main() {
   late MockPostService postService;
   late PostRepository postRepository;
@@ -115,7 +112,7 @@ void main() {
     test(
       'should return a failure when an unexpected error occurs',
       () async {
-        when(postService.getPosts()).thenThrow(throwsException);
+        when(postService.getPosts()).thenThrow(Exception('Unexpected error'));
 
         final Either<Failure, List<Post>> result =
             await postRepository.getPosts();

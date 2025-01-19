@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chopper/chopper.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -6,6 +8,7 @@ import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:very_good_core/app/config/chopper_config.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/features/auth/data/service/auth_service.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';
@@ -38,7 +41,7 @@ abstract class ServiceModule {
 
   //API Service
   @lazySingleton
-  ChopperClient get chopperClient => ChopperConfig().client;
+  ChopperClient get chopperClient => getIt<ChopperConfig>().client;
 
   @lazySingleton
   AuthService get authService => chopperClient.getService<AuthService>();

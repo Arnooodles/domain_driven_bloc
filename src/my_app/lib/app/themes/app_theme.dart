@@ -1,38 +1,49 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
-import 'package:very_good_core/app/themes/app_text_style.dart';
 
-final class AppTheme {
-  /// Standard `ThemeData` for App UI.
-  static final ThemeData _baseTheme = ThemeData(
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    textTheme: _textTheme,
+sealed class AppTheme {
+  // The defined light theme.
+  static ThemeData light = FlexThemeData.light(
+    scheme: FlexScheme.blue,
+    swapColors: true,
+    subThemesData: const FlexSubThemesData(
+      interactionEffects: true,
+      tintedDisabledControls: true,
+      useM2StyleDividerInM3: true,
+      adaptiveAppBarScrollUnderOff: FlexAdaptive.all(),
+      inputDecoratorIsFilled: true,
+      inputDecoratorBorderType: FlexInputBorderType.outline,
+      alignedDropdown: true,
+      navigationRailUseIndicator: true,
+      navigationRailLabelType: NavigationRailLabelType.all,
+    ),
+    useMaterial3ErrorColors: true,
+    visualDensity: FlexColorScheme.comfortablePlatformDensity,
+    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    swapLegacyOnMaterial3: true,
   );
-
-  static final ThemeData lightTheme = _baseTheme.copyWith(
-    colorScheme: AppColors.lightColorScheme,
-  );
-
-  static final ThemeData darkTheme = _baseTheme.copyWith(
-    colorScheme: AppColors.darkColorScheme,
-  );
-
-  static final TextTheme _textTheme = TextTheme(
-    displayLarge: AppTextStyle.displayLarge,
-    displayMedium: AppTextStyle.displayMedium,
-    displaySmall: AppTextStyle.displaySmall,
-    headlineLarge: AppTextStyle.headlineLarge,
-    headlineMedium: AppTextStyle.headlineMedium,
-    headlineSmall: AppTextStyle.headlineSmall,
-    titleLarge: AppTextStyle.titleLarge,
-    titleMedium: AppTextStyle.titleMedium,
-    titleSmall: AppTextStyle.titleSmall,
-    bodyLarge: AppTextStyle.bodyLarge,
-    bodyMedium: AppTextStyle.bodyMedium,
-    bodySmall: AppTextStyle.bodySmall,
-    labelLarge: AppTextStyle.labelLarge,
-    labelMedium: AppTextStyle.labelMedium,
-    labelSmall: AppTextStyle.labelSmall,
+  // The defined dark theme.
+  static ThemeData dark = FlexThemeData.dark(
+    colors:
+        FlexColor.schemes[FlexScheme.blue]!.light.defaultError.toDark(0, true),
+    subThemesData: const FlexSubThemesData(
+      interactionEffects: true,
+      tintedDisabledControls: true,
+      blendOnColors: true,
+      useM2StyleDividerInM3: true,
+      adaptiveAppBarScrollUnderOff: FlexAdaptive.all(),
+      inputDecoratorIsFilled: true,
+      inputDecoratorBorderType: FlexInputBorderType.outline,
+      alignedDropdown: true,
+      navigationRailUseIndicator: true,
+      navigationRailLabelType: NavigationRailLabelType.all,
+    ),
+    useMaterial3ErrorColors: true,
+    visualDensity: FlexColorScheme.comfortablePlatformDensity,
+    cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+    swapLegacyOnMaterial3: true,
   );
 
   static const double defaultRadius = 16;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
+import 'package:very_good_core/core/domain/entity/enum/button_type.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 
 class VeryGoodCoreButton extends StatelessWidget {
   const VeryGoodCoreButton({
@@ -40,8 +41,7 @@ class VeryGoodCoreButton extends StatelessWidget {
         child: SizedBox(
           width: isExpanded ? Insets.infinity : null,
           child: Padding(
-            padding: padding ??
-                const EdgeInsets.symmetric(horizontal: Insets.medium),
+            padding: padding ?? EdgeInsets.zero,
             child: _ButtonType(
               text: text,
               buttonType: buttonType,
@@ -89,7 +89,7 @@ class _ButtonType extends StatelessWidget {
     final Padding iconWithPadding = Padding(
       padding: iconPadding ??
           const EdgeInsets.fromLTRB(
-            Insets.xxsmall,
+            Insets.xxSmall,
             Insets.medium,
             Insets.zero,
             Insets.medium,
@@ -262,7 +262,7 @@ class _ButtonContent extends StatelessWidget {
             isExpanded ? Insets.medium * 2 : Insets.medium,
             Insets.medium,
           )
-        : const EdgeInsets.all(Insets.medium);
+        : Paddings.allMedium;
     final TextStyle defaultTextStyle =
         context.textTheme.bodyLarge!.copyWith(color: defaultTextColor);
     return SizedBox(
@@ -270,8 +270,8 @@ class _ButtonContent extends StatelessWidget {
       child: Padding(
         padding: contentPadding ?? defaultPadding,
         child: isEnabled
-            ? Text(
-                text,
+            ? VeryGoodCoreText(
+                text: text,
                 style: textStyle ?? defaultTextStyle,
                 textAlign: TextAlign.center,
               )

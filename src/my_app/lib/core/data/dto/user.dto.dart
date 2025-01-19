@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:dartx/dartx.dart';
 import 'package:faker/faker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/helpers/converters/string_to_datetime.dart';
+import 'package:very_good_core/app/helpers/extensions/object_ext.dart';
+import 'package:very_good_core/core/domain/entity/enum/gender.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
 import 'package:very_good_core/core/domain/entity/value_object.dart';
 
@@ -68,7 +69,7 @@ sealed class UserDTO with _$UserDTO {
       contactNumber: contactNumber.isNotNullOrBlank
           ? ContactNumber(contactNumber!)
           : ContactNumber(faker.phoneNumber.us()),
-      avatar: (avatar?.isNotNullOrBlank ?? false) ? Url(avatar!) : null,
+      avatar: avatar.let(Url.new),
     );
   }
 }

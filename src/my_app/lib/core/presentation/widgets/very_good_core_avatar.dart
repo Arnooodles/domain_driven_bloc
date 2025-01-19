@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
 
 class VeryGoodCoreAvatar extends StatelessWidget {
   const VeryGoodCoreAvatar({
@@ -30,7 +31,6 @@ class VeryGoodCoreAvatar extends StatelessWidget {
                   ) =>
                       Container(
                     decoration: BoxDecoration(
-                      color: context.colorScheme.onBackground,
                       image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.cover,
@@ -42,10 +42,13 @@ class VeryGoodCoreAvatar extends StatelessWidget {
                   ),
                   errorWidget:
                       (BuildContext context, String url, dynamic error) =>
-                          Icon(Icons.account_circle, size: size),
+                          VeryGoodCoreIcon(
+                    icon: right(Icons.account_circle),
+                    size: size,
+                  ),
                   fit: BoxFit.cover,
                 )
-              : Icon(Icons.account_circle, size: size),
+              : VeryGoodCoreIcon(icon: right(Icons.account_circle), size: size),
         ),
       );
 }

@@ -4,13 +4,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/core/presentation/widgets/connectivity_checker.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_app_bar.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_webview.dart';
+import 'package:very_good_core/core/presentation/widgets/wrappers/connectivity_checker.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 
-class PostDetailsWebview extends HookWidget {
-  const PostDetailsWebview({required this.post, super.key});
+class PostDetailsScreen extends HookWidget {
+  const PostDetailsScreen({required this.post, super.key});
 
   final Post post;
 
@@ -48,11 +48,10 @@ class PostDetailsWebview extends HookWidget {
     return Builder(
       builder: (BuildContext context) => PopScope(
         canPop: false,
-        onPopInvoked: (bool didPop) async =>
+        onPopInvokedWithResult: (bool didPop, _) async =>
             _onPopInvoked(context, webViewController.value, didPop),
         child: ConnectivityChecker.scaffold(
           appBar: VeryGoodCoreAppBar(
-            titleColor: context.colorScheme.primary,
             leading: BackButton(
               color: context.colorScheme.primary,
               onPressed: () => GoRouter.of(context).pop(),

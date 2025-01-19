@@ -1,4 +1,4 @@
-import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 
 extension IntExt on int {
   StatusCode get statusCode => StatusCode.values.firstWhere(

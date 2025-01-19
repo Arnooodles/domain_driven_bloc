@@ -1,3 +1,39 @@
+# 2.0.0
+- feat: implemented flex_color_scheme
+- feat: replaced intl_utils with slang
+- feat: added script for updating android project settings
+- feat: added reusable text widget
+- feat: added let extension
+- feat: added persistency on theme modes
+- feat: added app localization bloc
+- feat: optimized build_runner with build.yaml
+- feat: moved all generated mocks into one file
+- feat: added MockDevice from the golden_toolkit package
+- refactor: removed golden_toolkit dependency
+- refactor: migrated android build config from Groovy to Kotlin
+- refactor: merged flavor main files into one main file
+- refactor: changed arb file into json for slang
+- refactor: optimized using of media query extensions
+- refactor: separated enum file into multiple files and moved to core/entity folder
+- refactor: added pre-defined Paddings in app_spacing
+- refactor: optimized logging in go_route_observer
+- refactor: optimized app_router and separated it into multiple class/files
+- refactor: added clauses on try catches
+- refactor: implemented the use of the reusable icon widget
+- fix: reset failed login status to initial state
+- test: fixed tests that were affected by the updates
+- test: remove  golden test for screens and webviews
+- chore: deleted unused files and folders
+- chore: updated dependencies to the latest version
+- chore: updated workflow dependencies to the latest version
+- chore: updated goldens files
+- chore: updated screenshots
+
+# TODO:
+- docs: updated brick's README with regards to the updates
+- docs: updated template's README with regards to the updates
+
+
 # 1.2.0
 - feat: add themeAnimation
 - feat: migrate from webview_flutter to flutter_inappwebview
