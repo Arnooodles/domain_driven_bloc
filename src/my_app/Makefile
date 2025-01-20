@@ -74,7 +74,7 @@ lcov_gen_widget: ## Generates lcov for widget tests only
 	fvm flutter test test/widget --coverage 
 
 lcov_report_mac: ## Generates lcov report for macOS
-	lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/main.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_screen.dart' '*_webview.dart' '**\wrappers\*.dart' '**/service/*' '**/entity/*' '**/dto/*' -o coverage/lcov.info
+	lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/main.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_screen.dart' '*_webview.dart' '**/wrappers/*.dart' '**/service/*' '**/entity/*' '**/dto/*' -o coverage/lcov.info
 	genhtml coverage/lcov.info -o coverage/
 	open coverage/index.html		
 

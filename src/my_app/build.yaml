@@ -44,6 +44,8 @@ targets:
             flutter_svg: true    
       slang_build_runner:
         options:
+          runs_before:
+            - mockito|mockBuilder
           base_locale: en
           fallback_strategy: base_locale
           input_directory: assets/i18n

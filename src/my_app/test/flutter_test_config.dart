@@ -13,7 +13,7 @@ class TestConfig {
   /// Added a goldens version to know when the golden files were last updated
   /// To update the golden files in the remote repository change goldensVersion
   /// Format: yyyyMMdd
-  static String get goldensVersion => '20250118';
+  static String get goldensVersion => '20250120';
 
   /// Customize your threshold here
   /// For example, the error threshold here is 15%
