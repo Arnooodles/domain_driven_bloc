@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/app_text_style.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidget
@@ -45,19 +43,15 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
         automaticallyImplyLeading: automaticallyImplyLeading,
         title: showTitle
             ? Padding(
-                padding: const EdgeInsets.only(left: Insets.xsmall),
+                padding: Paddings.leftXSmall,
                 child: Text(
                   title ?? Constant.appName,
-                  style: context.textTheme.headlineSmall?.copyWith(
-                    color: titleColor,
-                    fontWeight: AppFontWeight.medium,
-                  ),
                 ),
               )
             : null,
         actions: actions,
         scrolledUnderElevation: scrolledUnderElevation,
-        backgroundColor: backgroundColor ?? context.colorScheme.background,
+        backgroundColor: backgroundColor,
         centerTitle: centerTitle,
         bottom: bottom,
       );

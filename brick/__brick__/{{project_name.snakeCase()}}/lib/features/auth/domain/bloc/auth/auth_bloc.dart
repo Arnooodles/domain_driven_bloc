@@ -27,7 +27,7 @@ class AuthBloc extends Cubit<AuthState> {
     try {
       safeEmit(const AuthState.initial());
       _emitAuthState(await _userRepository.user, isLogout: true);
-    } catch (error) {
+    } on Exception catch (error) {
       _emitError(error);
     }
   }
@@ -36,7 +36,7 @@ class AuthBloc extends Cubit<AuthState> {
     try {
       safeEmit(const AuthState.loading());
       _emitAuthState(await _userRepository.user);
-    } catch (error) {
+    } on Exception catch (error) {
       _emitError(error);
     }
   }
@@ -45,7 +45,7 @@ class AuthBloc extends Cubit<AuthState> {
     try {
       safeEmit(const AuthState.loading());
       _emitAuthState(await _userRepository.user, isLogout: true);
-    } catch (error) {
+    } on Exception catch (error) {
       _emitError(error);
     }
   }
@@ -61,7 +61,7 @@ class AuthBloc extends Cubit<AuthState> {
           (_) => const AuthState.unauthenticated(),
         ),
       );
-    } catch (error) {
+    } on Exception catch (error) {
       _emitError(error);
     }
   }

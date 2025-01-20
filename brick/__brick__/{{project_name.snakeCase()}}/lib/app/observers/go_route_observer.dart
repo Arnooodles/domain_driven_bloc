@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
@@ -15,37 +15,60 @@ final class GoRouteObserver extends NavigatorObserver {
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (kDebugMode) {
-      _logger.t(
-        '$_navigatorLocation:${route.settings.name} pushed from ${previousRoute?.settings.name}',
-      );
-    }
+    _logNavigation(
+      route.settings.name,
+      previousRoute?.settings.name,
+      _NavigatorActions.pushed,
+    );
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (kDebugMode) {
-      _logger.t(
-        '$_navigatorLocation:${route.settings.name} popped from ${previousRoute?.settings.name}',
-      );
-    }
+    _logNavigation(
+      route.settings.name,
+      previousRoute?.settings.name,
+      _NavigatorActions.popped,
+    );
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (kDebugMode) {
-      _logger.t(
-        '$_navigatorLocation:${route.settings.name} removed ${previousRoute?.settings.name}',
-      );
-    }
+    _logNavigation(
+      route.settings.name,
+      previousRoute?.settings.name,
+      _NavigatorActions.removed,
+    );
   }
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    if (kDebugMode) {
+    _logNavigation(
+      newRoute?.settings.name,
+      oldRoute?.settings.name,
+      _NavigatorActions.replaced,
+    );
+  }
+
+  void _logNavigation(
+    String? newRoute,
+    String? oldRoute,
+    _NavigatorActions action,
+  ) {
+    if (newRoute.isNotNullOrBlank && oldRoute.isNotNullOrBlank) {
       _logger.t(
-        '${newRoute?.settings.name} replaced ${oldRoute?.settings.name}',
+        '$_navigatorLocation:$newRoute ${action.value} $oldRoute',
       );
     }
   }
+}
+
+enum _NavigatorActions {
+  pushed('pushed from'),
+  popped('popped from'),
+  removed('removed'),
+  replaced('replaced');
+
+  const _NavigatorActions(this.value);
+
+  final String value;
 }

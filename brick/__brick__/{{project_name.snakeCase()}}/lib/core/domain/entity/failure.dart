@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 
 part 'failure.freezed.dart';
 

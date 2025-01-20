@@ -1,18 +1,12 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/repository/device_repository.dart';
 
+import '../../../utils/generated_mocks.mocks.dart';
 import '../../../utils/test_utils.dart';
-import 'device_repository_test.mocks.dart';
 
-@GenerateNiceMocks(<MockSpec<dynamic>>[
-  MockSpec<PackageInfo>(),
-  MockSpec<DeviceInfoPlugin>(),
-])
 void main() {
   late MockPackageInfo packageInfo;
   late MockDeviceInfoPlugin deviceInfo;

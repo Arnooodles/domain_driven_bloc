@@ -10,13 +10,14 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:{{project_name.snakeCase()}}/app/config/chopper_config.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
-import 'package:{{project_name.snakeCase()}}/bootstrap.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/dto/user.dto.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/app_scroll_controller.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/env.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
+import 'package:{{project_name.snakeCase()}}/main.dart';
 
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';
@@ -94,7 +95,9 @@ IosDeviceInfo mockIosDeviceInfo({
       'systemName': os ?? 'systemName',
       'systemVersion': version ?? 'systemVersion',
       'model': phoneModel ?? 'model',
+      'modelName': 'modelName',
       'localizedModel': 'localizedModel',
+      'isiOSAppOnMac': false,
       'isPhysicalDevice': false,
       'utsname': <String, dynamic>{
         'sysname': 'sysname',
@@ -117,7 +120,7 @@ User get mockUser => UserDTO(
 
 List<Post> get mockPosts => List<Post>.generate(2, (_) => mockPost);
 
-chopper.ChopperClient get mockChopperClient => ChopperConfig().client;
+chopper.ChopperClient get mockChopperClient => getIt<ChopperConfig>().client;
 
 Map<AppScrollController, ScrollController> mockScrollControllers =
     <AppScrollController, ScrollController>{

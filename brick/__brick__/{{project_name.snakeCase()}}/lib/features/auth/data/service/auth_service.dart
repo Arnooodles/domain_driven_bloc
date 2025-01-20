@@ -3,7 +3,7 @@ import 'package:{{project_name.snakeCase()}}/features/auth/data/dto/login_respon
 
 part 'auth_service.chopper.dart';
 
-@ChopperApi(baseUrl: 'api')
+@ChopperApi(baseUrl: 'https://reqres.in/api')
 abstract interface class AuthService extends ChopperService {
   @Post(path: '/login')
   Future<Response<LoginResponseDTO>> login(

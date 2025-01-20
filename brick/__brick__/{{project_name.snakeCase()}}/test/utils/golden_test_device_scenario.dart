@@ -1,16 +1,17 @@
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
+
+import 'mock_device.dart';
 
 class GoldenTestDeviceScenario extends StatelessWidget {
   const GoldenTestDeviceScenario({
     required this.name,
     required this.builder,
-    this.device = Device.iphone11,
+    this.device = MockDevice.iphone11,
     super.key,
   });
   final String name;
-  final Device device;
+  final MockDevice device;
   final ValueGetter<Widget> builder;
 
   @override

@@ -1,0 +1,56 @@
+{
+  "common": {
+    "error": {
+      "generic": "Oops! Something went wrong",
+      "email_format": "Invalid email format",
+      "empty_string": "${property: String} is empty",
+      "invalid_password": "Password does not meet the required format",
+      "max_characters": "Exceeds the number of allowable characters",
+      "min_characters": "Does not meet the required character length",
+      "server_error": "Error ${code: String}: ${error: String}",
+      "no_internet_connection": "No Internet Connection",
+      "unexpected_error": "Unexpected Error",
+      "unsupported_device": "This device is not supported by the app"
+    },
+    "home": "home",
+    "no": "no",
+    "profile": "profile",
+    "yes": "yes"
+  },
+  "dialog": {
+    "exit_message": "Are you sure you want to close the application?"
+  },
+  "login": {
+    "button": {
+      "login": "login"
+    },
+    "label": {
+      "email": "Email",
+      "password": "Password"
+    },
+    "hint": {
+      "email": "enter email address",
+      "password": "enter password"
+    }
+  },
+  "post": {
+    "label": {
+      "empty_post": "No posts available",
+      "author_and_created_date": "Posted by u/${author: String} ${date: String}",
+      "vote": "Vote"
+    }
+  },
+  "profile": {
+    "label": {
+      "basic_information": "Basic Information",
+      "age": "Age",
+      "birthday": "Birthday",
+      "email": "Email",
+      "gender": "Gender",
+      "phone_number": "Phone Number"
+    },
+    "button": {
+      "logout": "logout"
+    }
+  }
+}

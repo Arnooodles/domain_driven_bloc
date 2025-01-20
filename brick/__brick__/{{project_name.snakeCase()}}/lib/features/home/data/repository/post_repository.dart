@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:chopper/chopper.dart' as chopper;
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/service/post_service.dart';
@@ -39,7 +39,7 @@ class PostRepository implements IPostRepository {
       } else {
         return left(Failure.serverError(statusCode, response.error.toString()));
       }
-    } catch (error) {
+    } on Exception catch (error) {
       log(error.toString());
 
       return left(Failure.unexpected(error.toString()));

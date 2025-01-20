@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar({
@@ -30,7 +31,6 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar extends StatelessWidg
                   ) =>
                       Container(
                     decoration: BoxDecoration(
-                      color: context.colorScheme.onBackground,
                       image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.cover,
@@ -42,10 +42,13 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar extends StatelessWidg
                   ),
                   errorWidget:
                       (BuildContext context, String url, dynamic error) =>
-                          Icon(Icons.account_circle, size: size),
+                          {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(
+                    icon: right(Icons.account_circle),
+                    size: size,
+                  ),
                   fit: BoxFit.cover,
                 )
-              : Icon(Icons.account_circle, size: size),
+              : {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.account_circle), size: size),
         ),
       );
 }

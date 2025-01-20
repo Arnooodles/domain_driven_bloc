@@ -1,15 +1,16 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
-import 'package:{{project_name.snakeCase()}}/app/generated/l10n.dart';
+import 'package:{{project_name.snakeCase()}}/app/generated/localization.g.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/app_router.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_life_cycle/app_life_cycle_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_localization/app_localization_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/hidable/hidable_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/bloc/theme/theme_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
@@ -17,23 +18,24 @@ import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth
 class App extends StatelessWidget {
   App({super.key});
 
-  final AppRouter _appRouter = getIt<AppRouter>();
-
   final List<BlocProvider<dynamic>> _globalProviders = <BlocProvider<dynamic>>[
-    BlocProvider<AuthBloc>(
-      create: (BuildContext context) => getIt<AuthBloc>(),
+    BlocProvider<AppLifeCycleBloc>(
+      create: (BuildContext context) => getIt<AppLifeCycleBloc>(),
     ),
-    BlocProvider<ThemeBloc>(
-      create: (BuildContext context) => getIt<ThemeBloc>(),
-    ),
-    BlocProvider<HidableBloc>(
-      create: (BuildContext context) => getIt<HidableBloc>(),
+    BlocProvider<AppLocalizationBloc>(
+      create: (BuildContext context) => getIt<AppLocalizationBloc>(),
     ),
     BlocProvider<AppCoreBloc>(
       create: (BuildContext context) => getIt<AppCoreBloc>(),
     ),
-    BlocProvider<AppLifeCycleBloc>(
-      create: (BuildContext context) => getIt<AppLifeCycleBloc>(),
+    BlocProvider<ThemeBloc>(
+      create: (BuildContext context) => getIt<ThemeBloc>(),
+    ),
+    BlocProvider<AuthBloc>(
+      create: (BuildContext context) => getIt<AuthBloc>(),
+    ),
+    BlocProvider<HidableBloc>(
+      create: (BuildContext context) => getIt<HidableBloc>(),
     ),
   ];
 
@@ -53,14 +55,6 @@ class App extends StatelessWidget {
       end: double.infinity,
       name: DESKTOP,
     ),
-  ];
-
-  final List<LocalizationsDelegate<dynamic>> _localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-    AppLocalizations.delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
   ];
 
   List<Condition<double>> _getResponsiveWidth(BuildContext context) =>
@@ -87,7 +81,15 @@ class App extends StatelessWidget {
       providers: _globalProviders,
       child: Builder(
         builder: (BuildContext context) => MaterialApp.router(
-          routerConfig: _appRouter.router,
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
+            dragDevices: <PointerDeviceKind>{
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.touch,
+              PointerDeviceKind.stylus,
+              PointerDeviceKind.unknown,
+            },
+          ),
+          routerConfig: AppRouter.router,
           builder: (BuildContext context, Widget? child) =>
               ResponsiveBreakpoints.builder(
             child: Builder(
@@ -103,13 +105,19 @@ class App extends StatelessWidget {
             breakpoints: _breakpoints,
           ),
           title: Constant.appName,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
           themeMode: context.watch<ThemeBloc>().state,
           themeAnimationCurve: Curves.fastOutSlowIn,
           themeAnimationDuration: const Duration(milliseconds: 500),
-          localizationsDelegates: _localizationsDelegates,
-          supportedLocales: AppLocalizations.delegate.supportedLocales,
+          locale: context
+              .watch<AppLocalizationBloc>()
+              .state
+              .$meta
+              .locale
+              .flutterLocale,
+          supportedLocales: AppLocaleUtils.supportedLocales,
+          localizationsDelegates: Constant.localizationDelegates,
           debugShowCheckedModeBanner: false,
         ),
       ),

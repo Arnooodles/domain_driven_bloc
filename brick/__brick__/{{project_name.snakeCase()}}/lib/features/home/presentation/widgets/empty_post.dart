@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text.dart';
 
 class EmptyPost extends StatelessWidget {
   const EmptyPost({super.key});
@@ -10,29 +13,24 @@ class EmptyPost extends StatelessWidget {
         slivers: <Widget>[
           SliverFillRemaining(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: Insets.large),
-              color: context.colorScheme.background,
+              padding: Paddings.horizontalLarge,
               width: Insets.infinity,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(
-                      Icons.list_alt,
+                    {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(
+                      icon: right(Icons.list_alt),
                       size: 200,
-                      color: context.colorScheme.onBackground.withOpacity(0.25),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: Insets.small,
-                        bottom: Insets.xsmall,
+                        bottom: Insets.xSmall,
                       ),
-                      child: Text(
-                        context.l10n.post__empty_post__empty_post_message,
-                        style: context.textTheme.titleLarge?.copyWith(
-                          color: context.colorScheme.onBackground
-                              .withOpacity(0.25),
-                        ),
+                      child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
+                        text: context.i18n.post.label.empty_post,
+                        style: context.textTheme.titleLarge,
                         textAlign: TextAlign.center,
                       ),
                     ),

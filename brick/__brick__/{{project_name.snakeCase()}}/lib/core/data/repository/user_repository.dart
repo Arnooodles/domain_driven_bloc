@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:chopper/chopper.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/dto/user.dto.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/service/user_service.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_user_repository.dart';
@@ -36,7 +36,7 @@ class UserRepository implements IUserRepository {
       }
 
       return left(Failure.serverError(statusCode, response.error.toString()));
-    } catch (error) {
+    } on Exception catch (error) {
       log(error.toString());
 
       return left(Failure.unexpected(error.toString()));

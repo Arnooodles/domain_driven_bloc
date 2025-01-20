@@ -11,6 +11,7 @@ final class _Keys {
   static const String accessToken = 'access_token';
   static const String refreshToken = 'refresh_token';
   static const String emailAddress = 'email_address';
+  static const String isDarkMode = 'is_dark_mode';
 }
 
 @LazySingleton(as: ILocalStorageRepository)
@@ -33,7 +34,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   Future<void> setAccessToken(String? value) async {
     try {
       await _securedStorage.write(key: _Keys.accessToken, value: value);
-    } catch (error) {
+    } on Exception catch (error) {
       _logger.e(error.toString());
       throw Exception(error);
     }
@@ -46,7 +47,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   Future<void> setRefreshToken(String? value) async {
     try {
       await _securedStorage.write(key: _Keys.refreshToken, value: value);
-    } catch (error) {
+    } on Exception catch (error) {
       _logger.e(error.toString());
       throw Exception(error);
     }
@@ -60,7 +61,21 @@ class LocalStorageRepository implements ILocalStorageRepository {
   Future<void> setLastLoggedInEmail(String? value) async {
     try {
       await _unsecuredStorage.setString(_Keys.emailAddress, value ?? '');
-    } catch (error) {
+    } on Exception catch (error) {
+      _logger.e(error.toString());
+      throw Exception(error);
+    }
+  }
+
+  @override
+  Future<bool?> getIsDarkMode() async =>
+      _unsecuredStorage.getBool(_Keys.isDarkMode);
+
+  @override
+  Future<void> setIsDarkMode({required bool isDarkMode}) async {
+    try {
+      await _unsecuredStorage.setBool(_Keys.isDarkMode, isDarkMode);
+    } on Exception catch (error) {
       _logger.e(error.toString());
       throw Exception(error);
     }
