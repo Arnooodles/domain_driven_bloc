@@ -120,10 +120,14 @@ Out of the box, Domain-Driven Bloc includes:
   ✅ [Logger](https://pub.dev/packages/logger) \
   ✅ [Pretty Chopper Logger](https://pub.dev/packages/pretty_chopper_logger)
 
+#### Theme
+
+  ✅ [Flex Color Scheme](https://pub.dev/packages/flex_color_scheme) 
+
 #### Localization
 
   ✅ [Intl](https://pub.dev/packages/intl) \
-  ✅ [Intl Utils](https://pub.dev/packages/intl_utils)
+  ✅ [Slang](https://pub.dev/packages/slang)
 
 #### Package & Device Info
 
@@ -190,8 +194,8 @@ Out of the box, Domain-Driven Bloc includes:
 │   ├── fonts
 │   ├── icons
 │   ├── images
-│   └── l10n
-│       └── app_en.arb
+│   └── i18n
+│       └── en.i18n.json
 ├── ios
 ├── lib
 │   ├── app
@@ -216,9 +220,12 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   │   ├── bloc
 │   │   │   ├── interface
 │   │   │   └── entity
+│   │   │       └── enum
 │   │   └── presentation
 │   │       ├── views
 │   │       └── widgets
+│   │           └── dialogs
+│   │           └── wrappers
 │   ├── features
 │   │   ├── auth
 │   │   │   ├── data
@@ -256,28 +263,24 @@ Out of the box, Domain-Driven Bloc includes:
 │   │       └── presentation
 │   │           ├── views
 │   │           └── widgets
-│   ├── bootstrap.dart
-│   ├── main_development.dart
-│   ├── main_production.dart
-│   └── main_staging.dart
+│   ├── main.dart
+├── scripts
 ├── test
 │   ├── utils
 │   ├── unit
 │   │   ├── core
 │   │   │   ├── bloc
 │   │   │   └── repository
-│   │   │       ├── auth
-│   │   │       └── home
 │   │   └── features
 │   │       ├── auth
-│   │           ├── bloc
-│   │           └── repository
+│   │       │   ├── bloc
+│   │       │   └── repository
 │   │       └── home
 │   │           ├── bloc
 │   │           └── repository
 │   ├── widget
 │   │   ├── core
-│   │   │   ├── views
+│   │   │   ├── dialogs
 │   │   │   │   ├── goldens(generated)
 │   │   │   │   └── failures(generated)
 │   │   │   └── widgets
@@ -285,23 +288,14 @@ Out of the box, Domain-Driven Bloc includes:
 │   │   │       └── failures(generated)
 │   │   └── features
 │   │       ├── auth
-│   │       │   ├── views
-│   │       │   │   ├── goldens(generated)
-│   │       │   │   └── failures(generated)
 │   │       │   └── widgets
 │   │       │       ├── goldens(generated)
 │   │       │       └── failures(generated)
 │   │       ├── home
-│   │       │   ├── views
-│   │       │   │   ├── goldens(generated)
-│   │       │   │   └── failures(generated)
 │   │       │   └── widgets
 │   │       │       ├── goldens(generated)
 │   │       │       └── failures(generated)
 │   │       └── profile
-│   │           ├── views
-│   │           │   ├── goldens(generated)
-│   │           │   └── failures(generated)
 │   │           └── widgets
 │   │               ├── goldens(generated)
 │   │               └── failures(generated)
@@ -329,6 +323,11 @@ Out of the box, Domain-Driven Bloc includes:
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/login_screen.png" width=270 height=520></td>
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/home_screen.png" width=270 height=520></td>
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/profile_screen.png" width=270 height=520></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_login_screen.png" width=270 height=520></td>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_home_screen.png" width=270 height=520></td>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_profile_screen.png" width=270 height=520></td>
   </tr>
 </table>
 

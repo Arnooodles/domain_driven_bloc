@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:very_good_core/app/generated/l10n.dart';
+import 'package:very_good_core/app/generated/localization.g.dart';
+import 'package:very_good_core/core/domain/bloc/app_localization/app_localization_bloc.dart';
 
 extension BuildContextExt on BuildContext {
-  AppLocalizations get l10n => AppLocalizations.of(this);
+  I18n get i18n => read<AppLocalizationBloc>().state;
 
-  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+  ThemeData get theme => Theme.of(this);
 
-  TextTheme get textTheme => Theme.of(this).textTheme;
+  ColorScheme get colorScheme => theme.colorScheme;
 
-  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+  TextTheme get textTheme => theme.textTheme;
 
-  double get screenWidth => MediaQuery.of(this).size.width;
+  bool get isDarkMode => theme.brightness == Brightness.dark;
 
-  double get screenHeight => MediaQuery.of(this).size.height;
+  double get screenWidth => MediaQuery.sizeOf(this).width;
+
+  double get screenHeight => MediaQuery.sizeOf(this).height;
+
+  EdgeInsets get padding => MediaQuery.paddingOf(this);
 
   GoRouter get goRouter => GoRouter.of(this);
 }

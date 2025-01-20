@@ -1,24 +1,15 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
-import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
 import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
-import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
 
-import 'post_bloc_test.mocks.dart';
+import '../../../../utils/generated_mocks.mocks.dart';
 
-@GenerateNiceMocks(
-  <MockSpec<dynamic>>[
-    MockSpec<IPostRepository>(),
-    MockSpec<ILocalStorageRepository>(),
-  ],
-)
 void main() {
   late MockIPostRepository postRepository;
 
@@ -77,9 +68,10 @@ void main() {
     );
 
     blocTest<PostBloc, PostState>(
-      'should emit a failed state with throwsException error ',
+      'should emit a failed state with an Exception error ',
       build: () {
-        when(postRepository.getPosts()).thenThrow(throwsException);
+        when(postRepository.getPosts())
+            .thenThrow(Exception('Unexpected error'));
 
         return PostBloc(postRepository);
       },
@@ -87,7 +79,7 @@ void main() {
       expect: () => <PostState>[
         const PostState.loading(),
         PostState.failed(
-          Failure.unexpected(throwsException.toString()),
+          Failure.unexpected(Exception('Unexpected error').toString()),
         ),
       ],
     );

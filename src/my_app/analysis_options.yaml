@@ -10,6 +10,7 @@ analyzer:
     unawaited_futures: warning
     unused_import: warning
     invalid_annotation_target: ignore
+    document_ignores: ignore
  
   exclude:
     - "**.g.dart"

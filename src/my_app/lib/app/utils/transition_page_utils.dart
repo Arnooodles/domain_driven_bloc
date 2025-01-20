@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:very_good_core/app/constants/enum.dart';
+import 'package:very_good_core/core/domain/entity/enum/slide_transition_type.dart';
 
 // ignore_for_file: prefer-match-file-name
 final class FadeTransitionPage extends CustomTransitionPage<void> {
@@ -56,5 +56,5 @@ final class SlideTransitionPage extends CustomTransitionPage<void> {
 
   static Animatable<Offset> _getTween(Offset begin) =>
       Tween<Offset>(begin: begin, end: Offset.zero)
-          .chain(CurveTween(curve: Curves.ease));
+          .chain(CurveTween(curve: Curves.easeInOut));
 }

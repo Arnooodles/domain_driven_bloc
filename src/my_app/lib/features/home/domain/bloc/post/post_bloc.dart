@@ -33,7 +33,7 @@ class PostBloc extends Cubit<PostState> {
           PostState.success,
         ),
       );
-    } catch (error) {
+    } on Exception catch (error) {
       log(error.toString());
 
       safeEmit(

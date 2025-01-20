@@ -28,11 +28,12 @@ jobs:
 
       - name: ⚙️ Run Setup
         run: |
-          dart run intl_utils:generate
+          dart run slang	
           dart run build_runner build --delete-conflicting-outputs
 
       - name: ✨ Check Formatting
-        run: dart format lib test
+        run: |
+          dart format lib test
 
       - name: 🕵️ Analyze
         run: |
@@ -54,8 +55,8 @@ jobs:
 
       - name: 📃 Generate LCOV Report
         run:  |
-          lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/bootstrap.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_webview.dart' '**/service/*' '**/dto/*' '**/entity/*' -o coverage/lcov.info
-          genhtml coverage/lcov.info -o coverage/     
+          lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/main.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_screen.dart' '*_webview.dart' '**/wrappers/*.dart' '**/service/*' '**/entity/*' '**/dto/*' -o coverage/lcov.info
+          genhtml coverage/lcov.info -o coverage/        
 
       - name: 📉 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v2

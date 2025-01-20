@@ -5,6 +5,7 @@ import 'package:very_good_core/app/helpers/extensions/datetime_ext.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 
 class PostContainerHeader extends StatelessWidget {
@@ -20,15 +21,13 @@ class PostContainerHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(Insets.xsmall),
-            child: Text(
-              context.l10n.post__post_details__author_and_created_date(
-                post.author.getOrCrash(),
-                post.createdUtc.ago,
+            padding: Paddings.allXSmall,
+            child: VeryGoodCoreText(
+              text: context.i18n.post.label.author_and_created_date(
+                author: post.author.getOrCrash(),
+                date: post.createdUtc.ago,
               ),
-              style: context.textTheme.bodySmall?.copyWith(
-                color: context.colorScheme.secondary,
-              ),
+              style: context.textTheme.bodySmall,
             ),
           ),
           Row(
@@ -36,8 +35,8 @@ class PostContainerHeader extends StatelessWidget {
               if (post.linkFlairText.getOrCrash().isNotNullOrBlank)
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    vertical: Insets.xxsmall,
-                    horizontal: Insets.xsmall,
+                    vertical: Insets.xxSmall,
+                    horizontal: Insets.xSmall,
                   ),
                   decoration: BoxDecoration(
                     color: _getBackgroundColor(
@@ -46,21 +45,19 @@ class PostContainerHeader extends StatelessWidget {
                     ),
                     borderRadius: AppTheme.defaultBoardRadius,
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: Insets.xsmall),
-                  child: Text(
-                    post.linkFlairText.getOrCrash(),
+                  margin: Paddings.horizontalXSmall,
+                  child: VeryGoodCoreText(
+                    text: post.linkFlairText.getOrCrash(),
                     style: context.textTheme.bodySmall
                         ?.copyWith(color: context.colorScheme.onSecondary),
                   ),
                 ),
               if (!post.linkFlairText.getOrCrash().isNotNullOrBlank)
-                Gap.xsmall(),
+                Gap.xSmall(),
               Expanded(
-                child: Text(
-                  post.title.getOrCrash(),
-                  style: context.textTheme.titleMedium?.copyWith(
-                    color: context.colorScheme.onSecondaryContainer,
-                  ),
+                child: VeryGoodCoreText(
+                  text: post.title.getOrCrash(),
+                  style: context.textTheme.titleMedium,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
@@ -75,6 +72,6 @@ class PostContainerHeader extends StatelessWidget {
     Color linkFlairBackgroundColor,
   ) =>
       linkFlairBackgroundColor == AppColors.transparent
-          ? context.colorScheme.secondary.withOpacity(0.5)
+          ? context.colorScheme.secondary.withValues(alpha: 0.5)
           : linkFlairBackgroundColor;
 }

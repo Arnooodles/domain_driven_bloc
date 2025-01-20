@@ -1,16 +1,9 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:very_good_core/core/data/repository/local_storage_repository.dart';
 
-import 'local_repository_test.mocks.dart';
+import '../../../utils/generated_mocks.mocks.dart';
 
-@GenerateNiceMocks(<MockSpec<dynamic>>[
-  MockSpec<SharedPreferences>(),
-  MockSpec<FlutterSecureStorage>(),
-])
 void main() {
   late MockSharedPreferences unsecuredStorage;
   late MockFlutterSecureStorage secureStorage;
@@ -69,7 +62,7 @@ void main() {
               key: 'access_token',
               value: anyNamed('value'),
             ),
-          ).thenThrow(throwsException);
+          ).thenThrow(Exception('Unexpected error'));
 
           expect(
             () => localStorageRepository.setAccessToken('access_token'),
@@ -117,7 +110,7 @@ void main() {
               key: 'refresh_token',
               value: anyNamed('value'),
             ),
-          ).thenThrow(throwsException);
+          ).thenThrow(Exception('Unexpected error'));
 
           expect(
             () => localStorageRepository.setRefreshToken('refresh_token'),
@@ -160,11 +153,49 @@ void main() {
         'should throws an exception if an unexpected error occurs when saving',
         () async {
           when(unsecuredStorage.setString('email_address', any))
-              .thenThrow(throwsException);
+              .thenThrow(Exception('Unexpected error'));
 
           expect(
             () => localStorageRepository
                 .setLastLoggedInEmail('email@example.com'),
+            throwsA(isA<Exception>()),
+          );
+        },
+      );
+    });
+
+    group('is dark mode', () {
+      test(
+        'should return true',
+        () async {
+          when(unsecuredStorage.getBool('is_dark_mode')).thenReturn(true);
+
+          final bool? isDarkMode = await localStorageRepository.getIsDarkMode();
+
+          expect(isDarkMode, true);
+        },
+      );
+      test(
+        'should return true if the darkMode value is saved',
+        () async {
+          when(unsecuredStorage.setBool('is_dark_mode', any))
+              .thenAnswer((_) async => true);
+
+          await localStorageRepository.setIsDarkMode(isDarkMode: true);
+
+          verify(
+            localStorageRepository.setIsDarkMode(isDarkMode: true),
+          ).called(1);
+        },
+      );
+      test(
+        'should throws an exception if an unexpected error occurs when saving',
+        () async {
+          when(unsecuredStorage.setBool('is_dark_mode', any))
+              .thenThrow(Exception('Unexpected error'));
+
+          expect(
+            () => localStorageRepository.setIsDarkMode(isDarkMode: true),
             throwsA(isA<Exception>()),
           );
         },

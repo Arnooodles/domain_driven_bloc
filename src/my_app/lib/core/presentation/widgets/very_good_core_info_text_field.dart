@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 
 class VeryGoodCoreInfoTextField extends StatelessWidget {
   const VeryGoodCoreInfoTextField({
@@ -29,7 +30,7 @@ class VeryGoodCoreInfoTextField extends StatelessWidget {
             horizontal: Insets.medium,
           ),
           decoration: BoxDecoration(
-            color: context.colorScheme.secondaryContainer,
+            color: context.colorScheme.surfaceContainer,
             borderRadius: AppTheme.defaultBoardRadius,
           ),
           width: isExpanded ? Insets.infinity : null,
@@ -37,18 +38,17 @@ class VeryGoodCoreInfoTextField extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                title,
+              VeryGoodCoreText(
+                text: title,
                 style: context.textTheme.bodySmall?.copyWith(
-                  color: titleColor ?? context.colorScheme.secondary,
+                  color: titleColor,
                 ),
               ),
-              Gap.xxsmall(),
-              Text(
-                description,
+              Gap.xxSmall(),
+              VeryGoodCoreText(
+                text: description,
                 style: context.textTheme.titleMedium?.copyWith(
-                  color: descriptionColor ??
-                      context.colorScheme.onSecondaryContainer,
+                  color: descriptionColor,
                 ),
               ),
             ],

@@ -3,10 +3,12 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/core/presentation/widgets/hidable.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
+import 'package:very_good_core/core/presentation/widgets/wrappers/hidable.dart';
 
 class VeryGoodCoreNavBar extends HookWidget implements PreferredSizeWidget {
   const VeryGoodCoreNavBar({
@@ -30,14 +32,17 @@ class VeryGoodCoreNavBar extends HookWidget implements PreferredSizeWidget {
             selectedIndex: navigationShell.currentIndex,
             destinations: <Widget>[
               NavigationDestination(
-                icon: const Icon(Icons.home_outlined),
-                selectedIcon: const Icon(Icons.home),
-                label: context.l10n.common_home.capitalize(),
+                icon: VeryGoodCoreIcon(icon: right(Icons.home_outlined)),
+                selectedIcon: VeryGoodCoreIcon(icon: right(Icons.home)),
+                label: context.i18n.common.home.capitalize(),
               ),
               NavigationDestination(
-                icon: const Icon(Icons.account_circle_outlined),
-                selectedIcon: const Icon(Icons.account_circle),
-                label: context.l10n.common_profile.capitalize(),
+                icon: VeryGoodCoreIcon(
+                  icon: right(Icons.account_circle_outlined),
+                ),
+                selectedIcon:
+                    VeryGoodCoreIcon(icon: right(Icons.account_circle)),
+                label: context.i18n.common.profile.capitalize(),
               ),
             ],
             onDestinationSelected: (int index) => _onItemTapped(context, index),

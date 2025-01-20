@@ -3,10 +3,10 @@ import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:very_good_core/app/constants/constant.dart';
-import 'package:very_good_core/app/constants/enum.dart';
 import 'package:very_good_core/app/constants/mock_data.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/datetime_ext.dart';
@@ -16,12 +16,16 @@ import 'package:very_good_core/app/utils/dialog_utils.dart';
 import 'package:very_good_core/app/utils/error_message_utils.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
+import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
+import 'package:very_good_core/core/domain/entity/enum/button_type.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_app_bar.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_avatar.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_info_text_field.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
 class ProfileScreen extends HookWidget {
@@ -30,20 +34,18 @@ class ProfileScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<bool> isDialogShowing = useState(false);
-    final Color iconColor = context.colorScheme.onSecondaryContainer;
 
     return Scaffold(
-      backgroundColor: context.colorScheme.background,
+      backgroundColor: context.colorScheme.surface,
       appBar: VeryGoodCoreAppBar(
-        titleColor: context.colorScheme.primary,
         actions: <Widget>[
           IconButton(
             onPressed: () => context
                 .read<ThemeBloc>()
                 .switchTheme(Theme.of(context).brightness),
             icon: Theme.of(context).brightness == Brightness.dark
-                ? Icon(Icons.light_mode, color: iconColor)
-                : Icon(Icons.dark_mode, color: iconColor),
+                ? VeryGoodCoreIcon(icon: right(Icons.light_mode))
+                : VeryGoodCoreIcon(icon: right(Icons.dark_mode)),
           ),
           BlocBuilder<AuthBloc, AuthState>(
             builder: (BuildContext context, AuthState state) => state.maybeWhen(
@@ -54,7 +56,7 @@ class ProfileScreen extends HookWidget {
                 child: VeryGoodCoreAvatar(
                   size: 32,
                   imageUrl: user.avatar?.getOrCrash(),
-                  padding: const EdgeInsets.all(Insets.small),
+                  padding: Paddings.allSmall,
                 ),
               ),
             ),
@@ -67,6 +69,8 @@ class ProfileScreen extends HookWidget {
             maxWidth: Constant.mobileBreakpoint,
           ),
           child: RefreshIndicator(
+            backgroundColor: context.colorScheme.surface,
+            color: context.colorScheme.primary,
             onRefresh: () => context.read<AuthBloc>().getUser(),
             child: BlocSelector<AppCoreBloc, AppCoreState,
                 Map<AppScrollController, ScrollController>>(
@@ -143,9 +147,7 @@ class _ProfileContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: Insets.xlarge,
-        ),
+        padding: Paddings.horizontalXLarge,
         child: Column(
           children: <Widget>[
             Expanded(
@@ -158,16 +160,14 @@ class _ProfileContent extends StatelessWidget {
               ),
             ),
             VeryGoodCoreButton(
-              text: context.l10n.profile__button_text__logout,
+              text: context.i18n.profile.button.logout,
               isExpanded: true,
               buttonType: ButtonType.filled,
               onPressed: () => context.read<AuthBloc>().logout(),
               padding: EdgeInsets.zero,
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: Insets.small,
-              ),
+              contentPadding: Paddings.verticalSmall,
             ),
-            const Gap(Insets.large),
+            Gap.large(),
           ],
         ),
       );
@@ -186,28 +186,33 @@ class _ProfileDetails extends StatelessWidget {
         children: <Widget>[
           Gap.small(),
           VeryGoodCoreInfoTextField(
-            title: context.l10n.profile__label_text__email,
+            title: context.i18n.profile.label.email,
             description: user.email.getOrCrash(),
+            titleColor: context.colorScheme.primary,
           ),
           Gap.small(),
           VeryGoodCoreInfoTextField(
-            title: context.l10n.profile__label_text__phone_number,
+            title: context.i18n.profile.label.phone_number,
             description: user.contactNumber.getOrCrash(),
+            titleColor: context.colorScheme.primary,
           ),
           Gap.small(),
           VeryGoodCoreInfoTextField(
-            title: context.l10n.profile__label_text__gender,
+            title: context.i18n.profile.label.gender,
             description: user.gender.name.capitalize(),
+            titleColor: context.colorScheme.primary,
           ),
           Gap.small(),
           VeryGoodCoreInfoTextField(
-            title: context.l10n.profile__label_text__birthday,
+            title: context.i18n.profile.label.birthday,
             description: user.birthday.defaultFormat(),
+            titleColor: context.colorScheme.primary,
           ),
           Gap.small(),
           VeryGoodCoreInfoTextField(
-            title: context.l10n.profile__label_text__age,
+            title: context.i18n.profile.label.age,
             description: user.age,
+            titleColor: context.colorScheme.primary,
           ),
         ],
       );
@@ -222,9 +227,7 @@ class _ProfileName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle? nameStyle = context.textTheme.headlineMedium?.copyWith(
-      color: context.colorScheme.onSecondaryContainer,
-    );
+    final TextStyle? nameStyle = context.textTheme.headlineMedium;
 
     return Row(
       children: <Widget>[
@@ -234,16 +237,16 @@ class _ProfileName extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(Insets.large),
+            padding: Paddings.allLarge,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  user.firstName.getOrCrash(),
+                VeryGoodCoreText(
+                  text: user.firstName.getOrCrash(),
                   style: nameStyle,
                 ),
-                Text(
-                  user.lastName.getOrCrash(),
+                VeryGoodCoreText(
+                  text: user.lastName.getOrCrash(),
                   style: nameStyle,
                 ),
               ],

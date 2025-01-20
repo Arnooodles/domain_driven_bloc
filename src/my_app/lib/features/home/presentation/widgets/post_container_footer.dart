@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
+import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 
 class PostContainerFooter extends StatelessWidget {
@@ -18,7 +21,7 @@ class PostContainerFooter extends StatelessWidget {
           _FooterItems(
             leftIcon: Icons.arrow_upward_rounded,
             value: post.upvotes.getOrCrash() == 0
-                ? context.l10n.post__upvotes_default_value__vote
+                ? context.i18n.post.label.vote
                 : post.upvotes.getOrCrash().toString(),
             rightIcon: Icons.arrow_downward_rounded,
           ),
@@ -44,35 +47,31 @@ class _FooterItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: Insets.xsmall),
+        padding: Paddings.horizontalXSmall,
         decoration: BoxDecoration(
           border: Border.all(
             color: context.colorScheme.outline,
           ),
           borderRadius: AppTheme.defaultBoardRadius,
         ),
-        margin: const EdgeInsets.symmetric(horizontal: Insets.xxsmall),
+        margin: Paddings.horizontalXxSmall,
         child: Row(
           children: <Widget>[
-            Icon(
-              leftIcon,
+            VeryGoodCoreIcon(
+              icon: right(leftIcon),
               size: (context.textTheme.bodySmall?.fontSize ?? 14) * 1.5,
-              color: context.colorScheme.onSecondaryContainer,
             ),
             Padding(
-              padding: const EdgeInsets.all(Insets.xsmall),
-              child: Text(
-                value,
-                style: context.textTheme.bodySmall?.copyWith(
-                  color: context.colorScheme.onSecondaryContainer,
-                ),
+              padding: Paddings.allXSmall,
+              child: VeryGoodCoreText(
+                text: value,
+                style: context.textTheme.bodySmall,
               ),
             ),
             if (rightIcon != null)
-              Icon(
-                rightIcon,
+              VeryGoodCoreIcon(
+                icon: right(rightIcon!),
                 size: (context.textTheme.bodySmall?.fontSize ?? 14) * 1.5,
-                color: context.colorScheme.onSecondaryContainer,
               ),
           ],
         ),
