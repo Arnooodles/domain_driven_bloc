@@ -28,8 +28,6 @@
 - chore: updated workflow dependencies to the latest version
 - chore: updated goldens files
 - chore: updated screenshots
-
-# TODO:
 - docs: updated brick's README with regards to the updates
 - docs: updated template's README with regards to the updates
 
