@@ -42,9 +42,9 @@ build_runner_watch: ## This command generates the files for the code generated d
 format: ## This command formats the codebase and run import sorter
 	fvm dart format $$(find lib test -name '*.dart' -not -name '*.g.dart' -and -not -name '*.freezed.dart' -and -not -name '*.config.dart' -and -not -name '*.chopper.dart' -and -not -name '*.gen.dart' -and -not -name '*.mocks.dart') --line-length=80 
 
-clean_rebuild: ensure_flutter_version clean pub_clean pub_get build_runner format lint fix_lint
+clean_rebuild: ensure_flutter_version clean pub_clean pub_get slang build_runner format lint fix_lint
 
-rebuild: ensure_flutter_version pub_get  build_runner format lint fix_lint
+rebuild: ensure_flutter_version pub_get slang build_runner format lint fix_lint
 
 fast_rebuild: build_runner format 
 
@@ -108,3 +108,6 @@ goldens_mac: delete_goldens_mac delete_failures_mac update_goldens ## Deletes th
 
 update_android_project: ## Update the android project versions and dependencies
 	sh scripts/update_android_project.sh
+
+delete_generated_files: ## Delete the generated files
+	sh scripts/delete_generated_files.sh	

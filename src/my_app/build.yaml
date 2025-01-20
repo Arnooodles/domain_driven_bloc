@@ -8,16 +8,16 @@ targets:
           - lib/features/**/data/dto/**.dart
           - lib/core/domain/entity/**.dart
           - lib/features/**/domain/entity/**.dart
-          - lib/features/**/domain/bloc/**_.dart
-          - lib/core/domain/bloc/**_.dart
+          - lib/features/**/domain/bloc/**.dart
+          - lib/core/domain/bloc/**.dart
       json_serializable:
         generate_for:
           - lib/core/data/dto/**.dart
           - lib/features/**/data/dto/**.dart
           - lib/core/domain/entity/**.dart
           - lib/features/**/domain/entity/**.dart
-          - lib/features/**/domain/bloc/**_.dart
-          - lib/core/domain/bloc/**_.dart        
+          - lib/features/**/domain/bloc/**.dart
+          - lib/core/domain/bloc/**.dart        
       injectable_generator|injectable_builder:
         generate_for:
           - lib/app/config/chopper_config.dart
@@ -28,8 +28,8 @@ targets:
           - lib/app/utils/**.dart
           - lib/core/data/repository/**.dart
           - lib/features/**/data/repository/**.dart
-          - lib/core/domain/bloc/**_bloc.dart
-          - lib/features/**/domain/bloc/**_bloc.dart
+          - lib/core/domain/bloc/**.dart
+          - lib/features/**/domain/bloc/**.dart
       chopper_generator:
         generate_for:
           - lib/core/data/service/**.dart
@@ -44,8 +44,6 @@ targets:
             flutter_svg: true    
       slang_build_runner:
         options:
-          runs_before:
-            - mockito|mockBuilder
           base_locale: en
           fallback_strategy: base_locale
           input_directory: assets/i18n

@@ -28,6 +28,7 @@ jobs:
 
       - name: ⚙️ Run Setup
         run: |
+          dart run slang	
           dart run build_runner build --delete-conflicting-outputs
 
       - name: ✨ Check Formatting

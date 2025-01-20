@@ -19,8 +19,6 @@ import 'package:very_good_core/features/home/data/service/post_service.dart';
 
 @singleton
 final class ChopperConfig {
-  ChopperConfig();
-
   final List<ChopperService> _services = <ChopperService>[
     AuthService.create(),
     UserService.create(),
