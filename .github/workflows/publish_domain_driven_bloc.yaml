@@ -1,4 +1,4 @@
-name: publish_very_good_core
+name: publish_domain_driven_bloc
 
 on:
   push:
