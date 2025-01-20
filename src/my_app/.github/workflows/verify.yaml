@@ -31,7 +31,9 @@ jobs:
           dart run build_runner build --delete-conflicting-outputs
 
       - name: ✨ Check Formatting
-        run: dart format lib test
+        run: |
+          dart format $$(find lib test -name '*.dart' -not -name '*.g.dart' -and -not -name '*.freezed.dart' -and -not -name '*.config.dart' -and -not -name '*.chopper.dart' -and -not -name '*.gen.dart' -and -not -name '*.mocks.dart') --line-length=80 
+
 
       - name: 🕵️ Analyze
         run: |
