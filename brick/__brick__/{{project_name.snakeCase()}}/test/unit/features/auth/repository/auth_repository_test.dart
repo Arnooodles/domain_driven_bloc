@@ -1,30 +1,23 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:{{project_name.snakeCase()}}/core/data/repository/local_storage_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/data/dto/login_response.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/data/repository/auth_repository.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/data/service/auth_service.dart';
 
+import '../../../../utils/generated_mocks.mocks.dart';
 import '../../../../utils/test_utils.dart';
-import 'auth_repository_test.mocks.dart';
 
-@GenerateNiceMocks(<MockSpec<dynamic>>[
-  MockSpec<AuthService>(),
-  MockSpec<LocalStorageRepository>(),
-])
 void main() {
   late MockAuthService authService;
-  late MockLocalStorageRepository localStorageRepository;
+  late MockILocalStorageRepository localStorageRepository;
   late AuthRepository authRepository;
   late LoginResponseDTO loginResponseDTO;
 
   setUp(() {
     authService = MockAuthService();
-    localStorageRepository = MockLocalStorageRepository();
+    localStorageRepository = MockILocalStorageRepository();
     authRepository = AuthRepository(authService, localStorageRepository);
     loginResponseDTO = const LoginResponseDTO(accessToken: 'accessToken');
   });
@@ -92,7 +85,7 @@ void main() {
     test(
       'should return a failure when login encounters an unexpected error',
       () async {
-        when(authService.login(any)).thenThrow(throwsException);
+        when(authService.login(any)).thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.setAccessToken(any))
             .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
@@ -119,7 +112,7 @@ void main() {
               generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200),
         );
         when(localStorageRepository.setAccessToken(any))
-            .thenThrow(throwsException);
+            .thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.setRefreshToken(any))
             .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setLastLoggedInEmail(any))
@@ -146,7 +139,7 @@ void main() {
         when(localStorageRepository.setAccessToken(any))
             .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenThrow(throwsException);
+            .thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.setLastLoggedInEmail(any))
             .thenAnswer((_) async => Future.value);
 
@@ -173,7 +166,7 @@ void main() {
         when(localStorageRepository.setRefreshToken(any))
             .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setLastLoggedInEmail(any))
-            .thenThrow(throwsException);
+            .thenThrow(Exception('Unexpected error'));
 
         final Either<Failure, Unit> result = await authRepository.login(
           EmailAddress('email@example.com'),
@@ -203,7 +196,7 @@ void main() {
       'should return a failure when logout encounters an unexpected error',
       () async {
         when(localStorageRepository.setAccessToken(any))
-            .thenThrow(throwsException);
+            .thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.setRefreshToken(any))
             .thenAnswer((_) async => Future.value);
 
@@ -216,7 +209,7 @@ void main() {
       'should return a failure when an error occurs when clearing the access token',
       () async {
         when(localStorageRepository.setAccessToken(any))
-            .thenThrow(throwsException);
+            .thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.setRefreshToken(any))
             .thenAnswer((_) async => Future.value);
 
@@ -231,7 +224,7 @@ void main() {
         when(localStorageRepository.setAccessToken(any))
             .thenAnswer((_) async => Future.value);
         when(localStorageRepository.setRefreshToken(any))
-            .thenThrow(throwsException);
+            .thenThrow(Exception('Unexpected error'));
 
         final Either<Failure, Unit> result = await authRepository.logout();
 

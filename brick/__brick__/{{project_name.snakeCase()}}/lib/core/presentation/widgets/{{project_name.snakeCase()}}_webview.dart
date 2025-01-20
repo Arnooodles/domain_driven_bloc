@@ -1,5 +1,3 @@
-// ignore_for_file: prefer-correct-identifier-length
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

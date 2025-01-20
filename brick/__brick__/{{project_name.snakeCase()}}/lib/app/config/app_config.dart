@@ -1,5 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/env.dart';
 
 final class AppConfig {
   static Env get environment => switch (dotenv.get('ENV')) {
@@ -8,5 +8,4 @@ final class AppConfig {
         'Production' => Env.production,
         _ => Env.development
       };
-  static String get baseApiUrl => dotenv.get('BASE_API_URL');
 }

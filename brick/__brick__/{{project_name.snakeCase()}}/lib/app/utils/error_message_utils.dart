@@ -13,16 +13,16 @@ final class ErrorMessageUtils {
       if (error is ServerError) {
         return _parseMessage(context, error);
       } else if (error is UnexpectedError) {
-        return error.error ?? context.l10n.common_error_unexpected_error;
+        return error.error ?? context.i18n.common.error.unexpected_error;
       } else if (error is EmptyString) {
-        return context.l10n
-            .common_error_empty_string(error.property.toString());
+        return context.i18n.common.error
+            .empty_string(property: error.property.toString());
       } else if (error is InvalidEmailFormat) {
-        return context.l10n.common_error_email_format;
+        return context.i18n.common.error.email_format;
       } else if (error is ExceedingCharacterLength) {
         return error.max != null
-            ? context.l10n.common_error_max_characters
-            : context.l10n.common_error_min_characters;
+            ? context.i18n.common.error.max_characters
+            : context.i18n.common.error.min_characters;
       } else {
         return errorString(error);
       }
@@ -43,20 +43,20 @@ final class ErrorMessageUtils {
           jsonDecode(error.error?.toString() ?? '{}') as Map<String, dynamic>;
       final String errorCode = error.code.value.toString();
       return switch (object) {
-        {'message': final String message} =>
-          context.l10n.common_error_server_error(errorCode, message),
+        {'message': final String message} => context.i18n.common.error
+            .server_error(code: errorCode, error: message),
         {'error': final String errorMessage} =>
-          context.l10n.common_error_server_error(
-            errorCode,
-            errorMessage,
+          context.i18n.common.error.server_error(
+            code: errorCode,
+            error: errorMessage,
           ),
-        _ => context.l10n.common_error_server_error(
-            errorCode,
-            error.error.toString(),
+        _ => context.i18n.common.error.server_error(
+            code: errorCode,
+            error: error.error.toString(),
           )
       };
-    } catch (e) {
-      return e.toString();
+    } on Exception catch (error) {
+      return error.toString();
     }
   }
 }

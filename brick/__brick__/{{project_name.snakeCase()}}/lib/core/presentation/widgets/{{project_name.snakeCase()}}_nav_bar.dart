@@ -3,10 +3,12 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/hidable.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/wrappers/hidable.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends HookWidget implements PreferredSizeWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar({
@@ -30,14 +32,17 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends HookWidget im
             selectedIndex: navigationShell.currentIndex,
             destinations: <Widget>[
               NavigationDestination(
-                icon: const Icon(Icons.home_outlined),
-                selectedIcon: const Icon(Icons.home),
-                label: context.l10n.common_home.capitalize(),
+                icon: {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.home_outlined)),
+                selectedIcon: {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.home)),
+                label: context.i18n.common.home.capitalize(),
               ),
               NavigationDestination(
-                icon: const Icon(Icons.account_circle_outlined),
-                selectedIcon: const Icon(Icons.account_circle),
-                label: context.l10n.common_profile.capitalize(),
+                icon: {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(
+                  icon: right(Icons.account_circle_outlined),
+                ),
+                selectedIcon:
+                    {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.account_circle)),
+                label: context.i18n.common.profile.capitalize(),
               ),
             ],
             onDestinationSelected: (int index) => _onItemTapped(context, index),

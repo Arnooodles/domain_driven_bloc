@@ -1,23 +1,15 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_user_repository.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_auth_repository.dart';
 
+import '../../../../utils/generated_mocks.mocks.dart';
 import '../../../../utils/test_utils.dart';
-import 'auth_bloc_test.mocks.dart';
 
-@GenerateNiceMocks(<MockSpec<dynamic>>[
-  MockSpec<IUserRepository>(),
-  MockSpec<AuthBloc>(),
-  MockSpec<IAuthRepository>(),
-])
 void main() {
   late MockIUserRepository userRepository;
   late MockIAuthRepository authRepository;
@@ -72,14 +64,16 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit a failed state',
       build: () {
-        when(userRepository.user).thenThrow(throwsException);
+        when(userRepository.user).thenThrow(Exception('Unexpected error'));
 
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.initialize(),
       expect: () => <AuthState>[
         const AuthState.initial(),
-        AuthState.failed(Failure.unexpected(throwsException.toString())),
+        AuthState.failed(
+          Failure.unexpected(Exception('Unexpected error').toString()),
+        ),
       ],
     );
   });
@@ -137,14 +131,16 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit  a failed state',
       build: () {
-        when(userRepository.user).thenThrow(throwsException);
+        when(userRepository.user).thenThrow(Exception('Unexpected error'));
 
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.getUser(),
       expect: () => <AuthState>[
         const AuthState.loading(),
-        AuthState.failed(Failure.unexpected(throwsException.toString())),
+        AuthState.failed(
+          Failure.unexpected(Exception('Unexpected error').toString()),
+        ),
       ],
     );
   });
@@ -177,12 +173,12 @@ void main() {
       build: () {
         provideDummy(
           Either<Failure, Unit>.left(
-            Failure.unexpected(throwsException.toString()),
+            Failure.unexpected(Exception('Unexpected error').toString()),
           ),
         );
         when(authRepository.logout()).thenAnswer(
           (_) async => Either<Failure, Unit>.left(
-            Failure.unexpected(throwsException.toString()),
+            Failure.unexpected(Exception('Unexpected error').toString()),
           ),
         );
 
@@ -192,14 +188,14 @@ void main() {
       expect: () => <AuthState>[
         const AuthState.loading(),
         AuthState.failed(
-          Failure.unexpected(throwsException.toString()),
+          Failure.unexpected(Exception('Unexpected error').toString()),
         ),
       ],
     );
     blocTest<AuthBloc, AuthState>(
       'should emit a failed state when unexpected error occurs',
       build: () {
-        when(authRepository.logout()).thenThrow(throwsException);
+        when(authRepository.logout()).thenThrow(Exception('Unexpected error'));
 
         return authBloc;
       },
@@ -207,7 +203,7 @@ void main() {
       expect: () => <AuthState>[
         const AuthState.loading(),
         AuthState.failed(
-          Failure.unexpected(throwsException.toString()),
+          Failure.unexpected(Exception('Unexpected error').toString()),
         ),
       ],
     );
@@ -262,14 +258,16 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'should emit a failed state',
       build: () {
-        when(userRepository.user).thenThrow(throwsException);
+        when(userRepository.user).thenThrow(Exception('Unexpected error'));
 
         return authBloc;
       },
       act: (AuthBloc bloc) => bloc.authenticate(),
       expect: () => <AuthState>[
         const AuthState.loading(),
-        AuthState.failed(Failure.unexpected(throwsException.toString())),
+        AuthState.failed(
+          Failure.unexpected(Exception('Unexpected error').toString()),
+        ),
       ],
     );
   });

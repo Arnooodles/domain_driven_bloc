@@ -1,0 +1,4 @@
+enum AppScrollController {
+  home,
+  profile,
+}

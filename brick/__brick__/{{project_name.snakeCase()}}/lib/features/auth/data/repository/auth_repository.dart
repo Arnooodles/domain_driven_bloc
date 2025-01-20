@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:chopper/chopper.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
@@ -54,7 +54,7 @@ class AuthRepository implements IAuthRepository {
           Failure.serverError(statusCode, response.error?.toString() ?? ''),
         );
       }
-    } catch (error) {
+    } on Exception catch (error) {
       log(error.toString());
 
       return left(Failure.unexpected(error.toString()));
@@ -74,7 +74,7 @@ class AuthRepository implements IAuthRepository {
       ]);
 
       return right(unit);
-    } catch (error) {
+    } on Exception catch (error) {
       log(error.toString());
 
       return left(Failure.unexpected(error.toString()));

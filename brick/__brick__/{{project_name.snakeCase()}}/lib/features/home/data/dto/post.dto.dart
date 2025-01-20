@@ -3,8 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/converters/timestamp_to_datetime.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/color_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/object_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/entity/validators.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 
@@ -43,7 +43,7 @@ sealed class PostDTO with _$PostDTO {
         selftext: post.selftext.getOrCrash(),
         createdUtc: post.createdUtc,
         linkFlairBackgroundColor:
-            post.linkFlairBackgroundColor.toHex(hashSign: true),
+            post.linkFlairBackgroundColor.toHexString(hashSign: true),
         linkFlairText: post.linkFlairText.getOrCrash(),
         upvotes: post.upvotes.getOrCrash().toInt(),
         comments: post.comments.getOrCrash().toInt(),
@@ -59,7 +59,7 @@ sealed class PostDTO with _$PostDTO {
         permalink: Url('https://www.reddit.com$permalink'),
         createdUtc: createdUtc,
         linkFlairBackgroundColor: linkFlairBackgroundColor.isNotNullOrBlank
-            ? ColorExt.fromHex(linkFlairBackgroundColor!)
+            ? ColorExt.fromHexString(linkFlairBackgroundColor!)
             : AppColors.transparent,
         upvotes: Number(upvotes ?? 0),
         comments: Number(comments ?? 0),
@@ -71,8 +71,6 @@ sealed class PostDTO with _$PostDTO {
               : '',
         ),
         linkFlairText: ValueString(linkFlairText),
-        urlOverriddenByDest: urlOverriddenByDest.isNotNullOrBlank
-            ? validateLink(urlOverriddenByDest!).fold((_) => null, Url.new)
-            : null,
+        urlOverriddenByDest: urlOverriddenByDest?.let(Url.new),
       );
 }

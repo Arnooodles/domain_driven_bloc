@@ -57,7 +57,7 @@ class LoginBloc extends Cubit<LoginState> {
               : validPassword.value.asLeft(),
         );
       }
-    } catch (error) {
+    } on Exception catch (error) {
       log(error.toString());
       _emitFailure(Failure.unexpected(error.toString()));
     }
@@ -70,6 +70,8 @@ class LoginBloc extends Cubit<LoginState> {
         loginStatus: LoginStatus.failed(failure),
       ),
     );
+    // Reset Failed Login Status to Initial State
+    safeEmit(state.copyWith(loginStatus: const LoginStatus.initial()));
   }
 
   void onEmailAddressChanged(String emailAddress) =>

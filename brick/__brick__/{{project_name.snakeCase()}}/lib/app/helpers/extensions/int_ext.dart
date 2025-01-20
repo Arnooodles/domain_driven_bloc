@@ -1,4 +1,4 @@
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 
 extension IntExt on int {
   StatusCode get statusCode => StatusCode.values.firstWhere(

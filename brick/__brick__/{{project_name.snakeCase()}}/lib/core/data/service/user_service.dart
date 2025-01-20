@@ -2,7 +2,7 @@ import 'package:chopper/chopper.dart';
 
 part 'user_service.chopper.dart';
 
-@ChopperApi(baseUrl: 'api')
+@ChopperApi(baseUrl: 'https://reqres.in/api')
 abstract interface class UserService extends ChopperService {
   @Get(path: '/users/2')
   Future<Response<dynamic>> getCurrentUser();

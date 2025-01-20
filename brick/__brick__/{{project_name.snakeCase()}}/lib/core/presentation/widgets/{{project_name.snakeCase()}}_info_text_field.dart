@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField({
@@ -29,7 +30,7 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField extends Statel
             horizontal: Insets.medium,
           ),
           decoration: BoxDecoration(
-            color: context.colorScheme.secondaryContainer,
+            color: context.colorScheme.surfaceContainer,
             borderRadius: AppTheme.defaultBoardRadius,
           ),
           width: isExpanded ? Insets.infinity : null,
@@ -37,18 +38,17 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField extends Statel
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                title,
+              {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
+                text: title,
                 style: context.textTheme.bodySmall?.copyWith(
-                  color: titleColor ?? context.colorScheme.secondary,
+                  color: titleColor,
                 ),
               ),
-              Gap.xxsmall(),
-              Text(
-                description,
+              Gap.xxSmall(),
+              {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
+                text: description,
                 style: context.textTheme.titleMedium?.copyWith(
-                  color: descriptionColor ??
-                      context.colorScheme.onSecondaryContainer,
+                  color: descriptionColor,
                 ),
               ),
             ],

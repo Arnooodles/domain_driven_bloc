@@ -1,22 +1,13 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:{{project_name.snakeCase()}}/app/constants/enum.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/login/login_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_auth_repository.dart';
 
-import 'login_bloc_test.mocks.dart';
+import '../../../../utils/generated_mocks.mocks.dart';
 
-@GenerateNiceMocks(
-  <MockSpec<dynamic>>[
-    MockSpec<IAuthRepository>(),
-    MockSpec<ILocalStorageRepository>(),
-  ],
-)
 void main() {
   late MockIAuthRepository authRepository;
   late MockILocalStorageRepository localStorageRepository;
@@ -139,6 +130,11 @@ void main() {
           emailAddress: email,
           loginStatus: LoginStatus.failed(failure),
         ),
+        LoginState(
+          isLoading: false,
+          emailAddress: email,
+          loginStatus: const LoginStatus.initial(),
+        ),
       ],
     );
     blocTest<LoginBloc, LoginState>(
@@ -146,10 +142,11 @@ void main() {
       build: () {
         provideDummy(
           Either<Failure, Unit>.left(
-            Failure.unexpected(throwsException.toString()),
+            Failure.unexpected(Exception('Unexpected error').toString()),
           ),
         );
-        when(authRepository.login(any, any)).thenThrow(throwsException);
+        when(authRepository.login(any, any))
+            .thenThrow(Exception('Unexpected error'));
 
         return loginBloc;
       },
@@ -160,8 +157,13 @@ void main() {
           isLoading: false,
           emailAddress: email,
           loginStatus: LoginStatus.failed(
-            Failure.unexpected(throwsException.toString()),
+            Failure.unexpected(Exception('Unexpected error').toString()),
           ),
+        ),
+        LoginState(
+          isLoading: false,
+          emailAddress: email,
+          loginStatus: const LoginStatus.initial(),
         ),
       ],
     );
@@ -173,7 +175,8 @@ void main() {
             const Failure.invalidEmailFormat(),
           ),
         );
-        when(authRepository.login(any, any)).thenThrow(throwsException);
+        when(authRepository.login(any, any))
+            .thenThrow(Exception('Unexpected error'));
 
         return loginBloc;
       },
@@ -187,6 +190,11 @@ void main() {
             Failure.invalidEmailFormat(),
           ),
         ),
+        const LoginState(
+          isLoading: false,
+          emailAddress: 'email',
+          loginStatus: LoginStatus.initial(),
+        ),
       ],
     );
     blocTest<LoginBloc, LoginState>(
@@ -197,7 +205,8 @@ void main() {
             const Failure.exceedingCharacterLength(min: 6),
           ),
         );
-        when(authRepository.login(any, any)).thenThrow(throwsException);
+        when(authRepository.login(any, any))
+            .thenThrow(Exception('Unexpected error'));
 
         return loginBloc;
       },
@@ -210,6 +219,11 @@ void main() {
           loginStatus: const LoginStatus.failed(
             Failure.exceedingCharacterLength(min: 6),
           ),
+        ),
+        LoginState(
+          isLoading: false,
+          emailAddress: email,
+          loginStatus: const LoginStatus.initial(),
         ),
       ],
     );
