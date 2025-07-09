@@ -16,10 +16,7 @@ final class _Keys {
 
 @LazySingleton(as: ILocalStorageRepository)
 class LocalStorageRepository implements ILocalStorageRepository {
-  const LocalStorageRepository(
-    this._securedStorage,
-    this._unsecuredStorage,
-  );
+  const LocalStorageRepository(this._securedStorage, this._unsecuredStorage);
 
   final FlutterSecureStorage _securedStorage;
   final SharedPreferences _unsecuredStorage;
@@ -28,48 +25,44 @@ class LocalStorageRepository implements ILocalStorageRepository {
 
   /// Secured Storage services
   @override
-  Future<String?> getAccessToken() =>
-      _securedStorage.read(key: _Keys.accessToken);
+  Future<String?> getAccessToken() => _securedStorage.read(key: _Keys.accessToken);
   @override
   Future<void> setAccessToken(String? value) async {
     try {
       await _securedStorage.write(key: _Keys.accessToken, value: value);
     } on Exception catch (error) {
       _logger.e(error.toString());
-      throw Exception(error);
+      rethrow;
     }
   }
 
   @override
-  Future<String?> getRefreshToken() =>
-      _securedStorage.read(key: _Keys.refreshToken);
+  Future<String?> getRefreshToken() => _securedStorage.read(key: _Keys.refreshToken);
   @override
   Future<void> setRefreshToken(String? value) async {
     try {
       await _securedStorage.write(key: _Keys.refreshToken, value: value);
     } on Exception catch (error) {
       _logger.e(error.toString());
-      throw Exception(error);
+      rethrow;
     }
   }
 
   /// Unsecured storage services
   @override
-  Future<String?> getLastLoggedInEmail() async =>
-      _unsecuredStorage.getString(_Keys.emailAddress);
+  Future<String?> getLastLoggedInUsername() async => _unsecuredStorage.getString(_Keys.emailAddress);
   @override
-  Future<void> setLastLoggedInEmail(String? value) async {
+  Future<void> setLastLoggedInUsername(String? value) async {
     try {
       await _unsecuredStorage.setString(_Keys.emailAddress, value ?? '');
     } on Exception catch (error) {
       _logger.e(error.toString());
-      throw Exception(error);
+      rethrow;
     }
   }
 
   @override
-  Future<bool?> getIsDarkMode() async =>
-      _unsecuredStorage.getBool(_Keys.isDarkMode);
+  Future<bool?> getIsDarkMode() async => _unsecuredStorage.getBool(_Keys.isDarkMode);
 
   @override
   Future<void> setIsDarkMode({required bool isDarkMode}) async {
@@ -77,7 +70,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
       await _unsecuredStorage.setBool(_Keys.isDarkMode, isDarkMode);
     } on Exception catch (error) {
       _logger.e(error.toString());
-      throw Exception(error);
+      rethrow;
     }
   }
 }

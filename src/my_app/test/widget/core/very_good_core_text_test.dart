@@ -34,16 +34,11 @@ void main() {
         children: <Widget>[
           GoldenTestScenario(
             name: 'regular',
-            child: const VeryGoodCoreText(
-              text: 'text',
-            ),
+            child: const VeryGoodCoreText(text: 'text'),
           ),
           GoldenTestScenario(
             name: 'styled',
-            child: const VeryGoodCoreText(
-              text: '<b>styled</b> text',
-              textType: TextType.styled,
-            ),
+            child: const VeryGoodCoreText(text: '<b>styled</b> text', textType: TextType.styled),
           ),
           GoldenTestScenario(
             name: 'markdown',
@@ -51,18 +46,12 @@ void main() {
             child: const SizedBox(
               width: 400,
               height: 400,
-              child: VeryGoodCoreText(
-                text: markdownData,
-                textType: TextType.markdown,
-              ),
+              child: VeryGoodCoreText(text: markdownData, textType: TextType.markdown),
             ),
           ),
           GoldenTestScenario(
             name: 'selectable',
-            child: const VeryGoodCoreText(
-              text: 'selectable text',
-              textType: TextType.selectable,
-            ),
+            child: const VeryGoodCoreText(text: 'selectable text', textType: TextType.selectable),
           ),
         ],
       ),

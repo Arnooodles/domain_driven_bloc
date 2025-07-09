@@ -104,7 +104,6 @@ coverage/
 !pubspec.lock
 packages/**/pubspec.lock
 
-
 # Web related
 lib/generated_plugin_registrant.dart
 
@@ -132,14 +131,7 @@ coverage
 # Do not commit local.properties
 local.properties
 
-
-
 # FVM
-.fvm/flutter_sdk
-.fvm/versions
-.fvm/release
-.fvm/version
-.fvmrc
 
 # Fastlane
 ios/fastlane/README.md
@@ -170,3 +162,8 @@ android/fastlane/report.xml
 **/goldens/linux
 **/goldens/windows
 **/failures/
+
+# FVM Version Cache
+.fvm/
+.cursor
+.fvmrc

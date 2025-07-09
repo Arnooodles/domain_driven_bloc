@@ -26,6 +26,7 @@ targets:
           - lib/app/observers/**.dart
           - lib/app/routes/**.dart
           - lib/app/utils/**.dart
+          - lib/app/helpers/interceptors/**.dart
           - lib/core/data/repository/**.dart
           - lib/features/**/data/repository/**.dart
           - lib/core/domain/bloc/**.dart
@@ -40,7 +41,7 @@ targets:
       flutter_gen:
         options:
           output: lib/app/generated/  
-          integration:
+          integrations:
             flutter_svg: true    
       slang_build_runner:
         options:

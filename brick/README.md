@@ -1,11 +1,29 @@
 # Domain-Driven Bloc
 
-[![License: MIT][license_badge]][license_link]
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)](https://github.com/felangel/mason)
 
-A Flutter Project Blueprint for Building Maintainable and Scalable Flutter Apps.
+Domain-Driven Bloc jumpstarts your Flutter projects with a clean, modular foundation. Get instant best practices—Bloc, Clean Architecture, DI, and feature isolation—so you can focus on building, not boilerplate. Everything you need for fast, confident app development is ready out of the box.
 
-## Credits
+---
+
+## Table of Contents
+- [Domain-Driven Bloc](#domain-driven-bloc)
+  - [Table of Contents](#table-of-contents)
+  - [Credits 🙏](#credits-)
+  - [Getting Started 🚀](#getting-started-)
+  - [What's Included ✨](#whats-included-)
+    - [Key Packages 🗃](#key-packages-)
+  - [Output 🗂️](#output-️)
+    - [Core Functionality 🏅](#core-functionality-)
+    - [Architecture 🏗️](#architecture-️)
+  - [Folder Structure 📁](#folder-structure-)
+  - [Screenshots 📷](#screenshots-)
+  - [Contributing 🤝](#contributing-)
+
+---
+
+## Credits 🙏
 
 This project was originally developed by [Very Good Ventures][very_good_ventures_link] 🦄
 
@@ -51,128 +69,66 @@ Usage 🚀
 mason make domain_driven_bloc
 ```
 
+---
+
 ## What's Included ✨
 
-Out of the box, Domain-Driven Bloc includes:
+Everything you need for a modern, production-grade Flutter app:
 
-- ✅ [Cross Platform Support][flutter_cross_platform_link] - Built-in support for iOS, Android, Web, and Windows (MacOS/Linux coming soon!)
-- ✅ [Build Flavors][flutter_flavors_link] - Multiple flavor support for development, staging, and production
-- ✅ [Internationalization Support][internationalization_link] - Internationalization support using synthetic code generation to streamline the development process
-- ✅ [Sound Null-Safety][null_safety_link] - No more null-dereference exceptions at runtime. Develop with a sound, static type system.
-- ✅ [Bloc][bloc_link] - Integrated bloc architecture for scalable, testable code which offers a clear separation between business logic and presentation
-- ✅ [Testing][testing_link] - Unit and Widget(Golden) Tests with more than 80% line coverage
-- ✅ [Logging][logging_link] - Built-in, extensible logging to capture uncaught Flutter and Dart Exceptions
-- ✅ [Continuous Integration][github_actions_link] - Lint, format, test, and enforce code coverage using [GitHub Actions][github_actions_link]
-- ✅ [Dependabot Integration][github_dependabot_link] - Automated dependency updates built into GitHub
-- ✅ [Flutter Version Management][fvm_link] - A simple CLI to manage Flutter SDK versions.
-- ✅ [Makefile][makefile_link] - A simple way to organize and standardize project commands
+- 🏛️ **Clean Architecture:** Modular, scalable architecture inspired by DDD—separation of concerns, testability, and maintainability.
+- 🧩 **Feature Isolation:** Each feature is fully modular for easy scaling and testing.
+- 🧠 **Bloc State Management:** Clean separation of business logic and UI using Bloc.
+- 🧬 **Dependency Injection:** Built-in DI with [injectable], [get_it] for testability and loose coupling.
+- 🛠 **Configurable Build Flavors:** Effortless switching between dev, staging, and prod environments.
+- 🌍 **Internationalization:** Streamlined i18n with codegen—add new languages in minutes, no manual boilerplate.
+- 🛡 **Null Safety:** 100% sound null safety for safer, more reliable code.
+- 🔒 **Secure Storage:** Secure sensitive data with [flutter_secure_storage].
+- 🧪 **Testing Suite:** Extensive unit, widget, and golden tests; includes mocks, fakes, and golden tests for robust, reliable test suites.
+- 📝 **Extensible Logging:** Catch and log uncaught exceptions, plug in your own loggers, or use pretty logging for debugging and production.
+- 🏎 **Performance Ready:** Responsive layouts and best practices for smooth UX on all platforms.
+- 🧑‍💻 **Developer Experience:** Makefile, FVM, and pre-configured analysis for fast onboarding and consistent code quality.
+- 🤖 **CI/CD Ready:** Lint, format, test, and coverage checks via GitHub Actions.
+- 🔄 **Automated Dependency Updates:** Dependabot keeps your dependencies fresh and secure.
 
-### Additional Packages
 
-<br />
+### Key Packages 🗃
 
-#### State Management
+- 🧠 **State Management:** [flutter_bloc](https://pub.dev/packages/flutter_bloc), [flutter_hooks](https://pub.dev/packages/flutter_hooks)
+- 🧮 **Functional Programming:** [fpdart](https://pub.dev/packages/fpdart)
+- 🗄️ **Model:** [freezed](https://pub.dev/packages/freezed), [json_serializable](https://pub.dev/packages/json_serializable)
+- 🧭 **Navigation:** [go_router](https://pub.dev/packages/go_router)
+- 🧬 **DI:** [injectable](https://pub.dev/packages/injectable), [get_it](https://pub.dev/packages/get_it)
+- 📱 **Responsive:** [responsive_framework](https://pub.dev/packages/responsive_framework)
+- 🌱 **Env:** [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)
+- 🌐 **HTTP:** [chopper](https://pub.dev/packages/chopper)
+- 💾 **Storage:** [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage), [shared_preferences](https://pub.dev/packages/shared_preferences)
+- 🛡 **Security:** [safe_device](https://pub.dev/packages/safe_device)
+- 📝 **Logging:** [logger](https://pub.dev/packages/logger), [pretty_chopper_logger](https://pub.dev/packages/pretty_chopper_logger)
+- 🌍 **Localization:** [intl](https://pub.dev/packages/intl), [slang](https://pub.dev/packages/slang)
+- 🧾 **Device Info:** [package_info_plus](https://pub.dev/packages/package_info_plus), [device_info_plus](https://pub.dev/packages/device_info_plus)
+- 🖼 **Assets:** [flutter_svg](https://pub.dev/packages/flutter_svg), [flutter_gen](https://pub.dev/packages/flutter_gen)
+- 🧪 **Testing:** [alchemist](https://pub.dev/packages/alchemist), [bloc_test](https://pub.dev/packages/bloc_test)
+- 🦾 **Mocking:** [mockito](https://pub.dev/packages/mockito), [mocktail_image_network](https://pub.dev/packages/mocktail_image_network), [faker](https://pub.dev/packages/faker)
+- 🧹 **Code Quality:** [very_good_analysis](https://pub.dev/packages/very_good_analysis), [dart_code_metrics](https://pub.dev/packages/dart_code_metrics)
 
-  ✅ [Flutter Bloc](https://pub.dev/packages/flutter_bloc) \
-  ✅ [Flutter Hooks](https://pub.dev/packages/flutter_hooks)
+## Output 🗂️
 
-#### Functional Programming
+### Core Functionality 🏅
 
-  ✅ [Fpdart](https://pub.dev/packages/fpdart)
+- 🏠 **Home:** Live Reddit [FlutterDev][flutter_dev_link] feed integration—real-world API, pagination, error handling.
+- 🔐 **Auth:** Mock login using [DummyJSON](https://dummyjson.com/docs/auth)—prototype real auth flows with any [user](https://dummyjson.com/users).
+- 👤 **Profile:** Mock user profile via [DummyJSON](https://dummyjson.com/docs/auth#auth-me)—user state management and editing patterns.
+- 🌙 **Dark Mode:** Seamless theme switching with persistent user preference.
 
-#### Data Classes
+### Architecture 🏗️
 
-  ✅ [Freezed](https://pub.dev/packages/freezed) \
-  ✅ [Json Serializable](https://pub.dev/packages/json_serializable)
+![Architecture Diagram](https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/diagram.png "Architecture Diagram")
 
-#### Navigation
+---
 
-  ✅ [Go Router](https://pub.dev/packages/go_router)
+## Folder Structure 📁
 
-#### Dependency Injection
-
-  ✅ [Injectable](https://pub.dev/packages/injectable) \
-  ✅ [Get It](https://pub.dev/packages/get_it)
-
-#### Responsive
-
-  ✅ [Responsive Framework](https://pub.dev/packages/responsive_framework)
-
-#### Environment Variable Management
-
-  ✅ [Dotenv](https://pub.dev/packages/flutter_dotenv)
-
-#### HTTP Client
-
-  ✅ [Chopper](https://pub.dev/packages?q=chopper)
-
-#### Local Storage
-
-  ✅ [Secure Storage](https://pub.dev/packages/flutter_secure_storage) \
-  ✅ [Shared Preferences](https://pub.dev/packages/shared_preferences)
-
-#### Security
-
-  ✅ [Safe Device](https://pub.dev/packages/safe_device) 
-
-#### Logging
-
-  ✅ [Logger](https://pub.dev/packages/logger) \
-  ✅ [Pretty Chopper Logger](https://pub.dev/packages/pretty_chopper_logger)
-
-#### Theme
-
-  ✅ [Flex Color Scheme](https://pub.dev/packages/flex_color_scheme) 
-
-#### Localization
-
-  ✅ [Intl](https://pub.dev/packages/intl) \
-  ✅ [Slang](https://pub.dev/packages/slang)
-
-#### Package & Device Info
-
-  ✅ [Package Info Plus](https://pub.dev/packages/package_info_plus) \
-  ✅ [Device Info Plus](https://pub.dev/packages/device_info_plus)  
-
-#### Assets
-
-  ✅ [Flutter Svg](https://pub.dev/packages/flutter_svg) \
-  ✅ [Flutter Gen](https://pub.dev/packages/flutter_gen)
-
-#### Testing
-
-  ✅ [Alchemist](https://pub.dev/packages/alchemist) \
-  ✅ [Golden Toolkit](https://pub.dev/packages/golden_toolkit) \
-  ✅ [Bloc Test](https://pub.dev/packages/bloc_test)
-
-#### Mock
-
-  ✅ [Mockito](https://pub.dev/packages/mockito) \
-  ✅ [Mocktail Image Network](https://pub.dev/packages/mocktail_image_network) \
-  ✅ [Faker](https://pub.dev/packages/faker)
-
-#### Code Quality
-
-  ✅ [Very Good Analysis](https://pub.dev/packages/flutter_lints) \
-  ✅ [Dependency Validator](https://pub.dev/packages/dependency_validator)
-
-## Output📦
-
-### Features ⭐
-
-- ✴️ Domain-Driven-Bloc - A clean architecture based on domain driven design
-- ✴️ Authentication - A mock authentication implementation using [Reqres][reqres_link] API (e.g. Email: janet.weaver@reqres.in, Password: **password** ).
-- ✴️ Home - Displays the post found in the sub-reddit [FlutterDev][flutter_dev_link].
-- ✴️ Profile - Displays the basic information of the mocked user.
-- ✴️ Dark Mode - Switch between Light and Dark themes
-- ✴️ Unit Testing - Performs a unit test to verify the correctness of a unit of logic under the Bloc and repository layers
-- ✴️ Widget(Goldens) Testing - Performs a widget tests that uses a special matcher that compares your widget with an image file and expects that it looks the same
-
-### Architecture Diagram
-
-<img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/diagram.png" width=460 height=890>
-
-### Folder Structure 📁
+> Output after running the template:
 
 ```sh
 ├── .github
@@ -263,6 +219,7 @@ Out of the box, Domain-Driven Bloc includes:
 │   │       └── presentation
 │   │           ├── views
 │   │           └── widgets
+│   │
 │   ├── main.dart
 ├── scripts
 ├── test
@@ -311,25 +268,36 @@ Out of the box, Domain-Driven Bloc includes:
 └── README.md
 ```
 
-### Screenshots 📷
+---
 
-<table>
-  <tr>
-    <td>Login Screen</td>
-    <td>Home Screen</td>
-    <td>Profile Screen</td>
-  </tr>
-  <tr>
-    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/login_screen.png" width=270 height=520></td>
-    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/home_screen.png" width=270 height=520></td>
-    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/profile_screen.png" width=270 height=520></td>
-  </tr>
-  <tr>
-    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_login_screen.png" width=270 height=520></td>
-    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_home_screen.png" width=270 height=520></td>
-    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_profile_screen.png" width=270 height=520></td>
-  </tr>
-</table>
+## Screenshots 📷
+
+| Login | Home | Profile |
+|-------|------|---------|
+| ![Login](screenshots/login_screen.png) | ![Home](screenshots/home_screen.png) | ![Profile](screenshots/profile_screen.png) |
+| ![Login Dark](screenshots/dark_login_screen.png) | ![Home Dark](screenshots/dark_home_screen.png) | ![Profile Dark](screenshots/dark_profile_screen.png) |
+
+---
+
+## Contributing 🤝
+
+Contributions are welcome! To get started:
+
+1. Fork the repo and create your branch from `main`.
+2. Make your changes, following the existing code style and conventions.
+3. Add tests for any new features or bug fixes.
+4. Run the linter and tests to ensure everything passes:
+   ```sh
+   make lint         # for static analysis
+   make lcov_*      # for running tests and generating coverage (see Makefile for available targets)
+   ```
+5. Open a pull request with a clear description of your changes.
+
+For major changes, please open an issue first to discuss what you'd like to change.
+
+If you have questions, suggestions, or want to discuss ideas, feel free to open an issue or start a discussion.
+
+---
 
 [bloc_link]: https://bloclibrary.dev
 [flutter_cross_platform_link]: https://flutter.dev/docs/development/tools/sdk/release-notes/supported-platforms
@@ -348,3 +316,34 @@ Out of the box, Domain-Driven Bloc includes:
 [reqres_link]: https://reqres.in/
 [testing_link]: https://flutter.dev/docs/testing
 [very_good_ventures_link]: https://verygood.ventures
+[flutter_bloc]: https://pub.dev/packages/flutter_bloc
+[flutter_hooks]: https://pub.dev/packages/flutter_hooks
+[fpdart]: https://pub.dev/packages/fpdart
+[freezed]: https://pub.dev/packages/freezed
+[json_serializable]: https://pub.dev/packages/json_serializable
+[go_router]: https://pub.dev/packages/go_router
+[injectable]: https://pub.dev/packages/injectable
+[get_it]: https://pub.dev/packages/get_it
+[responsive_framework]: https://pub.dev/packages/responsive_framework
+[flutter_dotenv]: https://pub.dev/packages/flutter_dotenv
+[chopper]: https://pub.dev/packages/chopper
+[flutter_secure_storage]: https://pub.dev/packages/flutter_secure_storage
+[shared_preferences]: https://pub.dev/packages/shared_preferences
+[safe_device]: https://pub.dev/packages/safe_device
+[logger]: https://pub.dev/packages/logger
+[pretty_chopper_logger]: https://pub.dev/packages/pretty_chopper_logger
+[flex_color_scheme]: https://pub.dev/packages/flex_color_scheme
+[intl]: https://pub.dev/packages/intl
+[slang]: https://pub.dev/packages/slang
+[package_info_plus]: https://pub.dev/packages/package_info_plus
+[device_info_plus]: https://pub.dev/packages/device_info_plus
+[flutter_svg]: https://pub.dev/packages/flutter_svg
+[flutter_gen]: https://pub.dev/packages/flutter_gen
+[alchemist]: https://pub.dev/packages/alchemist
+[golden_toolkit]: https://pub.dev/packages/golden_toolkit
+[bloc_test]: https://pub.dev/packages/bloc_test
+[mockito]: https://pub.dev/packages/mockito
+[mocktail_image_network]: https://pub.dev/packages/mocktail_image_network
+[faker]: https://pub.dev/packages/faker
+[very_good_analysis]: https://pub.dev/packages/very_good_analysis
+[dart_code_metrics]: https://pub.dev/packages/dart_code_metrics

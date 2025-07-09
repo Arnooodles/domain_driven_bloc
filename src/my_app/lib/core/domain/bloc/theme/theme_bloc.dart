@@ -1,3 +1,5 @@
+// ignore_for_file: prefer-bloc-state-suffix
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -6,14 +8,14 @@ import 'package:very_good_core/core/domain/interface/i_local_storage_repository.
 
 @lazySingleton
 class ThemeBloc extends Cubit<ThemeMode> {
-  ThemeBloc(this.localStorageRepository) : super(ThemeMode.system) {
+  ThemeBloc(this._localStorageRepository) : super(ThemeMode.system) {
     initialize();
   }
 
-  final ILocalStorageRepository localStorageRepository;
+  final ILocalStorageRepository _localStorageRepository;
 
   Future<void> initialize() async {
-    final bool? isDarkMode = await localStorageRepository.getIsDarkMode();
+    final bool? isDarkMode = await _localStorageRepository.getIsDarkMode();
     if (isDarkMode != null) {
       safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
     }
@@ -21,7 +23,7 @@ class ThemeBloc extends Cubit<ThemeMode> {
 
   Future<void> switchTheme(Brightness currentBrightness) async {
     final bool isDarkMode = currentBrightness != Brightness.dark;
-    await localStorageRepository.setIsDarkMode(isDarkMode: isDarkMode);
+    await _localStorageRepository.setIsDarkMode(isDarkMode: isDarkMode);
     safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
   }
 

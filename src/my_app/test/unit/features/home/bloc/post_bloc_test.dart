@@ -18,8 +18,7 @@ void main() {
 
   setUp(() {
     postRepository = MockIPostRepository();
-    failure =
-        const Failure.serverError(StatusCode.http500, 'INTERNAL SERVER ERROR');
+    failure = const Failure.serverError(StatusCode.http500, 'INTERNAL SERVER ERROR');
     posts = <Post>[
       PostDTO(
         uid: '1',
@@ -39,48 +38,37 @@ void main() {
     blocTest<PostBloc, PostState>(
       'should emit a success state with list of posts',
       build: () {
-        provideDummy(
-          Either<Failure, List<Post>>.right(posts),
-        );
-        when(postRepository.getPosts())
-            .thenAnswer((_) async => Either<Failure, List<Post>>.right(posts));
+        provideDummy(Either<Failure, List<Post>>.right(posts));
+        when(postRepository.getPosts()).thenAnswer((_) async => Either<Failure, List<Post>>.right(posts));
 
         return PostBloc(postRepository);
       },
       act: (PostBloc bloc) => bloc.getPosts(),
-      expect: () =>
-          <PostState>[const PostState.loading(), PostState.success(posts)],
+      expect: () => <PostState>[const PostState.loading(), PostState.onSuccess(posts)],
     );
     blocTest<PostBloc, PostState>(
       'should emit a failed state with posts from local storage ',
       build: () {
-        provideDummy(
-          Either<Failure, List<Post>>.left(failure),
-        );
-        when(postRepository.getPosts())
-            .thenAnswer((_) async => Either<Failure, List<Post>>.left(failure));
+        provideDummy(Either<Failure, List<Post>>.left(failure));
+        when(postRepository.getPosts()).thenAnswer((_) async => Either<Failure, List<Post>>.left(failure));
 
         return PostBloc(postRepository);
       },
       act: (PostBloc bloc) => bloc.getPosts(),
-      expect: () =>
-          <PostState>[const PostState.loading(), PostState.failed(failure)],
+      expect: () => <PostState>[const PostState.loading(), PostState.onFailure(failure)],
     );
 
     blocTest<PostBloc, PostState>(
       'should emit a failed state with an Exception error ',
       build: () {
-        when(postRepository.getPosts())
-            .thenThrow(Exception('Unexpected error'));
+        when(postRepository.getPosts()).thenThrow(Exception('Unexpected error'));
 
         return PostBloc(postRepository);
       },
       act: (PostBloc bloc) => bloc.getPosts(),
       expect: () => <PostState>[
         const PostState.loading(),
-        PostState.failed(
-          Failure.unexpected(Exception('Unexpected error').toString()),
-        ),
+        PostState.onFailure(Failure.unexpected(Exception('Unexpected error').toString())),
       ],
     );
   });

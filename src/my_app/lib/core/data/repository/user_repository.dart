@@ -14,25 +14,19 @@ import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
 
 @LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {
-  UserRepository(
-    this._userService,
-  );
+  UserRepository(this._userService);
 
   final UserService _userService;
 
   @override
   Future<Either<Failure, User>> get user async {
     try {
-      final Response<dynamic> response = await _userService.getCurrentUser();
+      final Response<UserDTO> response = await _userService.getCurrentUser();
 
       final StatusCode statusCode = response.statusCode.statusCode;
 
       if (statusCode.isSuccess && response.body != null) {
-        final {'data': Map<String, dynamic> data} =
-            response.body as Map<String, dynamic>;
-        final UserDTO userDTO = UserDTO.fromJson(data);
-
-        return _validateUserData(userDTO);
+        return _validateUserData(response.body!);
       }
 
       return left(Failure.serverError(statusCode, response.error.toString()));

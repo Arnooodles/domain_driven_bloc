@@ -6,10 +6,7 @@ import 'package:very_good_core/core/domain/interface/i_device_repository.dart';
 
 @LazySingleton(as: IDeviceRepository)
 class DeviceRepository implements IDeviceRepository {
-  const DeviceRepository(
-    this._packageInfo,
-    this._deviceInfo,
-  );
+  const DeviceRepository(this._packageInfo, this._deviceInfo);
 
   final PackageInfo _packageInfo;
   final DeviceInfoPlugin _deviceInfo;

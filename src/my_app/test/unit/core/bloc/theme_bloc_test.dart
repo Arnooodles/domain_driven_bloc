@@ -24,8 +24,7 @@ void main() {
     blocTest<ThemeBloc, ThemeMode>(
       'should emit a dark theme mode',
       setUp: () {
-        when(localStorageRepository.getIsDarkMode())
-            .thenAnswer((_) async => Future<bool>.value(true));
+        when(localStorageRepository.getIsDarkMode()).thenAnswer((_) async => Future<bool>.value(true));
       },
       build: () => themeBloc = ThemeBloc(localStorageRepository),
       expect: () => <dynamic>[ThemeMode.dark],
@@ -37,8 +36,7 @@ void main() {
     blocTest<ThemeBloc, ThemeMode>(
       'should emit a dark theme mode',
       setUp: () {
-        when(localStorageRepository.getIsDarkMode())
-            .thenAnswer((_) async => Future<bool>.value(false));
+        when(localStorageRepository.getIsDarkMode()).thenAnswer((_) async => Future<bool>.value(false));
       },
       build: () => themeBloc = ThemeBloc(localStorageRepository),
       expect: () => <dynamic>[ThemeMode.light],
@@ -57,8 +55,7 @@ void main() {
       'should emit a dark theme mode',
       build: () => themeBloc,
       setUp: () {
-        when(localStorageRepository.setIsDarkMode(isDarkMode: false))
-            .thenAnswer((_) async => Future.value);
+        when(localStorageRepository.setIsDarkMode(isDarkMode: false)).thenAnswer((_) async => Future.value);
       },
       act: (ThemeBloc bloc) async => bloc.switchTheme(Brightness.light),
       expect: () => <dynamic>[ThemeMode.dark],
@@ -70,8 +67,7 @@ void main() {
       'should emit a light theme mode',
       build: () => themeBloc,
       setUp: () {
-        when(localStorageRepository.setIsDarkMode(isDarkMode: true))
-            .thenAnswer((_) async => Future.value);
+        when(localStorageRepository.setIsDarkMode(isDarkMode: true)).thenAnswer((_) async => Future.value);
       },
       act: (ThemeBloc bloc) async => bloc.switchTheme(Brightness.dark),
       expect: () => <dynamic>[ThemeMode.light],

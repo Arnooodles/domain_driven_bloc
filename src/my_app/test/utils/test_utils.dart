@@ -22,17 +22,14 @@ import 'package:very_good_core/main.dart';
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';
 
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages,prefer-match-file-name
 Future<void> setupInjection() async {
   await getIt.reset();
   TestWidgetsFlutterBinding.ensureInitialized();
   PathProviderPlatform.instance = MockPathProviderPlatform();
   SharedPreferences.setMockInitialValues(<String, Object>{});
   _mockPackageInfo();
-  await Future.wait(<Future<void>>[
-    initializeEnvironmentConfig(Env.test),
-    configureDependencies(Env.test),
-  ]);
+  await Future.wait(<Future<void>>[initializeEnvironmentConfig(Env.test), configureDependencies(Env.test)]);
 }
 
 void _mockPackageInfo() {
@@ -45,10 +42,7 @@ void _mockPackageInfo() {
   );
 }
 
-AndroidDeviceInfo mockAndroidDeviceInfo({
-  String? phoneModel,
-  String? version,
-}) =>
+AndroidDeviceInfo mockAndroidDeviceInfo({String? phoneModel, String? version}) =>
     AndroidDeviceInfo.fromMap(<String, dynamic>{
       'model': phoneModel ?? 'model',
       'version': <String, dynamic>{
@@ -76,19 +70,14 @@ AndroidDeviceInfo mockAndroidDeviceInfo({
       'isPhysicalDevice': false,
       'serialNumber': 'serialNumber',
       'isLowRamDevice': false,
-      'displayMetrics': <String, double>{
-        'widthPx': 0.0,
-        'heightPx': 0.0,
-        'xDpi': 0.0,
-        'yDpi': 0.0,
-      },
+      'physicalRamSize': 1,
+      'availableRamSize': 1,
+      'freeDiskSize': 1,
+      'totalDiskSize': 1,
+      'displayMetrics': <String, double>{'widthPx': 0.0, 'heightPx': 0.0, 'xDpi': 0.0, 'yDpi': 0.0},
     });
 
-IosDeviceInfo mockIosDeviceInfo({
-  String? phoneModel,
-  String? os,
-  String? version,
-}) =>
+IosDeviceInfo mockIosDeviceInfo({String? phoneModel, String? os, String? version}) =>
     IosDeviceInfo.fromMap(<String, dynamic>{
       'data': <String, dynamic>{},
       'name': 'name',
@@ -99,6 +88,10 @@ IosDeviceInfo mockIosDeviceInfo({
       'localizedModel': 'localizedModel',
       'isiOSAppOnMac': false,
       'isPhysicalDevice': false,
+      'physicalRamSize': 1,
+      'availableRamSize': 1,
+      'freeDiskSize': 1,
+      'totalDiskSize': 1,
       'utsname': <String, dynamic>{
         'sysname': 'sysname',
         'nodename': 'nodename',
@@ -108,39 +101,39 @@ IosDeviceInfo mockIosDeviceInfo({
       },
     });
 
-User get mockUser => UserDTO(
-      uid: 1,
-      email: 'exampe@email.com',
-      firstName: 'test',
-      lastName: 'test',
-      gender: 'Male',
-      contactNumber: '123456789',
-      birthday: DateTime(2000),
-    ).toDomain();
+User get mockUser => const UserDTO(
+  uid: 1,
+  email: 'exampe@email.com',
+  username: 'username',
+  firstName: 'test',
+  lastName: 'test',
+  gender: 'Male',
+  phone: '123456789',
+  birthDate: '2000-01-01',
+).toDomain();
 
 List<Post> get mockPosts => List<Post>.generate(2, (_) => mockPost);
 
 chopper.ChopperClient get mockChopperClient => getIt<ChopperConfig>().client;
 
-Map<AppScrollController, ScrollController> mockScrollControllers =
-    <AppScrollController, ScrollController>{
+final Map<AppScrollController, ScrollController> mockScrollControllers = <AppScrollController, ScrollController>{
   AppScrollController.home: ScrollController(),
   AppScrollController.profile: ScrollController(),
 };
 
 Post get mockPost => PostDTO(
-      uid: '1',
-      title: 'Turpis in eu mi bibendum neque egestas congue.',
-      author: 'Tempus egestas',
-      permalink: '/r/FlutterDev/comments/123456/',
-      selftext:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      createdUtc: DateTime.fromMillisecondsSinceEpoch(1672689610000),
-      linkFlairBackgroundColor: '#7b35f0',
-      linkFlairText: 'Lorem',
-      upvotes: 10,
-      comments: 2,
-    ).toDomain();
+  uid: '1',
+  title: 'Turpis in eu mi bibendum neque egestas congue.',
+  author: 'Tempus egestas',
+  permalink: '/r/FlutterDev/comments/123456/',
+  selftext:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  createdUtc: DateTime.fromMillisecondsSinceEpoch(1672689610000),
+  linkFlairBackgroundColor: '#7b35f0',
+  linkFlairText: 'Lorem',
+  upvotes: 10,
+  comments: 2,
+).toDomain();
 
 chopper.Response<T> generateMockResponse<T>(T body, int statusCode) =>
     chopper.Response<T>(http.Response(json.encode(body), statusCode), body);

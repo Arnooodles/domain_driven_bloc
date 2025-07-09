@@ -36,49 +36,34 @@ class ConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        backgroundColor: context.colorScheme.surface,
-        surfaceTintColor: context.colorScheme.surfaceTint,
-        shape: RoundedRectangleBorder(
-          borderRadius: AppTheme.defaultBoardRadius,
-        ),
-        title: title != null
-            ? VeryGoodCoreText(
-                text: title!,
-                style: context.textTheme.titleMedium,
-              )
-            : null,
-        content: Padding(
-          padding: title != null ? EdgeInsets.zero : Paddings.topXxSmall,
-          child: VeryGoodCoreText(
-            text: message,
-            style: context.textTheme.bodyMedium?.copyWith(
-              color: titleColor,
-            ),
-          ),
-        ),
-        actions: <Widget>[
-          VeryGoodCoreButton(
-            text: negativeButtonText ?? context.i18n.common.no.toUpperCase(),
-            buttonType: ButtonType.text,
-            onPressed: onNegativePressed ?? () => Navigator.of(context).pop(),
-            padding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.zero,
-            textStyle: TextStyle(
-              color: negativeButtonTextColor ?? context.colorScheme.primary,
-            ),
-          ),
-          VeryGoodCoreButton(
-            text: positiveButtonText ?? context.i18n.common.yes.toUpperCase(),
-            buttonType: ButtonType.text,
-            onPressed: onPositivePressed ?? () => Navigator.of(context).pop(),
-            padding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.zero,
-            textStyle: TextStyle(
-              color: positiveButtonTextColor ?? context.colorScheme.primary,
-            ),
-          ),
-        ],
-        actionsPadding: Paddings.horizontalMedium,
-        buttonPadding: EdgeInsets.zero,
-      );
+    shape: const RoundedRectangleBorder(borderRadius: AppTheme.defaultBorderRadius),
+    title: title != null ? VeryGoodCoreText(text: title!, style: context.textTheme.titleMedium) : null,
+    content: Padding(
+      padding: title != null ? EdgeInsets.zero : Paddings.topXxSmall,
+      child: VeryGoodCoreText(
+        text: message,
+        style: context.textTheme.bodyMedium?.copyWith(color: titleColor),
+      ),
+    ),
+    actions: <Widget>[
+      VeryGoodCoreButton(
+        text: negativeButtonText ?? context.i18n.common.no.toUpperCase(),
+        buttonType: ButtonType.text,
+        onPressed: onNegativePressed ?? () => Navigator.of(context).pop(),
+        padding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        textStyle: TextStyle(color: negativeButtonTextColor ?? context.colorScheme.primary),
+      ),
+      VeryGoodCoreButton(
+        text: positiveButtonText ?? context.i18n.common.yes.toUpperCase(),
+        buttonType: ButtonType.text,
+        onPressed: onPositivePressed ?? () => Navigator.of(context).pop(),
+        padding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        textStyle: TextStyle(color: positiveButtonTextColor ?? context.colorScheme.primary),
+      ),
+    ],
+    actionsPadding: Paddings.horizontalMedium,
+    buttonPadding: EdgeInsets.zero,
+  );
 }

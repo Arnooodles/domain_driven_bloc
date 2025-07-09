@@ -1,10 +1,10 @@
 name: domain_driven_bloc
-description: A flutter project blueprint for building maintainable and scalable flutter apps.
+description: Domain-Driven Bloc jumpstarts your Flutter projects with a clean, modular foundation. Get instant best practices—Bloc, Clean Architecture, DI, and feature isolation—so you can focus on building, not boilerplate. Everything you need for fast, confident app development is ready out of the box.
 repository: https://github.com/Arnooodles/domain_driven_bloc
-version: 2.0.0
+version: 3.0.0
 
 environment:
-  mason: ^0.1.0
+  mason: ^0.1.1
 
 vars:
   project_name:

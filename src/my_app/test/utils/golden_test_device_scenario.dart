@@ -16,22 +16,18 @@ class GoldenTestDeviceScenario extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GoldenTestScenario(
-        name: '$name (device: ${device.name})',
-        child: ClipRect(
-          child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              size: device.size,
-              padding: device.safeArea,
-              platformBrightness: device.brightness,
-              devicePixelRatio: device.devicePixelRatio,
-              textScaler: TextScaler.linear(device.textScale),
-            ),
-            child: SizedBox(
-              width: device.size.width,
-              height: device.size.height,
-              child: builder(),
-            ),
-          ),
+    name: '$name (device: ${device.name})',
+    child: ClipRect(
+      child: MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          size: device.size,
+          padding: device.safeArea,
+          platformBrightness: device.brightness,
+          devicePixelRatio: device.devicePixelRatio,
+          textScaler: TextScaler.linear(device.textScale),
         ),
-      );
+        child: SizedBox(width: device.size.width, height: device.size.height, child: builder()),
+      ),
+    ),
+  );
 }

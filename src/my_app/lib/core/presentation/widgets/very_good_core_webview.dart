@@ -49,41 +49,27 @@ class VeryGoodCoreWebview extends HookWidget {
   final bool? allowsLinkPreview;
   final bool? allowsPictureInPictureMediaPlayback;
   final bool? allowsInlineMediaPlayback;
-  final Future<PermissionResponse?> Function(
-    InAppWebViewController,
-    PermissionRequest?,
-  )? onPermissionRequest;
-  final Future<ServerTrustAuthResponse?> Function(
-    InAppWebViewController,
-    URLAuthenticationChallenge,
-  )? onReceivedServerTrustAuthRequest;
+  final Future<PermissionResponse?> Function(InAppWebViewController, PermissionRequest?)? onPermissionRequest;
+  final Future<ServerTrustAuthResponse?> Function(InAppWebViewController, URLAuthenticationChallenge)?
+  onReceivedServerTrustAuthRequest;
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
-  final Future<NavigationActionPolicy?> Function(
-    InAppWebViewController,
-    NavigationAction,
-  )? shouldOverrideUrlLoading;
+  final Future<NavigationActionPolicy?> Function(InAppWebViewController, NavigationAction)? shouldOverrideUrlLoading;
 
   Logger get _logger => getIt<Logger>();
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<PullToRefreshController?> pullToRefreshController =
-        useState<PullToRefreshController?>(null);
+    final ValueNotifier<PullToRefreshController?> pullToRefreshController = useState<PullToRefreshController?>(null);
 
-    useEffect(
-      () {
-        pullToRefreshController.value = kIsWeb || onRefresh == null
-            ? null
-            : PullToRefreshController(
-                settings: PullToRefreshSettings(
-                  color: refreshIndicatorColor,
-                ),
-                onRefresh: onRefresh,
-              );
-        return null;
-      },
-      <Object?>[],
-    );
+    useEffect(() {
+      pullToRefreshController.value = kIsWeb || onRefresh == null
+          ? null
+          : PullToRefreshController(
+              settings: PullToRefreshSettings(color: refreshIndicatorColor),
+              onRefresh: onRefresh,
+            );
+      return null;
+    }, <Object?>[]);
 
     return InAppWebView(
       initialUrlRequest: URLRequest(url: WebUri(url)),
@@ -98,8 +84,7 @@ class VeryGoodCoreWebview extends HookWidget {
       initialSettings: InAppWebViewSettings(
         useShouldOverrideUrlLoading: useShouldOverrideUrlLoading,
         mediaPlaybackRequiresUserGesture: mediaPlaybackRequiresUserGesture,
-        javaScriptCanOpenWindowsAutomatically:
-            javaScriptCanOpenWindowsAutomatically,
+        javaScriptCanOpenWindowsAutomatically: javaScriptCanOpenWindowsAutomatically,
         cacheEnabled: cacheEnabled,
         clearCache: clearCache,
         horizontalScrollBarEnabled: horizontalScrollBarEnabled,
@@ -107,27 +92,19 @@ class VeryGoodCoreWebview extends HookWidget {
         allowsInlineMediaPlayback: allowsInlineMediaPlayback,
         allowsAirPlayForMediaPlayback: allowsAirPlayForMediaPlayback,
         allowsLinkPreview: allowsLinkPreview,
-        allowsPictureInPictureMediaPlayback:
-            allowsPictureInPictureMediaPlayback,
+        allowsPictureInPictureMediaPlayback: allowsPictureInPictureMediaPlayback,
       ),
       onPermissionRequest: onPermissionRequest,
       onReceivedServerTrustAuthRequest: onReceivedServerTrustAuthRequest,
       gestureRecognizers: gestureRecognizers,
       shouldOverrideUrlLoading: shouldOverrideUrlLoading,
-      onReceivedError: (
-        InAppWebViewController controller,
-        WebResourceRequest request,
-        WebResourceError error,
-      ) =>
+      onReceivedError: (InAppWebViewController controller, WebResourceRequest request, WebResourceError error) =>
           _logger.e(error.description),
-      onReceivedHttpError: (
-        InAppWebViewController controller,
-        WebResourceRequest request,
-        WebResourceResponse response,
-      ) {
-        pullToRefreshController.value?.endRefreshing();
-        _logger.e(response.toString());
-      },
+      onReceivedHttpError:
+          (InAppWebViewController controller, WebResourceRequest request, WebResourceResponse response) {
+            pullToRefreshController.value?.endRefreshing();
+            _logger.e(response.toString());
+          },
       onLoadStop: (InAppWebViewController controller, WebUri? url) {
         pullToRefreshController.value?.endRefreshing();
       },

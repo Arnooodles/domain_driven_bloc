@@ -16,9 +16,7 @@ void main() {
   setUp(() {
     appLocalizationBloc = MockAppLocalizationBloc();
 
-    when(appLocalizationBloc.state).thenAnswer(
-      (_) => AppLocale.values.first.buildSync(),
-    );
+    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
   tearDown(() {
@@ -42,8 +40,7 @@ void main() {
             name: 'with title',
             builder: () => MockLocalization(
               appLocalizationBloc: appLocalizationBloc,
-              child:
-                  const ConfirmationDialog(message: 'message', title: 'title'),
+              child: const ConfirmationDialog(message: 'message', title: 'title'),
             ),
           ),
         ],

@@ -11,9 +11,7 @@ final class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
-    _logger.t(
-      'Current:${change.currentState}\nNext:${change.nextState}',
-    );
+    _logger.t('Current:${change.currentState}\nNext:${change.nextState}');
   }
 
   @override

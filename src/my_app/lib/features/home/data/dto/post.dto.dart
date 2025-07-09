@@ -18,12 +18,9 @@ sealed class PostDTO with _$PostDTO {
     required String title,
     required String author,
     required String permalink,
-    @TimestampToDateTime()
-    @JsonKey(name: 'created_utc')
-    required DateTime createdUtc,
+    @TimestampToDateTime() @JsonKey(name: 'created_utc') required DateTime createdUtc,
     String? selftext,
-    @JsonKey(name: 'link_flair_background_color')
-    String? linkFlairBackgroundColor,
+    @JsonKey(name: 'link_flair_background_color') String? linkFlairBackgroundColor,
     @JsonKey(name: 'link_flair_text') String? linkFlairText,
     @JsonKey(name: 'ups', defaultValue: 0) int? upvotes,
     @JsonKey(name: 'num_comments', defaultValue: 0) int? comments,
@@ -32,45 +29,44 @@ sealed class PostDTO with _$PostDTO {
 
   const PostDTO._();
 
-  factory PostDTO.fromJson(Map<String, dynamic> json) =>
-      _$PostDTOFromJson(json);
+  factory PostDTO.fromJson(Map<String, dynamic> json) => _$PostDTOFromJson(json);
 
   factory PostDTO.fromDomain(Post post) => PostDTO(
-        uid: post.uid.getOrCrash(),
-        title: post.title.getOrCrash(),
-        author: post.author.getOrCrash(),
-        permalink: post.permalink.getOrCrash(),
-        selftext: post.selftext.getOrCrash(),
-        createdUtc: post.createdUtc,
-        linkFlairBackgroundColor:
-            post.linkFlairBackgroundColor.toHexString(hashSign: true),
-        linkFlairText: post.linkFlairText.getOrCrash(),
-        upvotes: post.upvotes.getOrCrash().toInt(),
-        comments: post.comments.getOrCrash().toInt(),
-        urlOverriddenByDest: post.urlOverriddenByDest?.getOrCrash(),
-      );
+    uid: post.uid.getValue(),
+    title: post.title.getValue(),
+    author: post.author.getValue(),
+    permalink: post.permalink.getValue(),
+    selftext: post.selftext?.getValue(),
+    createdUtc: post.createdUtc,
+    linkFlairBackgroundColor: post.linkFlairBackgroundColor.toHexString(hashSign: true),
+    linkFlairText: post.linkFlairText?.getValue(),
+    upvotes: post.upvotes.getValue().toInt(),
+    comments: post.comments.getValue().toInt(),
+    urlOverriddenByDest: post.urlOverriddenByDest?.getValue(),
+  );
 
-  Post toDomain() => Post(
-        uid: UniqueId.fromUniqueString(uid),
-        title: ValueString(
-          HtmlUnescape().convert(title).replaceAll('&#x200B;', '\u2028'),
-        ),
-        author: ValueName(author),
-        permalink: Url('https://www.reddit.com$permalink'),
-        createdUtc: createdUtc,
-        linkFlairBackgroundColor: linkFlairBackgroundColor.isNotNullOrBlank
-            ? ColorExt.fromHexString(linkFlairBackgroundColor!)
-            : AppColors.transparent,
-        upvotes: Number(upvotes ?? 0),
-        comments: Number(comments ?? 0),
-        selftext: ValueString(
-          selftext.isNotNullOrBlank
-              ? HtmlUnescape()
-                  .convert(selftext!)
-                  .replaceAll('&#x200B;', '\u2028')
-              : '',
-        ),
-        linkFlairText: ValueString(linkFlairText),
-        urlOverriddenByDest: urlOverriddenByDest?.let(Url.new),
-      );
+  Post toDomain() {
+    final HtmlUnescape unescape = HtmlUnescape();
+    return Post(
+      uid: UniqueId.fromUniqueString(uid),
+      title: ValueString(unescape.convert(title).replaceAll('&#x200B;', '\u2028'), fieldName: 'title'),
+      author: ValueString(author, fieldName: 'author'),
+      permalink: Url('https://www.reddit.com$permalink'),
+      createdUtc: createdUtc,
+      linkFlairBackgroundColor: linkFlairBackgroundColor.isNotNullOrBlank
+          ? ColorExt.fromHexString(linkFlairBackgroundColor!)
+          : AppColors.transparent,
+      upvotes: ValueNumeric(upvotes ?? 0, fieldName: 'upvotes'),
+      comments: ValueNumeric(comments ?? 0, fieldName: 'comments'),
+      selftext: selftext.let(
+        (String value) => ValueString(unescape.convert(value).replaceAll('&#x200B;', '\u2028'), fieldName: 'selftext'),
+      ),
+      linkFlairText: linkFlairText.let((String value) => ValueString(value, fieldName: 'linkFlairText')),
+      urlOverriddenByDest: urlOverriddenByDest != null
+          ? Uri.parse(urlOverriddenByDest!).isAbsolute
+                ? Url(urlOverriddenByDest!)
+                : null
+          : null,
+    );
+  }
 }

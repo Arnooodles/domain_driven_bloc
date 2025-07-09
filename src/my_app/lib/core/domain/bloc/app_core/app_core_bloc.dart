@@ -21,30 +21,20 @@ class AppCoreBloc extends Cubit<AppCoreState> {
   }
 
   List<String> _getSvgAssets() => <String>[
-        ..._filterSvgAssets(Assets.images.values),
-        ..._filterSvgAssets(Assets.icons.values),
-      ];
+    ..._filterSvgAssets(Assets.images.values),
+    ..._filterSvgAssets(Assets.icons.values),
+  ];
 
   Future<void> _preloadSVG(List<String> assetPaths) async {
     for (final String path in assetPaths) {
       final SvgAssetLoader loader = SvgAssetLoader(path);
-      unawaited(
-        svg.cache.putIfAbsent(
-          loader.cacheKey(null),
-          () => loader.loadBytes(null),
-        ),
-      );
+      unawaited(svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null)));
     }
   }
 
-  List<String> _filterSvgAssets(List<dynamic> assetPaths) => assetPaths
-      .whereType<String>()
-      .toList()
-      .where((String path) => path.contains('.svg'))
-      .toList();
+  List<String> _filterSvgAssets(List<dynamic> assetPaths) =>
+      assetPaths.whereType<String>().toList().where((String path) => path.contains('.svg')).toList();
 
-  void setScrollControllers(
-    Map<AppScrollController, ScrollController> scrollControllers,
-  ) =>
+  void setScrollControllers(Map<AppScrollController, ScrollController> scrollControllers) =>
       safeEmit(state.copyWith(scrollControllers: scrollControllers));
 }

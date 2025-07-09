@@ -6,7 +6,7 @@ import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/themes/app_spacing.dart';
+import 'package:very_good_core/app/themes/app_sizes.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/utils/app_utils.dart';
 import 'package:very_good_core/core/presentation/widgets/dialogs/confirmation_dialog.dart';
@@ -38,23 +38,22 @@ final class DialogUtils {
     Color? negativeButtonTextColor,
     Color? positiveButtonTextColor,
     Color? titleColor,
-  }) =>
-      showModal<bool?>(
-        context: context,
-        builder: (BuildContext context) => ConfirmationDialog(
-          message: message,
-          title: title,
-          titleColor: titleColor,
-          negativeButtonText: negativeButtonText,
-          positiveButtonText: positiveButtonText,
-          onNegativePressed: onNegativePressed,
-          onPositivePressed: onPositivePressed,
-          negativeButtonColor: negativeButtonColor,
-          positiveButtonColor: positiveButtonColor,
-          negativeButtonTextColor: negativeButtonTextColor,
-          positiveButtonTextColor: positiveButtonTextColor,
-        ),
-      );
+  }) => showModal<bool?>(
+    context: context,
+    builder: (BuildContext context) => ConfirmationDialog(
+      message: message,
+      title: title,
+      titleColor: titleColor,
+      negativeButtonText: negativeButtonText,
+      positiveButtonText: positiveButtonText,
+      onNegativePressed: onNegativePressed,
+      onPositivePressed: onPositivePressed,
+      negativeButtonColor: negativeButtonColor,
+      positiveButtonColor: positiveButtonColor,
+      negativeButtonTextColor: negativeButtonTextColor,
+      positiveButtonTextColor: positiveButtonTextColor,
+    ),
+  );
 
   static Future<void> showError(
     BuildContext context,
@@ -62,38 +61,26 @@ final class DialogUtils {
     Icon? icon,
     Duration? duration,
     FlashPosition? position,
-  }) =>
-      context.showFlash<void>(
-        duration: duration ?? const Duration(seconds: 3),
-        builder: (BuildContext context, FlashController<void> controller) =>
-            FlashBar<void>(
-          controller: controller,
-          shouldIconPulse: false,
-          position: position ?? FlashPosition.bottom,
-          behavior: FlashBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: AppTheme.defaultBoardRadius,
-          ),
-          margin: const EdgeInsets.symmetric(
-            vertical: Insets.xxxLarge,
-            horizontal: Insets.xxLarge,
-          ),
-          clipBehavior: Clip.antiAlias,
-          icon: Padding(
-            padding:
-                const EdgeInsets.only(left: Insets.small, right: Insets.xSmall),
-            child: icon ??
-                VeryGoodCoreIcon(
-                  icon: right(Icons.error_outline),
-                  color: context.colorScheme.error,
-                ),
-          ),
-          content: VeryGoodCoreText(
-            text: message,
-            style: context.textTheme.bodyMedium,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 3,
-          ),
-        ),
-      );
+  }) => context.showFlash<void>(
+    duration: duration ?? const Duration(seconds: 3),
+    builder: (BuildContext context, FlashController<void> controller) => FlashBar<void>(
+      controller: controller,
+      shouldIconPulse: false,
+      position: position ?? FlashPosition.bottom,
+      behavior: FlashBehavior.floating,
+      shape: const RoundedRectangleBorder(borderRadius: AppTheme.defaultBorderRadius),
+      margin: const EdgeInsets.symmetric(vertical: AppSizes.xxxLarge, horizontal: AppSizes.xxLarge),
+      clipBehavior: Clip.antiAlias,
+      icon: Padding(
+        padding: const EdgeInsets.only(left: AppSizes.small, right: AppSizes.xSmall),
+        child: icon ?? VeryGoodCoreIcon(icon: right(Icons.error_outline), color: context.colorScheme.error),
+      ),
+      content: VeryGoodCoreText(
+        text: message,
+        style: context.textTheme.bodyMedium,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 3,
+      ),
+    ),
+  );
 }

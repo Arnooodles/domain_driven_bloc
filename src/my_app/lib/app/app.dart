@@ -19,59 +19,25 @@ class App extends StatelessWidget {
   App({super.key});
 
   final List<BlocProvider<dynamic>> _globalProviders = <BlocProvider<dynamic>>[
-    BlocProvider<AppLifeCycleBloc>(
-      create: (BuildContext context) => getIt<AppLifeCycleBloc>(),
-    ),
-    BlocProvider<AppLocalizationBloc>(
-      create: (BuildContext context) => getIt<AppLocalizationBloc>(),
-    ),
-    BlocProvider<AppCoreBloc>(
-      create: (BuildContext context) => getIt<AppCoreBloc>(),
-    ),
-    BlocProvider<ThemeBloc>(
-      create: (BuildContext context) => getIt<ThemeBloc>(),
-    ),
-    BlocProvider<AuthBloc>(
-      create: (BuildContext context) => getIt<AuthBloc>(),
-    ),
-    BlocProvider<HidableBloc>(
-      create: (BuildContext context) => getIt<HidableBloc>(),
-    ),
+    BlocProvider<AppLifeCycleBloc>(create: (BuildContext context) => getIt<AppLifeCycleBloc>()),
+    BlocProvider<AppLocalizationBloc>(create: (BuildContext context) => getIt<AppLocalizationBloc>()),
+    BlocProvider<AppCoreBloc>(create: (BuildContext context) => getIt<AppCoreBloc>()),
+    BlocProvider<ThemeBloc>(create: (BuildContext context) => getIt<ThemeBloc>()),
+    BlocProvider<AuthBloc>(create: (BuildContext context) => getIt<AuthBloc>()),
+    BlocProvider<HidableBloc>(create: (BuildContext context) => getIt<HidableBloc>()),
   ];
 
   final List<Breakpoint> _breakpoints = <Breakpoint>[
-    const Breakpoint(
-      start: 0,
-      end: Constant.mobileBreakpoint,
-      name: MOBILE,
-    ),
-    const Breakpoint(
-      start: Constant.mobileBreakpoint + 1,
-      end: Constant.tabletBreakpoint,
-      name: TABLET,
-    ),
-    const Breakpoint(
-      start: Constant.tabletBreakpoint + 1,
-      end: double.infinity,
-      name: DESKTOP,
-    ),
+    const Breakpoint(start: 0, end: Constant.mobileBreakpoint, name: MOBILE),
+    const Breakpoint(start: Constant.mobileBreakpoint + 1, end: Constant.tabletBreakpoint, name: TABLET),
+    const Breakpoint(start: Constant.tabletBreakpoint + 1, end: double.infinity, name: DESKTOP),
   ];
 
-  List<Condition<double>> _getResponsiveWidth(BuildContext context) =>
-      <Condition<double>>[
-        const Condition<double>.equals(
-          name: MOBILE,
-          value: Constant.mobileBreakpoint,
-        ),
-        const Condition<double>.equals(
-          name: TABLET,
-          value: Constant.tabletBreakpoint,
-        ),
-        Condition<double>.equals(
-          name: DESKTOP,
-          value: context.screenWidth,
-        ),
-      ];
+  List<Condition<double>> _getResponsiveWidth(BuildContext context) => <Condition<double>>[
+    const Condition<double>.equals(name: MOBILE, value: Constant.mobileBreakpoint),
+    const Condition<double>.equals(name: TABLET, value: Constant.tabletBreakpoint),
+    Condition<double>.equals(name: DESKTOP, value: context.screenWidth),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +56,7 @@ class App extends StatelessWidget {
             },
           ),
           routerConfig: AppRouter.router,
-          builder: (BuildContext context, Widget? child) =>
-              ResponsiveBreakpoints.builder(
+          builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
             child: Builder(
               builder: (BuildContext context) => ResponsiveScaledBox(
                 width: ResponsiveValue<double>(
@@ -110,12 +75,7 @@ class App extends StatelessWidget {
           themeMode: context.watch<ThemeBloc>().state,
           themeAnimationCurve: Curves.fastOutSlowIn,
           themeAnimationDuration: const Duration(milliseconds: 500),
-          locale: context
-              .watch<AppLocalizationBloc>()
-              .state
-              .$meta
-              .locale
-              .flutterLocale,
+          locale: context.watch<AppLocalizationBloc>().state.$meta.locale.flutterLocale,
           supportedLocales: AppLocaleUtils.supportedLocales,
           localizationsDelegates: Constant.localizationDelegates,
           debugShowCheckedModeBanner: false,

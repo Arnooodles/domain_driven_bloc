@@ -19,8 +19,9 @@ final class ConnectivityUtils {
   }
 
   final Connectivity _connectivity = Connectivity();
-  final BehaviorSubject<ConnectionStatus> _controller =
-      BehaviorSubject<ConnectionStatus>.seeded(ConnectionStatus.online);
+  final BehaviorSubject<ConnectionStatus> _controller = BehaviorSubject<ConnectionStatus>.seeded(
+    ConnectionStatus.online,
+  );
   StreamSubscription<List<ConnectivityResult>>? _connectionSubscription;
   ConnectionStatus _currentStatus = ConnectionStatus.online;
 
@@ -29,8 +30,7 @@ final class ConnectivityUtils {
   bool get isNotConnected => !isConnected;
 
   Stream<ConnectionStatus> internetStatus() {
-    _connectionSubscription ??= _connectivity.onConnectivityChanged
-        .listen((_) => _checkInternetConnection());
+    _connectionSubscription ??= _connectivity.onConnectivityChanged.listen((_) => _checkInternetConnection());
 
     return _controller.stream;
   }
@@ -43,16 +43,25 @@ final class ConnectivityUtils {
 
   Future<ConnectionStatus> checkInternet() async {
     try {
-      final Either<List<InternetAddress>, http.Response> result = kIsWeb //
+      final Either<List<InternetAddress>, http.Response> result =
+          kIsWeb //
           ? right(await http.get(Uri.parse(Constant.networkLookup)))
           : left(await InternetAddress.lookup(Constant.networkLookup));
 
       return result.fold(
         (List<InternetAddress> mobile) =>
-            mobile.isNotEmpty && mobile.first.rawAddress.isNotEmpty //
-                ? ConnectionStatus.online
-                : ConnectionStatus.offline,
-        (http.Response web) => web.statusCode.statusCode.isSuccess //
+            mobile.isNotEmpty &&
+                mobile
+                    .first
+                    .rawAddress
+                    .isNotEmpty //
+            ? ConnectionStatus.online
+            : ConnectionStatus.offline,
+        (http.Response web) =>
+            web
+                .statusCode
+                .statusCode
+                .isSuccess //
             ? ConnectionStatus.online
             : ConnectionStatus.offline,
       );

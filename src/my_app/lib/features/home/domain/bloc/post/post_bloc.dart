@@ -14,9 +14,7 @@ part 'post_state.dart';
 
 @injectable
 class PostBloc extends Cubit<PostState> {
-  PostBloc(
-    this._postRepository,
-  ) : super(const PostState.initial());
+  PostBloc(this._postRepository) : super(const PostState.initial());
 
   final IPostRepository _postRepository;
 
@@ -24,23 +22,13 @@ class PostBloc extends Cubit<PostState> {
     try {
       safeEmit(const PostState.loading());
 
-      final Either<Failure, List<Post>> possibleFailure =
-          await _postRepository.getPosts();
+      final Either<Failure, List<Post>> possibleFailure = await _postRepository.getPosts();
 
-      safeEmit(
-        possibleFailure.fold(
-          PostState.failed,
-          PostState.success,
-        ),
-      );
+      safeEmit(possibleFailure.fold(PostState.onFailure, PostState.onSuccess));
     } on Exception catch (error) {
       log(error.toString());
 
-      safeEmit(
-        PostState.failed(
-          Failure.unexpected(error.toString()),
-        ),
-      );
+      safeEmit(PostState.onFailure(Failure.unexpected(error.toString())));
     }
   }
 }

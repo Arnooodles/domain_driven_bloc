@@ -5,8 +5,8 @@ abstract interface class ILocalStorageRepository {
   Future<String?> getRefreshToken();
   Future<void> setRefreshToken(String? refreshToken);
 
-  Future<String?> getLastLoggedInEmail();
-  Future<void> setLastLoggedInEmail(String? emailAddress);
+  Future<String?> getLastLoggedInUsername();
+  Future<void> setLastLoggedInUsername(String? emailAddress);
 
   Future<bool?> getIsDarkMode();
   Future<void> setIsDarkMode({required bool isDarkMode});

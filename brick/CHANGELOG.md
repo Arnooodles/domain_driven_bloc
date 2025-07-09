@@ -1,3 +1,18 @@
+# 3.0.0
+- feat: update README documentation & screenshots
+- feat: update Flutter, Gradle, Android, and dependency versions for improved compatibility and tooling
+- feat: enhance theming, sizing, and UI consistency across the app
+- feat: switch user and authentication endpoints from reqres.in to dummyjson.com
+- feat: update login credentials to use username instead of email to support dummyjson.com authentication
+- feat: add AuthInterceptor for handling token refresh and session timeouts
+- feat: refactor and improve user and auth models, DTOs, and related repositories/services
+- feat: update localization and i18n for new and renamed fields
+- feat: add and improve core widgets (buttons, avatars, icons, text fields, and etc.) with new props and better UX
+- test: add and update tests for new features and refactored logic
+- chore: update workflow actions, and .gitignore for better CI/CD and local development
+- chore: clean up and merge related code, test, and asset changes for maintainability
+
+
 # 2.0.0
 - feat: implemented flex_color_scheme
 - feat: replaced intl_utils with slang

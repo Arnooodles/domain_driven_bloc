@@ -10,37 +10,37 @@ import '../../utils/test_utils.dart';
 
 void main() {
   group(VeryGoodCoreIcon, () {
-    Widget buildIcon(Either<String, IconData> icon, {Color? color}) =>
-        DefaultAssetBundle(
-          bundle: MockAssetBundle(),
-          child: VeryGoodCoreIcon(
-            icon: icon,
-            color: color,
-          ),
-        );
+    Widget buildIcon(Either<String, IconData> icon, {Color? color, Widget? child}) => DefaultAssetBundle(
+      bundle: MockAssetBundle(),
+      child: VeryGoodCoreIcon(icon: icon, color: color, child: child),
+    );
     goldenTest(
       'renders correctly',
       fileName: 'very_good_core_icon'.goldensVersion,
       builder: () => GoldenTestGroup(
         children: <Widget>[
-          GoldenTestScenario(
-            name: 'svg icon',
-            child: buildIcon(
-              left(Assets.icons.launcherIcon.path),
-            ),
-          ),
+          GoldenTestScenario(name: 'svg icon', child: buildIcon(left(Assets.icons.launcherIcon.path))),
+
           GoldenTestScenario(
             name: 'svg icon with custom color',
-            child: buildIcon(
-              left(Assets.icons.launcherIcon.path),
-              color: Colors.red,
-            ),
+            child: buildIcon(left(Assets.icons.launcherIcon.path), color: Colors.red),
           ),
           GoldenTestScenario(
-            name: 'material icon',
-            child: buildIcon(
-              right(Icons.abc),
-            ),
+            name: 'svg icon with custom color and child',
+            child: buildIcon(left(Assets.icons.launcherIcon.path), color: Colors.red, child: const Text('Child')),
+          ),
+          GoldenTestScenario(name: 'material icon', child: buildIcon(right(Icons.abc))),
+          GoldenTestScenario(
+            name: 'material icon with custom color',
+            child: buildIcon(right(Icons.abc), color: Colors.red),
+          ),
+          GoldenTestScenario(
+            name: 'material icon with child',
+            child: buildIcon(right(Icons.abc), child: const Text('Child')),
+          ),
+          GoldenTestScenario(
+            name: 'material icon with override color',
+            child: VeryGoodCoreIcon(icon: right(Icons.abc), color: Colors.red).copyWith(copyColor: Colors.blue),
           ),
         ],
       ),

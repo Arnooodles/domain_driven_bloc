@@ -1,5 +1,1 @@
-enum TextFieldType {
-  password,
-  form,
-  normal,
-}
+enum TextFieldType { password, form, normal }

@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
+import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 
@@ -15,18 +16,20 @@ part 'auth_state.dart';
 
 @lazySingleton
 class AuthBloc extends Cubit<AuthState> {
-  AuthBloc(
-    this._userRepository,
-    this._authRepository,
-  ) : super(const AuthState.initial());
+  AuthBloc(this._userRepository, this._authRepository, this._localStorageRepository) : super(const AuthState.initial());
 
   final IUserRepository _userRepository;
   final IAuthRepository _authRepository;
+  final ILocalStorageRepository _localStorageRepository;
 
   Future<void> initialize() async {
     try {
       safeEmit(const AuthState.initial());
-      _emitAuthState(await _userRepository.user, isLogout: true);
+      if (await _localStorageRepository.getAccessToken() == null) {
+        safeEmit(const AuthState.unauthenticated());
+      } else {
+        _emitAuthState(await _userRepository.user, isLogout: true);
+      }
     } on Exception catch (error) {
       _emitError(error);
     }
@@ -53,44 +56,24 @@ class AuthBloc extends Cubit<AuthState> {
   Future<void> logout() async {
     try {
       safeEmit(const AuthState.loading());
-      final Either<Failure, Unit> possibleFailure =
-          await _authRepository.logout();
-      safeEmit(
-        possibleFailure.fold(
-          AuthState.failed,
-          (_) => const AuthState.unauthenticated(),
-        ),
-      );
+      final Either<Failure, Unit> possibleFailure = await _authRepository.logout();
+      safeEmit(possibleFailure.fold(AuthState.onFailure, (_) => const AuthState.unauthenticated()));
     } on Exception catch (error) {
       _emitError(error);
     }
   }
 
-  void _emitAuthState(
-    Either<Failure, User> possibleFailure, {
-    bool isLogout = false,
-  }) {
-    possibleFailure.fold(
-      (Failure failure) {
-        safeEmit(AuthState.failed(failure));
-        if (isLogout) {
-          safeEmit(const AuthState.unauthenticated());
-        }
-      },
-      (User user) => safeEmit(
-        AuthState.authenticated(
-          user: user,
-        ),
-      ),
-    );
+  void _emitAuthState(Either<Failure, User> possibleFailure, {bool isLogout = false}) {
+    possibleFailure.fold((Failure failure) {
+      safeEmit(AuthState.onFailure(failure));
+      if (isLogout) {
+        safeEmit(const AuthState.unauthenticated());
+      }
+    }, (User user) => safeEmit(AuthState.authenticated(user: user)));
   }
 
   void _emitError(Object error) {
     log(error.toString());
-    safeEmit(
-      AuthState.failed(
-        Failure.unexpected(error.toString()),
-      ),
-    );
+    safeEmit(AuthState.onFailure(Failure.unexpected(error.toString())));
   }
 }

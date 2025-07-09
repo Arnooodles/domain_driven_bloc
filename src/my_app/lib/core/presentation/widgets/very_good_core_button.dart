@@ -1,5 +1,8 @@
+// ignore_for_file: avoid-returning-widgets, prefer-correct-edge-insets-constructor
+
 import 'package:flutter/material.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/themes/app_sizes.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/core/domain/entity/enum/button_type.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
@@ -9,8 +12,9 @@ class VeryGoodCoreButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isEnabled = true,
+    this.isLoading = false,
     this.isExpanded = false,
-    this.buttonType = ButtonType.elevated,
+    this.buttonType = ButtonType.filled,
     this.buttonStyle,
     this.textStyle,
     this.padding,
@@ -23,6 +27,7 @@ class VeryGoodCoreButton extends StatelessWidget {
   final String text;
   final bool isEnabled;
   final bool isExpanded;
+  final bool isLoading;
   final ButtonType buttonType;
   final VoidCallback? onPressed;
   final ButtonStyle? buttonStyle;
@@ -34,29 +39,30 @@ class VeryGoodCoreButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        key: Key(text),
-        enabled: isEnabled,
-        button: true,
-        label: text,
-        child: SizedBox(
-          width: isExpanded ? Insets.infinity : null,
-          child: Padding(
-            padding: padding ?? EdgeInsets.zero,
-            child: _ButtonType(
-              text: text,
-              buttonType: buttonType,
-              icon: icon,
-              isEnabled: isEnabled,
-              isExpanded: isExpanded,
-              onPressed: onPressed,
-              buttonStyle: buttonStyle,
-              iconPadding: iconPadding,
-              contentPadding: contentPadding,
-              textStyle: textStyle,
-            ),
-          ),
+    key: Key(text),
+    enabled: isEnabled,
+    button: true,
+    label: text,
+    child: SizedBox(
+      width: isExpanded ? AppSizes.infinity : null,
+      child: Padding(
+        padding: padding ?? EdgeInsets.zero,
+        child: _ButtonType(
+          text: text,
+          buttonType: buttonType,
+          icon: icon,
+          isEnabled: isEnabled,
+          isExpanded: isExpanded,
+          isLoading: isLoading,
+          onPressed: onPressed,
+          buttonStyle: buttonStyle,
+          iconPadding: iconPadding,
+          contentPadding: contentPadding,
+          textStyle: textStyle,
         ),
-      );
+      ),
+    ),
+  );
 }
 
 class _ButtonType extends StatelessWidget {
@@ -64,6 +70,7 @@ class _ButtonType extends StatelessWidget {
     required this.text,
     required this.buttonType,
     required this.icon,
+    this.isLoading = false,
     this.isEnabled = true,
     this.isExpanded = false,
     this.onPressed,
@@ -74,6 +81,7 @@ class _ButtonType extends StatelessWidget {
   });
 
   final bool isEnabled;
+  final bool isLoading;
   final VoidCallback? onPressed;
   final ButtonStyle? buttonStyle;
   final EdgeInsets? iconPadding;
@@ -84,161 +92,90 @@ class _ButtonType extends StatelessWidget {
   final ButtonType buttonType;
   final Widget? icon;
 
-  @override
-  Widget build(BuildContext context) {
-    final Padding iconWithPadding = Padding(
-      padding: iconPadding ??
-          const EdgeInsets.fromLTRB(
-            Insets.xxSmall,
-            Insets.medium,
-            Insets.zero,
-            Insets.medium,
-          ),
+  Widget _buildContent(BuildContext context, {bool hasIcon = false, bool isTonal = false}) => _ButtonContent(
+    contentPadding: contentPadding,
+    isLoading: isLoading,
+    text: text,
+    hasIcon: hasIcon,
+    textStyle: isTonal ? textStyle?.copyWith(color: context.colorScheme.onSecondaryContainer) : textStyle,
+    isExpanded: isExpanded,
+  );
+
+  Widget? _buildIcon() {
+    if (icon == null) return null;
+
+    return Padding(
+      padding:
+          iconPadding ?? const EdgeInsets.fromLTRB(AppSizes.medium, AppSizes.medium, AppSizes.zero, AppSizes.medium),
       child: icon,
     );
-    final Color primaryColor = context.colorScheme.primary;
-    final Color secondaryColor = context.colorScheme.secondary;
-    final Color onPrimaryColor = context.colorScheme.onPrimary;
+  }
 
-    return switch (buttonType) {
-      ButtonType.elevated when icon != null => ElevatedButton.icon(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          icon: iconWithPadding,
-          label: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: primaryColor,
-          ),
-        ),
-      ButtonType.elevated => ElevatedButton(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: primaryColor,
-          ),
-        ),
-      ButtonType.filled when icon != null => FilledButton.icon(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          icon: iconWithPadding,
-          label: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            hasIcon: true,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: onPrimaryColor,
-          ),
-        ),
-      ButtonType.filled => FilledButton(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: onPrimaryColor,
-          ),
-        ),
-      ButtonType.tonal when icon != null => FilledButton.tonalIcon(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          icon: iconWithPadding,
-          label: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            hasIcon: true,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: secondaryColor,
-          ),
-        ),
-      ButtonType.tonal => FilledButton.tonal(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: secondaryColor,
-          ),
-        ),
-      ButtonType.outlined when icon != null => OutlinedButton.icon(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          icon: iconWithPadding,
-          label: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            hasIcon: true,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: primaryColor,
-          ),
-        ),
-      ButtonType.outlined => OutlinedButton(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: primaryColor,
-          ),
-        ),
-      ButtonType.text when icon != null => TextButton.icon(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          icon: iconWithPadding,
-          label: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            hasIcon: true,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: primaryColor,
-          ),
-        ),
-      ButtonType.text => TextButton(
-          onPressed: isEnabled ? onPressed : null,
-          style: buttonStyle,
-          child: _ButtonContent(
-            contentPadding: contentPadding,
-            isEnabled: isEnabled,
-            text: text,
-            textStyle: textStyle,
-            isExpanded: isExpanded,
-            defaultTextColor: primaryColor,
-          ),
-        ),
-    };
+  @override
+  Widget build(BuildContext context) {
+    final Widget? iconWidget = _buildIcon();
+    final VoidCallback? callback = (isEnabled && !isLoading) ? onPressed : null;
+
+    switch (buttonType) {
+      case ButtonType.elevated:
+        return iconWidget != null
+            ? ElevatedButton.icon(
+                onPressed: callback,
+                style: buttonStyle,
+                icon: iconWidget,
+                label: _buildContent(context, hasIcon: true),
+              )
+            : ElevatedButton(onPressed: callback, style: buttonStyle, child: _buildContent(context));
+      case ButtonType.filled:
+        return iconWidget != null
+            ? FilledButton.icon(
+                onPressed: callback,
+                style: buttonStyle,
+                icon: iconWidget,
+                label: _buildContent(context, hasIcon: true),
+              )
+            : FilledButton(onPressed: callback, style: buttonStyle, child: _buildContent(context));
+      case ButtonType.tonal:
+        final ButtonStyle tonalStyle = FilledButton.styleFrom(
+          backgroundColor: context.colorScheme.secondaryContainer,
+          foregroundColor: context.colorScheme.onSecondaryContainer,
+        ).merge(buttonStyle);
+
+        return iconWidget != null
+            ? FilledButton.icon(
+                onPressed: callback,
+                style: tonalStyle,
+                icon: iconWidget,
+                label: _buildContent(context, hasIcon: true, isTonal: true),
+              )
+            : FilledButton(onPressed: callback, style: tonalStyle, child: _buildContent(context, isTonal: true));
+      case ButtonType.outlined:
+        return iconWidget != null
+            ? OutlinedButton.icon(
+                onPressed: callback,
+                style: buttonStyle,
+                icon: iconWidget,
+                label: _buildContent(context, hasIcon: true),
+              )
+            : OutlinedButton(onPressed: callback, style: buttonStyle, child: _buildContent(context));
+      case ButtonType.text:
+        return iconWidget != null
+            ? TextButton.icon(
+                onPressed: callback,
+                style: buttonStyle,
+                icon: iconWidget,
+                label: _buildContent(context, hasIcon: true),
+              )
+            : TextButton(onPressed: callback, style: buttonStyle, child: _buildContent(context));
+    }
   }
 }
 
 class _ButtonContent extends StatelessWidget {
   const _ButtonContent({
-    required this.isEnabled,
+    required this.isLoading,
     required this.text,
-    required this.defaultTextColor,
+
     this.hasIcon = false,
     this.textStyle,
     this.isExpanded = false,
@@ -246,10 +183,10 @@ class _ButtonContent extends StatelessWidget {
   });
 
   final EdgeInsets? contentPadding;
-  final bool isEnabled;
+  final bool isLoading;
   final String text;
   final TextStyle? textStyle;
-  final Color defaultTextColor;
+
   final bool hasIcon;
   final bool isExpanded;
 
@@ -257,27 +194,22 @@ class _ButtonContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final EdgeInsets defaultPadding = hasIcon
         ? EdgeInsets.fromLTRB(
-            Insets.zero,
-            Insets.medium,
-            isExpanded ? Insets.medium * 2 : Insets.medium,
-            Insets.medium,
+            AppSizes.zero,
+            AppSizes.medium,
+            isExpanded ? AppSizes.medium * 2 : AppSizes.medium,
+            AppSizes.medium,
           )
         : Paddings.allMedium;
-    final TextStyle defaultTextStyle =
-        context.textTheme.bodyLarge!.copyWith(color: defaultTextColor);
+
     return SizedBox(
-      width: isExpanded ? Insets.infinity : null,
+      width: isExpanded ? AppSizes.infinity : null,
       child: Padding(
         padding: contentPadding ?? defaultPadding,
-        child: isEnabled
-            ? VeryGoodCoreText(
-                text: text,
-                style: textStyle ?? defaultTextStyle,
-                textAlign: TextAlign.center,
-              )
+        child: !isLoading
+            ? VeryGoodCoreText(text: text, style: textStyle, textAlign: TextAlign.center)
             : Center(
                 child: SizedBox.square(
-                  dimension: textStyle?.fontSize ?? defaultTextStyle.fontSize,
+                  dimension: textStyle?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
                   child: const CircularProgressIndicator(),
                 ),
               ),

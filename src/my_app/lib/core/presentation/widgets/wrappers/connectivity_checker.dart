@@ -24,22 +24,21 @@ class ConnectivityChecker extends StatefulWidget {
     Widget? bottomNavigationBar,
     Color? backgroundColor,
     bool isUnfocusable = false,
-  }) =>
-      ConnectivityChecker(
-        child: isUnfocusable
-            ? UnfocusableScaffold(
-                body: body,
-                appBar: appBar,
-                backgroundColor: backgroundColor,
-                bottomNavigationBar: bottomNavigationBar,
-              )
-            : Scaffold(
-                body: body,
-                appBar: appBar,
-                backgroundColor: backgroundColor,
-                bottomNavigationBar: bottomNavigationBar,
-              ),
-      );
+  }) => ConnectivityChecker(
+    child: isUnfocusable
+        ? UnfocusableScaffold(
+            body: body,
+            appBar: appBar,
+            backgroundColor: backgroundColor,
+            bottomNavigationBar: bottomNavigationBar,
+          )
+        : Scaffold(
+            body: body,
+            appBar: appBar,
+            backgroundColor: backgroundColor,
+            bottomNavigationBar: bottomNavigationBar,
+          ),
+  );
 
   @override
   State<ConnectivityChecker> createState() => _ConnectivityCheckerState();
@@ -61,9 +60,7 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
           position: FlashPosition.top,
           behavior: FlashBehavior.floating,
           margin: Paddings.allXxxLarge,
-          shape: RoundedRectangleBorder(
-            borderRadius: AppTheme.defaultBoardRadius,
-          ),
+          shape: const RoundedRectangleBorder(borderRadius: AppTheme.defaultBorderRadius),
           clipBehavior: Clip.antiAlias,
           icon: VeryGoodCoreIcon(icon: fpdart.right(Icons.wifi_off)),
           content: Padding(
@@ -99,9 +96,7 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _onStatusChanged(await _connectivityUtils.checkInternet());
-      _connectionSubscription ??= _connectivityUtils
-          .internetStatus()
-          .listen((ConnectionStatus event) async {
+      _connectionSubscription ??= _connectivityUtils.internetStatus().listen((ConnectionStatus event) async {
         await _onStatusChanged(event);
       });
     });
