@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:animations/animations.dart';
-import 'package:flash/flash.dart';
-import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:toastification/toastification.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
+import 'package:very_good_core/app/themes/app_colors.dart';
 import 'package:very_good_core/app/themes/app_sizes.dart';
-import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/utils/app_utils.dart';
+import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
 import 'package:very_good_core/core/presentation/widgets/dialogs/confirmation_dialog.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
@@ -55,32 +56,29 @@ final class DialogUtils {
     ),
   );
 
-  static Future<void> showError(
-    BuildContext context,
+  static ToastificationItem showError(
     String message, {
-    Icon? icon,
+    Widget? icon,
     Duration? duration,
-    FlashPosition? position,
-  }) => context.showFlash<void>(
-    duration: duration ?? const Duration(seconds: 3),
-    builder: (BuildContext context, FlashController<void> controller) => FlashBar<void>(
-      controller: controller,
-      shouldIconPulse: false,
-      position: position ?? FlashPosition.bottom,
-      behavior: FlashBehavior.floating,
-      shape: const RoundedRectangleBorder(borderRadius: AppTheme.defaultBorderRadius),
-      margin: const EdgeInsets.symmetric(vertical: AppSizes.xxxLarge, horizontal: AppSizes.xxLarge),
-      clipBehavior: Clip.antiAlias,
-      icon: Padding(
-        padding: const EdgeInsets.only(left: AppSizes.small, right: AppSizes.xSmall),
-        child: icon ?? VeryGoodCoreIcon(icon: right(Icons.error_outline), color: context.colorScheme.error),
-      ),
-      content: VeryGoodCoreText(
-        text: message,
-        style: context.textTheme.bodyMedium,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 3,
-      ),
+    bool isDismissable = true,
+    Alignment alignment = Alignment.topCenter,
+  }) => toastification.show(
+    title: VeryGoodCoreText(text: message, overflow: TextOverflow.ellipsis, maxLines: 3),
+    icon: Padding(
+      padding: const EdgeInsets.only(left: AppSizes.small, right: AppSizes.xSmall),
+      child: icon ?? VeryGoodCoreIcon(icon: right(Icons.error_outline)),
     ),
+    autoCloseDuration: isDismissable ? duration ?? const Duration(seconds: 5) : null,
+    style: ToastificationStyle.flatColored,
+    type: ToastificationType.custom('app_error', _getErrorColor(), Icons.error_outline),
+    alignment: alignment,
+    closeOnClick: isDismissable,
+    dragToClose: isDismissable,
+    closeButton: isDismissable ? const ToastCloseButton() : const ToastCloseButton(showType: CloseButtonShowType.none),
+    dismissDirection: isDismissable ? null : DismissDirection.none,
   );
+
+  static Color _getErrorColor() => getIt<ThemeBloc>().state == ThemeMode.dark
+      ? AppColors.darkColorScheme.errorContainer
+      : AppColors.lightColorScheme.error;
 }

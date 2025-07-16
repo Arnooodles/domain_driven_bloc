@@ -1,4 +1,3 @@
-import 'package:flash/flash.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +6,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:safe_device/safe_device.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/themes/app_spacing.dart';
+import 'package:very_good_core/app/utils/dialog_utils.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
@@ -32,20 +31,11 @@ class SplashScreen extends HookWidget {
   }
 
   Future<void> _showUnsupportedDeviceDialog(BuildContext context) async {
-    await showFlash<void>(
-      context: context,
-      builder: (BuildContext context, FlashController<void> controller) => FlashBar<void>(
-        controller: controller,
-        dismissDirections: const <FlashDismissDirection>[],
-        elevation: 3,
-        indicatorColor: context.colorScheme.error,
-        shouldIconPulse: false,
-        icon: VeryGoodCoreIcon(icon: right(Icons.mobile_off)),
-        content: Padding(
-          padding: Paddings.horizontalMedium,
-          child: VeryGoodCoreText(text: context.i18n.common.error.unsupported_device),
-        ),
-      ),
+    DialogUtils.showError(
+      context.i18n.common.error.unsupported_device,
+      icon: VeryGoodCoreIcon(icon: right(Icons.mobile_off)),
+      isDismissable: false,
+      alignment: Alignment.bottomCenter,
     );
   }
 

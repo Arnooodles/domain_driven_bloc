@@ -11,6 +11,5 @@ sealed class LoginState with _$LoginState {
 
 @freezed
 sealed class LoginPresentationEvent with _$LoginPresentationEvent {
-  const factory LoginPresentationEvent.onFailure(Failure failure) = _LoginFailedEvent;
   const factory LoginPresentationEvent.onSuccess() = _LoginSuccessEvent;
 }

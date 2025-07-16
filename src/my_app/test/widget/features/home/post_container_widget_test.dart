@@ -51,7 +51,7 @@ void main() {
                   PostContainer(
                     post: mockPost.copyWith(
                       urlOverriddenByDest: Url('https://www.google.com/'),
-                      selftext: ValueString('', fieldName: 'selfText'),
+                      selftext: ValueString('post', fieldName: 'selfText'),
                     ),
                   ),
                   const Spacer(),

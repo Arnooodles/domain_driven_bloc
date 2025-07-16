@@ -7,9 +7,7 @@ import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
-import 'package:very_good_core/app/utils/error_message_utils.dart';
 import 'package:very_good_core/core/domain/entity/enum/text_field_type.dart';
-import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text_field.dart';
@@ -27,16 +25,7 @@ class LoginScreen extends HookWidget {
   }
 
   void _onLoginStateChangedListener(BuildContext context, LoginPresentationEvent event) {
-    event.when(
-      onFailure: (Failure failure) => DialogUtils.showError(context, ErrorMessageUtils.generate(context, failure)),
-      onSuccess: () => context.read<AuthBloc>().authenticate(),
-    );
-  }
-
-  void _onAuthStateChangedListener(BuildContext context, AuthState state) {
-    state.whenOrNull(
-      onFailure: (Failure failure) => DialogUtils.showError(context, ErrorMessageUtils.generate(context, failure)),
-    );
+    event.when(onSuccess: () => context.read<AuthBloc>().authenticate());
   }
 
   @override
@@ -48,74 +37,71 @@ class LoginScreen extends HookWidget {
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) => _onPopInvoked(context, didPop),
       child: BlocProvider<LoginBloc>(
-        create: (BuildContext context) => getIt<LoginBloc>(),
+        create: (BuildContext context) => getIt<LoginBloc>()..initialize(),
         child: BlocPresentationListener<LoginBloc, LoginPresentationEvent>(
           listener: _onLoginStateChangedListener,
-          child: BlocListener<AuthBloc, AuthState>(
-            listener: _onAuthStateChangedListener,
-            child: BlocBuilder<LoginBloc, LoginState>(
-              builder: (BuildContext context, LoginState state) {
-                final String currentUsername = state.username ?? '';
-                usernameTextController
-                  ..value = TextEditingValue(text: currentUsername)
-                  ..selection = TextSelection.fromPosition(TextPosition(offset: currentUsername.length));
+          child: BlocBuilder<LoginBloc, LoginState>(
+            builder: (BuildContext context, LoginState state) {
+              final String currentUsername = state.username ?? '';
+              usernameTextController
+                ..value = TextEditingValue(text: currentUsername)
+                ..selection = TextSelection.fromPosition(TextPosition(offset: currentUsername.length));
 
-                return ConnectivityChecker.scaffold(
-                  isUnfocusable: true,
-                  body: Center(
-                    child: Container(
-                      padding: Paddings.allXLarge,
-                      constraints: const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
-                      child: Column(
-                        children: <Widget>[
-                          Flexible(
-                            child: Center(
-                              child: VeryGoodCoreText(
-                                text: Constant.appName,
-                                textAlign: TextAlign.center,
-                                style: context.textTheme.displayLarge,
+              return ConnectivityChecker.scaffold(
+                isUnfocusable: true,
+                body: Center(
+                  child: Container(
+                    padding: Paddings.allXLarge,
+                    constraints: const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
+                    child: Column(
+                      children: <Widget>[
+                        Flexible(
+                          child: Center(
+                            child: VeryGoodCoreText(
+                              text: Constant.appName,
+                              textAlign: TextAlign.center,
+                              style: context.textTheme.displayLarge,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: <Widget>[
+                              VeryGoodCoreTextField(
+                                controller: usernameTextController,
+                                labelText: context.i18n.login.label.username,
+                                hintText: context.i18n.login.hint.username,
+                                onChanged: (String value) => context.read<LoginBloc>().onUsernameChanged(value),
+                                autofocus: true,
                               ),
-                            ),
+                              Gap.large(),
+                              VeryGoodCoreTextField(
+                                controller: passwordTextController,
+                                labelText: context.i18n.login.label.password,
+                                hintText: context.i18n.login.hint.password,
+                                textFieldType: TextFieldType.password,
+                              ),
+                              Gap.xxxLarge(),
+                              VeryGoodCoreButton(
+                                text: context.i18n.login.button.login,
+                                isEnabled: !state.isLoading,
+                                isLoading: state.isLoading,
+                                isExpanded: true,
+                                onPressed: () => context.read<LoginBloc>().login(
+                                  usernameTextController.text,
+                                  passwordTextController.text,
+                                ),
+                                contentPadding: Paddings.verticalSmall,
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: Column(
-                              children: <Widget>[
-                                VeryGoodCoreTextField(
-                                  controller: usernameTextController,
-                                  labelText: context.i18n.login.label.username,
-                                  hintText: context.i18n.login.hint.username,
-                                  onChanged: (String value) => context.read<LoginBloc>().onUsernameChanged(value),
-                                  autofocus: true,
-                                ),
-                                Gap.large(),
-                                VeryGoodCoreTextField(
-                                  controller: passwordTextController,
-                                  labelText: context.i18n.login.label.password,
-                                  hintText: context.i18n.login.hint.password,
-                                  textFieldType: TextFieldType.password,
-                                ),
-                                Gap.xxxLarge(),
-                                VeryGoodCoreButton(
-                                  text: context.i18n.login.button.login,
-                                  isEnabled: !state.isLoading,
-                                  isLoading: state.isLoading,
-                                  isExpanded: true,
-                                  onPressed: () => context.read<LoginBloc>().login(
-                                    usernameTextController.text,
-                                    passwordTextController.text,
-                                  ),
-                                  contentPadding: Paddings.verticalSmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),

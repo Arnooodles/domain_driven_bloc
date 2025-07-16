@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:toastification/toastification.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
@@ -22,7 +23,7 @@ class App extends StatelessWidget {
     BlocProvider<AppLifeCycleBloc>(create: (BuildContext context) => getIt<AppLifeCycleBloc>()),
     BlocProvider<AppLocalizationBloc>(create: (BuildContext context) => getIt<AppLocalizationBloc>()),
     BlocProvider<AppCoreBloc>(create: (BuildContext context) => getIt<AppCoreBloc>()),
-    BlocProvider<ThemeBloc>(create: (BuildContext context) => getIt<ThemeBloc>()),
+    BlocProvider<ThemeBloc>(create: (BuildContext context) => getIt<ThemeBloc>()..initialize()),
     BlocProvider<AuthBloc>(create: (BuildContext context) => getIt<AuthBloc>()),
     BlocProvider<HidableBloc>(create: (BuildContext context) => getIt<HidableBloc>()),
   ];
@@ -46,39 +47,41 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: _globalProviders,
       child: Builder(
-        builder: (BuildContext context) => MaterialApp.router(
-          scrollBehavior: const MaterialScrollBehavior().copyWith(
-            dragDevices: <PointerDeviceKind>{
-              PointerDeviceKind.mouse,
-              PointerDeviceKind.touch,
-              PointerDeviceKind.stylus,
-              PointerDeviceKind.unknown,
-            },
-          ),
-          routerConfig: AppRouter.router,
-          builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
-            child: Builder(
-              builder: (BuildContext context) => ResponsiveScaledBox(
-                width: ResponsiveValue<double>(
-                  context,
-                  defaultValue: Constant.mobileBreakpoint,
-                  conditionalValues: _getResponsiveWidth(context),
-                ).value,
-                child: child!,
-              ),
+        builder: (BuildContext context) => ToastificationWrapper(
+          child: MaterialApp.router(
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: <PointerDeviceKind>{
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.touch,
+                PointerDeviceKind.stylus,
+                PointerDeviceKind.unknown,
+              },
             ),
-            breakpoints: _breakpoints,
+            routerConfig: AppRouter.router,
+            builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
+              child: Builder(
+                builder: (BuildContext context) => ResponsiveScaledBox(
+                  width: ResponsiveValue<double>(
+                    context,
+                    defaultValue: Constant.mobileBreakpoint,
+                    conditionalValues: _getResponsiveWidth(context),
+                  ).value,
+                  child: child!,
+                ),
+              ),
+              breakpoints: _breakpoints,
+            ),
+            title: Constant.appName,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: context.watch<ThemeBloc>().state,
+            themeAnimationCurve: Curves.fastOutSlowIn,
+            themeAnimationDuration: const Duration(milliseconds: 500),
+            locale: context.watch<AppLocalizationBloc>().state.$meta.locale.flutterLocale,
+            supportedLocales: AppLocaleUtils.supportedLocales,
+            localizationsDelegates: Constant.localizationDelegates,
+            debugShowCheckedModeBanner: false,
           ),
-          title: Constant.appName,
-          theme: AppTheme.light,
-          darkTheme: AppTheme.dark,
-          themeMode: context.watch<ThemeBloc>().state,
-          themeAnimationCurve: Curves.fastOutSlowIn,
-          themeAnimationDuration: const Duration(milliseconds: 500),
-          locale: context.watch<AppLocalizationBloc>().state.$meta.locale.flutterLocale,
-          supportedLocales: AppLocaleUtils.supportedLocales,
-          localizationsDelegates: Constant.localizationDelegates,
-          debugShowCheckedModeBanner: false,
         ),
       ),
     );

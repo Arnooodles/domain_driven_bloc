@@ -23,11 +23,11 @@ abstract class ValueObject<T> {
     return other is ValueObject<T> && other.value == value;
   }
 
-  Either<Failure, Unit> get failureOrUnit => value.fold(left, (T r) => right(unit));
+  Either<Failure, Unit> get validate => value.fold(left, (T r) => right(unit));
 
-  T getValue() => value.fold((Failure failure) => throw Exception(failure.toString()), identity);
+  T getValue() => value.fold((Failure failure) => throw failure, identity);
 
-  bool isValid() => value.isRight();
+  bool get isValid => value.isRight();
 
   @override
   String toString() => 'Value:$value';
@@ -44,7 +44,7 @@ class UniqueId extends ValueObject<String> {
         //TODO: disable this for now since we are using mock data
         //.isUuid()
         .validateEither()
-        .fold((ValidationError error) => left(Failure.validationFailure(error)), right),
+        .fold((ValidationError error) => left(Failure.validation(error)), right),
   );
 
   @override
@@ -58,7 +58,7 @@ class Url extends ValueObject<String> {
         .isNotEmpty()
         .isUrl()
         .validateEither()
-        .fold((ValidationError error) => left(Failure.validationFailure(error)), right),
+        .fold((ValidationError error) => left(Failure.validation(error)), right),
   );
   const Url._(this.value);
   @override
@@ -72,7 +72,7 @@ class EmailAddress extends ValueObject<String> {
         .isNotEmpty()
         .isEmail()
         .validateEither()
-        .fold((ValidationError error) => left(Failure.validationFailure(error)), right),
+        .fold((ValidationError error) => left(Failure.validation(error)), right),
   );
   const EmailAddress._(this.value);
   @override
@@ -86,7 +86,7 @@ class ValueString extends ValueObject<String> {
         .isNotNull()
         .isNotEmpty()
         .validateEither()
-        .fold((ValidationError error) => left(Failure.validationFailure(error)), right),
+        .fold((ValidationError error) => left(Failure.validation(error)), right),
   );
   const ValueString._(this.value);
   @override
@@ -109,7 +109,7 @@ class ValueNumeric extends ValueObject<num> {
           return right(value);
         })
         .validateEither()
-        .fold((ValidationError error) => left(Failure.validationFailure(error)), right),
+        .fold((ValidationError error) => left(Failure.validation(error)), right),
   );
   const ValueNumeric._(this.value);
   @override
@@ -125,7 +125,7 @@ class Password extends ValueObject<String> {
         .maxLength(100) // max password length
         .validateEither()
         .fold(
-          (ValidationError error) => left(Failure.validationFailure(error)),
+          (ValidationError error) => left(Failure.validation(error)),
           // encrypt password
           (String input) => right(_encryptPassword(input, isHashed: isHashed)),
         ),

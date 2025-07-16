@@ -1,20 +1,15 @@
 import 'package:dartx/dartx.dart';
-import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/constants/mock_data.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/datetime_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
-import 'package:very_good_core/app/utils/dialog_utils.dart';
-import 'package:very_good_core/app/utils/error_message_utils.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
 import 'package:very_good_core/core/domain/entity/enum/button_type.dart';
-import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_app_bar.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_avatar.dart';
@@ -23,66 +18,41 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_info_tex
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
 
-class ProfileScreen extends HookWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  void _onStateChangedListener(BuildContext context, AuthState state, ValueNotifier<bool> isDialogShowing) {
-    if (isDialogShowing.value) return;
-
-    state.whenOrNull(
-      onFailure: (Failure failure) {
-        isDialogShowing.value = true;
-
-        DialogUtils.showError(
-          context,
-          ErrorMessageUtils.generate(context, failure),
-          position: FlashPosition.top,
-        ).whenComplete(() => isDialogShowing.value = false);
-      },
-    );
-  }
-
-  bool _buildWhen(_, AuthState current) => current.maybeWhen(onFailure: (_) => false, orElse: () => true);
-
   @override
-  Widget build(BuildContext context) {
-    final ValueNotifier<bool> isDialogShowing = useState(false);
-
-    return Scaffold(
-      appBar: VeryGoodCoreAppBar(actions: VeryGoodCoreAppBar.buildCommonAppBarActions(context)),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
-          child: RefreshIndicator(
-            onRefresh: () => context.read<AuthBloc>().getUser(),
-            child: BlocSelector<AppCoreBloc, AppCoreState, Map<AppScrollController, ScrollController>>(
-              selector: (AppCoreState state) => state.scrollControllers,
-              builder: (BuildContext context, Map<AppScrollController, ScrollController> scrollControllers) =>
-                  CustomScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    controller: scrollControllers.isNotEmpty
-                        ? scrollControllers[AppScrollController.profile]
-                        : ScrollController(),
-                    slivers: <Widget>[
-                      SliverFillRemaining(
-                        child: BlocConsumer<AuthBloc, AuthState>(
-                          listener: (BuildContext context, AuthState state) =>
-                              _onStateChangedListener(context, state, isDialogShowing),
-                          buildWhen: _buildWhen,
-                          builder: (BuildContext context, AuthState authState) => authState.maybeWhen(
-                            authenticated: (User user) => _ProfileContent(user: user),
-                            orElse: () => Skeletonizer(child: _ProfileContent(user: MockData.user)),
-                          ),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: VeryGoodCoreAppBar(actions: VeryGoodCoreAppBar.buildCommonAppBarActions(context)),
+    body: Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
+        child: RefreshIndicator(
+          onRefresh: () => context.read<AuthBloc>().getUser(),
+          child: BlocSelector<AppCoreBloc, AppCoreState, Map<AppScrollController, ScrollController>>(
+            selector: (AppCoreState state) => state.scrollControllers,
+            builder: (BuildContext context, Map<AppScrollController, ScrollController> scrollControllers) =>
+                CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: scrollControllers.isNotEmpty
+                      ? scrollControllers[AppScrollController.profile]
+                      : ScrollController(),
+                  slivers: <Widget>[
+                    SliverFillRemaining(
+                      child: BlocBuilder<AuthBloc, AuthState>(
+                        builder: (BuildContext context, AuthState authState) => authState.maybeWhen(
+                          authenticated: (User user) => _ProfileContent(user: user),
+                          orElse: () => Skeletonizer(child: _ProfileContent(user: MockData.user)),
                         ),
                       ),
-                    ],
-                  ),
-            ),
+                    ),
+                  ],
+                ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 class _ProfileContent extends StatelessWidget {

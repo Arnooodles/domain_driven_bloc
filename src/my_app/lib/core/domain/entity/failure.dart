@@ -8,9 +8,13 @@ part 'failure.freezed.dart';
 sealed class Failure with _$Failure implements Exception {
   const factory Failure.unexpected(String? error) = UnexpectedError;
 
-  const factory Failure.serverError(StatusCode code, String? error) = ServerError;
+  const factory Failure.server(StatusCode code, String? error) = ServerError;
 
-  const factory Failure.validationFailure(ValidationError error) = ValidationFailure;
+  const factory Failure.deviceStorage(String? error) = DeviceStorageError;
 
-  const factory Failure.userNotFound() = UserNotFound;
+  const factory Failure.deviceInfo(String? error) = DeviceInfoError;
+
+  const factory Failure.authentication(String? error) = AuthenticationError;
+
+  const factory Failure.validation(ValidationError error) = ValidationFailure;
 }

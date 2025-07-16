@@ -5,10 +5,10 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Note: In windows, recommended terminal is cmd 
 
-ensure_flutter_version: ## Ensures flutter version is 3.32.5 
-	fvm install 3.32.5 
-	fvm use 3.32.5 
-	fvm global 3.32.5 
+ensure_flutter_version: ## Ensures flutter version is 3.32.6
+	fvm install 3.32.6
+	fvm use 3.32.6
+	fvm global 3.32.6
 
 ## Note: If you are using a specific flutter version, change '3.24.4' to the desired '{flutter version}' you want to use
 

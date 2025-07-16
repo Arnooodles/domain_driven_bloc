@@ -5,31 +5,32 @@ targets:
       freezed:
         generate_for:
           - lib/core/data/dto/**.dart
-          - lib/features/**/data/dto/**.dart
-          - lib/core/domain/entity/**.dart
-          - lib/features/**/domain/entity/**.dart
-          - lib/features/**/domain/bloc/**.dart
           - lib/core/domain/bloc/**.dart
+          - lib/core/domain/entity/**.dart
+          - lib/features/**/data/dto/**.dart
+          - lib/features/**/domain/bloc/**.dart
+          - lib/features/**/domain/entity/**.dart
       json_serializable:
         generate_for:
           - lib/core/data/dto/**.dart
-          - lib/features/**/data/dto/**.dart
+          - lib/core/domain/bloc/**.dart
           - lib/core/domain/entity/**.dart
-          - lib/features/**/domain/entity/**.dart
+          - lib/features/**/data/dto/**.dart
           - lib/features/**/domain/bloc/**.dart
-          - lib/core/domain/bloc/**.dart        
+          - lib/features/**/domain/entity/**.dart
       injectable_generator|injectable_builder:
         generate_for:
           - lib/app/config/chopper_config.dart
           - lib/app/helpers/injection/**.dart
+          - lib/app/helpers/interceptors/**.dart
           - lib/app/helpers/mappers/**.dart
+          - lib/app/helpers/mixins/**.dart
           - lib/app/observers/**.dart
           - lib/app/routes/**.dart
           - lib/app/utils/**.dart
-          - lib/app/helpers/interceptors/**.dart
           - lib/core/data/repository/**.dart
-          - lib/features/**/data/repository/**.dart
           - lib/core/domain/bloc/**.dart
+          - lib/features/**/data/repository/**.dart
           - lib/features/**/domain/bloc/**.dart
       chopper_generator:
         generate_for:
@@ -40,19 +41,19 @@ targets:
           - test/utils/generated_mocks.dart  
       flutter_gen:
         options:
-          output: lib/app/generated/  
           integrations:
             flutter_svg: true    
+          output: lib/app/generated/  
       slang_build_runner:
         options:
           base_locale: en
+          class_name: I18n
           fallback_strategy: base_locale
           input_directory: assets/i18n
           input_file_pattern: .i18n.json
+          locale_handling: false
           output_directory: lib/app/generated
           output_file_name: localization.g.dart
           translate_var: i18n
-          class_name: I18n
-          locale_handling: false
           translation_class_visibility: public 
           translation_overrides: true

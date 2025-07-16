@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:very_good_core/app/helpers/extensions/object_ext.dart';
@@ -42,10 +40,6 @@ sealed class UserDTO with _$UserDTO {
     birthDate: user.birthDate?.toIso8601String(),
     address: user.address.let(AddressDTO.fromDomain),
   );
-
-  factory UserDTO.userDTOFromJson(String str) => UserDTO.fromJson(json.decode(str) as Map<String, dynamic>);
-
-  static String userDTOToJson(UserDTO data) => json.encode(data.toJson());
 
   User toDomain() {
     final DateFormat format = DateFormat('yyyy-M-d');

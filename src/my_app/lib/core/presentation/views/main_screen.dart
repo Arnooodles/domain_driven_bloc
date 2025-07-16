@@ -19,14 +19,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final Map<AppScrollController, ScrollController> _controllers = <AppScrollController, ScrollController>{};
+
   void _initScrollControllers() {
-    final Map<AppScrollController, ScrollController> controllers = <AppScrollController, ScrollController>{};
     for (final AppScrollController appScrollController in AppScrollController.values) {
       final ScrollController scrollController = ScrollController(debugLabel: appScrollController.name);
+      // ignore: always-remove-listener
       scrollController.addListener(() => _addListener(scrollController, context.read<HidableBloc>()));
-      controllers.putIfAbsent(appScrollController, () => scrollController);
+      _controllers.putIfAbsent(appScrollController, () => scrollController);
     }
-    context.read<AppCoreBloc>().setScrollControllers(controllers);
+    context.read<AppCoreBloc>().setScrollControllers(_controllers);
   }
 
   void _addListener(ScrollController scrollController, HidableBloc hidableBloc) {
@@ -62,4 +64,15 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: VeryGoodCoreNavBar(navigationShell: widget.navigationShell),
     ),
   );
+
+  @override
+  void dispose() {
+    _controllers.forEach((AppScrollController key, ScrollController scrollController) {
+      scrollController
+        ..removeListener(() => _addListener(scrollController, context.read<HidableBloc>()))
+        ..dispose();
+    });
+
+    super.dispose();
+  }
 }

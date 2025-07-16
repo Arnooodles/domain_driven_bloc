@@ -2,6 +2,7 @@ import 'package:chopper/chopper.dart' as chopper;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mockito/mockito.dart';
+import 'package:very_good_core/app/helpers/extensions/fpdart_ext.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
 import 'package:very_good_core/features/home/data/dto/reddit_post.dto.dart';
@@ -24,12 +25,11 @@ void main() {
 
   tearDown(() {
     provideDummy(mockChopperClient);
-    postService.client.dispose();
     reset(postService);
   });
 
   group('Get Posts', () {
-    test('should return a list of posts', () async {
+    test('getPosts should return list of posts when successful', () async {
       final RedditPostDTO data = RedditPostDTO(
         data: RedditPostData(children: <RedditPostDataChild>[RedditPostDataChild(data: postDTO)]),
       );
@@ -39,38 +39,44 @@ void main() {
 
       final Either<Failure, List<Post>> result = await postRepository.getPosts();
 
-      expect(result.isRight(), true);
+      expect(result, isA<Right<Failure, List<Post>>>());
+      expect(result.asRight(), isNotEmpty);
     });
-    test('should return a failure when list has an invalid post', () async {
+
+    test('getPosts should return failure when list has invalid post', () async {
       final RedditPostDTO data = RedditPostDTO(
         data: RedditPostData(
           children: <RedditPostDataChild>[RedditPostDataChild(data: postDTO.copyWith(comments: -1))],
         ),
       );
+
       provideDummy<chopper.Response<RedditPostDTO>>(generateMockResponse<RedditPostDTO>(data, 200));
       when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<RedditPostDTO>(data, 200));
 
       final Either<Failure, List<Post>> result = await postRepository.getPosts();
 
-      expect(result.isLeft(), true);
+      expect(result, isA<Left<Failure, List<Post>>>());
     });
-    test('should return a failure when a server error occurs', () async {
+
+    test('getPosts should return failure when server error occurs', () async {
       final RedditPostDTO data = RedditPostDTO(
         data: RedditPostData(children: <RedditPostDataChild>[RedditPostDataChild(data: postDTO)]),
       );
+
       provideDummy<chopper.Response<RedditPostDTO>>(generateMockResponse<RedditPostDTO>(data, 500));
       when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<RedditPostDTO>(data, 500));
 
       final Either<Failure, List<Post>> result = await postRepository.getPosts();
 
-      expect(result.isLeft(), true);
+      expect(result, isA<Left<Failure, List<Post>>>());
     });
-    test('should return a failure when an unexpected error occurs', () async {
+
+    test('getPosts should return failure when unexpected error occurs', () async {
       when(postService.getPosts()).thenThrow(Exception('Unexpected error'));
 
       final Either<Failure, List<Post>> result = await postRepository.getPosts();
 
-      expect(result.isLeft(), true);
+      expect(result, isA<Left<Failure, List<Post>>>());
     });
   });
 }

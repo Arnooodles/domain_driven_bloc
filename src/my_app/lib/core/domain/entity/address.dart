@@ -18,12 +18,12 @@ sealed class Address with _$Address {
 
   const Address._();
 
-  Option<Failure> get failureOption => address
-      .nullableFailureOrUnit()
-      .andThen(() => state.nullableFailureOrUnit())
-      .andThen(() => stateCode.nullableFailureOrUnit())
-      .andThen(() => postalCode.nullableFailureOrUnit())
-      .andThen(() => country.nullableFailureOrUnit())
+  Option<Failure> get validate => address
+      .optionalValidation()
+      .andThen(state.optionalValidation)
+      .andThen(stateCode.optionalValidation)
+      .andThen(postalCode.optionalValidation)
+      .andThen(country.optionalValidation)
       .fold(some, (_) => none());
 
   String? get fullAddress {

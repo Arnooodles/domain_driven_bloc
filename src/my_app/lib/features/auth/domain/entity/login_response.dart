@@ -12,6 +12,6 @@ sealed class LoginResponse with _$LoginResponse {
 
   const LoginResponse._();
 
-  Option<Failure> get failureOption =>
-      accessToken.failureOrUnit.andThen(refreshToken.nullableFailureOrUnit).fold(some, (_) => none());
+  Option<Failure> get validate =>
+      accessToken.validate.andThen(refreshToken.optionalValidation).fold(some, (_) => none());
 }

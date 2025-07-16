@@ -29,15 +29,13 @@ sealed class User with _$User {
 
   int? get age => birthDate != null ? (DateTime.now().difference(birthDate!).inDays ~/ 365) : null;
 
-  Option<Failure> get failureOption => uid.failureOrUnit
-      .andThen(() => email.failureOrUnit)
-      .andThen(() => firstName.failureOrUnit)
-      .andThen(() => lastName.failureOrUnit)
-      .andThen(() => username.failureOrUnit)
-      .andThen(() => phone.nullableFailureOrUnit())
-      .andThen(() => image.nullableFailureOrUnit())
-      .andThen(
-        () => address != null ? address!.failureOption.fold(() => right(unit), left<Failure, Unit>) : right(unit),
-      )
+  Option<Failure> get validate => uid.validate
+      .andThen(() => email.validate)
+      .andThen(() => firstName.validate)
+      .andThen(() => lastName.validate)
+      .andThen(() => username.validate)
+      .andThen(phone.optionalValidation)
+      .andThen(image.optionalValidation)
+      .andThen(() => address != null ? address!.validate.fold(() => right(unit), left<Failure, Unit>) : right(unit))
       .fold(some, (_) => none());
 }

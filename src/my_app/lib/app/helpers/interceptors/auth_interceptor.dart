@@ -49,7 +49,10 @@ class AuthInterceptor implements Interceptor {
     return response;
   }
 
-  Future<String?> _getAccessToken() async => getIt<ILocalStorageRepository>().getAccessToken();
+  Future<String?> _getAccessToken() async {
+    final Either<Failure, String?> possibleFailure = await getIt<ILocalStorageRepository>().getAccessToken();
+    return possibleFailure.fold((Failure failure) => throw failure, identity);
+  }
 
   Request _addAuthorizationHeader(Request request, String token) =>
       applyHeader(request, _authorizationHeader, 'Bearer $token');
@@ -61,7 +64,7 @@ class AuthInterceptor implements Interceptor {
     final Either<Failure, Unit> refreshResult = await getIt<IAuthRepository>().refreshToken();
 
     if (refreshResult.isLeft()) {
-      throw Exception('Token refresh failed: ${refreshResult.asLeft()}');
+      throw Failure.authentication('Token refresh failed: ${refreshResult.asLeft()}');
     }
 
     final String? newToken = await _getAccessToken();

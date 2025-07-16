@@ -15,5 +15,5 @@ extension ObjectExt<T> on T? {
 }
 
 extension NullableValueObjectX<T> on ValueObject<T>? {
-  Either<Failure, Unit> nullableFailureOrUnit() => this?.failureOrUnit ?? right(unit);
+  Either<Failure, Unit> optionalValidation() => this?.validate ?? right(unit);
 }

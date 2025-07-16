@@ -1,10 +1,11 @@
-import 'dart:developer';
-
 import 'package:chopper/chopper.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
+import 'package:logger/logger.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
+import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
@@ -18,6 +19,9 @@ class UserRepository implements IUserRepository {
 
   final UserService _userService;
 
+  Logger get _logger => getIt<Logger>();
+  FailureHandler get _failureHandler => getIt<FailureHandler>();
+
   @override
   Future<Either<Failure, User>> get user async {
     try {
@@ -29,10 +33,9 @@ class UserRepository implements IUserRepository {
         return _validateUserData(response.body!);
       }
 
-      return left(Failure.serverError(statusCode, response.error.toString()));
+      return _failureHandler.handleServerError<User>(statusCode, response.error);
     } on Exception catch (error) {
-      log(error.toString());
-
+      _logger.e(error.toString());
       return left(Failure.unexpected(error.toString()));
     }
   }
@@ -40,6 +43,6 @@ class UserRepository implements IUserRepository {
   Either<Failure, User> _validateUserData(UserDTO userDTO) {
     final User user = userDTO.toDomain();
 
-    return user.failureOption.fold(() => right(user), left);
+    return user.validate.fold(() => right(user), left);
   }
 }

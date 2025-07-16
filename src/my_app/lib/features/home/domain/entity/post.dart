@@ -26,11 +26,11 @@ sealed class Post with _$Post {
 
   const Post._();
 
-  Option<Failure> get failureOption => uid.failureOrUnit
-      .andThen(() => author.failureOrUnit)
-      .andThen(() => permalink.failureOrUnit)
-      .andThen(() => upvotes.failureOrUnit)
-      .andThen(() => comments.failureOrUnit)
-      .andThen(() => urlOverriddenByDest.nullableFailureOrUnit())
+  Option<Failure> get validate => uid.validate
+      .andThen(() => author.validate)
+      .andThen(() => permalink.validate)
+      .andThen(() => upvotes.validate)
+      .andThen(() => comments.validate)
+      .andThen(urlOverriddenByDest.optionalValidation)
       .fold(some, (_) => none());
 }

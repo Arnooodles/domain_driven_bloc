@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_core/app/helpers/extensions/object_ext.dart';
 import 'package:very_good_core/core/domain/entity/value_object.dart';
@@ -20,11 +18,6 @@ sealed class LoginResponseDTO with _$LoginResponseDTO {
     accessToken: loginResponse.accessToken.getValue(),
     refreshToken: loginResponse.refreshToken?.getValue(),
   );
-
-  factory LoginResponseDTO.loginDTOFromJson(String str) =>
-      LoginResponseDTO.fromJson(json.decode(str) as Map<String, dynamic>);
-
-  static String loginDTOToJson(LoginResponseDTO data) => json.encode(data.toJson());
 
   LoginResponse toDomain() => LoginResponse(
     accessToken: ValueString(accessToken, fieldName: 'accessToken'),
