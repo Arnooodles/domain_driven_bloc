@@ -1,15 +1,21 @@
 # 3.0.0
-- feat: update README documentation & screenshots
-- feat: update Flutter, Gradle, Android, and dependency versions for improved compatibility and tooling
-- feat: enhance theming, sizing, and UI consistency across the app
-- feat: switch user and authentication endpoints from reqres.in to dummyjson.com
-- feat: update login credentials to use username instead of email to support dummyjson.com authentication
-- feat: add AuthInterceptor for handling token refresh and session timeouts
-- feat: refactor and improve user and auth models, DTOs, and related repositories/services
-- feat: update localization and i18n for new and renamed fields
-- feat: add and improve core widgets (buttons, avatars, icons, text fields, and etc.) with new props and better UX
-- test: add and update tests for new features and refactored logic
-- chore: update workflow actions, and .gitignore for better CI/CD and local development
+- feat: update README docs, screenshots, and localization/i18n for new/renamed fields
+- feat: update Flutter, Gradle, Android, and dependencies for improved compatibility
+- feat: enhance theming, sizing, and UI consistency; add app text styles
+- feat: switch user/auth endpoints to dummyjson.com, update login to username
+- feat: add AuthInterceptor for token refresh/session timeout
+- feat: add/extend context extensions (theme, navigation, text style, mediaQuery)
+- feat: add .githooks/pre-commit, Makefile git hook/init_hooks targets
+- feat: add/extend core widgets (buttons, avatars, icons, text fields, webview)
+- feat: add/extend DTOs, entities, and repositories for user, auth, device
+- feat: add/extend tests for new features and refactored logic
+- refactor: unify Failure types to use `message` field, update all usages/tests
+- refactor: ErrorActions/FailureHandler to use Failure, not Exception
+- refactor: ValueObject throws Exception with failure message
+- refactor: use context extensions for theme, navigation, text style
+- refactor: update usages of GoRouter/Navigator to use context extensions
+- refactor: update/optimize Makefile, workflows, .gitignore, and scripts
+- fix: update/optimize goldens, test utils, and widget tests
 - chore: clean up and merge related code, test, and asset changes for maintainability
 
 
