@@ -32,29 +32,14 @@ void main() {
     scrollControllers = mockScrollControllers;
     provideDummy(AppCoreState.initial());
     when(appCoreBloc.stream).thenAnswer(
-      (_) => Stream<AppCoreState>.fromIterable(
-        <AppCoreState>[
-          AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
-        ],
-      ),
+      (_) => Stream<AppCoreState>.fromIterable(<AppCoreState>[
+        AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
+      ]),
     );
-    when(appCoreBloc.state).thenAnswer(
-      (_) =>
-          AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
-    );
-    when(hidableBloc.stream).thenAnswer(
-      (_) => Stream<bool>.fromIterable(
-        <bool>[
-          true,
-        ],
-      ),
-    );
-    when(hidableBloc.state).thenAnswer(
-      (_) => true,
-    );
-    when(appLocalizationBloc.state).thenAnswer(
-      (_) => AppLocale.values.first.buildSync(),
-    );
+    when(appCoreBloc.state).thenAnswer((_) => AppCoreState.initial().copyWith(scrollControllers: scrollControllers));
+    when(hidableBloc.stream).thenAnswer((_) => Stream<bool>.fromIterable(<bool>[true]));
+    when(hidableBloc.state).thenAnswer((_) => true);
+    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
   tearDown(() {
@@ -69,32 +54,25 @@ void main() {
     navigationShell = MockStatefulNavigationShell();
     currentConfiguration = MockRouteMatchList();
     when(currentConfiguration.uri).thenAnswer((_) => Uri(path: path));
-    when(routerDelegate.currentConfiguration)
-        .thenAnswer((_) => currentConfiguration);
+    when(routerDelegate.currentConfiguration).thenAnswer((_) => currentConfiguration);
     when(router.routerDelegate).thenAnswer((_) => routerDelegate);
     when(navigationShell.currentIndex).thenAnswer((_) => index);
     return router;
   }
 
   Widget buildNavBar(MockGoRouter router) => MultiBlocProvider(
-        providers: <BlocProvider<dynamic>>[
-          BlocProvider<AppCoreBloc>(
-            create: (BuildContext context) => appCoreBloc,
-          ),
-          BlocProvider<HidableBloc>(
-            create: (BuildContext context) => hidableBloc,
-          ),
-        ],
-        child: MockLocalization(
-          appLocalizationBloc: appLocalizationBloc,
-          child: MockGoRouterProvider(
-            router: router,
-            child: {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar(
-              navigationShell: navigationShell,
-            ),
-          ),
-        ),
-      );
+    providers: <BlocProvider<dynamic>>[
+      BlocProvider<AppCoreBloc>(create: (BuildContext context) => appCoreBloc),
+      BlocProvider<HidableBloc>(create: (BuildContext context) => hidableBloc),
+    ],
+    child: MockLocalization(
+      appLocalizationBloc: appLocalizationBloc,
+      child: MockGoRouterProvider(
+        router: router,
+        child: {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar(navigationShell: navigationShell),
+      ),
+    ),
+  );
 
   group({{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar, () {
     goldenTest(

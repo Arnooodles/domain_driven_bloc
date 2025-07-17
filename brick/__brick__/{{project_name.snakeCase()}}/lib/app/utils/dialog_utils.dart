@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:animations/animations.dart';
-import 'package:flash/flash.dart';
-import 'package:flash/flash_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:toastification/toastification.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
-import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_sizes.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/app_utils.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/bloc/theme/theme_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/dialogs/confirmation_dialog.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text.dart';
@@ -38,62 +39,46 @@ final class DialogUtils {
     Color? negativeButtonTextColor,
     Color? positiveButtonTextColor,
     Color? titleColor,
-  }) =>
-      showModal<bool?>(
-        context: context,
-        builder: (BuildContext context) => ConfirmationDialog(
-          message: message,
-          title: title,
-          titleColor: titleColor,
-          negativeButtonText: negativeButtonText,
-          positiveButtonText: positiveButtonText,
-          onNegativePressed: onNegativePressed,
-          onPositivePressed: onPositivePressed,
-          negativeButtonColor: negativeButtonColor,
-          positiveButtonColor: positiveButtonColor,
-          negativeButtonTextColor: negativeButtonTextColor,
-          positiveButtonTextColor: positiveButtonTextColor,
-        ),
-      );
+  }) => showModal<bool?>(
+    context: context,
+    builder: (BuildContext context) => ConfirmationDialog(
+      message: message,
+      title: title,
+      titleColor: titleColor,
+      negativeButtonText: negativeButtonText,
+      positiveButtonText: positiveButtonText,
+      onNegativePressed: onNegativePressed,
+      onPositivePressed: onPositivePressed,
+      negativeButtonColor: negativeButtonColor,
+      positiveButtonColor: positiveButtonColor,
+      negativeButtonTextColor: negativeButtonTextColor,
+      positiveButtonTextColor: positiveButtonTextColor,
+    ),
+  );
 
-  static Future<void> showError(
-    BuildContext context,
+  static ToastificationItem showError(
     String message, {
-    Icon? icon,
+    Widget? icon,
     Duration? duration,
-    FlashPosition? position,
-  }) =>
-      context.showFlash<void>(
-        duration: duration ?? const Duration(seconds: 3),
-        builder: (BuildContext context, FlashController<void> controller) =>
-            FlashBar<void>(
-          controller: controller,
-          shouldIconPulse: false,
-          position: position ?? FlashPosition.bottom,
-          behavior: FlashBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: AppTheme.defaultBoardRadius,
-          ),
-          margin: const EdgeInsets.symmetric(
-            vertical: Insets.xxxLarge,
-            horizontal: Insets.xxLarge,
-          ),
-          clipBehavior: Clip.antiAlias,
-          icon: Padding(
-            padding:
-                const EdgeInsets.only(left: Insets.small, right: Insets.xSmall),
-            child: icon ??
-                {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(
-                  icon: right(Icons.error_outline),
-                  color: context.colorScheme.error,
-                ),
-          ),
-          content: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
-            text: message,
-            style: context.textTheme.bodyMedium,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 3,
-          ),
-        ),
-      );
+    bool isDismissable = true,
+    Alignment alignment = Alignment.topCenter,
+  }) => toastification.show(
+    title: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(text: message, overflow: TextOverflow.ellipsis, maxLines: 3),
+    icon: Padding(
+      padding: const EdgeInsets.only(left: AppSizes.small, right: AppSizes.xSmall),
+      child: icon ?? {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.error_outline)),
+    ),
+    autoCloseDuration: isDismissable ? duration ?? const Duration(seconds: 5) : null,
+    style: ToastificationStyle.flatColored,
+    type: ToastificationType.custom('app_error', _getErrorColor(), Icons.error_outline),
+    alignment: alignment,
+    closeOnClick: isDismissable,
+    dragToClose: isDismissable,
+    closeButton: isDismissable ? const ToastCloseButton() : const ToastCloseButton(showType: CloseButtonShowType.none),
+    dismissDirection: isDismissable ? null : DismissDirection.none,
+  );
+
+  static Color _getErrorColor() => getIt<ThemeBloc>().state == ThemeMode.dark
+      ? AppColors.darkColorScheme.errorContainer
+      : AppColors.lightColorScheme.error;
 }

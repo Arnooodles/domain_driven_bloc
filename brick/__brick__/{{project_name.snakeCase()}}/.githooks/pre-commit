@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Format Dart code
+echo "Running dart format..."
+make format
+if [ $? -ne 0 ]; then
+  echo "Dart format failed. Please format your code."
+  exit 1
+fi
+
+# Run linter
+echo "Running analysis..."
+make lint
+if [ $? -ne 0 ]; then
+  echo "Linting failed. Please fix the issues."
+  exit 1
+fi
+
+echo "Pre-commit checks passed."
+exit 0 

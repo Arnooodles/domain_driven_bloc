@@ -20,6 +20,5 @@ final class TimestampToDateTime implements JsonConverter<DateTime, double> {
   }
 
   @override
-  double toJson(DateTime json) =>
-      json.millisecondsSinceEpoch / 1000; // timestamp in seconds
+  double toJson(DateTime json) => json.millisecondsSinceEpoch / 1000; // timestamp in seconds
 }

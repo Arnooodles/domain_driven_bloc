@@ -13,8 +13,7 @@ class MockDevice {
   });
 
   /// [phone] one of the smallest phone screens
-  static const MockDevice phone =
-      MockDevice(name: 'phone', size: Size(375, 667));
+  static const MockDevice phone = MockDevice(name: 'phone', size: Size(375, 667));
 
   /// [iphone11] matches specs of iphone11, but with lower DPI for performance
   static const MockDevice iphone11 = MockDevice(
@@ -24,12 +23,10 @@ class MockDevice {
   );
 
   /// [tabletLandscape] example of tablet that in landscape mode
-  static const MockDevice tabletLandscape =
-      MockDevice(name: 'tablet_landscape', size: Size(1366, 1024));
+  static const MockDevice tabletLandscape = MockDevice(name: 'tablet_landscape', size: Size(1366, 1024));
 
   /// [tabletPortrait] example of tablet that in portrait mode
-  static const MockDevice tabletPortrait =
-      MockDevice(name: 'tablet_portrait', size: Size(1024, 1366));
+  static const MockDevice tabletPortrait = MockDevice(name: 'tablet_portrait', size: Size(1024, 1366));
 
   /// [name] specify device name. Ex: Phone, Tablet, Watch
 
@@ -47,7 +44,7 @@ class MockDevice {
   /// [brightness] specify platform brightness
   final Brightness brightness;
 
-  /// [safeArea] specify insets to define a safe area
+  /// [safeArea] specify AppSizes to define a safe area
   final EdgeInsets safeArea;
 
   /// [copyWith] convenience function for [MockDevice] modification
@@ -58,26 +55,25 @@ class MockDevice {
     double? textScale,
     Brightness? brightness,
     EdgeInsets? safeArea,
-  }) =>
-      MockDevice(
-        size: size ?? this.size,
-        devicePixelRatio: devicePixelRatio ?? this.devicePixelRatio,
-        name: name ?? this.name,
-        textScale: textScale ?? this.textScale,
-        brightness: brightness ?? this.brightness,
-        safeArea: safeArea ?? this.safeArea,
-      );
+  }) => MockDevice(
+    size: size ?? this.size,
+    devicePixelRatio: devicePixelRatio ?? this.devicePixelRatio,
+    name: name ?? this.name,
+    textScale: textScale ?? this.textScale,
+    brightness: brightness ?? this.brightness,
+    safeArea: safeArea ?? this.safeArea,
+  );
 
   /// [dark] convenience method to copy the current device and apply dark theme
   MockDevice dark() => MockDevice(
-        size: size,
-        devicePixelRatio: devicePixelRatio,
-        textScale: textScale,
-        brightness: Brightness.dark,
-        safeArea: safeArea,
-        // ignore: unnecessary_string_escapes
-        name: '$name\_dark',
-      );
+    size: size,
+    devicePixelRatio: devicePixelRatio,
+    textScale: textScale,
+    brightness: Brightness.dark,
+    safeArea: safeArea,
+    // ignore: unnecessary_string_escapes
+    name: '$name\_dark',
+  );
 
   @override
   String toString() =>

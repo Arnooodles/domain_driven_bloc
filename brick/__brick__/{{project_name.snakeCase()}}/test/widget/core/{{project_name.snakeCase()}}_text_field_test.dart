@@ -22,94 +22,87 @@ void main() {
   });
 
   group({{#pascalCase}}{{project_name}}{{/pascalCase}}TextField, () {
-    GoldenTestGroup buildTextFieldTestGroup({
-      TextFieldType textFieldType = TextFieldType.normal,
-    }) =>
-        GoldenTestGroup(
-          children: <Widget>[
-            GoldenTestScenario(
-              name: 'default',
-              constraints: const BoxConstraints(minWidth: 200),
-              child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+    GoldenTestGroup buildTextFieldTestGroup({TextFieldType textFieldType = TextFieldType.normal}) => GoldenTestGroup(
+      children: <Widget>[
+        GoldenTestScenario(
+          name: 'default',
+          constraints: const BoxConstraints(minWidth: 200),
+          child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(controller: controller, labelText: 'Label', textFieldType: textFieldType),
+        ),
+        GoldenTestScenario(
+          name: 'disabled',
+          constraints: const BoxConstraints(minWidth: 200),
+          child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+            controller: controller,
+            labelText: 'Label',
+            textFieldType: textFieldType,
+            isDisabled: true,
+          ),
+        ),
+        GoldenTestScenario(
+          name: 'is focused w/ hint',
+          constraints: const BoxConstraints(minWidth: 200),
+          child: Builder(
+            builder: (BuildContext context) {
+              focusNode.requestFocus();
+
+              return {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+                controller: controller,
+                labelText: 'Label',
+                hintText: 'hint',
+                textFieldType: textFieldType,
+                autofocus: true,
+                focusNode: focusNode,
+              );
+            },
+          ),
+        ),
+        GoldenTestScenario(
+          name: 'is focused w/o hint',
+          constraints: const BoxConstraints(minWidth: 200),
+          child: Builder(
+            builder: (BuildContext context) {
+              focusNode.requestFocus();
+
+              return {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
                 controller: controller,
                 labelText: 'Label',
                 textFieldType: textFieldType,
-              ),
-            ),
-            GoldenTestScenario(
-              name: 'disabled',
-              constraints: const BoxConstraints(minWidth: 200),
-              child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
-                controller: controller,
-                labelText: 'Label',
-                textFieldType: textFieldType,
-                disabled: true,
-              ),
-            ),
-            GoldenTestScenario(
-              name: 'is focused w/ hint',
-              constraints: const BoxConstraints(minWidth: 200),
-              child: Builder(
-                builder: (BuildContext context) {
-                  focusNode.requestFocus();
+                autofocus: true,
+                focusNode: focusNode,
+              );
+            },
+          ),
+        ),
+        GoldenTestScenario(
+          name: 'with value',
+          constraints: const BoxConstraints(minWidth: 200),
+          child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+            controller: TextEditingController(text: 'Value'),
+            labelText: 'Label',
+            textFieldType: textFieldType,
+            autofocus: true,
+          ),
+        ),
+        GoldenTestScenario(
+          name: 'is focused w/ value',
+          constraints: const BoxConstraints(minWidth: 200),
+          child: Builder(
+            builder: (BuildContext context) {
+              focusNode.requestFocus();
 
-                  return {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
-                    controller: controller,
-                    labelText: 'Label',
-                    hintText: 'hint',
-                    textFieldType: textFieldType,
-                    autofocus: true,
-                    focusNode: focusNode,
-                  );
-                },
-              ),
-            ),
-            GoldenTestScenario(
-              name: 'is focused w/o hint',
-              constraints: const BoxConstraints(minWidth: 200),
-              child: Builder(
-                builder: (BuildContext context) {
-                  focusNode.requestFocus();
-
-                  return {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
-                    controller: controller,
-                    labelText: 'Label',
-                    textFieldType: textFieldType,
-                    autofocus: true,
-                    focusNode: focusNode,
-                  );
-                },
-              ),
-            ),
-            GoldenTestScenario(
-              name: 'with value',
-              constraints: const BoxConstraints(minWidth: 200),
-              child: {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
+              return {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
                 controller: TextEditingController(text: 'Value'),
                 labelText: 'Label',
                 textFieldType: textFieldType,
                 autofocus: true,
-              ),
-            ),
-            GoldenTestScenario(
-              name: 'is focused w/ value',
-              constraints: const BoxConstraints(minWidth: 200),
-              child: Builder(
-                builder: (BuildContext context) {
-                  focusNode.requestFocus();
-
-                  return {{#pascalCase}}{{project_name}}{{/pascalCase}}TextField(
-                    controller: TextEditingController(text: 'Value'),
-                    labelText: 'Label',
-                    textFieldType: textFieldType,
-                    autofocus: true,
-                    focusNode: focusNode,
-                  );
-                },
-              ),
-            ),
-          ],
-        );
+                focusNode: focusNode,
+              );
+            },
+          ),
+        ),
+      ],
+    );
 
     goldenTest(
       'renders correctly the default text field',
@@ -126,8 +119,7 @@ void main() {
     goldenTest(
       'renders correctly when isPassword is true',
       fileName: '{{project_name.snakeCase()}}_text_field_password'.goldensVersion,
-      builder: () =>
-          buildTextFieldTestGroup(textFieldType: TextFieldType.password),
+      builder: () => buildTextFieldTestGroup(textFieldType: TextFieldType.password),
     );
 
     goldenTest(
@@ -139,8 +131,7 @@ void main() {
         }
         await tester.pumpAndSettle();
       },
-      builder: () =>
-          buildTextFieldTestGroup(textFieldType: TextFieldType.password),
+      builder: () => buildTextFieldTestGroup(textFieldType: TextFieldType.password),
     );
   });
 }

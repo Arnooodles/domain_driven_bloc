@@ -9,9 +9,9 @@ class Hidable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AnimatedAlign(
-        alignment: Alignment.topCenter,
-        duration: const Duration(milliseconds: 500),
-        heightFactor: context.watch<HidableBloc>().state ? 1.0 : 0.0,
-        child: child,
-      );
+    alignment: Alignment.topCenter,
+    duration: const Duration(milliseconds: 500),
+    heightFactor: context.watch<HidableBloc>().state ? 1.0 : 0.0,
+    child: child,
+  );
 }

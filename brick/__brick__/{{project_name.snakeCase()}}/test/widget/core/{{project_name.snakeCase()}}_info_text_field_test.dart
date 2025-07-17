@@ -15,18 +15,11 @@ void main() {
           GoldenTestScenario(
             name: 'default(expanded)',
             constraints: const BoxConstraints(minWidth: 200),
-            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(
-              title: 'Title',
-              description: 'Description',
-            ),
+            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(title: 'Title', description: 'Description'),
           ),
           GoldenTestScenario(
             name: 'shrink',
-            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(
-              title: 'Title',
-              description: 'Description',
-              isExpanded: false,
-            ),
+            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(title: 'Title', description: 'Description', isExpanded: false),
           ),
         ],
       ),

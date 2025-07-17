@@ -16,70 +16,58 @@ import 'package:{{project_name.snakeCase()}}/features/profile/presentation/views
 
 abstract final class AppRoutes {
   static List<RouteBase> get routes => <RouteBase>[
-        GoRoute(
-          path: RouteName.initial.path,
-          name: RouteName.initial.name,
-          builder: (BuildContext context, GoRouterState state) =>
-              const SplashScreen(),
-        ),
-        GoRoute(
-          path: RouteName.login.path,
-          name: RouteName.login.name,
-          builder: (BuildContext context, GoRouterState state) =>
-              const LoginScreen(),
-        ),
-        StatefulShellRoute.indexedStack(
-          builder: (
-            BuildContext context,
-            GoRouterState state,
-            StatefulNavigationShell navigationShell,
-          ) =>
-              MainScreen(navigationShell: navigationShell),
-          branches: <StatefulShellBranch>[
-            // The route branch for the first tab of the bottom navigation bar.
-            StatefulShellBranch(
-              observers: <NavigatorObserver>[
-                getIt<GoRouteObserver>(param1: RouteName.home.name),
-              ],
+    GoRoute(
+      path: RouteName.initial.path,
+      name: RouteName.initial.name,
+      builder: (BuildContext context, GoRouterState state) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: RouteName.login.path,
+      name: RouteName.login.name,
+      builder: (BuildContext context, GoRouterState state) => const LoginScreen(),
+    ),
+    StatefulShellRoute.indexedStack(
+      builder: (BuildContext context, GoRouterState state, StatefulNavigationShell navigationShell) =>
+          MainScreen(navigationShell: navigationShell),
+      branches: <StatefulShellBranch>[
+        // The route branch for the first tab of the bottom navigation bar.
+        StatefulShellBranch(
+          observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: RouteName.home.name)],
+          routes: <RouteBase>[
+            GoRoute(
+              path: RouteName.home.path,
+              name: RouteName.home.name,
+              builder: (BuildContext context, GoRouterState state) => const HomeScreen(),
               routes: <RouteBase>[
                 GoRoute(
-                  path: RouteName.home.path,
-                  name: RouteName.home.name,
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const HomeScreen(),
-                  routes: <RouteBase>[
-                    GoRoute(
-                      path: RouteName.postDetails.path,
-                      name: RouteName.postDetails.name,
-                      parentNavigatorKey: RouteNavigatorKeys.root,
-                      pageBuilder: (BuildContext context, GoRouterState state) {
-                        final Post post = state.extra! as Post;
-                        return SlideTransitionPage(
-                          key: state.pageKey,
-                          transitionType: SlideTransitionType.rightToLeft,
-                          child: PostDetailsScreen(post: post),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            // The route branch for the second tab of the bottom navigation bar.
-            StatefulShellBranch(
-              observers: <NavigatorObserver>[
-                getIt<GoRouteObserver>(param1: RouteName.profile.name),
-              ],
-              routes: <RouteBase>[
-                GoRoute(
-                  path: RouteName.profile.path,
-                  name: RouteName.profile.name,
-                  builder: (BuildContext context, GoRouterState state) =>
-                      const ProfileScreen(),
+                  path: RouteName.postDetails.path,
+                  name: RouteName.postDetails.name,
+                  parentNavigatorKey: RouteNavigatorKeys.root,
+                  pageBuilder: (BuildContext context, GoRouterState state) {
+                    final Post post = state.extra! as Post;
+                    return SlideTransitionPage(
+                      key: state.pageKey,
+                      transitionType: SlideTransitionType.rightToLeft,
+                      child: PostDetailsScreen(post: post),
+                    );
+                  },
                 ),
               ],
             ),
           ],
         ),
-      ];
+        // The route branch for the second tab of the bottom navigation bar.
+        StatefulShellBranch(
+          observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: RouteName.profile.name)],
+          routes: <RouteBase>[
+            GoRoute(
+              path: RouteName.profile.path,
+              name: RouteName.profile.name,
+              builder: (BuildContext context, GoRouterState state) => const ProfileScreen(),
+            ),
+          ],
+        ),
+      ],
+    ),
+  ];
 }

@@ -25,10 +25,8 @@ final class JsonSerializableConverter extends JsonConverter {
     return jsonFactory(values);
   }
 
-  List<T> _decodeList<T>(Iterable<dynamic> values) => values
-      .where((dynamic v) => v != null)
-      .map<T>((dynamic v) => _decode<T>(v))
-      .toList();
+  List<T> _decodeList<T>(Iterable<dynamic> values) =>
+      values.where((dynamic v) => v != null).map<T>((dynamic v) => _decode<T>(v)).toList();
 
   dynamic _decode<T>(dynamic entity) {
     if (entity is Iterable) return _decodeList<T>(entity as List<dynamic>);
@@ -39,9 +37,7 @@ final class JsonSerializableConverter extends JsonConverter {
   }
 
   @override
-  FutureOr<Response<ResultType>> convertResponse<ResultType, Item>(
-    Response<dynamic> response,
-  ) async {
+  FutureOr<Response<ResultType>> convertResponse<ResultType, Item>(Response<dynamic> response) async {
     // use [JsonConverter] to decode json
     final Response<dynamic> jsonRes = await super.convertResponse(response);
 
@@ -53,15 +49,11 @@ final class JsonSerializableConverter extends JsonConverter {
   Request convertRequest(Request request) => super.convertRequest(request);
 
   @override
-  FutureOr<Response<dynamic>> convertError<ResultType, Item>(
-    Response<dynamic> response,
-  ) async {
+  FutureOr<Response<dynamic>> convertError<ResultType, Item>(Response<dynamic> response) async {
     // use [JsonConverter] to decode json
     final Response<dynamic> jsonRes = await super.convertError(response);
 
-    return jsonRes.copyWith<ResourceError>(
-      body: ResourceError.fromJsonFactory(jsonRes.body),
-    );
+    return jsonRes.copyWith<ResourceError>(body: ResourceError.fromJsonFactory(jsonRes.body));
   }
 
   @override

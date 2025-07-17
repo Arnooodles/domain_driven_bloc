@@ -1,3 +1,5 @@
+// ignore_for_file: prefer-bloc-state-suffix
+
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/localization.g.dart';

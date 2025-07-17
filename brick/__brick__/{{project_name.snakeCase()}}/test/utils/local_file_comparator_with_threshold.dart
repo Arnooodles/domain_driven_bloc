@@ -5,10 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// exceeded, marks the test as a failure.
 class LocalFileComparatorWithThreshold extends LocalFileComparator {
   LocalFileComparatorWithThreshold(super.testFile, this._threshold)
-      : assert(
-          _threshold >= 0 && _threshold <= 1,
-          'Threshold must be between 0 to 1',
-        );
+    : assert(_threshold >= 0 && _threshold <= 1, 'Threshold must be between 0 to 1');
 
   /// Threshold above which tests will be marked as failing.
   /// Ranges from 0 to 1, both inclusive.
@@ -19,10 +16,7 @@ class LocalFileComparatorWithThreshold extends LocalFileComparator {
   /// [_threshold] to decide whether this test is successful or a failure.
   @override
   Future<bool> compare(Uint8List imageBytes, Uri golden) async {
-    final ComparisonResult result = await GoldenFileComparator.compareLists(
-      imageBytes,
-      await getGoldenBytes(golden),
-    );
+    final ComparisonResult result = await GoldenFileComparator.compareLists(imageBytes, await getGoldenBytes(golden));
 
     if (!result.passed && result.diffPercent <= _threshold) {
       debugPrint(
