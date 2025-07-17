@@ -5,8 +5,7 @@ extension ColorExt on Color {
       withAlpha ? alpha.toRadixString(16).padLeft(2, '0') : '';
 
   String toHexString({bool hashSign = false, bool withAlpha = false}) {
-    final String alpha =
-        _generateAlpha(alpha: _floatToInt8(a), withAlpha: withAlpha);
+    final String alpha = _generateAlpha(alpha: _floatToInt8(a), withAlpha: withAlpha);
     final String red = _floatToInt8(r).toRadixString(16).padLeft(2, '0');
     final String green = _floatToInt8(g).toRadixString(16).padLeft(2, '0');
     final String blue = _floatToInt8(b).toRadixString(16).padLeft(2, '0');

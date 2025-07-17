@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 
 final class _Keys {
@@ -16,10 +18,7 @@ final class _Keys {
 
 @LazySingleton(as: ILocalStorageRepository)
 class LocalStorageRepository implements ILocalStorageRepository {
-  const LocalStorageRepository(
-    this._securedStorage,
-    this._unsecuredStorage,
-  );
+  const LocalStorageRepository(this._securedStorage, this._unsecuredStorage);
 
   final FlutterSecureStorage _securedStorage;
   final SharedPreferences _unsecuredStorage;
@@ -28,56 +27,116 @@ class LocalStorageRepository implements ILocalStorageRepository {
 
   /// Secured Storage services
   @override
-  Future<String?> getAccessToken() =>
-      _securedStorage.read(key: _Keys.accessToken);
-  @override
-  Future<void> setAccessToken(String? value) async {
+  Future<Either<Failure, String?>> getAccessToken() async {
     try {
-      await _securedStorage.write(key: _Keys.accessToken, value: value);
+      return right(await _securedStorage.read(key: _Keys.accessToken));
     } on Exception catch (error) {
       _logger.e(error.toString());
-      throw Exception(error);
+      return left(Failure.deviceStorage(error.toString()));
     }
   }
 
   @override
-  Future<String?> getRefreshToken() =>
-      _securedStorage.read(key: _Keys.refreshToken);
-  @override
-  Future<void> setRefreshToken(String? value) async {
+  Future<Either<Failure, Unit>> setAccessToken(String value) async {
     try {
-      await _securedStorage.write(key: _Keys.refreshToken, value: value);
+      if (value.isNotEmpty) {
+        await _securedStorage.write(key: _Keys.accessToken, value: value);
+      }
+
+      return right(unit);
     } on Exception catch (error) {
       _logger.e(error.toString());
-      throw Exception(error);
+      return left(Failure.deviceStorage(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteAccessToken() async {
+    try {
+      await _securedStorage.delete(key: _Keys.accessToken);
+      return right(unit);
+    } on Exception catch (error) {
+      _logger.e(error.toString());
+      return left(Failure.deviceStorage(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String?>> getRefreshToken() async {
+    try {
+      return right(await _securedStorage.read(key: _Keys.refreshToken));
+    } on Exception catch (error) {
+      _logger.e(error.toString());
+      return left(Failure.deviceStorage(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> setRefreshToken(String value) async {
+    try {
+      if (value.isNotEmpty) {
+        await _securedStorage.write(key: _Keys.refreshToken, value: value);
+      }
+      return right(unit);
+    } on Exception catch (error) {
+      _logger.e(error.toString());
+      return left(Failure.deviceStorage(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteRefreshToken() async {
+    try {
+      await _securedStorage.delete(key: _Keys.refreshToken);
+      return right(unit);
+    } on Exception catch (error) {
+      _logger.e(error.toString());
+      return left(Failure.deviceStorage(error.toString()));
     }
   }
 
   /// Unsecured storage services
   @override
-  Future<String?> getLastLoggedInEmail() async =>
-      _unsecuredStorage.getString(_Keys.emailAddress);
-  @override
-  Future<void> setLastLoggedInEmail(String? value) async {
+  Future<Either<Failure, String?>> getLastLoggedInUsername() async {
     try {
-      await _unsecuredStorage.setString(_Keys.emailAddress, value ?? '');
+      return right(_unsecuredStorage.getString(_Keys.emailAddress));
     } on Exception catch (error) {
       _logger.e(error.toString());
-      throw Exception(error);
+      return left(Failure.deviceStorage(error.toString()));
     }
   }
 
   @override
-  Future<bool?> getIsDarkMode() async =>
-      _unsecuredStorage.getBool(_Keys.isDarkMode);
-
-  @override
-  Future<void> setIsDarkMode({required bool isDarkMode}) async {
+  Future<Either<Failure, Unit>> setLastLoggedInUsername(String value) async {
     try {
-      await _unsecuredStorage.setBool(_Keys.isDarkMode, isDarkMode);
+      if (value.isNotEmpty) {
+        await _unsecuredStorage.setString(_Keys.emailAddress, value);
+      }
+      return right(unit);
     } on Exception catch (error) {
       _logger.e(error.toString());
-      throw Exception(error);
+      return left(Failure.deviceStorage(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool?>> getIsDarkMode() async {
+    try {
+      return right(_unsecuredStorage.getBool(_Keys.isDarkMode));
+    } on Exception catch (error) {
+      _logger.e(error.toString());
+      return left(Failure.deviceStorage(error.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> setIsDarkMode({required bool isDarkMode}) async {
+    try {
+      await _unsecuredStorage.setBool(_Keys.isDarkMode, isDarkMode);
+      return right(unit);
+    } on Exception catch (error) {
+      _logger.e(error.toString());
+      return left(Failure.deviceStorage(error.toString()));
     }
   }
 }

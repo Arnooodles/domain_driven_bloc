@@ -4,7 +4,7 @@
 # To use `sed` on Windows install `sed for Windows` from https://gnuwin32.sourceforge.net/packages/sed.htm
 
 # See: https://gradle.org/releases/
-DESIRED_GRADLE_VERSION="8.10.2"
+DESIRED_GRADLE_VERSION="8.14.2"
 # Build errors often show the required Java version
 DESIRED_JAVA_VERSION="18"
 # The minimum Android SDK version
@@ -14,9 +14,9 @@ DESIRED_TARGET_SDK="34"
 # The minimum compile SDK version
 DESIRED_COMPILE_SDK="34"
 # This shouldn't be too old, otherwise it won't compile with the DESIRED_GRADLE_VERSION set above
-DESIRED_ANDROID_APPLICATION_VERSION="8.7.0"
+DESIRED_ANDROID_APPLICATION_VERSION="8.10.0"
 # The minimum Kotlin version
-DESIRED_KOTLIN_VERSION="1.8.22"
+DESIRED_KOTLIN_VERSION="2.1.20"
 
 # Exit if this is not a Flutter project
 if [ ! -f "pubspec.yaml" ]; then
@@ -75,12 +75,13 @@ if [ -n "$DESIRED_MIN_SDK_VERSION" ]; then
   if [[ "$PLATFORM" == "windows" ]]; then
     sed -i "s/minSdk = Math.max(flutter.minSdkVersion, .*)/minSdk = Math.max(flutter.minSdkVersion, ${DESIRED_MIN_SDK_VERSION})/" app/build.gradle.kts
   else  
-    sed -i "s/minSdk = Math.max(flutter.minSdkVersion, .*)/minSdk = Math.max(flutter.minSdkVersion, ${DESIRED_MIN_SDK_VERSION})/" app/build.gradle.kts
+    sed -i '' "s/minSdk = Math.max(flutter.minSdkVersion, .*)/minSdk = Math.max(flutter.minSdkVersion, ${DESIRED_MIN_SDK_VERSION})/" app/build.gradle.kts
   fi
 fi
 
 # Update targetSdk version (if specified)
 if [ -n "$DESIRED_TARGET_SDK" ]; then
+  echo "Updating targetSdk version to $DESIRED_TARGET_SDK"
   if [[ "$PLATFORM" == "windows" ]]; then
     sed -i "s/targetSdk = Math.max(flutter.targetSdkVersion, .*)/targetSdk = Math.max(flutter.targetSdkVersion, ${DESIRED_TARGET_SDK})/" app/build.gradle.kts
   else  

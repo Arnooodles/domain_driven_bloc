@@ -10,10 +10,7 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_nav_bar.
 import 'package:very_good_core/core/presentation/widgets/wrappers/connectivity_checker.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({
-    required this.navigationShell,
-    super.key,
-  });
+  const MainScreen({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
@@ -22,30 +19,22 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final Map<AppScrollController, ScrollController> _controllers = <AppScrollController, ScrollController>{};
+
   void _initScrollControllers() {
-    final Map<AppScrollController, ScrollController> controllers =
-        <AppScrollController, ScrollController>{};
-    for (final AppScrollController appScrollController
-        in AppScrollController.values) {
-      final ScrollController scrollController =
-          ScrollController(debugLabel: appScrollController.name);
-      scrollController.addListener(
-        () => _addListener(scrollController, context.read<HidableBloc>()),
-      );
-      controllers.putIfAbsent(appScrollController, () => scrollController);
+    for (final AppScrollController appScrollController in AppScrollController.values) {
+      final ScrollController scrollController = ScrollController(debugLabel: appScrollController.name);
+      // ignore: always-remove-listener
+      scrollController.addListener(() => _addListener(scrollController, context.read<HidableBloc>()));
+      _controllers.putIfAbsent(appScrollController, () => scrollController);
     }
-    context.read<AppCoreBloc>().setScrollControllers(controllers);
+    context.read<AppCoreBloc>().setScrollControllers(_controllers);
   }
 
-  void _addListener(
-    ScrollController scrollController,
-    HidableBloc hidableBloc,
-  ) {
-    if (scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
+  void _addListener(ScrollController scrollController, HidableBloc hidableBloc) {
+    if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
       hidableBloc.setVisibility(isVisible: true);
-    } else if (scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
+    } else if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
       hidableBloc.setVisibility(isVisible: false);
     }
   }
@@ -68,13 +57,22 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) => PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (bool didPop, _) => _onPopInvoked(didPop),
-        child: ConnectivityChecker.scaffold(
-          body: widget.navigationShell,
-          bottomNavigationBar: VeryGoodCoreNavBar(
-            navigationShell: widget.navigationShell,
-          ),
-        ),
-      );
+    canPop: false,
+    onPopInvokedWithResult: (bool didPop, _) => _onPopInvoked(didPop),
+    child: ConnectivityChecker.scaffold(
+      body: widget.navigationShell,
+      bottomNavigationBar: VeryGoodCoreNavBar(navigationShell: widget.navigationShell),
+    ),
+  );
+
+  @override
+  void dispose() {
+    _controllers.forEach((AppScrollController key, ScrollController scrollController) {
+      scrollController
+        ..removeListener(() => _addListener(scrollController, context.read<HidableBloc>()))
+        ..dispose();
+    });
+
+    super.dispose();
+  }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: no-empty-block
+
 import 'dart:async';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -6,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/domain/bloc/app_localization/app_localization_bloc.dart';
@@ -45,5 +48,6 @@ import 'package:very_good_core/features/home/domain/interface/i_post_repository.
   MockSpec<GoRouterDelegate>(),
   MockSpec<StatefulNavigationShell>(),
   MockSpec<RouteMatchList>(),
+  MockSpec<FailureHandler>(),
 ])
 void main() {}

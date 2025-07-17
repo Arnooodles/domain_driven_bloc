@@ -10,12 +10,12 @@ class MockMaterialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        home: child,
-        title: Constant.appName,
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        localizationsDelegates: Constant.localizationDelegates,
-        supportedLocales: AppLocaleUtils.supportedLocales,
-        debugShowCheckedModeBanner: false,
-      );
+    home: child,
+    title: Constant.appName,
+    theme: AppTheme.light,
+    darkTheme: AppTheme.dark,
+    localizationsDelegates: Constant.localizationDelegates,
+    supportedLocales: AppLocaleUtils.supportedLocales,
+    debugShowCheckedModeBanner: false,
+  );
 }

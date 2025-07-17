@@ -16,6 +16,5 @@ class MockAssetBundle extends Fake implements AssetBundle {
   Future<String> loadString(String key, {bool cache = true}) async => svgStr;
 
   @override
-  Future<ByteData> load(String key) async =>
-      Uint8List.fromList(utf8.encode(svgStr)).buffer.asByteData();
+  Future<ByteData> load(String key) async => Uint8List.fromList(utf8.encode(svgStr)).buffer.asByteData();
 }

@@ -36,10 +36,7 @@ void main() {
         children: <Widget>[
           GoldenTestScenario(
             name: 'without action and back button',
-            child: MockGoRouterProvider(
-              router: setUpRouter(canPop: false),
-              child: const VeryGoodCoreAppBar(),
-            ),
+            child: MockGoRouterProvider(router: setUpRouter(canPop: false), child: const VeryGoodCoreAppBar()),
           ),
           GoldenTestScenario(
             name: 'with action but no back button',
@@ -59,9 +56,7 @@ void main() {
             name: 'without action but have a back button',
             child: MockGoRouterProvider(
               router: setUpRouter(canPop: true),
-              child: const VeryGoodCoreAppBar(
-                leading: BackButton(),
-              ),
+              child: const VeryGoodCoreAppBar(leading: BackButton()),
             ),
           ),
           GoldenTestScenario(

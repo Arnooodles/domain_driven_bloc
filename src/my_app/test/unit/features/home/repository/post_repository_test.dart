@@ -2,8 +2,10 @@ import 'package:chopper/chopper.dart' as chopper;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mockito/mockito.dart';
+import 'package:very_good_core/app/helpers/extensions/fpdart_ext.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
+import 'package:very_good_core/features/home/data/dto/reddit_post.dto.dart';
 import 'package:very_good_core/features/home/data/repository/post_repository.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 
@@ -18,107 +20,63 @@ void main() {
   setUp(() {
     postService = MockPostService();
     postRepository = PostRepository(postService);
-    postDTO = PostDTO(
-      uid: '1',
-      title: 'title',
-      author: 'author',
-      permalink: 'permalink',
-      createdUtc: DateTime.now(),
-    );
+    postDTO = PostDTO(uid: '1', title: 'title', author: 'author', permalink: 'permalink', createdUtc: DateTime.now());
   });
 
   tearDown(() {
     provideDummy(mockChopperClient);
-    postService.client.dispose();
     reset(postService);
   });
 
   group('Get Posts', () {
-    test(
-      'should return a list of posts',
-      () async {
-        final Map<String, dynamic> data = <String, dynamic>{
-          'data': <String, dynamic>{
-            'children': <Map<String, dynamic>>[
-              <String, dynamic>{
-                'data': postDTO.toJson(),
-              },
-            ],
-          },
-        };
-        provideDummy<chopper.Response<dynamic>>(
-          generateMockResponse<Map<String, dynamic>>(data, 200),
-        );
-        when(postService.getPosts()).thenAnswer(
-          (_) async => generateMockResponse<Map<String, dynamic>>(data, 200),
-        );
+    test('getPosts should return list of posts when successful', () async {
+      final RedditPostDTO data = RedditPostDTO(
+        data: RedditPostData(children: <RedditPostDataChild>[RedditPostDataChild(data: postDTO)]),
+      );
 
-        final Either<Failure, List<Post>> result =
-            await postRepository.getPosts();
+      provideDummy<chopper.Response<RedditPostDTO>>(generateMockResponse<RedditPostDTO>(data, 200));
+      when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<RedditPostDTO>(data, 200));
 
-        expect(result.isRight(), true);
-      },
-    );
-    test(
-      'should return a failure when list has an invalid post',
-      () async {
-        final Map<String, dynamic> data = <String, dynamic>{
-          'data': <String, dynamic>{
-            'children': <Map<String, dynamic>>[
-              <String, dynamic>{
-                'data': postDTO.copyWith(comments: -1).toJson(),
-              },
-            ],
-          },
-        };
-        provideDummy<chopper.Response<dynamic>>(
-          generateMockResponse<Map<String, dynamic>>(data, 200),
-        );
-        when(postService.getPosts()).thenAnswer(
-          (_) async => generateMockResponse<Map<String, dynamic>>(data, 200),
-        );
+      final Either<Failure, List<Post>> result = await postRepository.getPosts();
 
-        final Either<Failure, List<Post>> result =
-            await postRepository.getPosts();
+      expect(result, isA<Right<Failure, List<Post>>>());
+      expect(result.asRight(), isNotEmpty);
+    });
 
-        expect(result.isLeft(), true);
-      },
-    );
-    test(
-      'should return a failure when a server error occurs',
-      () async {
-        final Map<String, dynamic> data = <String, dynamic>{
-          'data': <String, dynamic>{
-            'children': <Map<String, dynamic>>[
-              <String, dynamic>{
-                'data': postDTO.toJson(),
-              },
-            ],
-          },
-        };
-        provideDummy<chopper.Response<dynamic>>(
-          generateMockResponse<Map<String, dynamic>>(data, 500),
-        );
-        when(postService.getPosts()).thenAnswer(
-          (_) async => generateMockResponse<Map<String, dynamic>>(data, 500),
-        );
+    test('getPosts should return failure when list has invalid post', () async {
+      final RedditPostDTO data = RedditPostDTO(
+        data: RedditPostData(
+          children: <RedditPostDataChild>[RedditPostDataChild(data: postDTO.copyWith(comments: -1))],
+        ),
+      );
 
-        final Either<Failure, List<Post>> result =
-            await postRepository.getPosts();
+      provideDummy<chopper.Response<RedditPostDTO>>(generateMockResponse<RedditPostDTO>(data, 200));
+      when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<RedditPostDTO>(data, 200));
 
-        expect(result.isLeft(), true);
-      },
-    );
-    test(
-      'should return a failure when an unexpected error occurs',
-      () async {
-        when(postService.getPosts()).thenThrow(Exception('Unexpected error'));
+      final Either<Failure, List<Post>> result = await postRepository.getPosts();
 
-        final Either<Failure, List<Post>> result =
-            await postRepository.getPosts();
+      expect(result, isA<Left<Failure, List<Post>>>());
+    });
 
-        expect(result.isLeft(), true);
-      },
-    );
+    test('getPosts should return failure when server error occurs', () async {
+      final RedditPostDTO data = RedditPostDTO(
+        data: RedditPostData(children: <RedditPostDataChild>[RedditPostDataChild(data: postDTO)]),
+      );
+
+      provideDummy<chopper.Response<RedditPostDTO>>(generateMockResponse<RedditPostDTO>(data, 500));
+      when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<RedditPostDTO>(data, 500));
+
+      final Either<Failure, List<Post>> result = await postRepository.getPosts();
+
+      expect(result, isA<Left<Failure, List<Post>>>());
+    });
+
+    test('getPosts should return failure when unexpected error occurs', () async {
+      when(postService.getPosts()).thenThrow(Exception('Unexpected error'));
+
+      final Either<Failure, List<Post>> result = await postRepository.getPosts();
+
+      expect(result, isA<Left<Failure, List<Post>>>());
+    });
   });
 }

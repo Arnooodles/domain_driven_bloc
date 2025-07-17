@@ -20,7 +20,8 @@ final class MockData {
     firstName: 'test',
     lastName: 'test',
     gender: 'Male',
-    contactNumber: '123456789',
-    birthday: DateTime(2000),
+    phone: '123456789',
+    birthDate: DateTime(2000).toIso8601String(),
+    username: 'username',
   ).toDomain();
 }

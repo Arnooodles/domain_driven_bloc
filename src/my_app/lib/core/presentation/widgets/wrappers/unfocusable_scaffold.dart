@@ -18,12 +18,12 @@ class UnfocusableScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: onTap ?? () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          body: body,
-          appBar: appBar,
-          backgroundColor: backgroundColor,
-          bottomNavigationBar: bottomNavigationBar,
-        ),
-      );
+    onTap: onTap ?? () => FocusManager.instance.primaryFocus?.unfocus(),
+    child: Scaffold(
+      body: body,
+      appBar: appBar,
+      backgroundColor: backgroundColor,
+      bottomNavigationBar: bottomNavigationBar,
+    ),
+  );
 }

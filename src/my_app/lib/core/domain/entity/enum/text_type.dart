@@ -1,6 +1,1 @@
-enum TextType {
-  regular,
-  selectable,
-  styled,
-  markdown,
-}
+enum TextType { regular, selectable, styled, markdown }

@@ -1,4 +1,5 @@
-include: package:very_good_analysis/analysis_options.yaml
+include: 
+    - package:very_good_analysis/analysis_options.yaml
 
 analyzer:
   errors:
@@ -10,8 +11,6 @@ analyzer:
     unawaited_futures: warning
     unused_import: warning
     invalid_annotation_target: ignore
-    document_ignores: ignore
- 
   exclude:
     - "**.g.dart"
     - "**.freezed.dart"
@@ -22,15 +21,16 @@ analyzer:
     - lib/app/generated/**
     - lib/**/generated_plugin_registrant.dart
 
+
   language:
     strict-casts: true
+    strict-inference: true
     strict-raw-types: true
 
 linter:
   rules:
     # Better readability
     always_specify_types: true
-    unsafe_html: true 
     prefer_expression_function_bodies: true
 
     #Suppressed Lints
@@ -41,7 +41,66 @@ linter:
     avoid_classes_with_only_static_members: false
     lines_longer_than_80_chars: false
     no_default_cases: false
+    document_ignores: false
+
+formatter: 
+  page_width: 120
+  trailing_commas: automate
 
 
+dart_code_metrics:
+  formatter:
+    line-length: 120
+    cascading-widget-extensions: true
+  metrics:
+    cyclomatic-complexity: 20
+    number-of-parameters: 5
+    maximum-nesting-level: 5
+  exclude:
+    metrics:
+      - test/**
+  rules:
+    - avoid-cascade-after-if-null
+    - avoid-duplicate-named-imports
+    - avoid-global-state
+    - avoid-self-compare
+    - avoid-substring
+    - avoid-throw-in-catch-block
+    - binary-expression-operand-order
+    - double-literal-format
+    - no-boolean-literal-compare
+    - no-empty-block
+    - no-equal-then-else
+    - prefer-conditional-expressions
+    - prefer-enums-by-name
+    - prefer-immediate-return
+    - prefer-iterable-of
+    - prefer-match-file-name
+    - always-remove-listener
+    - avoid-border-all
+    - avoid-expanded-as-spacer
+    - avoid-returning-widgets
+    - avoid-shrink-wrap-in-lists
+    - avoid-wrapping-in-padding
+    - check-for-equals-in-render-object-setters
+    - prefer-const-border-radius
+    - prefer-correct-edge-insets-constructor
+    - prefer-text-rich
+    - avoid-bloc-public-fields
+    - avoid-bloc-public-methods
+    - avoid-duplicate-bloc-event-handlers
+    - avoid-instantiating-in-bloc-value-provider
+    - avoid-passing-bloc-to-bloc
+    - avoid-passing-build-context-to-blocs
+    - avoid-returning-value-from-cubit-methods
+    - check-is-not-closed-after-async-gap
+    - prefer-bloc-extensions
+    - prefer-bloc-state-suffix
+    - prefer-correct-bloc-provider
+    - prefer-immutable-bloc-events
+    - prefer-immutable-bloc-state
+    - prefer-multi-bloc-provider
+    - prefer-sealed-bloc-events
+    
 
 

@@ -1,6 +1,1 @@
-enum SlideTransitionType {
-  topToBottom,
-  bottomToTop,
-  leftToRight,
-  rightToLeft,
-}
+enum SlideTransitionType { topToBottom, bottomToTop, leftToRight, rightToLeft }

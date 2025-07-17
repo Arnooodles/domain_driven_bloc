@@ -1,16 +1,14 @@
 import 'dart:async';
 
-import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' as fpdart;
+import 'package:toastification/toastification.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
-import 'package:very_good_core/app/themes/app_spacing.dart';
-import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/app/utils/connectivity_utils.dart';
+import 'package:very_good_core/app/utils/dialog_utils.dart';
 import 'package:very_good_core/core/domain/entity/enum/connection_status.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
-import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/core/presentation/widgets/wrappers/unfocusable_scaffold.dart';
 
 class ConnectivityChecker extends StatefulWidget {
@@ -24,22 +22,21 @@ class ConnectivityChecker extends StatefulWidget {
     Widget? bottomNavigationBar,
     Color? backgroundColor,
     bool isUnfocusable = false,
-  }) =>
-      ConnectivityChecker(
-        child: isUnfocusable
-            ? UnfocusableScaffold(
-                body: body,
-                appBar: appBar,
-                backgroundColor: backgroundColor,
-                bottomNavigationBar: bottomNavigationBar,
-              )
-            : Scaffold(
-                body: body,
-                appBar: appBar,
-                backgroundColor: backgroundColor,
-                bottomNavigationBar: bottomNavigationBar,
-              ),
-      );
+  }) => ConnectivityChecker(
+    child: isUnfocusable
+        ? UnfocusableScaffold(
+            body: body,
+            appBar: appBar,
+            backgroundColor: backgroundColor,
+            bottomNavigationBar: bottomNavigationBar,
+          )
+        : Scaffold(
+            body: body,
+            appBar: appBar,
+            backgroundColor: backgroundColor,
+            bottomNavigationBar: bottomNavigationBar,
+          ),
+  );
 
   @override
   State<ConnectivityChecker> createState() => _ConnectivityCheckerState();
@@ -47,49 +44,25 @@ class ConnectivityChecker extends StatefulWidget {
 
 class _ConnectivityCheckerState extends State<ConnectivityChecker> {
   final ConnectivityUtils _connectivityUtils = getIt<ConnectivityUtils>();
-  StreamSubscription<ConnectionStatus>? _connectionSubscription;
-  bool _isDialogShowing = false;
-  FlashController<void>? _controller;
+  late final StreamSubscription<ConnectionStatus> _connectionSubscription;
+  ToastificationItem? _toastificationItem;
 
-  Future<void> _showOfflineDialog(BuildContext context) async {
-    await showFlash<void>(
-      context: context,
-      builder: (BuildContext context, FlashController<void> controller) {
-        _controller = controller;
-        return FlashBar<void>(
-          controller: controller,
-          position: FlashPosition.top,
-          behavior: FlashBehavior.floating,
-          margin: Paddings.allXxxLarge,
-          shape: RoundedRectangleBorder(
-            borderRadius: AppTheme.defaultBoardRadius,
-          ),
-          clipBehavior: Clip.antiAlias,
-          icon: VeryGoodCoreIcon(icon: fpdart.right(Icons.wifi_off)),
-          content: Padding(
-            padding: Paddings.horizontalSmall,
-            child: VeryGoodCoreText(
-              text: context.i18n.common.error.no_internet_connection,
-              style: context.textTheme.bodyLarge,
-            ),
-          ),
-        );
-      },
-    );
-  }
+  Future<ToastificationItem> _showOfflineDialog(BuildContext context) async => DialogUtils.showError(
+    context.i18n.common.error.no_internet_connection,
+    icon: VeryGoodCoreIcon(icon: fpdart.right(Icons.wifi_off)),
+    isDismissable: false,
+  );
 
   Future<void> _onStatusChanged(ConnectionStatus connectionStatus) async {
+    if (!mounted) return;
     switch (connectionStatus) {
       case ConnectionStatus.offline:
-        if (!_isDialogShowing) {
-          _isDialogShowing = true;
-          await _showOfflineDialog(context);
-          _isDialogShowing = false;
-        }
+        if (_toastificationItem?.isRunning ?? false) return;
+        _toastificationItem ??= await _showOfflineDialog(context);
       case ConnectionStatus.online:
-        if (_isDialogShowing) {
-          await _controller?.dismiss();
-          _isDialogShowing = false;
+        if (_toastificationItem != null) {
+          toastification.dismiss(_toastificationItem!);
+          _toastificationItem = null;
         }
     }
   }
@@ -97,14 +70,7 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _onStatusChanged(await _connectivityUtils.checkInternet());
-      _connectionSubscription ??= _connectivityUtils
-          .internetStatus()
-          .listen((ConnectionStatus event) async {
-        await _onStatusChanged(event);
-      });
-    });
+    _connectionSubscription = _connectivityUtils.internetStatus.listen(_onStatusChanged);
   }
 
   @override
@@ -112,7 +78,7 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
 
   @override
   void dispose() {
-    _connectionSubscription?.cancel();
+    _connectionSubscription.cancel();
     super.dispose();
   }
 }

@@ -21,8 +21,7 @@ abstract class ServiceModule {
 
   @lazySingleton
   @preResolve
-  Future<SharedPreferences> get sharedPreferences =>
-      SharedPreferences.getInstance();
+  Future<SharedPreferences> get sharedPreferences => SharedPreferences.getInstance();
 
   //Device Service
   @lazySingleton
@@ -33,11 +32,8 @@ abstract class ServiceModule {
   DeviceInfoPlugin get deviceInfo => DeviceInfoPlugin();
 
   @lazySingleton
-  Logger get logger => Logger(
-        filter: ProductionFilter(),
-        printer: PrettyPrinter(methodCount: 0),
-        output: ConsoleOutput(),
-      );
+  Logger get logger =>
+      Logger(filter: ProductionFilter(), printer: PrettyPrinter(methodCount: 0), output: ConsoleOutput());
 
   //API Service
   @lazySingleton

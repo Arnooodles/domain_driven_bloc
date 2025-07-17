@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:very_good_core/app/helpers/extensions/object_ext.dart';
 import 'package:very_good_core/core/domain/entity/value_object.dart';
 import 'package:very_good_core/features/auth/domain/entity/login_response.dart';
 
@@ -9,30 +8,19 @@ part 'login_response.dto.g.dart';
 
 @freezed
 sealed class LoginResponseDTO with _$LoginResponseDTO {
-  const factory LoginResponseDTO({
-    @JsonKey(name: 'token') required String accessToken,
-    String? refreshToken,
-  }) = _LoginResponseDTO;
+  const factory LoginResponseDTO({required String accessToken, String? refreshToken}) = _LoginResponseDTO;
 
   const LoginResponseDTO._();
 
-  factory LoginResponseDTO.fromJson(Map<String, dynamic> json) =>
-      _$LoginResponseDTOFromJson(json);
+  factory LoginResponseDTO.fromJson(Map<String, dynamic> json) => _$LoginResponseDTOFromJson(json);
 
-  factory LoginResponseDTO.fromDomain(LoginResponse loginResponse) =>
-      LoginResponseDTO(
-        accessToken: loginResponse.accessToken.getOrCrash(),
-        refreshToken: loginResponse.refreshToken.getOrCrash(),
-      );
-
-  factory LoginResponseDTO.loginDTOFromJson(String str) =>
-      LoginResponseDTO.fromJson(json.decode(str) as Map<String, dynamic>);
-
-  static String loginDTOToJson(LoginResponseDTO data) =>
-      json.encode(data.toJson());
+  factory LoginResponseDTO.fromDomain(LoginResponse loginResponse) => LoginResponseDTO(
+    accessToken: loginResponse.accessToken.getValue(),
+    refreshToken: loginResponse.refreshToken?.getValue(),
+  );
 
   LoginResponse toDomain() => LoginResponse(
-        accessToken: AuthToken(accessToken),
-        refreshToken: AuthToken(refreshToken ?? accessToken),
-      );
+    accessToken: ValueString(accessToken, fieldName: 'accessToken'),
+    refreshToken: refreshToken.let((String value) => ValueString(value, fieldName: 'refreshToken')),
+  );
 }

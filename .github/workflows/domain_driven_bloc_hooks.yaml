@@ -19,3 +19,4 @@ jobs:
       working_directory: "brick/hooks"
       analyze_directories: "test"
       report_on: "pre_gen.dart"
+      format_line_length: 120

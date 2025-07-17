@@ -9,6 +9,10 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: "generate-domain-driven-bloc-${{ github.ref_name }}"
+  cancel-in-progress: true      
+
 jobs:
   build:
     runs-on: macos-latest

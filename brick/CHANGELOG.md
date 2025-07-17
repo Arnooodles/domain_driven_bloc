@@ -1,3 +1,24 @@
+# 3.0.0
+- feat: update README docs, screenshots, and localization/i18n for new/renamed fields
+- feat: update Flutter, Gradle, Android, and dependencies for improved compatibility
+- feat: enhance theming, sizing, and UI consistency; add app text styles
+- feat: switch user/auth endpoints to dummyjson.com, update login to username
+- feat: add AuthInterceptor for token refresh/session timeout
+- feat: add/extend context extensions (theme, navigation, text style, mediaQuery)
+- feat: add .githooks/pre-commit, Makefile git hook/init_hooks targets
+- feat: add/extend core widgets (buttons, avatars, icons, text fields, webview)
+- feat: add/extend DTOs, entities, and repositories for user, auth, device
+- feat: add/extend tests for new features and refactored logic
+- refactor: unify Failure types to use `message` field, update all usages/tests
+- refactor: ErrorActions/FailureHandler to use Failure, not Exception
+- refactor: ValueObject throws Exception with failure message
+- refactor: use context extensions for theme, navigation, text style
+- refactor: update usages of GoRouter/Navigator to use context extensions
+- refactor: update/optimize Makefile, workflows, .gitignore, and scripts
+- fix: update/optimize goldens, test utils, and widget tests
+- chore: clean up and merge related code, test, and asset changes for maintainability
+
+
 # 2.0.0
 - feat: implemented flex_color_scheme
 - feat: replaced intl_utils with slang
