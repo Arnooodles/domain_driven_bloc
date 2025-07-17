@@ -30,7 +30,7 @@ class VeryGoodCoreText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle defaultTextStyle = DefaultTextStyle.of(context).style;
+    final TextStyle defaultTextStyle = context.defaultTextStyle.style;
     return switch (textType) {
       TextType.regular => Text(
         text,

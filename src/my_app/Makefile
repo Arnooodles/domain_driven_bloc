@@ -40,7 +40,7 @@ build_runner_watch: ## This command generates the files for the code generated d
 	fvm dart run build_runner watch --delete-conflicting-outputs
 
 format: ## This command formats the codebase and run import sorter
-	fvm dart format $$(find lib test -name '*.dart' -not -name '*.g.dart' -and -not -name '*.freezed.dart' -and -not -name '*.config.dart' -and -not -name '*.chopper.dart' -and -not -name '*.gen.dart' -and -not -name '*.mocks.dart') --line-length=120 
+	fvm dart format $$(find lib test -name '*.dart' -not -name '*.g.dart' -and -not -name '*.freezed.dart' -and -not -name '*.config.dart' -and -not -name '*.chopper.dart' -and -not -name '*.gen.dart' -and -not -name '*.mocks.dart') --line-length=120 --set-exit-if-changed
 
 clean_rebuild: ensure_flutter_version clean pub_clean pub_get slang build_runner format lint fix_lint
 
@@ -111,3 +111,6 @@ update_android_project: ## Update the android project versions and dependencies
 
 delete_generated_files: ## Delete the generated files
 	sh scripts/delete_generated_files.sh	
+
+init_hooks:
+	git config core.hooksPath .githooks	

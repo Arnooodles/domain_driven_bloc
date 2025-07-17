@@ -5,16 +5,16 @@ import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 part 'failure.freezed.dart';
 
 @freezed
-sealed class Failure with _$Failure implements Exception {
-  const factory Failure.unexpected(String? error) = UnexpectedError;
+sealed class Failure with _$Failure {
+  const factory Failure.unexpected(String? message) = UnexpectedError;
 
-  const factory Failure.server(StatusCode code, String? error) = ServerError;
+  const factory Failure.server(StatusCode code, String? message) = ServerError;
 
-  const factory Failure.deviceStorage(String? error) = DeviceStorageError;
+  const factory Failure.deviceStorage(String? message) = DeviceStorageError;
 
-  const factory Failure.deviceInfo(String? error) = DeviceInfoError;
+  const factory Failure.deviceInfo(String? message) = DeviceInfoError;
 
-  const factory Failure.authentication(String? error) = AuthenticationError;
+  const factory Failure.authentication(String? message) = AuthenticationError;
 
-  const factory Failure.validation(ValidationError error) = ValidationFailure;
+  const factory Failure.validation(ValidationError message) = ValidationFailure;
 }

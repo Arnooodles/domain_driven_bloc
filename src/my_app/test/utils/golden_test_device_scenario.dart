@@ -1,5 +1,6 @@
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 
 import 'mock_device.dart';
 
@@ -19,7 +20,7 @@ class GoldenTestDeviceScenario extends StatelessWidget {
     name: '$name (device: ${device.name})',
     child: ClipRect(
       child: MediaQuery(
-        data: MediaQuery.of(context).copyWith(
+        data: context.mediaQuery.copyWith(
           size: device.size,
           padding: device.safeArea,
           platformBrightness: device.brightness,

@@ -74,9 +74,9 @@ class VeryGoodCoreTextField extends HookWidget {
       hintText: hintText,
       prefixIcon: prefix?.copyWith(copyColor: prefixColor),
       suffixIcon: suffix,
-      fillColor: isDisabled ? Theme.of(context).colorScheme.surfaceContainerHigh : fillColor,
+      fillColor: isDisabled ? context.colorScheme.surfaceContainerHigh : fillColor,
       filled: true,
-    ).applyDefaults(Theme.of(context).inputDecorationTheme);
+    ).applyDefaults(context.theme.inputDecorationTheme);
   }
 
   @override

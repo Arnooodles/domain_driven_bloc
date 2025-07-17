@@ -49,7 +49,7 @@ class ConfirmationDialog extends StatelessWidget {
       VeryGoodCoreButton(
         text: negativeButtonText ?? context.i18n.common.no.toUpperCase(),
         buttonType: ButtonType.text,
-        onPressed: onNegativePressed ?? () => Navigator.of(context).pop(),
+        onPressed: onNegativePressed ?? () => context.navigator.pop(),
         padding: EdgeInsets.zero,
         contentPadding: EdgeInsets.zero,
         textStyle: TextStyle(color: negativeButtonTextColor ?? context.colorScheme.primary),
@@ -57,7 +57,7 @@ class ConfirmationDialog extends StatelessWidget {
       VeryGoodCoreButton(
         text: positiveButtonText ?? context.i18n.common.yes.toUpperCase(),
         buttonType: ButtonType.text,
-        onPressed: onPositivePressed ?? () => Navigator.of(context).pop(),
+        onPressed: onPositivePressed ?? () => context.navigator.pop(),
         padding: EdgeInsets.zero,
         contentPadding: EdgeInsets.zero,
         textStyle: TextStyle(color: positiveButtonTextColor ?? context.colorScheme.primary),

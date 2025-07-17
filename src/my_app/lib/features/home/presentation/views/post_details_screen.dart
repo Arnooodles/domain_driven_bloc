@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:go_router/go_router.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_app_bar.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_webview.dart';
 import 'package:very_good_core/core/presentation/widgets/wrappers/connectivity_checker.dart';
@@ -19,7 +19,7 @@ class PostDetailsScreen extends HookWidget {
         await controller?.goBack();
       } else {
         if (!context.mounted) return;
-        Navigator.of(context).pop();
+        context.navigator.pop();
       }
     }
   }
@@ -42,7 +42,7 @@ class PostDetailsScreen extends HookWidget {
         canPop: false,
         onPopInvokedWithResult: (bool didPop, _) async => _onPopInvoked(context, webViewController.value, didPop),
         child: ConnectivityChecker.scaffold(
-          appBar: VeryGoodCoreAppBar(leading: BackButton(onPressed: () => GoRouter.of(context).pop())),
+          appBar: VeryGoodCoreAppBar(leading: BackButton(onPressed: () => context.goRouter.pop())),
           body: Center(
             child: Stack(
               children: <Widget>[

@@ -8,37 +8,34 @@ import 'package:very_good_core/core/domain/entity/failure.dart';
 
 mixin ErrorActions {
   final I18n _localization = getIt<AppLocalizationBloc>().state;
-
   ToastificationItem? _activeToast;
 
-  void onServerError(ServerError error) {
+  void _showErrorOnce(String message) {
     if (_activeToast?.isRunning ?? false) return;
-
-    _activeToast = DialogUtils.showError(error.error ?? _localization.common.error.generic);
+    _activeToast = DialogUtils.showError(message);
   }
 
-  void onDeviceRelatedError(Exception error) {
-    if (_activeToast?.isRunning ?? false) return;
-    final String message =
-        switch (error) {
-          DeviceStorageError(:final String error?) => error,
-          DeviceInfoError(:final String error?) => error,
-          _ => null,
-        } ??
-        _localization.common.error.generic;
-    _activeToast = DialogUtils.showError(message);
+  void onServerError(ServerError error) {
+    _showErrorOnce(error.message ?? _localization.common.error.generic);
+  }
+
+  void onDeviceRelatedError(Failure error) {
+    final String? message = switch (error) {
+      DeviceStorageError(:final String? message) => message,
+      DeviceInfoError(:final String? message) => message,
+      _ => null,
+    };
+    _showErrorOnce(message ?? _localization.common.error.generic);
   }
 
   void onValidationError(ValidationFailure error) {
-    if (_activeToast?.isRunning ?? false) return;
-    _activeToast = DialogUtils.showError(error.error.message);
+    _showErrorOnce(error.message.message);
   }
 
-  void onGenericError(Exception error) {
-    if (_activeToast?.isRunning ?? false) return;
+  void onGenericError(Failure error) {
     final String message = error is UnexpectedError && kDebugMode
-        ? error.error ?? _localization.common.error.generic
+        ? error.message ?? _localization.common.error.generic
         : _localization.common.error.generic;
-    _activeToast = DialogUtils.showError(message);
+    _showErrorOnce(message);
   }
 }

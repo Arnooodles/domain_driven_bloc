@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
+import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/helpers/extensions/fpdart_ext.dart';
@@ -34,24 +35,32 @@ class AuthInterceptor implements Interceptor {
       request.uri.host.contains(_dummyJsonHost) && !request.uri.path.contains(_refreshPath);
 
   Future<Response<BodyType>> _handleAuthenticatedRequest<BodyType>(Chain<BodyType> chain) async {
-    final String? token = await _getAccessToken();
-    if (token == null) {
-      return await chain.proceed(chain.request);
-    }
+    final Either<Failure, String> possibleFailure = await _getAccessToken();
 
-    final Request authenticatedRequest = _addAuthorizationHeader(chain.request, token);
-    final Response<BodyType> response = await chain.proceed(authenticatedRequest);
+    return possibleFailure.fold(
+      (Failure failure) {
+        throw Exception(failure.message);
+      },
+      (String token) async {
+        final Request authenticatedRequest = _addAuthorizationHeader(chain.request, token);
+        final Response<BodyType> response = await chain.proceed(authenticatedRequest);
 
-    if (response.statusCode == _unauthorizedStatusCode) {
-      return _handleUnauthorizedResponse(chain, authenticatedRequest);
-    }
+        if (response.statusCode == _unauthorizedStatusCode) {
+          return _handleUnauthorizedResponse(chain, authenticatedRequest);
+        }
 
-    return response;
+        return response;
+      },
+    );
   }
 
-  Future<String?> _getAccessToken() async {
+  Future<Either<Failure, String>> _getAccessToken() async {
     final Either<Failure, String?> possibleFailure = await getIt<ILocalStorageRepository>().getAccessToken();
-    return possibleFailure.fold((Failure failure) => throw failure, identity);
+    return possibleFailure.fold(
+      left,
+      (String? value) =>
+          value.isNotNullOrBlank ? right(value!) : left(const Failure.authentication('Access token not found')),
+    );
   }
 
   Request _addAuthorizationHeader(Request request, String token) =>
@@ -64,15 +73,19 @@ class AuthInterceptor implements Interceptor {
     final Either<Failure, Unit> refreshResult = await getIt<IAuthRepository>().refreshToken();
 
     if (refreshResult.isLeft()) {
-      throw Failure.authentication('Token refresh failed: ${refreshResult.asLeft()}');
+      final Failure failure = refreshResult.asLeft();
+      throw Exception('Token refresh failed: ${failure.message}');
     }
 
-    final String? newToken = await _getAccessToken();
-    if (newToken == null) {
-      return await chain.proceed(originalRequest);
+    final Either<Failure, String> tokenResult = await _getAccessToken();
+
+    if (tokenResult.isLeft()) {
+      final Failure failure = tokenResult.asLeft();
+      throw Exception(failure.message);
     }
 
-    final Request newRequest = _addAuthorizationHeader(chain.request, newToken);
+    final String newToken = tokenResult.asRight();
+    final Request newRequest = _addAuthorizationHeader(originalRequest, newToken);
     return await chain.proceed(newRequest);
   }
 }

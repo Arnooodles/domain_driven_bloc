@@ -42,7 +42,7 @@ void main() {
       final Either<Failure, String> result = deviceRepository.getAppVersion();
       expect(result, isA<Left<Failure, String>>());
       expect(result.asLeft(), isA<DeviceInfoError>());
-      expect(result.asLeft().error, 'Exception: Package info error');
+      expect(result.asLeft().message, 'Exception: Package info error');
     });
   });
 
@@ -62,7 +62,7 @@ void main() {
       final Either<Failure, String> result = deviceRepository.getBuildNumber();
       expect(result, isA<Left<Failure, String>>());
       expect(result.asLeft(), isA<DeviceInfoError>());
-      expect(result.asLeft().error, 'Exception: Build number error');
+      expect(result.asLeft().message, 'Exception: Build number error');
     });
   });
 
@@ -107,7 +107,7 @@ void main() {
       final Either<Failure, String> result = await deviceRepository.getPhoneModel();
       expect(result, isA<Left<Failure, String>>());
       expect(result.asLeft(), isA<DeviceInfoError>());
-      expect(result.asLeft().error, 'Exception: Android device info error');
+      expect(result.asLeft().message, 'Exception: Android device info error');
     });
 
     test('should return DeviceInfoError when ios device info throws exception', () async {
@@ -117,7 +117,7 @@ void main() {
       final Either<Failure, String> result = await deviceRepository.getPhoneModel();
       expect(result, isA<Left<Failure, String>>());
       expect(result.asLeft(), isA<DeviceInfoError>());
-      expect(result.asLeft().error, 'Exception: iOS device info error');
+      expect(result.asLeft().message, 'Exception: iOS device info error');
     });
   });
 
@@ -163,7 +163,7 @@ void main() {
       final Either<Failure, (String, String)> result = await deviceRepository.getPhoneOSVersion();
       expect(result, isA<Left<Failure, (String, String)>>());
       expect(result.asLeft(), isA<DeviceInfoError>());
-      expect(result.asLeft().error, 'Exception: Android OS version error');
+      expect(result.asLeft().message, 'Exception: Android OS version error');
     });
 
     test('should return DeviceInfoError when ios device info throws exception', () async {
@@ -173,7 +173,7 @@ void main() {
       final Either<Failure, (String, String)> result = await deviceRepository.getPhoneOSVersion();
       expect(result, isA<Left<Failure, (String, String)>>());
       expect(result.asLeft(), isA<DeviceInfoError>());
-      expect(result.asLeft().error, 'Exception: iOS OS version error');
+      expect(result.asLeft().message, 'Exception: iOS OS version error');
     });
   });
 }

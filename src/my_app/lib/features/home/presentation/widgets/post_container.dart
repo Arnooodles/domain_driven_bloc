@@ -2,7 +2,6 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/routes/route_name.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
@@ -68,7 +67,7 @@ class PostContainer extends StatelessWidget {
     if (kIsWeb) {
       await UrlLauncherUtils.launch(Uri.parse(post.permalink.getValue()), webOnlyWindowName: '_blank');
     } else {
-      GoRouter.of(context).goNamed(
+      context.goRouter.goNamed(
         RouteName.postDetails.name,
         pathParameters: <String, String>{'postId': post.uid.getValue()},
         extra: post,

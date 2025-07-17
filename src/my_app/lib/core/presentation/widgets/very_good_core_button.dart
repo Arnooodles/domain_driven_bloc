@@ -209,7 +209,7 @@ class _ButtonContent extends StatelessWidget {
             ? VeryGoodCoreText(text: text, style: textStyle, textAlign: TextAlign.center)
             : Center(
                 child: SizedBox.square(
-                  dimension: textStyle?.fontSize ?? DefaultTextStyle.of(context).style.fontSize,
+                  dimension: textStyle?.fontSize ?? context.defaultTextStyle.style.fontSize,
                   child: const CircularProgressIndicator(),
                 ),
               ),

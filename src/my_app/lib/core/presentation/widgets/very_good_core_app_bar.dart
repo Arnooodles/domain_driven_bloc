@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/constants/constant.dart';
+import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/routes/route_name.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
@@ -45,15 +45,15 @@ class VeryGoodCoreAppBar extends StatelessWidget implements PreferredSizeWidget 
 
   static List<Widget> buildCommonAppBarActions(BuildContext context) => <Widget>[
     IconButton(
-      onPressed: () => context.read<ThemeBloc>().switchTheme(Theme.of(context).brightness),
-      icon: Theme.of(context).brightness == Brightness.dark
+      onPressed: () => context.read<ThemeBloc>().switchTheme(context.theme.brightness),
+      icon: context.theme.brightness == Brightness.dark
           ? VeryGoodCoreIcon(icon: right(Icons.light_mode))
           : VeryGoodCoreIcon(icon: right(Icons.dark_mode)),
     ),
     BlocBuilder<AuthBloc, AuthState>(
       builder: (BuildContext context, AuthState state) => state.maybeWhen(
         authenticated: (User user) => GestureDetector(
-          onTap: () => GoRouter.of(context).goNamed(RouteName.profile.name),
+          onTap: () => context.goRouter.goNamed(RouteName.profile.name),
           child: VeryGoodCoreAvatar(size: 32, imageUrl: user.image?.getValue(), padding: Paddings.allSmall),
         ),
         orElse: () => const SizedBox.shrink(),

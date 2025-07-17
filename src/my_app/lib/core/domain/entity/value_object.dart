@@ -25,7 +25,7 @@ abstract class ValueObject<T> {
 
   Either<Failure, Unit> get validate => value.fold(left, (T r) => right(unit));
 
-  T getValue() => value.fold((Failure failure) => throw failure, identity);
+  T getValue() => value.fold((Failure failure) => throw Exception(failure.message), identity);
 
   bool get isValid => value.isRight();
 

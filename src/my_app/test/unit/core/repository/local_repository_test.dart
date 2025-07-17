@@ -42,7 +42,7 @@ void main() {
 
         expect(result, isA<Left<Failure, String?>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Secure storage read error');
+        expect(result.asLeft().message, 'Exception: Secure storage read error');
       });
 
       test('setAccessToken should save the access token successfully', () async {
@@ -63,7 +63,7 @@ void main() {
 
         expect(result, isA<Left<Failure, Unit>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Unexpected error');
+        expect(result.asLeft().message, 'Exception: Unexpected error');
       });
 
       test('deleteAccessToken should delete the access token successfully', () async {
@@ -82,7 +82,7 @@ void main() {
 
         expect(result, isA<Left<Failure, Unit>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Delete token error');
+        expect(result.asLeft().message, 'Exception: Delete token error');
       });
     });
 
@@ -104,7 +104,7 @@ void main() {
 
         expect(result, isA<Left<Failure, String?>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Refresh token read error');
+        expect(result.asLeft().message, 'Exception: Refresh token read error');
       });
 
       test('setRefreshToken should save the refresh token successfully', () async {
@@ -125,7 +125,7 @@ void main() {
 
         expect(result, isA<Left<Failure, Unit>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Unexpected error');
+        expect(result.asLeft().message, 'Exception: Unexpected error');
       });
 
       test('deleteRefreshToken should delete the refresh token successfully', () async {
@@ -144,7 +144,7 @@ void main() {
 
         expect(result, isA<Left<Failure, Unit>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Delete refresh token error');
+        expect(result.asLeft().message, 'Exception: Delete refresh token error');
       });
     });
   });
@@ -168,7 +168,7 @@ void main() {
 
         expect(result, isA<Left<Failure, String?>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Email read error');
+        expect(result.asLeft().message, 'Exception: Email read error');
       });
 
       test('setLastLoggedInUsername should save the email successfully', () async {
@@ -187,7 +187,7 @@ void main() {
 
         expect(result, isA<Left<Failure, Unit>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Unexpected error');
+        expect(result.asLeft().message, 'Exception: Unexpected error');
       });
     });
 
@@ -208,7 +208,7 @@ void main() {
 
         expect(result, isA<Left<Failure, bool?>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Dark mode read error');
+        expect(result.asLeft().message, 'Exception: Dark mode read error');
       });
 
       test('setIsDarkMode should save the dark mode value successfully', () async {
@@ -227,7 +227,7 @@ void main() {
 
         expect(result, isA<Left<Failure, Unit>>());
         expect(result.asLeft(), isA<DeviceStorageError>());
-        expect(result.asLeft().error, 'Exception: Unexpected error');
+        expect(result.asLeft().message, 'Exception: Unexpected error');
       });
     });
   });

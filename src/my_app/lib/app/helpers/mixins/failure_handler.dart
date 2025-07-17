@@ -9,13 +9,13 @@ import 'package:very_good_core/core/domain/entity/failure.dart';
 class FailureHandler with ErrorActions {
   FailureHandler();
 
-  void handleFailure(Exception failure, [ErrorActions? errorActions]) {
+  void handleFailure(Failure failure, [ErrorActions? errorActions]) {
     final ErrorActions actions = errorActions ?? this;
 
     switch (failure) {
       case final ServerError error:
         actions.onServerError(error);
-      case final Exception error when error is DeviceStorageError || error is DeviceInfoError:
+      case final Failure error when error is DeviceStorageError || error is DeviceInfoError:
         actions.onDeviceRelatedError(error);
       case final ValidationFailure error:
         actions.onValidationError(error);
