@@ -28,23 +28,14 @@ void main() {
         expect(context.vars['application_id_android'], 'com.example.app');
       });
 
-      test(
-        '''when not specified is set to `org_name + "." + project_name(snake_case)`''',
-        () {
-          final vars = <String, String>{
-            'project_name': 'Project Name',
-            'org_name': 'org_name',
-          };
-          when(() => context.vars).thenReturn(vars);
+      test('''when not specified is set to `org_name + "." + project_name(snake_case)`''', () {
+        final vars = <String, String>{'project_name': 'Project Name', 'org_name': 'org_name'};
+        when(() => context.vars).thenReturn(vars);
 
-          pre_gen.run(context);
+        pre_gen.run(context);
 
-          expect(
-            context.vars['application_id_android'],
-            'org_name.project_name',
-          );
-        },
-      );
+        expect(context.vars['application_id_android'], 'org_name.project_name');
+      });
     });
 
     group('application_id', () {
@@ -61,23 +52,14 @@ void main() {
         expect(context.vars['application_id'], 'com.example.app');
       });
 
-      test(
-        '''when not specified is set to `org_name + "." + project_name(param-case)`''',
-        () {
-          final vars = <String, String>{
-            'project_name': 'Project Name',
-            'org_name': 'org_name',
-          };
-          when(() => context.vars).thenReturn(vars);
+      test('''when not specified is set to `org_name + "." + project_name(param-case)`''', () {
+        final vars = <String, String>{'project_name': 'Project Name', 'org_name': 'org_name'};
+        when(() => context.vars).thenReturn(vars);
 
-          pre_gen.run(context);
+        pre_gen.run(context);
 
-          expect(
-            context.vars['application_id'],
-            'org_name.project-name',
-          );
-        },
-      );
+        expect(context.vars['application_id'], 'org_name.project-name');
+      });
     });
   });
 }
