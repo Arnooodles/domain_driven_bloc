@@ -1,12 +1,11 @@
 /// Certificates listed here come from https://www.amazontrust.com/repository/
+// ignore: prefer-match-file-name
 enum TrustedCertificate {
   ca1('2c43952ee9e000ff2acc4e2ed0897c0a72ad5fa72c3d934e81741cbd54f05bd1'),
   ca2('a3a7fe25439d9a9b50f60af43684444d798a4c869305bf615881e5c84a44c1a2'),
   ca3('3eb7c3258f4af9222033dc1bb3dd2c7cfa0982b98e39fb8e9dc095cfeb38126c'),
   ca4('b0b7961120481e33670315b2f843e643c42f693c7a1010eb9555e06ddc730214'),
-  starfield1(
-    '870f56d009d8aeb95b716b0e7b0020225d542c4b283b9ed896edf97428d6712e',
-  ),
+  starfield1('870f56d009d8aeb95b716b0e7b0020225d542c4b283b9ed896edf97428d6712e'),
   cross1('a19a0bb31bbe6e5c88cc06d6c8eddc0b4a0fd2a9eb81d9840bd7bc7ade6caef1'),
   cross2('86ad1020425af25d6d94200088e4657aad0cd1d9ed9471c3d20fe9cc751dea79'),
   cross3('35f30121a1bc99a6bc375ea1dc7fe327003297a7c51c39281888634a49b3549d'),

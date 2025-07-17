@@ -9,8 +9,7 @@ enum Env {
   const Env(this.value);
 
   factory Env.fromFlavor({required bool isWeb}) {
-    final String? flavor =
-        isWeb ? const String.fromEnvironment('flavor') : appFlavor;
+    final String? flavor = isWeb ? const String.fromEnvironment('flavor') : appFlavor;
     return switch (flavor) {
       'production' => Env.production,
       'development' => Env.development,

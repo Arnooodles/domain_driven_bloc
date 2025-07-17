@@ -10,24 +10,20 @@ final class RouteGuard {
 
   final AuthBloc _authBloc;
 
-  String? guard(BuildContext context, GoRouterState goRouterState) {
-    final String loginPath = RouteName.login.path;
-    final String initialPath = RouteName.initial.path;
-    final String homePath = RouteName.home.path;
+  String? guard(BuildContext context, GoRouterState goRouterState) => _authBloc.state.maybeWhen(
+    initial: () => RouteName.initial.path,
+    unauthenticated: () => RouteName.login.path,
+    authenticated: (_) => _authenticatedRouteGuard(goRouterState.matchedLocation),
+    orElse: () => null,
+  );
 
-    return _authBloc.state.whenOrNull(
-      initial: () => initialPath,
-      unauthenticated: () => loginPath,
-      authenticated: (_) {
-        // Check if the app is in the login screen
-        final bool isLoginScreen = goRouterState.matchedLocation == loginPath;
-        final bool isSplashScreen =
-            goRouterState.matchedLocation == initialPath;
+  String? _authenticatedRouteGuard(String matchedLocation) {
+    // Check if the app is in the login screen
+    final bool isLoginScreen = matchedLocation == RouteName.login.path;
+    final bool isSplashScreen = matchedLocation == RouteName.initial.path;
 
-        // Go to home screen if the app is authenticated but tries to go to login
-        // screen or is still in the splash screen.
-        return isLoginScreen || isSplashScreen ? homePath : null;
-      },
-    );
+    // Go to home screen if the app is authenticated but tries to go to login
+    // screen or is still in the splash screen.
+    return isLoginScreen || isSplashScreen ? RouteName.home.path : null;
   }
 }

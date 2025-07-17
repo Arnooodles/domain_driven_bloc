@@ -20,10 +20,7 @@ void main() {
 Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {
   WidgetsFlutterBinding.ensureInitialized();
   urlConfig();
-  await Future.wait(<Future<void>>[
-    initializeEnvironmentConfig(env),
-    configureDependencies(env),
-  ]);
+  await Future.wait(<Future<void>>[initializeEnvironmentConfig(env), configureDependencies(env)]);
 
   if (kDebugMode) {
     Bloc.observer = getIt<AppBlocObserver>();
@@ -39,22 +36,14 @@ void _handleErrors() {
     if (kReleaseMode) {
       //TODO: implement recordFlutterFatalError crashlytics
     } else {
-      getIt<Logger>().f(
-        details.exceptionAsString(),
-        error: details,
-        stackTrace: details.stack,
-      );
+      getIt<Logger>().f(details.exceptionAsString(), error: details, stackTrace: details.stack);
     }
   };
   PlatformDispatcher.instance.onError = (Object error, StackTrace stackTrace) {
     if (kReleaseMode) {
       //TODO: implement reportCrash crashlytics
     } else {
-      getIt<Logger>().f(
-        error.toString(),
-        error: error,
-        stackTrace: stackTrace,
-      );
+      getIt<Logger>().f(error.toString(), error: error, stackTrace: stackTrace);
     }
     return true;
   };

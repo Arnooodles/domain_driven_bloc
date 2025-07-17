@@ -16,9 +16,7 @@ void main() {
   setUp(() {
     appLocalizationBloc = MockAppLocalizationBloc();
 
-    when(appLocalizationBloc.state).thenAnswer(
-      (_) => AppLocale.values.first.buildSync(),
-    );
+    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
   tearDown(() {
@@ -33,10 +31,7 @@ void main() {
         children: <Widget>[
           GoldenTestDeviceScenario(
             name: 'default',
-            builder: () => MockLocalization(
-              appLocalizationBloc: appLocalizationBloc,
-              child: const EmptyPost(),
-            ),
+            builder: () => MockLocalization(appLocalizationBloc: appLocalizationBloc, child: const EmptyPost()),
           ),
         ],
       ),

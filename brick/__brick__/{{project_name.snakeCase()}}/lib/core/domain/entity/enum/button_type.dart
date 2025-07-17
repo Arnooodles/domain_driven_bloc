@@ -1,7 +1,1 @@
-enum ButtonType {
-  elevated,
-  filled,
-  tonal,
-  outlined,
-  text,
-}
+enum ButtonType { elevated, filled, tonal, outlined, text }

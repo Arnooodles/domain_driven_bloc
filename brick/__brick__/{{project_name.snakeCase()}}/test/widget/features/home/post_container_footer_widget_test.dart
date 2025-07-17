@@ -16,9 +16,7 @@ void main() {
   setUp(() {
     appLocalizationBloc = MockAppLocalizationBloc();
 
-    when(appLocalizationBloc.state).thenAnswer(
-      (_) => AppLocale.values.first.buildSync(),
-    );
+    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
   tearDown(() {
@@ -43,7 +41,7 @@ void main() {
             child: MockLocalization(
               appLocalizationBloc: appLocalizationBloc,
               child: PostContainerFooter(
-                post: mockPost.copyWith(upvotes: Number()),
+                post: mockPost.copyWith(upvotes: ValueNumeric(0, fieldName: 'upvotes')),
               ),
             ),
           ),

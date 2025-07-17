@@ -36,49 +36,34 @@ class ConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        backgroundColor: context.colorScheme.surface,
-        surfaceTintColor: context.colorScheme.surfaceTint,
-        shape: RoundedRectangleBorder(
-          borderRadius: AppTheme.defaultBoardRadius,
-        ),
-        title: title != null
-            ? {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
-                text: title!,
-                style: context.textTheme.titleMedium,
-              )
-            : null,
-        content: Padding(
-          padding: title != null ? EdgeInsets.zero : Paddings.topXxSmall,
-          child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
-            text: message,
-            style: context.textTheme.bodyMedium?.copyWith(
-              color: titleColor,
-            ),
-          ),
-        ),
-        actions: <Widget>[
-          {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
-            text: negativeButtonText ?? context.i18n.common.no.toUpperCase(),
-            buttonType: ButtonType.text,
-            onPressed: onNegativePressed ?? () => Navigator.of(context).pop(),
-            padding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.zero,
-            textStyle: TextStyle(
-              color: negativeButtonTextColor ?? context.colorScheme.primary,
-            ),
-          ),
-          {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
-            text: positiveButtonText ?? context.i18n.common.yes.toUpperCase(),
-            buttonType: ButtonType.text,
-            onPressed: onPositivePressed ?? () => Navigator.of(context).pop(),
-            padding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.zero,
-            textStyle: TextStyle(
-              color: positiveButtonTextColor ?? context.colorScheme.primary,
-            ),
-          ),
-        ],
-        actionsPadding: Paddings.horizontalMedium,
-        buttonPadding: EdgeInsets.zero,
-      );
+    shape: const RoundedRectangleBorder(borderRadius: AppTheme.defaultBorderRadius),
+    title: title != null ? {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(text: title!, style: context.textTheme.titleMedium) : null,
+    content: Padding(
+      padding: title != null ? EdgeInsets.zero : Paddings.topXxSmall,
+      child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
+        text: message,
+        style: context.textTheme.bodyMedium?.copyWith(color: titleColor),
+      ),
+    ),
+    actions: <Widget>[
+      {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
+        text: negativeButtonText ?? context.i18n.common.no.toUpperCase(),
+        buttonType: ButtonType.text,
+        onPressed: onNegativePressed ?? () => context.navigator.pop(),
+        padding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        textStyle: TextStyle(color: negativeButtonTextColor ?? context.colorScheme.primary),
+      ),
+      {{#pascalCase}}{{project_name}}{{/pascalCase}}Button(
+        text: positiveButtonText ?? context.i18n.common.yes.toUpperCase(),
+        buttonType: ButtonType.text,
+        onPressed: onPositivePressed ?? () => context.navigator.pop(),
+        padding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        textStyle: TextStyle(color: positiveButtonTextColor ?? context.colorScheme.primary),
+      ),
+    ],
+    actionsPadding: Paddings.horizontalMedium,
+    buttonPadding: EdgeInsets.zero,
+  );
 }

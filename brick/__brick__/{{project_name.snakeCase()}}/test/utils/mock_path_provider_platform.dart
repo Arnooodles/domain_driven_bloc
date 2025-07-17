@@ -3,9 +3,7 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 // ignore_for_file: depend_on_referenced_packages
-class MockPathProviderPlatform extends Fake
-    with MockPlatformInterfaceMixin
-    implements PathProviderPlatform {
+class MockPathProviderPlatform extends Fake with MockPlatformInterfaceMixin implements PathProviderPlatform {
   final String kTemporaryPath = 'temporaryPath';
   final String kApplicationSupportPath = 'applicationSupportPath';
   final String kDownloadsPath = 'downloadsPath';
@@ -24,21 +22,16 @@ class MockPathProviderPlatform extends Fake
   Future<String?> getLibraryPath() async => kLibraryPath;
 
   @override
-  Future<String?> getApplicationDocumentsPath() async =>
-      kApplicationDocumentsPath;
+  Future<String?> getApplicationDocumentsPath() async => kApplicationDocumentsPath;
 
   @override
   Future<String?> getExternalStoragePath() async => kExternalStoragePath;
 
   @override
-  Future<List<String>?> getExternalCachePaths() async =>
-      <String>[kExternalCachePath];
+  Future<List<String>?> getExternalCachePaths() async => <String>[kExternalCachePath];
 
   @override
-  Future<List<String>?> getExternalStoragePaths({
-    StorageDirectory? type,
-  }) async =>
-      <String>[kExternalStoragePath];
+  Future<List<String>?> getExternalStoragePaths({StorageDirectory? type}) async => <String>[kExternalStoragePath];
 
   @override
   Future<String?> getDownloadsPath() async => kDownloadsPath;

@@ -17,9 +17,7 @@ void main() {
   setUp(() {
     appLocalizationBloc = MockAppLocalizationBloc();
 
-    when(appLocalizationBloc.state).thenAnswer(
-      (_) => AppLocale.values.first.buildSync(),
-    );
+    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
   tearDown(() {
@@ -42,11 +40,7 @@ void main() {
             name: 'default with transparent link flair',
             child: MockLocalization(
               appLocalizationBloc: appLocalizationBloc,
-              child: PostContainerHeader(
-                post: mockPost.copyWith(
-                  linkFlairBackgroundColor: AppColors.transparent,
-                ),
-              ),
+              child: PostContainerHeader(post: mockPost.copyWith(linkFlairBackgroundColor: AppColors.transparent)),
             ),
           ),
           GoldenTestScenario(
@@ -54,7 +48,7 @@ void main() {
             child: MockLocalization(
               appLocalizationBloc: appLocalizationBloc,
               child: PostContainerHeader(
-                post: mockPost.copyWith(linkFlairText: ValueString()),
+                post: mockPost.copyWith(linkFlairText: ValueString('linkFlairText', fieldName: 'linkFlairText')),
               ),
             ),
           ),

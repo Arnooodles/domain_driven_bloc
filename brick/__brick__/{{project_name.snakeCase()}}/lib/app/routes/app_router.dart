@@ -9,14 +9,12 @@ import 'package:{{project_name.snakeCase()}}/app/routes/route_navigator_keys.dar
 import 'package:{{project_name.snakeCase()}}/app/routes/route_refresh_listener.dart';
 
 abstract final class AppRouter {
-  static GoRouter router = GoRouter(
+  static final GoRouter router = GoRouter(
     routes: AppRoutes.routes,
     redirect: getIt<RouteGuard>().guard,
     refreshListenable: getIt<RouteRefreshListener>(),
     initialLocation: RouteName.initial.path,
-    observers: <NavigatorObserver>[
-      getIt<GoRouteObserver>(param1: RouteNavigatorKeys.debugLabel),
-    ],
+    observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: RouteNavigatorKeys.debugLabel)],
     navigatorKey: RouteNavigatorKeys.root,
   );
 }

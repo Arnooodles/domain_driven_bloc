@@ -1,9 +1,10 @@
 import 'package:alchemist/alchemist.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail_image_network/mocktail_image_network.dart';
+import 'package:{{project_name.snakeCase()}}/app/generated/assets.gen.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_avatar.dart';
 
+import '../../utils/mock_cache_manager.dart';
 import '../../utils/test_utils.dart';
 
 void main() {
@@ -11,24 +12,46 @@ void main() {
     goldenTest(
       'renders correctly',
       fileName: '{{project_name.snakeCase()}}_avatar'.goldensVersion,
-      pumpWidget: (WidgetTester tester, Widget widget) async {
-        await mockNetworkImages(
-          () => tester.pumpWidget(widget, duration: const Duration(seconds: 2)),
-        );
+      pumpBeforeTest: (WidgetTester tester) async {
+        //TODO: precacheImages causes infinite loading, wait for updates if there are any fix (https://github.com/Baseflow/flutter_cached_network_image/issues/307#issuecomment-2697335138)
+        // await precacheImages(tester);
+        await tester.pump(const Duration(seconds: 1));
+      },
+
+      pumpWidget: (WidgetTester tester, Widget testWidget) async {
+        await tester.pumpWidget(testWidget);
+        await tester.runAsync(() async {
+          await tester.pump();
+        });
       },
       builder: () => GoldenTestGroup(
         children: <Widget>[
+          GoldenTestScenario(name: 'without image url', child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(size: 50)),
           GoldenTestScenario(
-            name: 'without image url',
-            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
+            name: 'with image url',
+            child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
               size: 50,
+              cacheManager: MockCacheManager(),
+              imageUrl: Assets.icons.splashIcon.path,
             ),
           ),
           GoldenTestScenario(
-            name: 'with image url',
-            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
+            name: 'isLoading',
+            child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
               size: 50,
-              imageUrl: 'https://fakeurl.com/image.png',
+              isLoading: true,
+              imageUrl: Assets.icons.splashIcon.path,
+              cacheManager: MockCacheManager(),
+              padding: const EdgeInsets.all(10),
+            ),
+          ),
+          GoldenTestScenario(
+            name: 'with error image',
+            child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
+              size: 50,
+              cacheManager: InvalidCacheManager(),
+              imageUrl: Assets.icons.launcherIcon.path,
+              padding: const EdgeInsets.all(10),
             ),
           ),
         ],

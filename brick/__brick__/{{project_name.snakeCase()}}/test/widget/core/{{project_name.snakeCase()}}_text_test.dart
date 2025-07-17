@@ -34,16 +34,11 @@ void main() {
         children: <Widget>[
           GoldenTestScenario(
             name: 'regular',
-            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
-              text: 'text',
-            ),
+            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(text: 'text'),
           ),
           GoldenTestScenario(
             name: 'styled',
-            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
-              text: '<b>styled</b> text',
-              textType: TextType.styled,
-            ),
+            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(text: '<b>styled</b> text', textType: TextType.styled),
           ),
           GoldenTestScenario(
             name: 'markdown',
@@ -51,18 +46,12 @@ void main() {
             child: const SizedBox(
               width: 400,
               height: 400,
-              child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
-                text: markdownData,
-                textType: TextType.markdown,
-              ),
+              child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(text: markdownData, textType: TextType.markdown),
             ),
           ),
           GoldenTestScenario(
             name: 'selectable',
-            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(
-              text: 'selectable text',
-              textType: TextType.selectable,
-            ),
+            child: const {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(text: 'selectable text', textType: TextType.selectable),
           ),
         ],
       ),

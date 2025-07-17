@@ -17,9 +17,7 @@ void main() {
   setUp(() {
     appLocalizationBloc = MockAppLocalizationBloc();
 
-    when(appLocalizationBloc.state).thenAnswer(
-      (_) => AppLocale.values.first.buildSync(),
-    );
+    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
   tearDown(() {
@@ -53,7 +51,7 @@ void main() {
                   PostContainer(
                     post: mockPost.copyWith(
                       urlOverriddenByDest: Url('https://www.google.com/'),
-                      selftext: ValueString(),
+                      selftext: ValueString('post', fieldName: 'selfText'),
                     ),
                   ),
                   const Spacer(),
