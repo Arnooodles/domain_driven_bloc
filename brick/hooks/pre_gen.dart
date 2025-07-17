@@ -1,9 +1,6 @@
 import 'package:mason/mason.dart';
 
-enum Platform {
-  android,
-  ios,
-}
+enum Platform { android, ios }
 
 void run(HookContext context) {
   context.vars['application_id_android'] = _appId(context, platform: Platform.android);
