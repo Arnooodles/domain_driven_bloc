@@ -1,10 +1,10 @@
 name: domain_driven_bloc
 description: Domain-Driven Bloc jumpstarts Flutter apps with modular, best-practice architecture—Bloc, Clean, DI, feature isolation.
 repository: https://github.com/Arnooodles/domain_driven_bloc
-version: 3.0.0
+version: 3.0.1
 
 environment:
-  mason: ^0.1.1
+  mason: ^0.1.0
 
 vars:
   project_name:
