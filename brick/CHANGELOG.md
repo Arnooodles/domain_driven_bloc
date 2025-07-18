@@ -4,6 +4,10 @@
 - chore: downgrade mason to support latest mason cli version (brick/brick.yaml, brick/hooks/pubspec.yaml)
 - chore: update workflow actions to latest version
 - chore: update dependencies
+- chore(android): update AndroidManifest for Flutter text plugin, tweak launchMode/taskAffinity
+- chore(android): increase JVM/Gradle memory settings
+- chore(ios): set minimum deployment target to iOS 15.6, update Xcode project/schemes
+- chore: update Flutter version
 
 # 3.0.0
 - feat: update README docs, screenshots, and localization/i18n for new/renamed fields
