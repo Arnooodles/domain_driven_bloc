@@ -1,3 +1,10 @@
+# 3.0.1
+- chore: update brick metadata 
+- fix: update README screenshots not displaying
+- chore: downgrade mason to support latest mason cli version (brick/brick.yaml, brick/hooks/pubspec.yaml)
+- chore: update workflow actions to latest version
+- chore: update dependencies
+
 # 3.0.0
 - feat: update README docs, screenshots, and localization/i18n for new/renamed fields
 - feat: update Flutter, Gradle, Android, and dependencies for improved compatibility

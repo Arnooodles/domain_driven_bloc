@@ -94,7 +94,7 @@ Everything you need for a modern, production-grade Flutter app:
 ### Key Packages 🗃
 
 - 🧠 **State Management:** [flutter_bloc](https://pub.dev/packages/flutter_bloc), [flutter_hooks](https://pub.dev/packages/flutter_hooks)
-- 🧮 **Functional Programming:** [fpdart](https://pub.dev/packages/fpdart)
+- 🧮 **Functional Programming:** [fpdart](https://pub.dev/packages/fpdart), [fpvalidate](https://pub.dev/packages/fpvalidate)
 - 🗄️ **Model:** [freezed](https://pub.dev/packages/freezed), [json_serializable](https://pub.dev/packages/json_serializable)
 - 🧭 **Navigation:** [go_router](https://pub.dev/packages/go_router)
 - 🧬 **DI:** [injectable](https://pub.dev/packages/injectable), [get_it](https://pub.dev/packages/get_it)
@@ -272,12 +272,23 @@ Everything you need for a modern, production-grade Flutter app:
 
 ## Screenshots 📷
 
-| Login | Home | Profile |
-|-------|------|---------|
-| ![Login](screenshots/login_screen.png) | ![Home](screenshots/home_screen.png) | ![Profile](screenshots/profile_screen.png) |
-| ![Login Dark](screenshots/dark_login_screen.png) | ![Home Dark](screenshots/dark_home_screen.png) | ![Profile Dark](screenshots/dark_profile_screen.png) |
-
----
+<table>
+  <tr>
+    <td>Login Screen</td>
+    <td>Home Screen</td>
+    <td>Profile Screen</td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/login_screen.png" width=270 height=520></td>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/home_screen.png" width=270 height=520></td>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/profile_screen.png" width=270 height=520></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_login_screen.png" width=270 height=520></td>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_home_screen.png" width=270 height=520></td>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_profile_screen.png" width=270 height=520></td>
+  </tr>
+</table>
 
 ## Contributing 🤝
 
