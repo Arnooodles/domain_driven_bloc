@@ -67,6 +67,7 @@ devtools_options.yaml
 **/android/key.properties
 **/android/.idea/
 *.jks
+.cxx/
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
