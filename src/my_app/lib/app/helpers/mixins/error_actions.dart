@@ -3,11 +3,11 @@ import 'package:toastification/toastification.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
-import 'package:very_good_core/core/domain/bloc/app_localization/app_localization_bloc.dart';
+import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 
 mixin ErrorActions {
-  final I18n _localization = getIt<AppLocalizationBloc>().state;
+  final I18n _localization = getIt<AppLocalizationCubit>().state;
   ToastificationItem? _activeToast;
 
   void _showErrorOnce(String message) {

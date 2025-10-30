@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
@@ -101,9 +101,9 @@ class _StyledText extends StatelessWidget {
           decorationColor: AppColors.defaultTextUrl,
           color: AppColors.defaultTextUrl,
         ),
-        (_, Map<String?, String?> attributes) {
+        (_, Map<String?, String?> attributes) async {
           if (attributes['href'] != null) {
-            UrlLauncherUtils.openBrowser(attributes['href']!);
+            await UrlLauncherUtils.openBrowser(attributes['href']!);
           }
         },
       ),

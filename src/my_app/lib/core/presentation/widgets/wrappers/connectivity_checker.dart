@@ -78,7 +78,8 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
 
   @override
   void dispose() {
-    _connectionSubscription.cancel();
+    unawaited(_connectionSubscription.cancel());
+    unawaited(_connectivityUtils.dispose());
     super.dispose();
   }
 }

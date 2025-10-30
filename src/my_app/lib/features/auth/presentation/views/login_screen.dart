@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_presentation/bloc_presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,20 +14,20 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_button.d
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text_field.dart';
 import 'package:very_good_core/core/presentation/widgets/wrappers/connectivity_checker.dart';
-import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
-import 'package:very_good_core/features/auth/domain/bloc/login/login_bloc.dart';
+import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
+import 'package:very_good_core/features/auth/domain/cubit/login/login_cubit.dart';
 
 class LoginScreen extends HookWidget {
   const LoginScreen({super.key});
 
-  void _onPopInvoked(BuildContext context, bool didPop) {
+  Future<void> _onPopInvoked(BuildContext context, bool didPop) async {
     if (!didPop) {
-      DialogUtils.showExitDialog(context);
+      await DialogUtils.showExitDialog(context);
     }
   }
 
-  void _onLoginStateChangedListener(BuildContext context, LoginPresentationEvent event) {
-    event.when(onSuccess: () => context.read<AuthBloc>().authenticate());
+  Future<void> _onLoginStateChangedListener(BuildContext context, LoginPresentationEvent event) async {
+    await event.when(onSuccess: () => context.read<AuthCubit>().authenticate());
   }
 
   @override
@@ -36,11 +38,15 @@ class LoginScreen extends HookWidget {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) => _onPopInvoked(context, didPop),
-      child: BlocProvider<LoginBloc>(
-        create: (BuildContext context) => getIt<LoginBloc>()..initialize(),
-        child: BlocPresentationListener<LoginBloc, LoginPresentationEvent>(
+      child: BlocProvider<LoginCubit>(
+        create: (BuildContext context) {
+          final LoginCubit bloc = getIt<LoginCubit>();
+          unawaited(bloc.initialize());
+          return bloc;
+        },
+        child: BlocPresentationListener<LoginCubit, LoginPresentationEvent>(
           listener: _onLoginStateChangedListener,
-          child: BlocBuilder<LoginBloc, LoginState>(
+          child: BlocBuilder<LoginCubit, LoginState>(
             builder: (BuildContext context, LoginState state) {
               final String currentUsername = state.username ?? '';
               usernameTextController
@@ -71,7 +77,7 @@ class LoginScreen extends HookWidget {
                                 controller: usernameTextController,
                                 labelText: context.i18n.login.label.username,
                                 hintText: context.i18n.login.hint.username,
-                                onChanged: (String value) => context.read<LoginBloc>().onUsernameChanged(value),
+                                onChanged: (String value) => context.read<LoginCubit>().onUsernameChanged(value),
                                 autofocus: true,
                               ),
                               Gap.large(),
@@ -87,7 +93,7 @@ class LoginScreen extends HookWidget {
                                 isEnabled: !state.isLoading,
                                 isLoading: state.isLoading,
                                 isExpanded: true,
-                                onPressed: () => context.read<LoginBloc>().login(
+                                onPressed: () => context.read<LoginCubit>().login(
                                   usernameTextController.text,
                                   passwordTextController.text,
                                 ),

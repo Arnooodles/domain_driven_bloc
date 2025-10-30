@@ -13,8 +13,8 @@ import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/observers/app_bloc_observer.dart';
 import 'package:very_good_core/core/domain/entity/enum/env.dart';
 
-void main() {
-  bootstrap(App.new, Env.fromFlavor(isWeb: kIsWeb));
+Future<void> main() async {
+  await bootstrap(App.new, Env.fromFlavor(isWeb: kIsWeb));
 }
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder, Env env) async {

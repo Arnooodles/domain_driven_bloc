@@ -1,3 +1,5 @@
+// ignore_for_file: discarded_futures
+
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,16 +13,16 @@ import '../../../utils/mock_localization.dart';
 import '../../../utils/test_utils.dart';
 
 void main() {
-  late MockAppLocalizationBloc appLocalizationBloc;
+  late MockAppLocalizationCubit appLocalizationCubit;
 
   setUp(() {
-    appLocalizationBloc = MockAppLocalizationBloc();
+    appLocalizationCubit = MockAppLocalizationCubit();
 
-    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
+    when(appLocalizationCubit.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
-  tearDown(() {
-    appLocalizationBloc.close();
+  tearDown(() async {
+    await appLocalizationCubit.close();
   });
 
   group(ConfirmationDialog, () {
@@ -32,14 +34,14 @@ void main() {
           GoldenTestDeviceScenario(
             name: 'default',
             builder: () => MockLocalization(
-              appLocalizationBloc: appLocalizationBloc,
+              appLocalizationCubit: appLocalizationCubit,
               child: const ConfirmationDialog(message: 'message'),
             ),
           ),
           GoldenTestDeviceScenario(
             name: 'with title',
             builder: () => MockLocalization(
-              appLocalizationBloc: appLocalizationBloc,
+              appLocalizationCubit: appLocalizationCubit,
               child: const ConfirmationDialog(message: 'message', title: 'title'),
             ),
           ),

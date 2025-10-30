@@ -2,23 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
-import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 @lazySingleton
 class RouteRefreshListener extends ChangeNotifier {
-  RouteRefreshListener(this._authBloc) {
+  RouteRefreshListener(this._authCubit) {
     notifyListeners();
-    _authStreamSubscription = _authBloc.stream.asBroadcastStream().listen((_) {
+    _authStreamSubscription = _authCubit.stream.asBroadcastStream().listen((_) {
       notifyListeners();
     });
   }
 
-  final AuthBloc _authBloc;
+  final AuthCubit _authCubit;
   late final StreamSubscription<AuthState> _authStreamSubscription;
 
   @override
-  void dispose() {
-    _authStreamSubscription.cancel();
+  Future<void> dispose() async {
+    await _authStreamSubscription.cancel();
     super.dispose();
   }
 }

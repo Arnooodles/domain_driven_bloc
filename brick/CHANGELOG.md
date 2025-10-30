@@ -1,3 +1,19 @@
+# 3.1.0
+- feat: add feature scaffolding scripts for Clean Architecture
+  - `scripts/create_feature.sh`: create feature folder structure with data/domain/presentation layers
+  - `scripts/create_feature_tests.sh`: create corresponding test folder structure
+- feat: add concurrency on verify workflow
+- refactor: rename `bloc` to `cubit` across the codebase
+- fix: resolve login issue on first app launch
+- fix: resolve discarded_futures lint warnings
+- chore: update Flutter to version 3.35.6
+- chore: update dependencies to latest compatible versions
+- chore(android): update Android project
+  - run `scripts/update_android_project.sh` to update dependency versions
+- chore: remove unused ignore comments from analysis_options.yaml
+- chore: update golden files
+- docs: remove table of contents from README
+
 # 3.0.1
 - chore: update brick metadata 
 - fix: update README screenshots not displaying

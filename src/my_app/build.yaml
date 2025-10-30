@@ -5,18 +5,18 @@ targets:
       freezed:
         generate_for:
           - lib/core/data/dto/**.dart
-          - lib/core/domain/bloc/**.dart
+          - lib/core/domain/cubit/**.dart
           - lib/core/domain/entity/**.dart
           - lib/features/**/data/dto/**.dart
-          - lib/features/**/domain/bloc/**.dart
+          - lib/features/**/domain/cubit/**.dart
           - lib/features/**/domain/entity/**.dart
       json_serializable:
         generate_for:
           - lib/core/data/dto/**.dart
-          - lib/core/domain/bloc/**.dart
+          - lib/core/domain/cubit/**.dart
           - lib/core/domain/entity/**.dart
           - lib/features/**/data/dto/**.dart
-          - lib/features/**/domain/bloc/**.dart
+          - lib/features/**/domain/cubit/**.dart
           - lib/features/**/domain/entity/**.dart
       injectable_generator|injectable_builder:
         generate_for:
@@ -29,9 +29,9 @@ targets:
           - lib/app/routes/**.dart
           - lib/app/utils/**.dart
           - lib/core/data/repository/**.dart
-          - lib/core/domain/bloc/**.dart
+          - lib/core/domain/cubit/**.dart
           - lib/features/**/data/repository/**.dart
-          - lib/features/**/domain/bloc/**.dart
+          - lib/features/**/domain/cubit/**.dart
       chopper_generator:
         generate_for:
           - lib/core/data/service/**.dart

@@ -10,16 +10,16 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
-import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
-import 'package:very_good_core/core/domain/bloc/app_localization/app_localization_bloc.dart';
-import 'package:very_good_core/core/domain/bloc/hidable/hidable_bloc.dart';
+import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/hidable/hidable_cubit.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
 import 'package:very_good_core/features/auth/data/service/auth_service.dart';
-import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';
-import 'package:very_good_core/features/home/domain/bloc/post/post_bloc.dart';
+import 'package:very_good_core/features/home/domain/cubit/post/post_cubit.dart';
 import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
 
 @GenerateNiceMocks(<MockSpec<dynamic>>[
@@ -36,12 +36,12 @@ import 'package:very_good_core/features/home/domain/interface/i_post_repository.
   MockSpec<IUserRepository>(),
   MockSpec<IAuthRepository>(),
   MockSpec<IPostRepository>(),
-  // Blocs
-  MockSpec<AuthBloc>(),
-  MockSpec<AppCoreBloc>(),
-  MockSpec<HidableBloc>(),
-  MockSpec<PostBloc>(),
-  MockSpec<AppLocalizationBloc>(),
+  // Cubits
+  MockSpec<AuthCubit>(),
+  MockSpec<AppCoreCubit>(),
+  MockSpec<HidableCubit>(),
+  MockSpec<PostCubit>(),
+  MockSpec<AppLocalizationCubit>(),
   // Others
   MockSpec<StreamSubscription<dynamic>>(),
   MockSpec<GoRouter>(),

@@ -9,23 +9,23 @@ import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/routes/app_router.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
-import 'package:very_good_core/core/domain/bloc/app_life_cycle/app_life_cycle_bloc.dart';
-import 'package:very_good_core/core/domain/bloc/app_localization/app_localization_bloc.dart';
-import 'package:very_good_core/core/domain/bloc/hidable/hidable_bloc.dart';
-import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
-import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/app_life_cycle/app_life_cycle_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/hidable/hidable_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/theme/theme_cubit.dart';
+import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 class App extends StatelessWidget {
   App({super.key});
 
   final List<BlocProvider<dynamic>> _globalProviders = <BlocProvider<dynamic>>[
-    BlocProvider<AppLifeCycleBloc>(create: (BuildContext context) => getIt<AppLifeCycleBloc>()),
-    BlocProvider<AppLocalizationBloc>(create: (BuildContext context) => getIt<AppLocalizationBloc>()),
-    BlocProvider<AppCoreBloc>(create: (BuildContext context) => getIt<AppCoreBloc>()),
-    BlocProvider<ThemeBloc>(create: (BuildContext context) => getIt<ThemeBloc>()..initialize()),
-    BlocProvider<AuthBloc>(create: (BuildContext context) => getIt<AuthBloc>()),
-    BlocProvider<HidableBloc>(create: (BuildContext context) => getIt<HidableBloc>()),
+    BlocProvider<AppLifeCycleCubit>(create: (BuildContext context) => getIt<AppLifeCycleCubit>()),
+    BlocProvider<AppLocalizationCubit>(create: (BuildContext context) => getIt<AppLocalizationCubit>()),
+    BlocProvider<AppCoreCubit>(create: (BuildContext context) => getIt<AppCoreCubit>()),
+    BlocProvider<ThemeCubit>(create: (BuildContext context) => getIt<ThemeCubit>()),
+    BlocProvider<AuthCubit>(create: (BuildContext context) => getIt<AuthCubit>()),
+    BlocProvider<HidableCubit>(create: (BuildContext context) => getIt<HidableCubit>()),
   ];
 
   final List<Breakpoint> _breakpoints = <Breakpoint>[
@@ -44,46 +44,54 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     /// This will tell you which image is oversized by throwing an exception.
     debugInvertOversizedImages = true;
-    return MultiBlocProvider(
-      providers: _globalProviders,
-      child: Builder(
-        builder: (BuildContext context) => ToastificationWrapper(
-          child: MaterialApp.router(
-            scrollBehavior: const MaterialScrollBehavior().copyWith(
-              dragDevices: <PointerDeviceKind>{
-                PointerDeviceKind.mouse,
-                PointerDeviceKind.touch,
-                PointerDeviceKind.stylus,
-                PointerDeviceKind.unknown,
-              },
-            ),
-            routerConfig: AppRouter.router,
-            builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
-              child: Builder(
-                builder: (BuildContext context) => ResponsiveScaledBox(
-                  width: ResponsiveValue<double>(
-                    context,
-                    defaultValue: Constant.mobileBreakpoint,
-                    conditionalValues: _getResponsiveWidth(context),
-                  ).value,
-                  child: child!,
+    return FutureBuilder<void>(
+      future: getIt.allReady(),
+      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const MaterialApp(debugShowCheckedModeBanner: false, home: SizedBox.shrink());
+        }
+        return MultiBlocProvider(
+          providers: _globalProviders,
+          child: Builder(
+            builder: (BuildContext context) => ToastificationWrapper(
+              child: MaterialApp.router(
+                scrollBehavior: const MaterialScrollBehavior().copyWith(
+                  dragDevices: <PointerDeviceKind>{
+                    PointerDeviceKind.mouse,
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.stylus,
+                    PointerDeviceKind.unknown,
+                  },
                 ),
+                routerConfig: AppRouter.router,
+                builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
+                  child: Builder(
+                    builder: (BuildContext context) => ResponsiveScaledBox(
+                      width: ResponsiveValue<double>(
+                        context,
+                        defaultValue: Constant.mobileBreakpoint,
+                        conditionalValues: _getResponsiveWidth(context),
+                      ).value,
+                      child: child!,
+                    ),
+                  ),
+                  breakpoints: _breakpoints,
+                ),
+                title: Constant.appName,
+                theme: AppTheme.light,
+                darkTheme: AppTheme.dark,
+                themeMode: context.watch<ThemeCubit>().state,
+                themeAnimationCurve: Curves.fastOutSlowIn,
+                themeAnimationDuration: const Duration(milliseconds: 500),
+                locale: context.watch<AppLocalizationCubit>().state.$meta.locale.flutterLocale,
+                supportedLocales: AppLocaleUtils.supportedLocales,
+                localizationsDelegates: Constant.localizationDelegates,
+                debugShowCheckedModeBanner: false,
               ),
-              breakpoints: _breakpoints,
             ),
-            title: Constant.appName,
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            themeMode: context.watch<ThemeBloc>().state,
-            themeAnimationCurve: Curves.fastOutSlowIn,
-            themeAnimationDuration: const Duration(milliseconds: 500),
-            locale: context.watch<AppLocalizationBloc>().state.$meta.locale.flutterLocale,
-            supportedLocales: AppLocaleUtils.supportedLocales,
-            localizationsDelegates: Constant.localizationDelegates,
-            debugShowCheckedModeBanner: false,
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

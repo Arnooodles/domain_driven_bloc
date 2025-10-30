@@ -5,56 +5,56 @@ publish_to: none
 
 environment:
   sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.7"
+  flutter: ">=3.35.7"
 
 dependencies:
-  animations: ^2.0.11
-  bloc: ^9.0.0
+  animations: ^2.1.0
+  bloc: ^9.1.0
   bloc_presentation: ^1.1.1
   cached_network_image: ^3.4.1
-  chopper: ^8.1.0
-  connectivity_plus: ^6.1.4
+  chopper: ^8.4.0
+  connectivity_plus: ^7.0.0
   crypto: ^3.0.6
   dartx: ^1.2.0
-  device_info_plus: ^11.5.0
+  device_info_plus: ^12.2.0
   email_validator: ^3.0.0
   faker: ^2.2.0
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
-  flutter_dotenv: ^5.2.1
-  flutter_hooks: ^0.21.2
+  flutter_dotenv: ^6.0.0
+  flutter_hooks: ^0.21.3
   flutter_inappwebview: ^6.1.5
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.7.7
-  flutter_native_splash: ^2.4.6
+  flutter_markdown_plus: ^1.0.5
+  flutter_native_splash: ^2.4.7
   flutter_secure_storage: ^9.2.4
-  flutter_svg: ^2.2.0
+  flutter_svg: ^2.2.1
   flutter_web_plugins:
     sdk: flutter
   fpdart: ^1.1.1
-  fpvalidate: ^0.3.0
+  fpvalidate: ^0.4.0
   freezed_annotation: ^3.1.0
   gap: ^3.0.1
-  get_it: ^8.0.3
-  go_router: ^16.0.0
+  get_it: ^8.2.0
+  go_router: ^16.3.0
   html_unescape: ^2.0.0
-  http: ^1.4.0
-  icons_launcher: ^3.0.1
-  injectable: ^2.5.0
+  http: ^1.5.0
+  icons_launcher: ^3.0.3
+  injectable: ^2.5.2
   intl: ^0.20.2
   json_annotation: ^4.9.0
-  logger: ^2.6.0
-  package_info_plus: ^8.3.0
-  pretty_chopper_logger: ^1.3.0
+  logger: ^2.6.2
+  package_info_plus: ^9.0.0
+  pretty_chopper_logger: ^1.3.1
   responsive_framework: ^1.5.1
   rxdart: ^0.28.0
-  safe_device: ^1.3.5
+  safe_device: ^1.3.8
   shared_preferences: ^2.5.3
   skeletonizer: ^2.1.0
-  slang: ^4.7.3
-  slang_flutter: ^4.7.0
+  slang: ^4.9.2
+  slang_flutter: ^4.9.0
   styled_text: ^8.1.0
   timeago: ^3.7.1
   toastification: ^3.0.3
@@ -62,21 +62,22 @@ dependencies:
   uuid: ^4.5.1
 
 dev_dependencies:
-  alchemist: ^0.12.1
+  alchemist: ^0.13.0
+  bloc_lint: ^0.3.3
   bloc_presentation_test: ^1.2.0
   bloc_test: ^10.0.0
-  build_runner: ^2.5.4
-  chopper_generator: ^8.1.0
-  flutter_gen_runner: ^5.11.0
+  build_runner: ^2.7.1
+  chopper_generator: ^8.4.0
+  flutter_gen_runner: ^5.12.0
   flutter_test:
     sdk: flutter
-  freezed: ^3.1.0
-  injectable_generator: ^2.7.0
-  json_serializable: ^6.9.5
-  mockito: ^5.4.6
+  freezed: ^3.2.3
+  injectable_generator: ^2.8.1
+  json_serializable: ^6.11.1
+  mockito: ^5.5.0
   mocktail_image_network: ^1.2.0
-  slang_build_runner: ^4.7.0
-  very_good_analysis: ^9.0.0
+  slang_build_runner: ^4.9.0
+  very_good_analysis: ^10.0.0
 
 flutter:
   uses-material-design: true

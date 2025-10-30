@@ -7,21 +7,6 @@ Domain-Driven Bloc jumpstarts your Flutter projects with a clean, modular founda
 
 ---
 
-## Table of Contents
-- [Domain-Driven Bloc](#domain-driven-bloc)
-  - [Table of Contents](#table-of-contents)
-  - [Credits 🙏](#credits-)
-  - [Getting Started 🚀](#getting-started-)
-  - [What's Included ✨](#whats-included-)
-    - [Key Packages 🗃](#key-packages-)
-  - [Output 🗂️](#output-️)
-    - [Core Functionality 🏅](#core-functionality-)
-    - [Architecture 🏗️](#architecture-️)
-  - [Folder Structure 📁](#folder-structure-)
-  - [Screenshots 📷](#screenshots-)
-  - [Contributing 🤝](#contributing-)
-
----
 
 ## Credits 🙏
 

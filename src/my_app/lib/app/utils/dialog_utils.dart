@@ -9,7 +9,7 @@ import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
 import 'package:very_good_core/app/themes/app_sizes.dart';
 import 'package:very_good_core/app/utils/app_utils.dart';
-import 'package:very_good_core/core/domain/bloc/theme/theme_bloc.dart';
+import 'package:very_good_core/core/domain/cubit/theme/theme_cubit.dart';
 import 'package:very_good_core/core/presentation/widgets/dialogs/confirmation_dialog.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
@@ -78,7 +78,7 @@ final class DialogUtils {
     dismissDirection: isDismissable ? null : DismissDirection.none,
   );
 
-  static Color _getErrorColor() => getIt<ThemeBloc>().state == ThemeMode.dark
+  static Color _getErrorColor() => getIt<ThemeCubit>().state == ThemeMode.dark
       ? AppColors.darkColorScheme.errorContainer
       : AppColors.lightColorScheme.error;
 }

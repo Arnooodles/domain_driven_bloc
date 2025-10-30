@@ -18,7 +18,7 @@ final class ConnectivityUtils {
     _connectionSubscription = _connectivity.onConnectivityChanged
         .debounceTime(const Duration(milliseconds: 300))
         .listen((_) => _checkInternetConnection());
-    _checkInternetConnection();
+    unawaited(_checkInternetConnection());
   }
 
   final Connectivity _connectivity = Connectivity();

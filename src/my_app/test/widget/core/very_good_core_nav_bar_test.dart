@@ -1,3 +1,7 @@
+// ignore_for_file: discarded_futures
+
+import 'dart:async';
+
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,8 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
 import 'package:very_good_core/app/routes/route_name.dart';
-import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
-import 'package:very_good_core/core/domain/bloc/hidable/hidable_bloc.dart';
+import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/hidable/hidable_cubit.dart';
 import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_nav_bar.dart';
 
@@ -19,33 +23,33 @@ void main() {
   late MockGoRouter router;
   late MockGoRouterDelegate routerDelegate;
   late MockRouteMatchList currentConfiguration;
-  late MockAppCoreBloc appCoreBloc;
-  late MockHidableBloc hidableBloc;
+  late MockAppCoreCubit appCoreCubit;
+  late MockHidableCubit hidableCubit;
   late MockStatefulNavigationShell navigationShell;
   late Map<AppScrollController, ScrollController> scrollControllers;
-  late MockAppLocalizationBloc appLocalizationBloc;
+  late MockAppLocalizationCubit appLocalizationCubit;
 
   setUp(() {
-    appCoreBloc = MockAppCoreBloc();
-    hidableBloc = MockHidableBloc();
-    appLocalizationBloc = MockAppLocalizationBloc();
+    appCoreCubit = MockAppCoreCubit();
+    hidableCubit = MockHidableCubit();
+    appLocalizationCubit = MockAppLocalizationCubit();
     scrollControllers = mockScrollControllers;
     provideDummy(AppCoreState.initial());
-    when(appCoreBloc.stream).thenAnswer(
+    when(appCoreCubit.stream).thenAnswer(
       (_) => Stream<AppCoreState>.fromIterable(<AppCoreState>[
         AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
       ]),
     );
-    when(appCoreBloc.state).thenAnswer((_) => AppCoreState.initial().copyWith(scrollControllers: scrollControllers));
-    when(hidableBloc.stream).thenAnswer((_) => Stream<bool>.fromIterable(<bool>[true]));
-    when(hidableBloc.state).thenAnswer((_) => true);
-    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
+    when(appCoreCubit.state).thenAnswer((_) => AppCoreState.initial().copyWith(scrollControllers: scrollControllers));
+    when(hidableCubit.stream).thenAnswer((_) => Stream<bool>.fromIterable(<bool>[true]));
+    when(hidableCubit.state).thenAnswer((_) => true);
+    when(appLocalizationCubit.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
-  tearDown(() {
-    appCoreBloc.close();
-    hidableBloc.close();
-    appLocalizationBloc.close();
+  tearDown(() async {
+    await appCoreCubit.close();
+    await hidableCubit.close();
+    await appLocalizationCubit.close();
   });
 
   MockGoRouter setUpRouter(String path, int index) {
@@ -62,11 +66,11 @@ void main() {
 
   Widget buildNavBar(MockGoRouter router) => MultiBlocProvider(
     providers: <BlocProvider<dynamic>>[
-      BlocProvider<AppCoreBloc>(create: (BuildContext context) => appCoreBloc),
-      BlocProvider<HidableBloc>(create: (BuildContext context) => hidableBloc),
+      BlocProvider<AppCoreCubit>(create: (BuildContext context) => appCoreCubit),
+      BlocProvider<HidableCubit>(create: (BuildContext context) => hidableCubit),
     ],
     child: MockLocalization(
-      appLocalizationBloc: appLocalizationBloc,
+      appLocalizationCubit: appLocalizationCubit,
       child: MockGoRouterProvider(
         router: router,
         child: VeryGoodCoreNavBar(navigationShell: navigationShell),
