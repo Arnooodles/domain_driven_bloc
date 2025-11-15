@@ -3,6 +3,8 @@ targets:
   $default:
     builders:
       freezed:
+        options:
+          format: true
         generate_for:
           - lib/core/data/dto/**.dart
           - lib/core/domain/cubit/**.dart
@@ -43,7 +45,8 @@ targets:
         options:
           integrations:
             flutter_svg: true    
-          output: lib/app/generated/  
+          output: lib/app/generated/
+          line_length: 120   
       slang_build_runner:
         options:
           base_locale: en
@@ -57,3 +60,6 @@ targets:
           translate_var: i18n
           translation_class_visibility: public 
           translation_overrides: true
+          format:
+            enabled: true
+            width: 120
