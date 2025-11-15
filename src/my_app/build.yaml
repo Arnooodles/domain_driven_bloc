@@ -4,7 +4,7 @@ targets:
     builders:
       freezed:
         options:
-          format: true
+          format: false
         generate_for:
           - lib/core/data/dto/**.dart
           - lib/core/domain/cubit/**.dart
