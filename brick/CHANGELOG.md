@@ -3,10 +3,13 @@
   - `scripts/create_feature.sh`: create feature folder structure with data/domain/presentation layers
   - `scripts/create_feature_tests.sh`: create corresponding test folder structure
 - feat: add concurrency on verify workflow
+- feat: implement google_fonts
+- feat: add font assets
+- feat: implement google_fonts in goldens testing
 - refactor: rename `bloc` to `cubit` across the codebase
 - fix: resolve login issue on first app launch
 - fix: resolve discarded_futures lint warnings
-- chore: update Flutter to version 3.35.6
+- chore: update Flutter to version 3.38.1
 - chore: update dependencies to latest compatible versions
 - chore(android): update Android project
   - run `scripts/update_android_project.sh` to update dependency versions

@@ -1,9 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// App Text Style Definitions
 
 abstract final class AppTextStyle {
-  static const TextStyle baseTextStyle = TextStyle(fontWeight: AppFontWeight.regular);
+  static final TextStyle baseTextStyle = GoogleFonts.roboto();
 
   /// Display Large Text Style
   static final TextStyle displayLarge = baseTextStyle.copyWith(fontSize: 57, fontWeight: AppFontWeight.regular);

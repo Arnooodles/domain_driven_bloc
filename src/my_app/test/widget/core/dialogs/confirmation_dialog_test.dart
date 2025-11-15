@@ -45,6 +45,21 @@ void main() {
               child: const ConfirmationDialog(message: 'message', title: 'title'),
             ),
           ),
+          GoldenTestDeviceScenario(
+            name: 'with all parameters',
+            builder: () => MockLocalization(
+              appLocalizationCubit: appLocalizationCubit,
+              child: const ConfirmationDialog(
+                message: 'message',
+                title: 'title',
+                titleColor: Colors.red,
+                negativeButtonText: 'Cancel',
+                positiveButtonText: 'Confirm',
+                negativeButtonColor: Colors.blue,
+                positiveButtonColor: Colors.green,
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -4,7 +4,7 @@ repository: https://github.com/Arnooodles/domain_driven_bloc
 version: 3.1.0
 
 environment:
-  mason: ^0.1.0
+  mason: ^0.1.1
 
 vars:
   project_name:
