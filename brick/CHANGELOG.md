@@ -7,6 +7,7 @@
 - feat: add font assets
 - feat: implement google_fonts in goldens testing
 - refactor: rename `bloc` to `cubit` across the codebase
+- refactor: remove pre_gen hooks and workflow
 - fix: resolve login issue on first app launch
 - fix: resolve discarded_futures lint warnings
 - chore: update Flutter to version 3.38.1
