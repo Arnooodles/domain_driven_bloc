@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' as fpdart;
 import 'package:toastification/toastification.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/helpers/extensions/future_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/utils/connectivity_utils.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
@@ -78,8 +79,7 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
 
   @override
   void dispose() {
-    unawaited(_connectionSubscription.cancel());
-    unawaited(_connectivityUtils.dispose());
+    unawaited(_connectionSubscription.cancel().logOnError());
     super.dispose();
   }
 }

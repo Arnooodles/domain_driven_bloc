@@ -29,7 +29,14 @@ mixin ErrorActions {
   }
 
   void onValidationError(ValidationFailure error) {
-    _showErrorOnce(error.message.message);
+    final String baseMessage = error.message.message;
+    if (!kDebugMode) {
+      _showErrorOnce(baseMessage);
+      return;
+    }
+
+    final String valueSuffix = error.value.isNotEmpty ? '\n(${error.value})' : '';
+    _showErrorOnce('$baseMessage$valueSuffix');
   }
 
   void onGenericError(Failure error) {

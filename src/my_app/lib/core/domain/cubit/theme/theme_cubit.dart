@@ -13,20 +13,22 @@ import 'package:very_good_core/core/domain/interface/i_local_storage_repository.
 
 @lazySingleton
 class ThemeCubit extends Cubit<ThemeMode> {
-  ThemeCubit(this._localStorageRepository, this._failureHandler) : super(ThemeMode.system) {
-    unawaited(initialize());
-  }
+  ThemeCubit(this._localStorageRepository, this._failureHandler) : super(ThemeMode.system);
 
   final ILocalStorageRepository _localStorageRepository;
   final FailureHandler _failureHandler;
 
   Future<void> initialize() async {
-    final Either<Failure, bool?> possibleFailure = await _localStorageRepository.getIsDarkMode();
-    possibleFailure.fold(_failureHandler.handleFailure, (bool? isDarkMode) {
-      if (isDarkMode != null) {
-        safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
-      }
-    });
+    try {
+      final Either<Failure, bool?> possibleFailure = await _localStorageRepository.getIsDarkMode();
+      possibleFailure.fold(_failureHandler.handleFailure, (bool? isDarkMode) {
+        if (isDarkMode != null) {
+          safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
+        }
+      });
+    } on Exception catch (error) {
+      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
+    }
   }
 
   Future<void> switchTheme(Brightness currentBrightness) async {

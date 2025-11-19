@@ -27,10 +27,15 @@ class LoginCubit extends Cubit<LoginState> with BlocPresentationMixin<LoginState
   final FailureHandler _failureHandler;
 
   Future<void> initialize() async {
-    final Either<Failure, String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername();
-    possibleFailure.fold(_failureHandler.handleFailure, (String? username) {
-      safeEmit(state.copyWith(username: username, isLoading: false));
-    });
+    try {
+      final Either<Failure, String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername();
+      possibleFailure.fold(_failureHandler.handleFailure, (String? username) {
+        safeEmit(state.copyWith(username: username, isLoading: false));
+      });
+    } on Exception catch (error) {
+      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
+      safeEmit(state.copyWith(isLoading: false));
+    }
   }
 
   Future<void> login(String username, String password) async {
@@ -63,5 +68,5 @@ class LoginCubit extends Cubit<LoginState> with BlocPresentationMixin<LoginState
     _failureHandler.handleFailure(failure);
   }
 
-  void onUsernameChanged(String username) => safeEmit(state.copyWith(username: username));
+  void onUsernameChanged(String username) => safeEmit(state.copyWith(username: username, isLoading: false));
 }

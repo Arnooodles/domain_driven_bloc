@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
+import 'package:very_good_core/app/helpers/extensions/future_ext.dart';
 import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 @lazySingleton
@@ -17,8 +18,8 @@ class RouteRefreshListener extends ChangeNotifier {
   late final StreamSubscription<AuthState> _authStreamSubscription;
 
   @override
-  Future<void> dispose() async {
-    await _authStreamSubscription.cancel();
+  void dispose() {
+    unawaited(_authStreamSubscription.cancel().logOnError());
     super.dispose();
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:very_good_core/core/domain/cubit/app_life_cycle/app_life_cycle_cubit.dart';
 
 void main() {
-  group('AppLifeCycleCubit', () {
+  group(AppLifeCycleCubit, () {
     late AppLifeCycleCubit appLifeCycleCubit;
 
     setUp(() {
@@ -23,7 +23,7 @@ void main() {
       blocTest<AppLifeCycleCubit, AppLifeCycleState>(
         'should emit detached state when app becomes detached',
         build: () => appLifeCycleCubit,
-        act: (AppLifeCycleCubit bloc) => setAppLifeCycleState(AppLifecycleState.detached),
+        act: (AppLifeCycleCubit cubit) => setAppLifeCycleState(AppLifecycleState.detached),
         expect: () => const <AppLifeCycleState>[AppLifeCycleState.detached()],
         verify: (_) {
           expect(appLifeCycleCubit.state, isA<AppLifeCycleState>());
@@ -33,7 +33,7 @@ void main() {
       blocTest<AppLifeCycleCubit, AppLifeCycleState>(
         'should emit inactive state when app becomes inactive',
         build: () => appLifeCycleCubit,
-        act: (AppLifeCycleCubit bloc) => setAppLifeCycleState(AppLifecycleState.inactive),
+        act: (AppLifeCycleCubit cubit) => setAppLifeCycleState(AppLifecycleState.inactive),
         expect: () => const <AppLifeCycleState>[AppLifeCycleState.inactive()],
         verify: (_) {
           expect(appLifeCycleCubit.state, isA<AppLifeCycleState>());
@@ -43,7 +43,7 @@ void main() {
       blocTest<AppLifeCycleCubit, AppLifeCycleState>(
         'should emit hidden state when app becomes hidden',
         build: () => appLifeCycleCubit,
-        act: (AppLifeCycleCubit bloc) => setAppLifeCycleState(AppLifecycleState.hidden),
+        act: (AppLifeCycleCubit cubit) => setAppLifeCycleState(AppLifecycleState.hidden),
         expect: () => const <AppLifeCycleState>[AppLifeCycleState.hidden()],
         verify: (_) {
           expect(appLifeCycleCubit.state, isA<AppLifeCycleState>());
@@ -53,7 +53,7 @@ void main() {
       blocTest<AppLifeCycleCubit, AppLifeCycleState>(
         'should emit paused state when app becomes paused',
         build: () => appLifeCycleCubit,
-        act: (AppLifeCycleCubit bloc) => setAppLifeCycleState(AppLifecycleState.paused),
+        act: (AppLifeCycleCubit cubit) => setAppLifeCycleState(AppLifecycleState.paused),
         expect: () => const <AppLifeCycleState>[AppLifeCycleState.paused()],
         verify: (_) {
           expect(appLifeCycleCubit.state, isA<AppLifeCycleState>());
@@ -63,7 +63,7 @@ void main() {
       blocTest<AppLifeCycleCubit, AppLifeCycleState>(
         'should emit resumed state when app becomes resumed',
         build: () => appLifeCycleCubit,
-        act: (AppLifeCycleCubit bloc) => setAppLifeCycleState(AppLifecycleState.resumed),
+        act: (AppLifeCycleCubit cubit) => setAppLifeCycleState(AppLifecycleState.resumed),
         expect: () => const <AppLifeCycleState>[AppLifeCycleState.resumed()],
         verify: (_) {
           expect(appLifeCycleCubit.state, isA<AppLifeCycleState>());
@@ -75,7 +75,7 @@ void main() {
       blocTest<AppLifeCycleCubit, AppLifeCycleState>(
         'should handle multiple state transitions correctly',
         build: () => appLifeCycleCubit,
-        act: (AppLifeCycleCubit bloc) async {
+        act: (AppLifeCycleCubit cubit) async {
           setAppLifeCycleState(AppLifecycleState.paused);
           setAppLifeCycleState(AppLifecycleState.resumed);
           setAppLifeCycleState(AppLifecycleState.inactive);
@@ -93,7 +93,7 @@ void main() {
       blocTest<AppLifeCycleCubit, AppLifeCycleState>(
         'should maintain correct state after rapid transitions',
         build: () => appLifeCycleCubit,
-        act: (AppLifeCycleCubit bloc) async {
+        act: (AppLifeCycleCubit cubit) async {
           setAppLifeCycleState(AppLifecycleState.detached);
           setAppLifeCycleState(AppLifecycleState.hidden);
         },

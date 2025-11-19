@@ -40,9 +40,9 @@ class LoginScreen extends HookWidget {
       onPopInvokedWithResult: (bool didPop, _) => _onPopInvoked(context, didPop),
       child: BlocProvider<LoginCubit>(
         create: (BuildContext context) {
-          final LoginCubit bloc = getIt<LoginCubit>();
-          unawaited(bloc.initialize());
-          return bloc;
+          final LoginCubit cubit = getIt<LoginCubit>();
+          unawaited(cubit.initialize());
+          return cubit;
         },
         child: BlocPresentationListener<LoginCubit, LoginPresentationEvent>(
           listener: _onLoginStateChangedListener,

@@ -9,6 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/generated/assets.gen.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
+import 'package:very_good_core/app/helpers/extensions/future_ext.dart';
 import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
 
 part 'app_core_cubit.freezed.dart';
@@ -30,7 +31,7 @@ class AppCoreCubit extends Cubit<AppCoreState> {
   Future<void> _preloadSVG(List<String> assetPaths) async {
     for (final String path in assetPaths) {
       final SvgAssetLoader loader = SvgAssetLoader(path);
-      unawaited(svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null)));
+      unawaited(svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null)).logOnError());
     }
   }
 

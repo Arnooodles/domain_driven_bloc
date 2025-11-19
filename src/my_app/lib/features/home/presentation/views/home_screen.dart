@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/constants/mock_data.dart';
@@ -16,7 +17,7 @@ import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/empty_post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
 
   List<Post> _generateFakePostData() => List<Post>.generate(8, (_) => MockData.post);
@@ -29,9 +30,9 @@ class HomeScreen extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
         child: BlocProvider<PostCubit>(
           create: (BuildContext context) {
-            final PostCubit bloc = getIt<PostCubit>();
-            unawaited(bloc.getPosts());
-            return bloc;
+            final PostCubit cubit = getIt<PostCubit>();
+            unawaited(cubit.getPosts());
+            return cubit;
           },
           child: Builder(
             builder: (BuildContext context) => RefreshIndicator(

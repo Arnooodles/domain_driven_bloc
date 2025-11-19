@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc_presentation_test/bloc_presentation_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,7 +11,7 @@ import 'package:very_good_core/features/auth/domain/cubit/login/login_cubit.dart
 import '../../../../utils/generated_mocks.mocks.dart';
 
 void main() {
-  group('LoginCubit', () {
+  group(LoginCubit, () {
     late MockIAuthRepository authRepository;
     late MockILocalStorageRepository localStorageRepository;
     late MockFailureHandler failureHandler;
@@ -46,7 +44,7 @@ void main() {
 
           return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
-        act: (LoginCubit bloc) => bloc.initialize(),
+        act: (LoginCubit cubit) => cubit.initialize(),
         expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false)],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
@@ -63,7 +61,7 @@ void main() {
 
           return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
-        act: (LoginCubit bloc) => bloc.initialize(),
+        act: (LoginCubit cubit) => cubit.initialize(),
         expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false, username: username)],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
@@ -79,10 +77,26 @@ void main() {
 
           return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
-        act: (LoginCubit bloc) => bloc.initialize(),
+        act: (LoginCubit cubit) => cubit.initialize(),
         expect: () => <LoginState>[],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
+        },
+      );
+
+      blocTest<LoginCubit, LoginState>(
+        'should handle unexpected exception during initialization',
+        build: () {
+          provideDummy(Either<Failure, String?>.right(username));
+          when(localStorageRepository.getLastLoggedInUsername()).thenThrow(Exception('Unexpected error'));
+
+          return LoginCubit(authRepository, localStorageRepository, failureHandler);
+        },
+        act: (LoginCubit cubit) => cubit.initialize(),
+        expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false)],
+        verify: (_) {
+          verify(localStorageRepository.getLastLoggedInUsername()).called(1);
+          verify(failureHandler.handleFailure(const Failure.unexpected('Exception: Unexpected error'))).called(1);
         },
       );
     });
@@ -94,27 +108,26 @@ void main() {
           localStorageRepository.getLastLoggedInUsername(),
         ).thenAnswer((_) async => Either<Failure, String?>.right(null));
         loginCubit = LoginCubit(authRepository, localStorageRepository, failureHandler);
-        unawaited(loginCubit.initialize());
       });
 
       blocTest<LoginCubit, LoginState>(
         'should emit state with updated username',
         build: () => loginCubit,
-        act: (LoginCubit bloc) => bloc.onUsernameChanged('test_$username'),
+        act: (LoginCubit cubit) => cubit.onUsernameChanged('test_$username'),
         expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false, username: 'test_$username')],
       );
 
       blocTest<LoginCubit, LoginState>(
         'should handle empty username input',
         build: () => loginCubit,
-        act: (LoginCubit bloc) => bloc.onUsernameChanged(''),
+        act: (LoginCubit cubit) => cubit.onUsernameChanged(''),
         expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false, username: '')],
       );
 
       blocTest<LoginCubit, LoginState>(
         'should handle special characters in username',
         build: () => loginCubit,
-        act: (LoginCubit bloc) => bloc.onUsernameChanged('user@domain.com'),
+        act: (LoginCubit cubit) => cubit.onUsernameChanged('user@domain.com'),
         expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false, username: 'user@domain.com')],
       );
     });
@@ -138,7 +151,7 @@ void main() {
 
           return loginCubit;
         },
-        act: (LoginCubit bloc) => bloc.login(username, password),
+        act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
@@ -157,7 +170,7 @@ void main() {
 
           return loginCubit;
         },
-        act: (LoginCubit bloc) => bloc.login(username, password),
+        act: (LoginCubit cubit) => cubit.login(username, password),
         expectPresentation: () => const <LoginPresentationEvent>[LoginPresentationEvent.onSuccess()],
       );
 
@@ -170,7 +183,7 @@ void main() {
 
           return loginCubit;
         },
-        act: (LoginCubit bloc) => bloc.login(username, password),
+        act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
@@ -189,7 +202,7 @@ void main() {
 
           return loginCubit;
         },
-        act: (LoginCubit bloc) => bloc.login(username, password),
+        act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
@@ -204,17 +217,17 @@ void main() {
         build: () {
           provideDummy(
             Either<Failure, Unit>.left(
-              const Failure.validation(EmptyStringValidationError('password', 'Invalid Password')),
+              const Failure.validation(EmptyStringValidationError('password', 'Invalid Password'), ''),
             ),
           );
           provideDummy(Either<Failure, String?>.right(null));
           when(authRepository.login(any)).thenAnswer(
-            (_) async => left(const Failure.validation(EmptyStringValidationError('password', 'Invalid Password'))),
+            (_) async => left(const Failure.validation(EmptyStringValidationError('password', 'Invalid Password'), '')),
           );
 
           return loginCubit;
         },
-        act: (LoginCubit bloc) => bloc.login(username, 'pass'),
+        act: (LoginCubit cubit) => cubit.login(username, 'pass'),
         expect: () => <LoginState>[
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
@@ -231,7 +244,7 @@ void main() {
 
           return loginCubit;
         },
-        act: (LoginCubit bloc) => bloc.login(username, password),
+        act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
@@ -249,7 +262,7 @@ void main() {
 
           return loginCubit;
         },
-        act: (LoginCubit bloc) => bloc.login(username, password),
+        act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),

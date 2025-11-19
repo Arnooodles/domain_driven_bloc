@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:logger/logger.dart';
+import 'package:very_good_core/app/helpers/extensions/future_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 
 class VeryGoodCoreWebview extends HookWidget {
@@ -74,9 +77,9 @@ class VeryGoodCoreWebview extends HookWidget {
     return InAppWebView(
       initialUrlRequest: URLRequest(url: WebUri(url)),
       onWebViewCreated: onWebViewCreated,
-      onProgressChanged: (_, int progress) async {
+      onProgressChanged: (_, int progress) {
         if (progress == 100) {
-          await pullToRefreshController.value?.endRefreshing();
+          unawaited(pullToRefreshController.value?.endRefreshing().logOnError());
         }
         onProgressChanged(progress);
       },

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
@@ -17,6 +16,7 @@ part 'post_state.dart';
 @injectable
 class PostCubit extends Cubit<PostState> {
   PostCubit(this._postRepository, this._failureHandler) : super(const PostState.initial());
+
   final IPostRepository _postRepository;
   final FailureHandler _failureHandler;
 
@@ -28,7 +28,6 @@ class PostCubit extends Cubit<PostState> {
 
       possibleFailure.fold(_failureHandler.handleFailure, (List<Post> posts) => safeEmit(PostState.onSuccess(posts)));
     } on Exception catch (error) {
-      log(error.toString());
       _failureHandler.handleFailure(Failure.unexpected(error.toString()));
     }
   }

@@ -9,9 +9,7 @@ import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 
 @lazySingleton
 class AppLocalizationCubit extends Cubit<I18n> {
-  AppLocalizationCubit() : super(AppLocale.values.first.buildSync()) {
-    unawaited(initialize());
-  }
+  AppLocalizationCubit() : super(AppLocale.values.first.buildSync());
 
   Future<void> initialize() async {
     safeEmit(await AppLocaleUtils.findDeviceLocale().build());

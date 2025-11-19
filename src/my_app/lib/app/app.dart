@@ -44,54 +44,46 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     /// This will tell you which image is oversized by throwing an exception.
     debugInvertOversizedImages = true;
-    return FutureBuilder<void>(
-      future: getIt.allReady(),
-      builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const MaterialApp(debugShowCheckedModeBanner: false, home: SizedBox.shrink());
-        }
-        return MultiBlocProvider(
-          providers: _globalProviders,
-          child: Builder(
-            builder: (BuildContext context) => ToastificationWrapper(
-              child: MaterialApp.router(
-                scrollBehavior: const MaterialScrollBehavior().copyWith(
-                  dragDevices: <PointerDeviceKind>{
-                    PointerDeviceKind.mouse,
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.stylus,
-                    PointerDeviceKind.unknown,
-                  },
-                ),
-                routerConfig: AppRouter.router,
-                builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
-                  child: Builder(
-                    builder: (BuildContext context) => ResponsiveScaledBox(
-                      width: ResponsiveValue<double>(
-                        context,
-                        defaultValue: Constant.mobileBreakpoint,
-                        conditionalValues: _getResponsiveWidth(context),
-                      ).value,
-                      child: child!,
-                    ),
-                  ),
-                  breakpoints: _breakpoints,
-                ),
-                title: Constant.appName,
-                theme: AppTheme.light,
-                darkTheme: AppTheme.dark,
-                themeMode: context.watch<ThemeCubit>().state,
-                themeAnimationCurve: Curves.fastOutSlowIn,
-                themeAnimationDuration: const Duration(milliseconds: 500),
-                locale: context.watch<AppLocalizationCubit>().state.$meta.locale.flutterLocale,
-                supportedLocales: AppLocaleUtils.supportedLocales,
-                localizationsDelegates: Constant.localizationDelegates,
-                debugShowCheckedModeBanner: false,
-              ),
+    return MultiBlocProvider(
+      providers: _globalProviders,
+      child: Builder(
+        builder: (BuildContext context) => ToastificationWrapper(
+          child: MaterialApp.router(
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: <PointerDeviceKind>{
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.touch,
+                PointerDeviceKind.stylus,
+                PointerDeviceKind.unknown,
+              },
             ),
+            routerConfig: AppRouter.router,
+            builder: (BuildContext context, Widget? child) => ResponsiveBreakpoints.builder(
+              child: Builder(
+                builder: (BuildContext context) => ResponsiveScaledBox(
+                  width: ResponsiveValue<double>(
+                    context,
+                    defaultValue: Constant.mobileBreakpoint,
+                    conditionalValues: _getResponsiveWidth(context),
+                  ).value,
+                  child: child!,
+                ),
+              ),
+              breakpoints: _breakpoints,
+            ),
+            title: Constant.appName,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: context.watch<ThemeCubit>().state,
+            themeAnimationCurve: Curves.fastOutSlowIn,
+            themeAnimationDuration: const Duration(milliseconds: 500),
+            locale: context.watch<AppLocalizationCubit>().state.$meta.locale.flutterLocale,
+            supportedLocales: AppLocaleUtils.supportedLocales,
+            localizationsDelegates: Constant.localizationDelegates,
+            debugShowCheckedModeBanner: false,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

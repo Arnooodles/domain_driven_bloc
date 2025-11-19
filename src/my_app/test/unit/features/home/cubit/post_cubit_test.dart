@@ -11,7 +11,7 @@ import 'package:very_good_core/features/home/domain/entity/post.dart';
 import '../../../../utils/generated_mocks.mocks.dart';
 
 void main() {
-  group('PostCubit', () {
+  group(PostCubit, () {
     late MockIPostRepository postRepository;
     late MockFailureHandler failureHandler;
     late Failure failure;
@@ -52,7 +52,7 @@ void main() {
 
           return PostCubit(postRepository, failureHandler);
         },
-        act: (PostCubit bloc) => bloc.getPosts(),
+        act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading(), PostState.onSuccess(posts)],
         verify: (_) {
           verify(postRepository.getPosts()).called(1);
@@ -67,7 +67,7 @@ void main() {
 
           return PostCubit(postRepository, failureHandler);
         },
-        act: (PostCubit bloc) => bloc.getPosts(),
+        act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading()],
         verify: (_) {
           verify(postRepository.getPosts()).called(1);
@@ -81,7 +81,7 @@ void main() {
 
           return PostCubit(postRepository, failureHandler);
         },
-        act: (PostCubit bloc) => bloc.getPosts(),
+        act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading()],
         verify: (_) {
           verify(postRepository.getPosts()).called(1);
@@ -95,7 +95,7 @@ void main() {
 
           return PostCubit(postRepository, failureHandler);
         },
-        act: (PostCubit bloc) => bloc.getPosts(),
+        act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading()],
         verify: (_) {
           verify(postRepository.getPosts()).called(1);
@@ -111,7 +111,7 @@ void main() {
 
           return PostCubit(postRepository, failureHandler);
         },
-        act: (PostCubit bloc) => bloc.getPosts(),
+        act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading()],
         verify: (_) {
           verify(postRepository.getPosts()).called(1);
@@ -127,7 +127,7 @@ void main() {
 
           return PostCubit(postRepository, failureHandler);
         },
-        act: (PostCubit bloc) => bloc.getPosts(),
+        act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading()],
         verify: (_) {
           verify(postRepository.getPosts()).called(1);
@@ -143,7 +143,7 @@ void main() {
 
           return PostCubit(postRepository, failureHandler);
         },
-        act: (PostCubit bloc) => bloc.getPosts(),
+        act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading(), const PostState.onSuccess(<Post>[])],
         verify: (_) {
           verify(postRepository.getPosts()).called(1);

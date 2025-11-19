@@ -11,7 +11,7 @@ import '../../../../utils/generated_mocks.mocks.dart';
 import '../../../../utils/test_utils.dart';
 
 void main() {
-  group('AuthCubit', () {
+  group(AuthCubit, () {
     late MockIUserRepository userRepository;
     late MockIAuthRepository authRepository;
     late MockILocalStorageRepository localStorageRepository;
@@ -47,7 +47,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.initialize(),
+        act: (AuthCubit cubit) => cubit.initialize(),
         expect: () => const <AuthState>[AuthState.initial(), AuthState.unauthenticated()],
         verify: (_) {
           verify(localStorageRepository.getAccessToken()).called(1);
@@ -66,7 +66,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.initialize(),
+        act: (AuthCubit cubit) => cubit.initialize(),
         expect: () => const <AuthState>[AuthState.initial(), AuthState.unauthenticated()],
         verify: (_) {
           verify(localStorageRepository.getAccessToken()).called(1);
@@ -84,7 +84,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.initialize(),
+        act: (AuthCubit cubit) => cubit.initialize(),
         expect: () => <AuthState>[const AuthState.initial(), AuthState.authenticated(user: mockUser)],
         verify: (_) {
           verify(localStorageRepository.getAccessToken()).called(1);
@@ -103,7 +103,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.initialize(),
+        act: (AuthCubit cubit) => cubit.initialize(),
         expect: () => <AuthState>[const AuthState.initial(), const AuthState.unauthenticated()],
         verify: (_) {
           verify(localStorageRepository.getAccessToken()).called(1);
@@ -120,7 +120,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.initialize(),
+        act: (AuthCubit cubit) => cubit.initialize(),
         expect: () => const <AuthState>[AuthState.initial()],
         verify: (_) {
           verify(localStorageRepository.getAccessToken()).called(1);
@@ -139,7 +139,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.initialize(),
+        act: (AuthCubit cubit) => cubit.initialize(),
         expect: () => <AuthState>[const AuthState.initial(), const AuthState.unauthenticated()],
         verify: (_) {
           verify(localStorageRepository.getAccessToken()).called(1);
@@ -156,7 +156,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.initialize(),
+        act: (AuthCubit cubit) => cubit.initialize(),
         expect: () => <AuthState>[const AuthState.initial()],
         verify: (_) {
           verify(localStorageRepository.getAccessToken()).called(1);
@@ -180,7 +180,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.getUser(),
+        act: (AuthCubit cubit) => cubit.getUser(),
         expect: () => <AuthState>[const AuthState.loading(), AuthState.authenticated(user: mockUser)],
         verify: (_) {
           verify(userRepository.user).called(1);
@@ -197,7 +197,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.getUser(),
+        act: (AuthCubit cubit) => cubit.getUser(),
         expect: () => const <AuthState>[AuthState.loading()],
         verify: (_) {
           verify(userRepository.user).called(1);
@@ -211,7 +211,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.getUser(),
+        act: (AuthCubit cubit) => cubit.getUser(),
         expect: () => <AuthState>[const AuthState.loading()],
         verify: (_) {
           verify(userRepository.user).called(1);
@@ -225,7 +225,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.getUser(),
+        act: (AuthCubit cubit) => cubit.getUser(),
         expect: () => <AuthState>[const AuthState.loading()],
         verify: (_) {
           verify(userRepository.user).called(1);
@@ -248,7 +248,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.logout(),
+        act: (AuthCubit cubit) => cubit.logout(),
         expect: () => const <AuthState>[AuthState.loading(), AuthState.unauthenticated()],
         verify: (_) {
           verify(authRepository.logout()).called(1);
@@ -265,7 +265,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.logout(),
+        act: (AuthCubit cubit) => cubit.logout(),
         expect: () => <AuthState>[const AuthState.loading()],
         verify: (_) {
           verify(authRepository.logout()).called(1);
@@ -279,7 +279,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.logout(),
+        act: (AuthCubit cubit) => cubit.logout(),
         expect: () => <AuthState>[const AuthState.loading()],
         verify: (_) {
           verify(authRepository.logout()).called(1);
@@ -297,7 +297,7 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should emit authenticated state when authentication is successful',
         build: () => authCubit,
-        act: (AuthCubit bloc) => bloc.authenticate(),
+        act: (AuthCubit cubit) => cubit.authenticate(),
         expect: () => <AuthState>[const AuthState.loading(), AuthState.authenticated(user: mockUser)],
         verify: (_) {
           verify(userRepository.user).called(1);
@@ -314,7 +314,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.authenticate(),
+        act: (AuthCubit cubit) => cubit.authenticate(),
         expect: () => <AuthState>[const AuthState.loading(), const AuthState.unauthenticated()],
         verify: (_) {
           verify(userRepository.user).called(1);
@@ -328,7 +328,7 @@ void main() {
 
           return authCubit;
         },
-        act: (AuthCubit bloc) => bloc.authenticate(),
+        act: (AuthCubit cubit) => cubit.authenticate(),
         expect: () => <AuthState>[const AuthState.loading()],
         verify: (_) {
           verify(userRepository.user).called(1);
