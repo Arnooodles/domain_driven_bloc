@@ -11,7 +11,6 @@ import 'package:very_good_core/app/generated/localization.g.dart';
 import 'package:very_good_core/app/routes/route_name.dart';
 import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
 import 'package:very_good_core/core/domain/cubit/hidable/hidable_cubit.dart';
-import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_nav_bar.dart';
 
 import '../../utils/generated_mocks.mocks.dart';
@@ -26,21 +25,17 @@ void main() {
   late MockAppCoreCubit appCoreCubit;
   late MockHidableCubit hidableCubit;
   late MockStatefulNavigationShell navigationShell;
-  late Map<AppScrollController, ScrollController> scrollControllers;
   late MockAppLocalizationCubit appLocalizationCubit;
 
   setUp(() {
     appCoreCubit = MockAppCoreCubit();
     hidableCubit = MockHidableCubit();
     appLocalizationCubit = MockAppLocalizationCubit();
-    scrollControllers = mockScrollControllers;
     provideDummy(AppCoreState.initial());
-    when(appCoreCubit.stream).thenAnswer(
-      (_) => Stream<AppCoreState>.fromIterable(<AppCoreState>[
-        AppCoreState.initial().copyWith(scrollControllers: scrollControllers),
-      ]),
-    );
-    when(appCoreCubit.state).thenAnswer((_) => AppCoreState.initial().copyWith(scrollControllers: scrollControllers));
+    when(
+      appCoreCubit.stream,
+    ).thenAnswer((_) => Stream<AppCoreState>.fromIterable(<AppCoreState>[AppCoreState.initial()]));
+    when(appCoreCubit.state).thenAnswer((_) => AppCoreState.initial());
     when(hidableCubit.stream).thenAnswer((_) => Stream<bool>.fromIterable(<bool>[true]));
     when(hidableCubit.state).thenAnswer((_) => true);
     when(appLocalizationCubit.state).thenAnswer((_) => AppLocale.values.first.buildSync());

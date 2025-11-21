@@ -3,41 +3,27 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:very_good_core/app/generated/assets.gen.dart';
-import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
-import 'package:very_good_core/app/helpers/extensions/future_ext.dart';
-import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
+import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/interface/i_asset_repository.dart';
 
 part 'app_core_cubit.freezed.dart';
 part 'app_core_state.dart';
 
 @lazySingleton
 class AppCoreCubit extends Cubit<AppCoreState> {
-  AppCoreCubit() : super(AppCoreState.initial());
+  AppCoreCubit(this._failureHandler, this._assetRepository) : super(AppCoreState.initial());
+
+  final FailureHandler _failureHandler;
+  final IAssetRepository _assetRepository;
 
   Future<void> initialize() async {
-    await _preloadSVG(_getSvgAssets());
-  }
-
-  List<String> _getSvgAssets() => <String>[
-    ..._filterSvgAssets(Assets.images.values),
-    ..._filterSvgAssets(Assets.icons.values),
-  ];
-
-  Future<void> _preloadSVG(List<String> assetPaths) async {
-    for (final String path in assetPaths) {
-      final SvgAssetLoader loader = SvgAssetLoader(path);
-      unawaited(svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null)).logOnError());
+    try {
+      await _assetRepository.preloadSVGs();
+    } on Exception catch (error) {
+      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
     }
   }
-
-  List<String> _filterSvgAssets(List<dynamic> assetPaths) =>
-      assetPaths.whereType<String>().toList().where((String path) => path.contains('.svg')).toList();
-
-  void setScrollControllers(Map<AppScrollController, ScrollController> scrollControllers) =>
-      safeEmit(state.copyWith(scrollControllers: scrollControllers));
 }

@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:fpvalidate/fpvalidate.dart';
 import 'package:mockito/mockito.dart';
-import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/domain/cubit/theme/theme_cubit.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
@@ -15,7 +14,7 @@ void main() {
   group(ThemeCubit, () {
     late ThemeCubit themeCubit;
     late ILocalStorageRepository localStorageRepository;
-    late FailureHandler failureHandler;
+    late MockFailureHandler failureHandler;
 
     setUp(() {
       localStorageRepository = MockILocalStorageRepository();
@@ -69,7 +68,7 @@ void main() {
           when(
             localStorageRepository.getIsDarkMode(),
           ).thenAnswer((_) async => Future<Either<Failure, bool?>>.value(left(failure)));
-          when(failureHandler.handleFailure(failure)).thenReturn(null);
+          when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         act: (ThemeCubit cubit) => cubit.initialize(),
@@ -88,7 +87,7 @@ void main() {
           when(
             localStorageRepository.getIsDarkMode(),
           ).thenAnswer((_) async => Future<Either<Failure, bool?>>.value(left(failure)));
-          when(failureHandler.handleFailure(failure)).thenReturn(null);
+          when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         act: (ThemeCubit cubit) => cubit.initialize(),
@@ -105,7 +104,7 @@ void main() {
           const Failure failure = Failure.unexpected('Exception: Unexpected storage crash');
           provideDummy(Either<Failure, bool?>.left(failure));
           when(localStorageRepository.getIsDarkMode()).thenThrow(Exception('Unexpected storage crash'));
-          when(failureHandler.handleFailure(failure)).thenReturn(null);
+          when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         act: (ThemeCubit cubit) => cubit.initialize(),
@@ -148,7 +147,7 @@ void main() {
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
         expect: () => <ThemeMode>[ThemeMode.dark],
         verify: (ThemeCubit cubit) {
-          expect(cubit.state == ThemeMode.dark, isTrue);
+          expect(cubit.state, ThemeMode.dark);
         },
       );
 
@@ -164,7 +163,7 @@ void main() {
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.dark),
         expect: () => <ThemeMode>[ThemeMode.light],
         verify: (ThemeCubit cubit) {
-          expect(cubit.state == ThemeMode.dark, isFalse);
+          expect(cubit.state, ThemeMode.light);
         },
       );
 
@@ -177,7 +176,7 @@ void main() {
           when(
             localStorageRepository.setIsDarkMode(isDarkMode: false),
           ).thenAnswer((_) async => Future<Either<Failure, Unit>>.value(left(failure)));
-          when(failureHandler.handleFailure(failure)).thenReturn(null);
+          when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
         expect: () => <ThemeMode>[],
@@ -197,7 +196,7 @@ void main() {
           when(
             localStorageRepository.setIsDarkMode(isDarkMode: true),
           ).thenAnswer((_) async => Future<Either<Failure, Unit>>.value(left(failure)));
-          when(failureHandler.handleFailure(failure)).thenReturn(null);
+          when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.dark),
         expect: () => <ThemeMode>[],
@@ -215,7 +214,7 @@ void main() {
           when(
             localStorageRepository.setIsDarkMode(isDarkMode: false),
           ).thenAnswer((_) async => Future<Either<Failure, Unit>>.value(left(failure)));
-          when(failureHandler.handleFailure(failure)).thenReturn(null);
+          when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
         expect: () => <ThemeMode>[],
@@ -224,6 +223,23 @@ void main() {
             failureHandler.handleFailure(
               const Failure.validation(EmptyStringValidationError('theme', 'Invalid theme value'), ''),
             ),
+          ).called(1);
+        },
+      );
+      blocTest<ThemeCubit, ThemeMode>(
+        'should handle thrown exception during switchTheme',
+        build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
+        setUp: () {
+          const Failure failure = Failure.unexpected('Exception: Unexpected network error');
+          provideDummy(Either<Failure, Unit>.left(failure));
+          when(localStorageRepository.setIsDarkMode(isDarkMode: true)).thenThrow(Exception('Unexpected network error'));
+          when(failureHandler.handleFailure(any)).thenReturn(null);
+        },
+        act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
+        expect: () => <ThemeMode>[],
+        verify: (_) {
+          verify(
+            failureHandler.handleFailure(const Failure.unexpected('Exception: Unexpected network error')),
           ).called(1);
         },
       );

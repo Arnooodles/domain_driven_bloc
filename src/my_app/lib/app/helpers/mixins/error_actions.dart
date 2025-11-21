@@ -7,11 +7,13 @@ import 'package:very_good_core/core/domain/cubit/app_localization/app_localizati
 import 'package:very_good_core/core/domain/entity/failure.dart';
 
 mixin ErrorActions {
-  final I18n _localization = getIt<AppLocalizationCubit>().state;
   ToastificationItem? _activeToast;
+
+  I18n get _localization => getIt<AppLocalizationCubit>().state;
 
   void _showErrorOnce(String message) {
     if (_activeToast?.isRunning ?? false) return;
+
     _activeToast = DialogUtils.showError(message);
   }
 

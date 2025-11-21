@@ -30,10 +30,11 @@ class LoginCubit extends Cubit<LoginState> with BlocPresentationMixin<LoginState
     try {
       final Either<Failure, String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername();
       possibleFailure.fold(_failureHandler.handleFailure, (String? username) {
-        safeEmit(state.copyWith(username: username, isLoading: false));
+        safeEmit(state.copyWith(username: username));
       });
     } on Exception catch (error) {
       _failureHandler.handleFailure(Failure.unexpected(error.toString()));
+    } finally {
       safeEmit(state.copyWith(isLoading: false));
     }
   }

@@ -31,7 +31,6 @@ final class ConnectivityUtils {
 
   bool get isConnected => _currentStatus == ConnectionStatus.online;
   bool get isNotConnected => !isConnected;
-  StreamSubscription<List<ConnectivityResult>> get connectionSubscription => _connectionSubscription;
 
   Stream<ConnectionStatus> get internetStatus => _controller.stream;
 

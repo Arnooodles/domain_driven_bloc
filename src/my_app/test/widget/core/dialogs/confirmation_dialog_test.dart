@@ -1,4 +1,5 @@
-// ignore_for_file: discarded_futures
+// prefer_const_constructors is ignored to ensure the constructor is hit by code coverage.
+// ignore_for_file: discarded_futures, prefer_const_constructors
 
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
@@ -35,21 +36,21 @@ void main() {
             name: 'default',
             builder: () => MockLocalization(
               appLocalizationCubit: appLocalizationCubit,
-              child: const ConfirmationDialog(message: 'message'),
+              child: ConfirmationDialog(message: 'message'),
             ),
           ),
           GoldenTestDeviceScenario(
             name: 'with title',
             builder: () => MockLocalization(
               appLocalizationCubit: appLocalizationCubit,
-              child: const ConfirmationDialog(message: 'message', title: 'title'),
+              child: ConfirmationDialog(message: 'message', title: 'title'),
             ),
           ),
           GoldenTestDeviceScenario(
             name: 'with all parameters',
             builder: () => MockLocalization(
               appLocalizationCubit: appLocalizationCubit,
-              child: const ConfirmationDialog(
+              child: ConfirmationDialog(
                 message: 'message',
                 title: 'title',
                 titleColor: Colors.red,

@@ -1,42 +1,43 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
-import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
+
+import '../../../utils/generated_mocks.mocks.dart';
 
 void main() {
   group(AppCoreCubit, () {
-    late AppCoreCubit appCoreCubit;
-    late Map<AppScrollController, ScrollController> scrollControllers;
+    late MockFailureHandler failureHandler;
+    late MockIAssetRepository assetRepository;
 
     setUp(() {
-      appCoreCubit = AppCoreCubit();
-      scrollControllers = <AppScrollController, ScrollController>{
-        AppScrollController.home: ScrollController(debugLabel: AppScrollController.home.name),
-        AppScrollController.profile: ScrollController(debugLabel: AppScrollController.profile.name),
-      };
+      failureHandler = MockFailureHandler();
+      assetRepository = MockIAssetRepository();
     });
 
-    tearDown(() async {
-      scrollControllers = <AppScrollController, ScrollController>{};
-      await appCoreCubit.close();
+    tearDown(() {
+      reset(failureHandler);
     });
 
     group('initialize', () {
       blocTest<AppCoreCubit, AppCoreState>(
-        'should emit initial state',
-        build: () => appCoreCubit,
+        'should complete without emitting states',
+        build: () => AppCoreCubit(failureHandler, assetRepository),
         act: (AppCoreCubit cubit) async => cubit.initialize(),
         expect: () => <AppCoreState>[],
       );
-    });
 
-    group(' setScrollControllers', () {
       blocTest<AppCoreCubit, AppCoreState>(
-        'should set scrollControllers',
-        build: () => appCoreCubit,
-        act: (AppCoreCubit cubit) async => cubit.setScrollControllers(scrollControllers),
-        expect: () => <AppCoreState>[appCoreCubit.state.copyWith(scrollControllers: scrollControllers)],
+        'should handle unexpected error',
+        setUp: () {
+          when(assetRepository.preloadSVGs()).thenThrow(Exception('error'));
+        },
+        build: () => AppCoreCubit(failureHandler, assetRepository),
+        act: (AppCoreCubit cubit) async => cubit.initialize(),
+        verify: (_) {
+          verify(failureHandler.handleFailure(const Failure.unexpected('Exception: error'))).called(1);
+        },
       );
     });
   });

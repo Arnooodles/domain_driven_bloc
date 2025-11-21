@@ -9,4 +9,13 @@ sealed class AppLifeCycleState with _$AppLifeCycleState {
   const factory AppLifeCycleState.hidden() = _Hidden;
 
   const AppLifeCycleState._();
+
+  factory AppLifeCycleState.initialize(AppLifecycleState? state) => switch (state) {
+    AppLifecycleState.detached => const AppLifeCycleState.detached(),
+    AppLifecycleState.resumed => const AppLifeCycleState.resumed(),
+    AppLifecycleState.inactive => const AppLifeCycleState.inactive(),
+    AppLifecycleState.hidden => const AppLifeCycleState.hidden(),
+    AppLifecycleState.paused => const AppLifeCycleState.paused(),
+    _ => const AppLifeCycleState.resumed(),
+  };
 }

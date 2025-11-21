@@ -31,7 +31,6 @@ void main() {
       reset(userRepository);
       reset(authRepository);
       reset(localStorageRepository);
-      reset(failureHandler);
     });
 
     group('initialize', () {
@@ -157,7 +156,7 @@ void main() {
           return authCubit;
         },
         act: (AuthCubit cubit) => cubit.initialize(),
-        expect: () => <AuthState>[const AuthState.initial()],
+        expect: () => <AuthState>[const AuthState.initial(), const AuthState.unauthenticated()],
         verify: (_) {
           verify(localStorageRepository.getAccessToken()).called(1);
           verifyNever(userRepository.user);
@@ -188,7 +187,7 @@ void main() {
       );
 
       blocTest<AuthCubit, AuthState>(
-        'should emit failure state when user fetch returns unauthorized',
+        'should emit loading state and stop when user fetch returns unauthorized',
         build: () {
           provideDummy(Either<Failure, User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
           when(userRepository.user).thenAnswer(
@@ -262,11 +261,11 @@ void main() {
           when(authRepository.logout()).thenAnswer(
             (_) async => Either<Failure, Unit>.left(Failure.unexpected(Exception('Unexpected error').toString())),
           );
-
+          when(failureHandler.handleFailure(any)).thenReturn(null);
           return authCubit;
         },
         act: (AuthCubit cubit) => cubit.logout(),
-        expect: () => <AuthState>[const AuthState.loading()],
+        expect: () => <AuthState>[const AuthState.loading(), const AuthState.unauthenticated()],
         verify: (_) {
           verify(authRepository.logout()).called(1);
         },
@@ -280,7 +279,7 @@ void main() {
           return authCubit;
         },
         act: (AuthCubit cubit) => cubit.logout(),
-        expect: () => <AuthState>[const AuthState.loading()],
+        expect: () => <AuthState>[const AuthState.loading(), const AuthState.unauthenticated()],
         verify: (_) {
           verify(authRepository.logout()).called(1);
         },
@@ -329,7 +328,7 @@ void main() {
           return authCubit;
         },
         act: (AuthCubit cubit) => cubit.authenticate(),
-        expect: () => <AuthState>[const AuthState.loading()],
+        expect: () => <AuthState>[const AuthState.loading(), const AuthState.unauthenticated()],
         verify: (_) {
           verify(userRepository.user).called(1);
         },

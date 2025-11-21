@@ -80,6 +80,12 @@ class _ConnectivityCheckerState extends State<ConnectivityChecker> {
   @override
   void dispose() {
     unawaited(_connectionSubscription.cancel().logOnError());
+
+    ///Dismiss active toast upon dispose
+    if (_toastificationItem != null) {
+      toastification.dismiss(_toastificationItem!);
+      _toastificationItem = null;
+    }
     super.dispose();
   }
 }

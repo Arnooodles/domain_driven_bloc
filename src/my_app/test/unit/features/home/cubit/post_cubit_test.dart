@@ -41,6 +41,7 @@ void main() {
 
     tearDown(() {
       reset(postRepository);
+      reset(failureHandler);
     });
 
     group('getPosts', () {

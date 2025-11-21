@@ -2,7 +2,7 @@ part of 'app_core_cubit.dart';
 
 @freezed
 sealed class AppCoreState with _$AppCoreState {
-  const factory AppCoreState({required Map<AppScrollController, ScrollController> scrollControllers}) = _AppCoreState;
+  const factory AppCoreState() = _AppCoreState;
 
-  factory AppCoreState.initial() => const _AppCoreState(scrollControllers: <AppScrollController, ScrollController>{});
+  factory AppCoreState.initial() => const _AppCoreState();
 }

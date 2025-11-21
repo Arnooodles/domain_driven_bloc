@@ -14,7 +14,7 @@ part 'app_life_cycle_state.dart';
 
 @lazySingleton
 class AppLifeCycleCubit extends Cubit<AppLifeCycleState> with WidgetsBindingObserver {
-  AppLifeCycleCubit() : super(const AppLifeCycleState.resumed()) {
+  AppLifeCycleCubit() : super(AppLifeCycleState.initialize(WidgetsBinding.instance.lifecycleState)) {
     WidgetsBinding.instance.addObserver(this);
   }
 

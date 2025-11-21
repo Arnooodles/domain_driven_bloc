@@ -13,7 +13,6 @@ class AppLocalizationCubit extends Cubit<I18n> {
 
   Future<void> initialize() async {
     safeEmit(await AppLocaleUtils.findDeviceLocale().build());
-
     // TODO: Example on how to implement remote localization
     // try {
     //   // fetch remote locale from a remote service

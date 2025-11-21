@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -37,7 +35,7 @@ class AuthCubit extends Cubit<AuthState> {
         }
       });
     } on Exception catch (error) {
-      _emitError(error);
+      _emitError(right(error));
     }
   }
 
@@ -46,7 +44,7 @@ class AuthCubit extends Cubit<AuthState> {
       safeEmit(const AuthState.loading());
       _emitAuthState(await _userRepository.user);
     } on Exception catch (error) {
-      _emitError(error);
+      _emitError(right(error), isLogout: false);
     }
   }
 
@@ -55,7 +53,7 @@ class AuthCubit extends Cubit<AuthState> {
       safeEmit(const AuthState.loading());
       _emitAuthState(await _userRepository.user, isLogout: true);
     } on Exception catch (error) {
-      _emitError(error);
+      _emitError(right(error));
     }
   }
 
@@ -63,24 +61,27 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       safeEmit(const AuthState.loading());
       final Either<Failure, Unit> possibleFailure = await _authRepository.logout();
-      possibleFailure.fold(_failureHandler.handleFailure, (_) => safeEmit(const AuthState.unauthenticated()));
+      possibleFailure.fold(
+        (Failure failure) => _emitError(left(failure)),
+        (_) => safeEmit(const AuthState.unauthenticated()),
+      );
     } on Exception catch (error) {
-      _emitError(error);
+      _emitError(right(error));
     }
   }
 
   void _emitAuthState(Either<Failure, User> possibleFailure, {bool isLogout = false}) {
     possibleFailure.fold((Failure failure) {
-      _failureHandler.handleFailure(failure);
-
-      if (isLogout) {
-        safeEmit(const AuthState.unauthenticated());
-      }
+      _emitError(left(failure), isLogout: isLogout);
     }, (User user) => safeEmit(AuthState.authenticated(user: user)));
   }
 
-  void _emitError(Object error) {
-    log(error.toString());
-    _failureHandler.handleFailure(Failure.unexpected(error.toString()));
+  void _emitError(Either<Failure, Object> failureOrError, {bool isLogout = true}) {
+    if (isLogout) {
+      safeEmit(const AuthState.unauthenticated());
+    }
+    _failureHandler.handleFailure(
+      failureOrError.fold((Failure failure) => failure, (Object error) => Failure.unexpected(error.toString())),
+    );
   }
 }

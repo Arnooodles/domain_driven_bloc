@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
+import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
 import 'package:very_good_core/app/utils/url_launcher_utils.dart';
 import 'package:very_good_core/core/domain/entity/enum/text_type.dart';
+import 'package:very_good_core/core/domain/entity/failure.dart';
 
 class VeryGoodCoreText extends StatelessWidget {
   const VeryGoodCoreText({
@@ -103,7 +106,7 @@ class _StyledText extends StatelessWidget {
         ),
         (_, Map<String?, String?> attributes) async {
           if (attributes['href'] != null) {
-            await UrlLauncherUtils.openBrowser(attributes['href']!);
+            await _launchLink(attributes);
           }
         },
       ),
@@ -115,6 +118,17 @@ class _StyledText extends StatelessWidget {
         ),
     },
   );
+
+  Future<void> _launchLink(Map<String?, String?> attributes) async {
+    try {
+      final String? href = attributes['href'];
+      if (href != null) {
+        await UrlLauncherUtils.openBrowser(href);
+      }
+    } on Exception catch (error) {
+      getIt<FailureHandler>().handleFailure(Failure.unexpected(error.toString()));
+    }
+  }
 }
 
 class _MarkdownText extends StatelessWidget {

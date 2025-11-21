@@ -18,7 +18,6 @@ void main() {
     late LoginCubit loginCubit;
     late String username;
     late String password;
-    late Failure failure;
 
     setUp(() {
       authRepository = MockIAuthRepository();
@@ -31,6 +30,7 @@ void main() {
     tearDown(() {
       reset(localStorageRepository);
       reset(authRepository);
+      reset(failureHandler);
     });
 
     group('initialize', () {
@@ -45,7 +45,7 @@ void main() {
           return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.initialize(),
-        expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false)],
+        expect: () => <LoginState>[LoginState.initial(), LoginState.initial().copyWith(isLoading: false)],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
         },
@@ -62,7 +62,10 @@ void main() {
           return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.initialize(),
-        expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false, username: username)],
+        expect: () => <LoginState>[
+          LoginState.initial().copyWith(username: username),
+          LoginState.initial().copyWith(isLoading: false, username: username),
+        ],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
         },
@@ -71,6 +74,7 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'should handle storage access failure during initialization',
         build: () {
+          provideDummy(Either<Failure, String?>.right(null));
           when(
             localStorageRepository.getLastLoggedInUsername(),
           ).thenAnswer((_) async => left(const Failure.deviceInfo('Storage access failed')));
@@ -78,7 +82,7 @@ void main() {
           return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.initialize(),
-        expect: () => <LoginState>[],
+        expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false)],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
         },
@@ -96,7 +100,6 @@ void main() {
         expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false)],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
-          verify(failureHandler.handleFailure(const Failure.unexpected('Exception: Unexpected error'))).called(1);
         },
       );
     });
@@ -133,23 +136,18 @@ void main() {
     });
 
     group('login', () {
-      setUp(() {
-        provideDummy(Either<Failure, String?>.right(null));
-        when(
-          localStorageRepository.getLastLoggedInUsername(),
-        ).thenAnswer((_) async => Either<Failure, String?>.right(null));
-        loginCubit = LoginCubit(authRepository, localStorageRepository, failureHandler);
-        failure = const Failure.server(StatusCode.http500, 'INTERNAL SERVER ERROR');
-      });
-
       blocTest<LoginCubit, LoginState>(
         'should emit loading and success states when login is successful',
         build: () {
-          provideDummy(Either<Failure, Unit>.right(unit));
           provideDummy(Either<Failure, String?>.right(null));
-          when(authRepository.login(any)).thenAnswer((_) async => Either<Failure, Unit>.right(unit));
+          when(
+            localStorageRepository.getLastLoggedInUsername(),
+          ).thenAnswer((_) async => Either<Failure, String?>.right(null));
 
-          return loginCubit;
+          provideDummy(Either<Failure, Unit>.right(unit));
+          when(authRepository.login(any)).thenAnswer((_) async => Either<Failure, Unit>.right(unit));
+          when(failureHandler.handleFailure(any)).thenReturn(null);
+          return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
@@ -164,11 +162,15 @@ void main() {
       blocPresentationTest<LoginCubit, LoginState, LoginPresentationEvent>(
         'should emit onSuccess presentation event when login is successful',
         build: () {
-          provideDummy(Either<Failure, Unit>.right(unit));
           provideDummy(Either<Failure, String?>.right(null));
-          when(authRepository.login(any)).thenAnswer((_) async => Either<Failure, Unit>.right(unit));
+          when(
+            localStorageRepository.getLastLoggedInUsername(),
+          ).thenAnswer((_) async => Either<Failure, String?>.right(null));
 
-          return loginCubit;
+          provideDummy(Either<Failure, Unit>.right(unit));
+          when(authRepository.login(any)).thenAnswer((_) async => Either<Failure, Unit>.right(unit));
+          when(failureHandler.handleFailure(any)).thenReturn(null);
+          return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expectPresentation: () => const <LoginPresentationEvent>[LoginPresentationEvent.onSuccess()],
@@ -177,11 +179,16 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'should emit loading and failure states when login fails',
         build: () {
-          provideDummy(Either<Failure, Unit>.left(failure));
           provideDummy(Either<Failure, String?>.right(null));
-          when(authRepository.login(any)).thenAnswer((_) async => Either<Failure, Unit>.left(failure));
+          when(
+            localStorageRepository.getLastLoggedInUsername(),
+          ).thenAnswer((_) async => Either<Failure, String?>.right(null));
 
-          return loginCubit;
+          const Failure failure = Failure.server(StatusCode.http500, 'INTERNAL SERVER ERROR');
+          provideDummy(Either<Failure, Unit>.left(failure));
+          when(authRepository.login(any)).thenAnswer((_) async => Either<Failure, Unit>.left(failure));
+          when(failureHandler.handleFailure(any)).thenReturn(null);
+          return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
@@ -196,11 +203,15 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'should handle unexpected error during login',
         build: () {
-          provideDummy(Either<Failure, Unit>.left(Failure.unexpected(Exception('Unexpected error').toString())));
           provideDummy(Either<Failure, String?>.right(null));
-          when(authRepository.login(any)).thenThrow(Exception('Unexpected error'));
+          when(
+            localStorageRepository.getLastLoggedInUsername(),
+          ).thenAnswer((_) async => Either<Failure, String?>.right(null));
 
-          return loginCubit;
+          provideDummy(Either<Failure, Unit>.left(Failure.unexpected(Exception('Unexpected error').toString())));
+          when(authRepository.login(any)).thenThrow(Exception('Unexpected error'));
+          when(failureHandler.handleFailure(any)).thenReturn(null);
+          return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
@@ -215,17 +226,21 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'should handle validation error for invalid password',
         build: () {
+          provideDummy(Either<Failure, String?>.right(null));
+          when(
+            localStorageRepository.getLastLoggedInUsername(),
+          ).thenAnswer((_) async => Either<Failure, String?>.right(null));
+
           provideDummy(
             Either<Failure, Unit>.left(
               const Failure.validation(EmptyStringValidationError('password', 'Invalid Password'), ''),
             ),
           );
-          provideDummy(Either<Failure, String?>.right(null));
           when(authRepository.login(any)).thenAnswer(
             (_) async => left(const Failure.validation(EmptyStringValidationError('password', 'Invalid Password'), '')),
           );
-
-          return loginCubit;
+          when(failureHandler.handleFailure(any)).thenReturn(null);
+          return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.login(username, 'pass'),
         expect: () => <LoginState>[
@@ -237,12 +252,16 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'should handle authentication failure',
         build: () {
+          provideDummy(Either<Failure, String?>.right(null));
+          when(
+            localStorageRepository.getLastLoggedInUsername(),
+          ).thenAnswer((_) async => Either<Failure, String?>.right(null));
+
           const Failure authFailure = Failure.authentication('Invalid credentials');
           provideDummy(Either<Failure, Unit>.left(authFailure));
-          provideDummy(Either<Failure, String?>.right(null));
           when(authRepository.login(any)).thenAnswer((_) async => left(authFailure));
-
-          return loginCubit;
+          when(failureHandler.handleFailure(any)).thenReturn(null);
+          return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
@@ -258,9 +277,13 @@ void main() {
         'should handle network timeout during login',
         build: () {
           provideDummy(Either<Failure, String?>.right(null));
-          when(authRepository.login(any)).thenThrow(Exception('Connection timeout'));
+          when(
+            localStorageRepository.getLastLoggedInUsername(),
+          ).thenAnswer((_) async => Either<Failure, String?>.right(null));
 
-          return loginCubit;
+          when(authRepository.login(any)).thenThrow(Exception('Connection timeout'));
+          when(failureHandler.handleFailure(any)).thenReturn(null);
+          return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[

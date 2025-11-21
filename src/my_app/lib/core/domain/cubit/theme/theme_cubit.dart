@@ -32,10 +32,14 @@ class ThemeCubit extends Cubit<ThemeMode> {
   }
 
   Future<void> switchTheme(Brightness currentBrightness) async {
-    final bool isDarkMode = currentBrightness != Brightness.dark;
-    final Either<Failure, Unit> possibleFailure = await _localStorageRepository.setIsDarkMode(isDarkMode: isDarkMode);
-    possibleFailure.fold(_failureHandler.handleFailure, (_) {
-      safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
-    });
+    try {
+      final bool isDarkMode = currentBrightness != Brightness.dark;
+      final Either<Failure, Unit> possibleFailure = await _localStorageRepository.setIsDarkMode(isDarkMode: isDarkMode);
+      possibleFailure.fold(_failureHandler.handleFailure, (_) {
+        safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
+      });
+    } on Exception catch (error) {
+      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
+    }
   }
 }

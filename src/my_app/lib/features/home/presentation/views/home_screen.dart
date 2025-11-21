@@ -9,9 +9,9 @@ import 'package:very_good_core/app/constants/mock_data.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
-import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
 import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_app_bar.dart';
+import 'package:very_good_core/core/presentation/widgets/wrappers/scroll_controller_provider.dart';
 import 'package:very_good_core/features/home/domain/cubit/post/post_cubit.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/empty_post.dart';
@@ -62,17 +62,12 @@ class _PostList extends StatelessWidget {
   final List<Post> posts;
 
   @override
-  Widget build(BuildContext context) =>
-      BlocSelector<AppCoreCubit, AppCoreState, Map<AppScrollController, ScrollController>>(
-        selector: (AppCoreState state) => state.scrollControllers,
-        builder: (BuildContext context, Map<AppScrollController, ScrollController> scrollController) =>
-            ListView.separated(
-              padding: Paddings.topMedium,
-              controller: scrollController.isNotEmpty ? scrollController[AppScrollController.home] : ScrollController(),
-              physics: const ClampingScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) => PostContainer(post: posts[index]),
-              separatorBuilder: (BuildContext context, int index) => Gap.small(),
-              itemCount: posts.length,
-            ),
-      );
+  Widget build(BuildContext context) => ListView.separated(
+    padding: Paddings.topMedium,
+    controller: ScrollControllerProvider.of(context, AppScrollController.home),
+    physics: const ClampingScrollPhysics(),
+    itemBuilder: (BuildContext context, int index) => PostContainer(post: posts[index]),
+    separatorBuilder: (BuildContext context, int index) => Gap.small(),
+    itemCount: posts.length,
+  );
 }

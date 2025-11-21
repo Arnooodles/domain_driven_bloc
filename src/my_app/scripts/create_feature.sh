@@ -2,44 +2,18 @@
 
 set -euo pipefail
 
-print_usage() {
-  echo "Usage: $0 <FeatureName>" 1>&2
-  echo "Creates Clean Architecture folders under lib/features/<feature_name>" 1>&2
-}
+# Source common functions
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/common.sh"
 
-if [ $# -lt 1 ]; then
-  # Portable prompt: print then read (works in bash/zsh/sh)
-  printf "Enter feature name: "
-  IFS= read -r INPUT_NAME
-else
-  INPUT_NAME="$1"
-fi
-
-# Validate non-empty input after trimming spaces
-if [ -z "${INPUT_NAME// }" ]; then
-  echo "Error: feature name is required." 1>&2
-  print_usage
+if ! validate_or_prompt_feature_name "$@"; then
+  print_usage "Creates Clean Architecture folders under lib/features/<feature_name>"
   exit 1
 fi
-
-# Convert to snake_case (underscore_case) per project naming rules
-# - Insert underscore between lower->Upper transitions
-# - Replace non-alphanumeric with underscores
-# - Lowercase and collapse duplicate underscores
-to_snake_case() {
-  local s="$1"
-  # Handle camelCase/PascalCase boundaries, non-alnum, and lowercase
-  s=$(echo "$s" | sed -E 's/([a-z0-9])([A-Z])|([A-Z])([A-Z][a-z])/\1\3_\2\4/g')
-  s=$(echo "$s" | sed -E 's/[^a-zA-Z0-9]+/_/g')
-  s=$(echo "$s" | tr '[:upper:]' '[:lower:]')
-  s=$(echo "$s" | sed -E 's/^_+|_+$//g; s/__+/_/g')
-  echo "$s"
-}
 
 FEATURE_NAME_SNAKE=$(to_snake_case "$INPUT_NAME")
 
 # Determine repo root based on this script's location
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 FEATURE_ROOT="$REPO_ROOT/lib/features/$FEATURE_NAME_SNAKE"

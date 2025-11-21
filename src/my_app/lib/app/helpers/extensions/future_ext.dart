@@ -7,7 +7,6 @@ import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 extension FutureExt<T> on Future<T> {
   /// Catches errors and logs them in debug mode.
   ///
-  /// Optionally provides a custom error message prefix.
   /// Returns the original future for chaining.
   Future<T> logOnError() => catchError((Object error, StackTrace stackTrace) {
     if (kDebugMode) {

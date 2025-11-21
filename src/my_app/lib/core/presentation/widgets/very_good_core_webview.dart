@@ -104,8 +104,8 @@ class VeryGoodCoreWebview extends HookWidget {
       onReceivedError: (InAppWebViewController controller, WebResourceRequest request, WebResourceError error) =>
           _logger.e(error.description),
       onReceivedHttpError:
-          (InAppWebViewController controller, WebResourceRequest request, WebResourceResponse response) async {
-            await pullToRefreshController.value?.endRefreshing();
+          (InAppWebViewController controller, WebResourceRequest request, WebResourceResponse response) {
+            unawaited(pullToRefreshController.value?.endRefreshing().logOnError());
             _logger.e(response.toString());
           },
       onLoadStop: (InAppWebViewController controller, WebUri? url) async {

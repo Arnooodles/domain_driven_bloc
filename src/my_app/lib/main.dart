@@ -4,9 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:logger/logger.dart';
 import 'package:very_good_core/app/app.dart';
+import 'package:very_good_core/app/config/app_config.dart';
 import 'package:very_good_core/app/generated/assets.gen.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/observers/app_bloc_observer.dart';
@@ -48,6 +49,8 @@ void _handleErrors() {
 }
 
 Future<void> initializeEnvironmentConfig(Env env) async {
+  AppConfig.environment = env;
+
   switch (env) {
     case Env.development:
     case Env.test:

@@ -103,9 +103,9 @@ if [ -n "$COMPILE_SDK" ]; then
   fi
 fi
 
-# Update compileSdk version (if specified)
+# Update ndkVersion (if specified)
 if [ -n "$NDK_VERSION" ]; then
-  echo "Updating ndkVersion version to $NDK_VERSION"
+  echo "Updating ndkVersion to $NDK_VERSION"
   if [[ "$PLATFORM" == "windows" ]]; then
     sed -i "s/ndkVersion = \".*\"/ndkVersion = \"${NDK_VERSION}\"/" app/build.gradle.kts
   else  
@@ -115,7 +115,7 @@ fi
 
 # Update com.android.application version in settings.gradle (if specified)
 if [ -n "$ANDROID_GRADLE_PLUGIN" ]; then
-echo "Updating com.android.application version to $ANDROID_GRADLE_PLUGIN"
+  echo "Updating com.android.application version to $ANDROID_GRADLE_PLUGIN"
   if [[ "$PLATFORM" == "windows" ]]; then
     sed -i "s/id (\"com.android.application\") version \".*\" apply false/id (\"com.android.application\") version \"${ANDROID_GRADLE_PLUGIN}\" apply false/" settings.gradle.kts
   else  
@@ -124,7 +124,7 @@ echo "Updating com.android.application version to $ANDROID_GRADLE_PLUGIN"
 fi
 
 if [ -n "$KOTLIN_VERSION" ]; then
-echo "Updating org.jetbrains.kotlin.android to $KOTLIN_VERSION"
+  echo "Updating org.jetbrains.kotlin.android to $KOTLIN_VERSION"
   if [[ "$PLATFORM" == "windows" ]]; then
     sed -i "s/id (\"org.jetbrains.kotlin.android\") version \".*\" apply false/id (\"org.jetbrains.kotlin.android\") version \"${KOTLIN_VERSION}\" apply false/" settings.gradle.kts
   else  
