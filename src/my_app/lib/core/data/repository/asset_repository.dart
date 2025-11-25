@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/generated/assets.gen.dart';
+import 'package:very_good_core/app/helpers/extensions/future_ext.dart';
 import 'package:very_good_core/core/domain/interface/i_asset_repository.dart';
 
 @LazySingleton(as: IAssetRepository)
@@ -11,7 +12,7 @@ class AssetRepository implements IAssetRepository {
     final List<Future<void>> futures = <Future<void>>[];
     for (final String path in getSvgAssets()) {
       final SvgAssetLoader loader = SvgAssetLoader(path);
-      futures.add(svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null)));
+      futures.add(svg.cache.putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null)).logOnError());
     }
     await Future.wait(futures);
   }

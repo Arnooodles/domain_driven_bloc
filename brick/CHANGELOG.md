@@ -3,14 +3,20 @@
 - feat: add feature scaffolding scripts for Clean Architecture
   - `scripts/create_feature.sh`: create feature folder structure with data/domain/presentation layers
   - `scripts/create_feature_tests.sh`: create corresponding test folder structure
+- feat: implement Google Fonts integration
+  - Add font assets
+  - Enable Google Fonts in goldens testing
 - feat: add concurrency to verify workflow
-- feat: implement google_fonts
-- feat: add font assets
-- feat: implement google_fonts in goldens testing
+- feat: add future and sync validation extensions
 - refactor: rename `bloc` to `cubit` across the codebase
 - refactor: remove pre_gen hooks and workflow
+- refactor: change flutter_dotenv to envied
+- refactor: optimize web assets and remove unused splash images
+- refactor: update dialog utils and confirmation dialog
 - fix: resolve login issue on first app launch
 - fix: resolve discarded_futures lint warnings
+- fix: disable formatting for freezed files
+- fix: apply auto-formatting to generated files
 - chore: update Flutter to version 3.38.1
 - chore: update dependencies to latest compatible versions
 - chore(android): update Android project

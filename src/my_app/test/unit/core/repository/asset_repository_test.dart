@@ -11,7 +11,7 @@ import 'package:very_good_core/core/domain/interface/i_asset_repository.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('AssetRepository', () {
+  group(AssetRepository, () {
     late AssetRepository assetRepository;
 
     setUp(() {
@@ -28,20 +28,27 @@ void main() {
     });
 
     test('preloadSVGs caches assets correctly', () async {
+      bool mockCalled = false;
       final FakeAssetRepository fakeAssetRepository = FakeAssetRepository();
 
       // Mock the asset loading
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler('flutter/assets', (
         ByteData? message,
       ) async {
+        mockCalled = true;
         final Uint8List svgBytes = utf8.encode('<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>');
         return ByteData.view(svgBytes.buffer);
       });
 
-      await expectLater(fakeAssetRepository.preloadSVGs(), completes);
+      try {
+        await expectLater(fakeAssetRepository.preloadSVGs(), completes);
 
-      // Clean up
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler('flutter/assets', null);
+        // Verify the mock was called (assets were loaded)
+        expect(mockCalled, isTrue, reason: 'Asset should have been loaded via binary messenger');
+      } finally {
+        // Clean up
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMessageHandler('flutter/assets', null);
+      }
     });
   });
 }

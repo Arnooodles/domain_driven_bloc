@@ -31,6 +31,7 @@ void main() {
       reset(userRepository);
       reset(authRepository);
       reset(localStorageRepository);
+      reset(failureHandler);
     });
 
     group('initialize', () {
@@ -255,7 +256,7 @@ void main() {
       );
 
       blocTest<AuthCubit, AuthState>(
-        'should emit failure state when logout fails',
+        'should emit unauthenticated state when logout fails',
         build: () {
           provideDummy(Either<Failure, Unit>.left(Failure.unexpected(Exception('Unexpected error').toString())));
           when(authRepository.logout()).thenAnswer(
@@ -272,7 +273,7 @@ void main() {
       );
 
       blocTest<AuthCubit, AuthState>(
-        'should emit failure state when logout throws exception',
+        'should emit unauthenticated state when logout throws exception',
         build: () {
           when(authRepository.logout()).thenThrow(Exception('Unexpected error'));
 
@@ -321,7 +322,7 @@ void main() {
       );
 
       blocTest<AuthCubit, AuthState>(
-        'should emit failure state when authentication throws exception',
+        'should emit unauthenticated state when authentication throws exception',
         build: () {
           when(userRepository.user).thenThrow(Exception('Unexpected error'));
 

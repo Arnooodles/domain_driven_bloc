@@ -1,21 +1,41 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
 import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
 
+import '../../../utils/generated_mocks.mocks.dart';
+
 void main() {
-  group('AppLocalizationCubit initialize ', () {
-    late AppLocalizationCubit appLocalizationCubit;
+  late MockIAppLocalizationRepository mockIAppLocalizationRepository;
 
-    tearDown(() async {
-      await appLocalizationCubit.close();
+  setUp(() {
+    mockIAppLocalizationRepository = MockIAppLocalizationRepository();
+  });
+
+  group(AppLocalizationCubit, () {
+    group('initialize', () {
+      blocTest<AppLocalizationCubit, I18n>(
+        'should emit an I18n state',
+        setUp: () {
+          when(mockIAppLocalizationRepository.findDeviceLocale()).thenReturn(AppLocale.en);
+        },
+        build: () => AppLocalizationCubit(mockIAppLocalizationRepository),
+        act: (AppLocalizationCubit cubit) => cubit.initialize(),
+        expect: () => <dynamic>[isA<I18n>()],
+      );
+
+      blocTest<AppLocalizationCubit, I18n>(
+        'should emit first locale when device locale detection fails',
+        setUp: () {
+          when(
+            mockIAppLocalizationRepository.findDeviceLocale(),
+          ).thenThrow(Exception('Device locale detection failed'));
+        },
+        build: () => AppLocalizationCubit(mockIAppLocalizationRepository),
+        act: (AppLocalizationCubit cubit) => cubit.initialize(),
+        expect: () => <dynamic>[isA<I18n>()],
+      );
     });
-
-    blocTest<AppLocalizationCubit, I18n>(
-      'should emit an I18n state',
-      build: () => appLocalizationCubit = AppLocalizationCubit(),
-      act: (AppLocalizationCubit cubit) => cubit.initialize(),
-      expect: () => <dynamic>[isA<I18n>()],
-    );
   });
 }

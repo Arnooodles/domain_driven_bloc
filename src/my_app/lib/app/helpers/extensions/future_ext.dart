@@ -10,7 +10,7 @@ extension FutureExt<T> on Future<T> {
   /// Returns the original future for chaining.
   Future<T> logOnError() => catchError((Object error, StackTrace stackTrace) {
     if (kDebugMode) {
-      getIt<Logger>().e('Error: $error', stackTrace: stackTrace as StackTrace?);
+      getIt<Logger>().e('Error: $error', stackTrace: stackTrace);
     } else {
       //TODO: implement reportCrash crashlytics
     }

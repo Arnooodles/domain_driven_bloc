@@ -18,9 +18,8 @@ class ScrollControllerProvider extends StatefulWidget {
   /// Retrieves the ScrollController for the given [key] from the nearest
   /// [ScrollControllerProvider] ancestor.
   ///
-  /// If the controller doesn't exist, it will be automatically initialized
-  ///
-  /// Throws a [StateError] if no provider is found.
+  /// Throws a [StateError] if no provider is found or if the controller
+  /// for the given [key] has not been initialized.
   static ScrollController of(BuildContext context, AppScrollController key) {
     final _InheritedScrollControllerProvider? provider = context
         .dependOnInheritedWidgetOfExactType<_InheritedScrollControllerProvider>();
@@ -31,15 +30,10 @@ class ScrollControllerProvider extends StatefulWidget {
       );
     }
 
-    ScrollController? controller = provider.getController(key);
-
-    // Auto-initialize controller if it doesn't exist
-    if (controller == null && provider.onCreateController != null) {
-      controller = provider.onCreateController!(key);
-    }
+    final ScrollController? controller = provider.getController(key);
 
     if (controller == null) {
-      throw StateError('ScrollController for $key could not be created or retrieved.');
+      throw StateError('ScrollController for $key not found. Ensure it is initialized in ScrollControllerProvider.');
     }
 
     return controller;
@@ -68,33 +62,9 @@ class _ScrollControllerProviderState extends State<ScrollControllerProvider> {
     _listeners.putIfAbsent(appScrollController, () => listener);
   }
 
-  /// Creates and adds a ScrollController for the given [key] if it doesn't exist.
-  ///
-  /// Returns the newly created or existing controller.
-  ScrollController _getOrCreateController(AppScrollController key) {
-    // Check if controller already exists
-    if (_controllers.containsKey(key)) {
-      return _controllers[key]!;
-    } else {
-      final ScrollController scrollController = ScrollController(debugLabel: key.name);
-      _addController(key, scrollController);
-
-      // Trigger rebuild to update InheritedWidget with the new controller
-      // since we modified the _controllers map
-      if (mounted) {
-        setState(() {
-          // Rebuild needed to notify InheritedWidget of controller addition
-          assert(_controllers.containsKey(key), 'Controller should be added to map');
-        });
-      }
-
-      return scrollController;
-    }
-  }
-
   void _onScrollChanged(ScrollController scrollController) {
     if (!scrollController.hasClients) return;
-    late HidableCubit hidableCubit;
+    HidableCubit hidableCubit;
     try {
       hidableCubit = context.read<HidableCubit>();
     } on Exception catch (_) {
@@ -135,23 +105,15 @@ class _ScrollControllerProviderState extends State<ScrollControllerProvider> {
   }
 
   @override
-  Widget build(BuildContext context) => _InheritedScrollControllerProvider(
-    controllers: _controllers,
-    onCreateController: _getOrCreateController,
-    child: widget.child,
-  );
+  Widget build(BuildContext context) =>
+      _InheritedScrollControllerProvider(controllers: _controllers, child: widget.child);
 }
 
 /// InheritedWidget that provides ScrollControllers to descendant widgets.
 class _InheritedScrollControllerProvider extends InheritedWidget {
-  const _InheritedScrollControllerProvider({
-    required this.controllers,
-    required this.onCreateController,
-    required super.child,
-  });
+  const _InheritedScrollControllerProvider({required this.controllers, required super.child});
 
   final Map<AppScrollController, ScrollController> controllers;
-  final ScrollController Function(AppScrollController)? onCreateController;
 
   /// Retrieves the ScrollController for the given [key].
   ScrollController? getController(AppScrollController key) => controllers[key];

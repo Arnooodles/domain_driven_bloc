@@ -6,13 +6,22 @@ import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
+import 'package:very_good_core/core/domain/interface/i_app_localization_repository.dart';
 
 @lazySingleton
 class AppLocalizationCubit extends Cubit<I18n> {
-  AppLocalizationCubit() : super(AppLocale.values.first.buildSync());
+  AppLocalizationCubit(this._appLocalizationRepository) : super(AppLocale.values.first.buildSync());
+
+  final IAppLocalizationRepository _appLocalizationRepository;
 
   Future<void> initialize() async {
-    safeEmit(await AppLocaleUtils.findDeviceLocale().build());
+    try {
+      safeEmit(await _appLocalizationRepository.findDeviceLocale().build());
+    } on Exception catch (_) {
+      // Fallback to first locale if device locale detection fails
+      safeEmit(AppLocale.values.first.buildSync());
+    }
+
     // TODO: Example on how to implement remote localization
     // try {
     //   // fetch remote locale from a remote service

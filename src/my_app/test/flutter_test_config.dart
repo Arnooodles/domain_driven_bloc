@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_catches_without_on_clauses
-
 import 'dart:async';
 
 import 'package:alchemist/alchemist.dart';
@@ -17,7 +15,7 @@ class TestConfig {
   /// Added a goldens version to know when the golden files were last updated
   /// To update the golden files in the remote repository change goldensVersion
   /// Format: yyyyMMdd
-  static String get goldensVersion => '20251115';
+  static String get goldensVersion => '20251125';
 
   /// Customize your threshold here
   /// For example, the error threshold here is 15%
@@ -27,12 +25,7 @@ class TestConfig {
 
 /// Loads fonts within a test zone to prevent "There is no current invoker" errors
 Future<void> _loadFontsInTestZone() async {
-  try {
-    // Trigger font loading by accessing the font
-    GoogleFonts.roboto();
-  } catch (_) {
-    // If font loading fails, continue with tests using fallback fonts
-  }
+  await GoogleFonts.pendingFonts(<dynamic>[GoogleFonts.roboto()]);
 }
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {

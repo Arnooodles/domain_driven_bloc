@@ -14,10 +14,10 @@ TARGET_SDK="36"
 # The minimum compile SDK version
 COMPILE_SDK="36"
 # This shouldn't be too old, otherwise it won't compile with the GRADLE_WRAPPER set above
-ANDROID_GRADLE_PLUGIN="8.12.1"
+ANDROID_GRADLE_PLUGIN="8.13.0"
 # The minimum Kotlin version
 # See: https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
-KOTLIN_VERSION="2.2.20"
+KOTLIN_VERSION="2.2.21"
 # See: https://developer.android.com/ndk/downloads
 NDK_VERSION="29.0.14206865"
 

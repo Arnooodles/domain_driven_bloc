@@ -9,7 +9,7 @@ import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 class RouteRefreshListener extends ChangeNotifier {
   RouteRefreshListener(this._authCubit) {
     notifyListeners();
-    _authStreamSubscription = _authCubit.stream.asBroadcastStream().listen((_) {
+    _authStreamSubscription = _authCubit.stream.listen((_) {
       notifyListeners();
     });
   }

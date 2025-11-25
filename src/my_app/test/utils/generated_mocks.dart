@@ -13,6 +13,7 @@ import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
 import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
 import 'package:very_good_core/core/domain/cubit/hidable/hidable_cubit.dart';
+import 'package:very_good_core/core/domain/interface/i_app_localization_repository.dart';
 import 'package:very_good_core/core/domain/interface/i_asset_repository.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
@@ -38,6 +39,7 @@ import 'package:very_good_core/features/home/domain/interface/i_post_repository.
   MockSpec<IAuthRepository>(),
   MockSpec<IPostRepository>(),
   MockSpec<IAssetRepository>(),
+  MockSpec<IAppLocalizationRepository>(),
   // Cubits
   MockSpec<AuthCubit>(),
   MockSpec<AppCoreCubit>(),

@@ -18,6 +18,7 @@ class MainScreen extends StatelessWidget {
         navigationShell.goBranch(0);
       } else {
         await DialogUtils.showExitDialog(context);
+        if (!context.mounted) return;
       }
     }
   }

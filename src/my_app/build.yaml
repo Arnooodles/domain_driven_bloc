@@ -1,4 +1,3 @@
-
 targets:
   $default:
     builders:
@@ -40,13 +39,13 @@ targets:
           - lib/features/**/data/service/**.dart
       mockito|mockBuilder:
         generate_for:
-          - test/utils/generated_mocks.dart  
+          - test/utils/generated_mocks.dart
       flutter_gen:
         options:
           integrations:
-            flutter_svg: true    
+            flutter_svg: true
           output: lib/app/generated/
-          line_length: 120   
+          line_length: 120
       slang_build_runner:
         options:
           base_locale: en
@@ -58,8 +57,13 @@ targets:
           output_directory: lib/app/generated
           output_file_name: localization.g.dart
           translate_var: i18n
-          translation_class_visibility: public 
+          translation_class_visibility: public
           translation_overrides: true
           format:
             enabled: true
             width: 120
+      envied_generator|envied:
+        generate_for:
+          - lib/app/config/app_config.dart
+        options:
+          override: true

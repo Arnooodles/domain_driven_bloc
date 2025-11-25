@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 /// App Text Style Definitions
 
 abstract final class AppTextStyle {
-  static final TextStyle baseTextStyle = GoogleFonts.roboto();
+  static final TextStyle baseTextStyle = GoogleFonts.roboto(fontWeight: AppFontWeight.regular);
 
   /// Display Large Text Style
   static final TextStyle displayLarge = baseTextStyle.copyWith(fontSize: 57, fontWeight: AppFontWeight.regular);

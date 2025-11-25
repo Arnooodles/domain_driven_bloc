@@ -11,7 +11,7 @@ import '../../../utils/generated_mocks.mocks.dart';
 import '../../../utils/test_utils.dart';
 
 void main() {
-  group('UserRepository', () {
+  group(UserRepository, () {
     late MockUserService userService;
     late UserRepository userRepository;
     late UserDTO user;

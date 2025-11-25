@@ -33,9 +33,7 @@ class AuthInterceptor implements Interceptor {
   }
 
   bool _shouldIntercept(Request request) =>
-      request.uri.host.contains(_dummyJsonHost) &&
-      !request.uri.path.contains(_refreshPath) &&
-      !request.uri.path.contains(_loginPath);
+      request.uri.host.contains(_dummyJsonHost) && request.uri.path != _refreshPath && request.uri.path != _loginPath;
 
   Future<Response<BodyType>> _handleAuthenticatedRequest<BodyType>(Chain<BodyType> chain) async {
     final Either<Failure, String> possibleFailure = await _getAccessToken();

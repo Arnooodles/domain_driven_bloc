@@ -4,7 +4,10 @@ set -euo pipefail
 
 # Source common functions
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-source "$SCRIPT_DIR/common.sh"
+source "$SCRIPT_DIR/common.sh" || {
+  echo "Error: common.sh not found at $SCRIPT_DIR/common.sh" >&2
+  exit 1
+}
 
 if ! validate_or_prompt_feature_name "$@"; then
   print_usage "Creates test folders under test/unit/features/<feature_name> and test/widget/features/<feature_name>"

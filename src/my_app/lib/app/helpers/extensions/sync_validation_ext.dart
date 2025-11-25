@@ -17,7 +17,7 @@ extension SyncValidationExt on SyncValidationStep<String> {
   });
 
   SyncValidationStep<String> isEmailStrict() => bind(
-    (String value) => EmailValidator.validate(value)
+    (String value) => EmailValidator.validate(value.trim())
         ? pass(value)
         : fail(InvalidEmailValidationError.new, ValidationI18n.messages.invalidEmail(fieldName)),
   );
