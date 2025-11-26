@@ -1,3 +1,6 @@
+// prefer_const_constructors is ignored to ensure the constructor is hit by code coverage.
+// ignore_for_file: discarded_futures, prefer_const_constructors
+
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,11 +18,11 @@ void main() {
           GoldenTestScenario(
             name: 'default(expanded)',
             constraints: const BoxConstraints(minWidth: 200),
-            child: const VeryGoodCoreInfoTextField(title: 'Title', description: 'Description'),
+            child: VeryGoodCoreInfoTextField(title: 'Title', description: 'Description'),
           ),
           GoldenTestScenario(
             name: 'shrink',
-            child: const VeryGoodCoreInfoTextField(title: 'Title', description: 'Description', isExpanded: false),
+            child: VeryGoodCoreInfoTextField(title: 'Title', description: 'Description', isExpanded: false),
           ),
         ],
       ),

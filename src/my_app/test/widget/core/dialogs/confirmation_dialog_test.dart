@@ -1,3 +1,6 @@
+// prefer_const_constructors is ignored to ensure the constructor is hit by code coverage.
+// ignore_for_file: discarded_futures, prefer_const_constructors
+
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,16 +14,16 @@ import '../../../utils/mock_localization.dart';
 import '../../../utils/test_utils.dart';
 
 void main() {
-  late MockAppLocalizationBloc appLocalizationBloc;
+  late MockAppLocalizationCubit appLocalizationCubit;
 
   setUp(() {
-    appLocalizationBloc = MockAppLocalizationBloc();
+    appLocalizationCubit = MockAppLocalizationCubit();
 
-    when(appLocalizationBloc.state).thenAnswer((_) => AppLocale.values.first.buildSync());
+    when(appLocalizationCubit.state).thenAnswer((_) => AppLocale.values.first.buildSync());
   });
 
-  tearDown(() {
-    appLocalizationBloc.close();
+  tearDown(() async {
+    await appLocalizationCubit.close();
   });
 
   group(ConfirmationDialog, () {
@@ -32,15 +35,30 @@ void main() {
           GoldenTestDeviceScenario(
             name: 'default',
             builder: () => MockLocalization(
-              appLocalizationBloc: appLocalizationBloc,
-              child: const ConfirmationDialog(message: 'message'),
+              appLocalizationCubit: appLocalizationCubit,
+              child: ConfirmationDialog(message: 'message'),
             ),
           ),
           GoldenTestDeviceScenario(
             name: 'with title',
             builder: () => MockLocalization(
-              appLocalizationBloc: appLocalizationBloc,
-              child: const ConfirmationDialog(message: 'message', title: 'title'),
+              appLocalizationCubit: appLocalizationCubit,
+              child: ConfirmationDialog(message: 'message', title: 'title'),
+            ),
+          ),
+          GoldenTestDeviceScenario(
+            name: 'with all parameters',
+            builder: () => MockLocalization(
+              appLocalizationCubit: appLocalizationCubit,
+              child: ConfirmationDialog(
+                message: 'message',
+                title: 'title',
+                titleColor: Colors.red,
+                negativeButtonText: 'Cancel',
+                positiveButtonText: 'Confirm',
+                negativeButtonTextColor: Colors.blue,
+                positiveButtonTextColor: Colors.green,
+              ),
             ),
           ),
         ],

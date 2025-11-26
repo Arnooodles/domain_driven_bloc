@@ -15,8 +15,6 @@ class ConfirmationDialog extends StatelessWidget {
     this.positiveButtonText,
     this.onNegativePressed,
     this.onPositivePressed,
-    this.negativeButtonColor,
-    this.positiveButtonColor,
     this.negativeButtonTextColor,
     this.positiveButtonTextColor,
     super.key,
@@ -29,8 +27,6 @@ class ConfirmationDialog extends StatelessWidget {
   final String? positiveButtonText;
   final VoidCallback? onNegativePressed;
   final VoidCallback? onPositivePressed;
-  final Color? negativeButtonColor;
-  final Color? positiveButtonColor;
   final Color? negativeButtonTextColor;
   final Color? positiveButtonTextColor;
 

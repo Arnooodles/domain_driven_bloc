@@ -7,10 +7,12 @@ import 'package:safe_device/safe_device.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
-import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
+import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
+import 'package:very_good_core/core/domain/cubit/theme/theme_cubit.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
-import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 class SplashScreen extends HookWidget {
   const SplashScreen({super.key});
@@ -22,12 +24,12 @@ class SplashScreen extends HookWidget {
   );
 
   Future<void> _initializeBlocs(BuildContext context) async {
-    if (context.mounted) {
-      await Future.wait(<Future<void>>[
-        context.read<AppCoreBloc>().initialize(),
-        context.read<AuthBloc>().initialize(),
-      ]);
-    }
+    await Future.wait(<Future<void>>[
+      context.read<AppCoreCubit>().initialize(),
+      context.read<AuthCubit>().initialize(),
+      context.read<ThemeCubit>().initialize(),
+      context.read<AppLocalizationCubit>().initialize(),
+    ]);
   }
 
   Future<void> _showUnsupportedDeviceDialog(BuildContext context) async {

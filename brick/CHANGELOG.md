@@ -1,5 +1,33 @@
+# 4.0.0
+
+- feat: add feature scaffolding scripts for Clean Architecture
+  - `scripts/create_feature.sh`: create feature folder structure with data/domain/presentation layers
+  - `scripts/create_feature_tests.sh`: create corresponding test folder structure
+- feat: implement Google Fonts integration
+  - Add font assets
+  - Enable Google Fonts in goldens testing
+- feat: add concurrency to verify workflow
+- feat: add future and sync validation extensions
+- refactor: rename `bloc` to `cubit` across the codebase
+- refactor: remove pre_gen hooks and workflow
+- refactor: change flutter_dotenv to envied
+- refactor: optimize web assets and remove unused splash images
+- refactor: update dialog utils and confirmation dialog
+- fix: resolve login issue on first app launch
+- fix: resolve discarded_futures lint warnings
+- fix: disable formatting for freezed files
+- fix: apply auto-formatting to generated files
+- chore: update Flutter to version 3.38.3
+- chore: update dependencies to latest compatible versions
+- chore(android): update Android project
+  - run `scripts/update_android_project.sh` to update dependency versions
+- chore: remove unused ignore comments from analysis_options.yaml
+- chore: update golden files
+- docs: remove table of contents from README
+
 # 3.0.1
-- chore: update brick metadata 
+
+- chore: update brick metadata
 - fix: update README screenshots not displaying
 - chore: downgrade mason to support latest mason cli version (brick/brick.yaml, brick/hooks/pubspec.yaml)
 - chore: update workflow actions to latest version
@@ -10,6 +38,7 @@
 - chore: update Flutter version
 
 # 3.0.0
+
 - feat: update README docs, screenshots, and localization/i18n for new/renamed fields
 - feat: update Flutter, Gradle, Android, and dependencies for improved compatibility
 - feat: enhance theming, sizing, and UI consistency; add app text styles
@@ -29,8 +58,8 @@
 - fix: update/optimize goldens, test utils, and widget tests
 - chore: clean up and merge related code, test, and asset changes for maintainability
 
-
 # 2.0.0
+
 - feat: implemented flex_color_scheme
 - feat: replaced intl_utils with slang
 - feat: added script for updating android project settings
@@ -54,7 +83,7 @@
 - refactor: implemented the use of the reusable icon widget
 - fix: reset failed login status to initial state
 - test: fixed tests that were affected by the updates
-- test: remove  golden test for screens and webviews
+- test: remove golden test for screens and webviews
 - chore: deleted unused files and folders
 - chore: updated dependencies to the latest version
 - chore: updated workflow dependencies to the latest version
@@ -63,8 +92,8 @@
 - docs: updated brick's README with regards to the updates
 - docs: updated template's README with regards to the updates
 
-
 # 1.2.0
+
 - feat: add themeAnimation
 - feat: migrate from webview_flutter to flutter_inappwebview
 - feat: add device_info_plus
@@ -76,12 +105,12 @@
 - feat: add vulnerability_check workflow
 - feat: implement url launcher utils
 - feat: implement common app utils
-- feat: implement SVG preloader 
+- feat: implement SVG preloader
 - refactor: change some bloc builders to instead use context.watch()
 - refactor: change local_storage setters from bool to void
-- refactor: dependency injection folder structure 
+- refactor: dependency injection folder structure
 - refactor: migrate deprecated imperative apply of Flutter's Gradle plugins
-- refactor: service locator and modules 
+- refactor: service locator and modules
 - refactor: add sealed class modifier to freezed classes
 - test: add widget test for core icon
 - test: add unit test for device repository
@@ -91,6 +120,7 @@
 - chore: update minimum SDK to 3.3.0
 - chore: update goldens files
 - docs: update README with regards to the updates
+
 # 1.1.3
 
 - feat: upgrade to flutter 3.16.9
@@ -102,12 +132,12 @@
 
 - feat: upgrade to flutter 3.16.9
 - feat: add vulnerability check(osv_scanner)
-- refactor: optimize some variables by making it private 
+- refactor: optimize some variables by making it private
 - refactor: rename data model folder to dto
 - refactor: rename domain model folder to entity
 - chore: update dependencies to the latest version
 - test: implement reset on mocked repositories and services
-- docs: update folder structure 
+- docs: update folder structure
 
 # 1.1.1
 
@@ -115,7 +145,6 @@
 - chore: update dependencies to the latest version
 - refactor: minor code optimization
 - test: added tear down on some tests
-  
 
 # 1.1.0
 
@@ -133,7 +162,7 @@
 - feat: implement SSL Certificate Pinning
 - refactor: migrate responsive_framework to 1.1.1
 - refactor: implement gap instead of using sizebox
-- refactor: remove Hidable and use AnimatedAlign instead 
+- refactor: remove Hidable and use AnimatedAlign instead
 - refactor: update workflow to use fvm's flutter version
 - fix: resolve test issues due to breaking changes
 - fix: change launchMode on Android to singleTask
@@ -157,11 +186,11 @@
 - refactor: removed hideable and implemented it locally to support dart 3.0
 - refactor: refactor switch and implement patterns
 - refactor: replace dartz with fpdart
-  
+
 # 0.2.0
 
 - refactor: refactor bloc states into multiple class
-- refactor: fix tests issues related to the refactors  
+- refactor: fix tests issues related to the refactors
 - refactor: dialog utils(toast/flash/dialogs)
 - feat: implement pretty_chopper_logger
 - feat: implement new lint rules and remove redundant rules

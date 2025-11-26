@@ -1,16 +1,12 @@
-import 'dart:io';
+import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:very_good_core/app/helpers/extensions/future_ext.dart';
 
 final class AppUtils {
   AppUtils._();
 
   static void closeApp() {
-    if (defaultTargetPlatform case TargetPlatform.android) {
-      SystemNavigator.pop();
-    } else if (defaultTargetPlatform case TargetPlatform.iOS) {
-      exit(0);
-    }
+    unawaited(SystemNavigator.pop().logOnError());
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: discarded_futures
+
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';

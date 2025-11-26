@@ -7,7 +7,6 @@ import 'package:very_good_core/app/constants/mock_data.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/datetime_ext.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
-import 'package:very_good_core/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
 import 'package:very_good_core/core/domain/entity/enum/button_type.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
@@ -16,7 +15,8 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_avatar.d
 import 'package:very_good_core/core/presentation/widgets/very_good_core_button.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_info_text_field.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
-import 'package:very_good_core/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:very_good_core/core/presentation/widgets/wrappers/scroll_controller_provider.dart';
+import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -28,26 +28,22 @@ class ProfileScreen extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
         child: RefreshIndicator(
-          onRefresh: () => context.read<AuthBloc>().getUser(),
-          child: BlocSelector<AppCoreBloc, AppCoreState, Map<AppScrollController, ScrollController>>(
-            selector: (AppCoreState state) => state.scrollControllers,
-            builder: (BuildContext context, Map<AppScrollController, ScrollController> scrollControllers) =>
-                CustomScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  controller: scrollControllers.isNotEmpty
-                      ? scrollControllers[AppScrollController.profile]
-                      : ScrollController(),
-                  slivers: <Widget>[
-                    SliverFillRemaining(
-                      child: BlocBuilder<AuthBloc, AuthState>(
-                        builder: (BuildContext context, AuthState authState) => authState.maybeWhen(
-                          authenticated: (User user) => _ProfileContent(user: user),
-                          orElse: () => Skeletonizer(child: _ProfileContent(user: MockData.user)),
-                        ),
-                      ),
+          onRefresh: () => context.read<AuthCubit>().getUser(),
+          child: Builder(
+            builder: (BuildContext context) => CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: ScrollControllerProvider.of(context, AppScrollController.profile),
+              slivers: <Widget>[
+                SliverFillRemaining(
+                  child: BlocBuilder<AuthCubit, AuthState>(
+                    builder: (BuildContext context, AuthState authState) => authState.maybeWhen(
+                      authenticated: (User user) => _ProfileContent(user: user),
+                      orElse: () => Skeletonizer(child: _ProfileContent(user: MockData.user)),
                     ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
           ),
         ),
       ),
@@ -79,7 +75,7 @@ class _ProfileContent extends StatelessWidget {
           isExpanded: true,
           buttonType: ButtonType.outlined,
           textStyle: context.textTheme.bodyLarge?.copyWith(color: context.colorScheme.error),
-          onPressed: () => context.read<AuthBloc>().logout(),
+          onPressed: () => context.read<AuthCubit>().logout(),
           padding: EdgeInsets.zero,
           contentPadding: Paddings.verticalSmall,
         ),

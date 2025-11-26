@@ -35,16 +35,21 @@ if (keystorePropertiesFile.exists()) {
 }
 
 kotlin {
-  jvmToolchain(18)
+  jvmToolchain(21)
 }
 
 android {
     namespace = "com.example.very_good_core"
-    compileSdk = Math.max(flutter.compileSdkVersion, 34)
+    compileSdk = Math.max(flutter.compileSdkVersion, 36)
+    ndkVersion = "29.0.14206865"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_18
-        targetCompatibility = JavaVersion.VERSION_18
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_21.toString()
     }
 
     
@@ -52,7 +57,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.very_good_core"
         minSdk = Math.max(flutter.minSdkVersion, 26)
-        targetSdk = Math.max(flutter.targetSdkVersion, 34)
+        targetSdk = Math.max(flutter.targetSdkVersion, 36)
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -114,4 +119,3 @@ android {
 flutter {
     source = "../.."
 }
-

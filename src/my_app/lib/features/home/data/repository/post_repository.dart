@@ -16,7 +16,6 @@ import 'package:very_good_core/features/home/data/service/post_service.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
 
-// ignore_for_file: avoid_dynamic_calls
 @LazySingleton(as: IPostRepository)
 class PostRepository implements IPostRepository {
   const PostRepository(this._postService);

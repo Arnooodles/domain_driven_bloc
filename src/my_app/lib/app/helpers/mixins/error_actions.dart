@@ -3,15 +3,17 @@ import 'package:toastification/toastification.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/utils/dialog_utils.dart';
-import 'package:very_good_core/core/domain/bloc/app_localization/app_localization_bloc.dart';
+import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 
 mixin ErrorActions {
-  final I18n _localization = getIt<AppLocalizationBloc>().state;
   ToastificationItem? _activeToast;
+
+  I18n get _localization => getIt<AppLocalizationCubit>().state;
 
   void _showErrorOnce(String message) {
     if (_activeToast?.isRunning ?? false) return;
+
     _activeToast = DialogUtils.showError(message);
   }
 
@@ -29,7 +31,14 @@ mixin ErrorActions {
   }
 
   void onValidationError(ValidationFailure error) {
-    _showErrorOnce(error.message.message);
+    final String baseMessage = error.message.message;
+    if (!kDebugMode) {
+      _showErrorOnce(baseMessage);
+      return;
+    }
+
+    final String valueSuffix = error.value.isNotEmpty ? '\n(${error.value})' : '';
+    _showErrorOnce('$baseMessage$valueSuffix');
   }
 
   void onGenericError(Failure error) {

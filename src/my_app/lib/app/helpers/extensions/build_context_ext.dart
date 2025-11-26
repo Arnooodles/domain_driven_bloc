@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
-import 'package:very_good_core/core/domain/bloc/app_localization/app_localization_bloc.dart';
+import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
 
 extension BuildContextExt on BuildContext {
-  I18n get i18n => read<AppLocalizationBloc>().state;
+  I18n get i18n => read<AppLocalizationCubit>().state;
 
   ThemeData get theme => Theme.of(this);
 

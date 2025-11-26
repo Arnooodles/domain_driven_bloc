@@ -2,6 +2,9 @@ name: verify
 
 on: [push]
 
+concurrency:
+  group: "${{ github.ref_name }}"
+  cancel-in-progress: true 
 jobs:
   verify-semantic-pull-request:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
