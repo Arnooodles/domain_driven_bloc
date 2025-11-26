@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/future_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/connection_status.dart';
@@ -17,8 +18,8 @@ final class ConnectivityUtils {
   ConnectivityUtils() {
     _connectionSubscription = _connectivity.onConnectivityChanged
         .debounceTime(const Duration(milliseconds: 300))
-        .listen((_) => _checkInternetConnection());
-    _checkInternetConnection();
+        .listen(_checkInternetConnection);
+    unawaited(_checkInternetConnection());
   }
 
   final Connectivity _connectivity = Connectivity();
@@ -33,9 +34,14 @@ final class ConnectivityUtils {
 
   Stream<ConnectionStatus> get internetStatus => _controller.stream;
 
-  Future<void> _checkInternetConnection() async {
-    final ConnectionStatus status = await checkInternet();
-    _updateStatus(status);
+  Future<void> _checkInternetConnection([List<ConnectivityResult>? result]) async {
+    // Check if device is not connected
+    if (result?.contains(ConnectivityResult.none) ?? false) {
+      _updateStatus(ConnectionStatus.offline);
+    } else {
+      final ConnectionStatus status = await checkInternet();
+      _updateStatus(status);
+    }
   }
 
   Future<ConnectionStatus> checkInternet() async {
@@ -62,8 +68,9 @@ final class ConnectivityUtils {
     }
   }
 
-  Future<void> dispose() async {
-    await _connectionSubscription.cancel();
-    await _controller.close();
+  @disposeMethod
+  void dispose() {
+    unawaited(_connectionSubscription.cancel().logOnError());
+    unawaited(_controller.close().logOnError());
   }
 }

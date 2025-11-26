@@ -1,5 +1,6 @@
-include: 
-    - package:very_good_analysis/analysis_options.yaml
+include:
+  - package:very_good_analysis/analysis_options.yaml
+  - package:bloc_lint/recommended.yaml
 
 analyzer:
   errors:
@@ -21,11 +22,14 @@ analyzer:
     - lib/app/generated/**
     - lib/**/generated_plugin_registrant.dart
 
-
   language:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
+
+formatter:
+  page_width: 120
+  trailing_commas: automate
 
 linter:
   rules:
@@ -43,10 +47,13 @@ linter:
     no_default_cases: false
     document_ignores: false
 
-formatter: 
-  page_width: 120
-  trailing_commas: automate
-
+bloc:
+  rules:
+    - avoid_flutter_imports
+    - avoid_public_fields
+    - prefer_cubit
+    - prefer_file_naming_conventions
+    - prefer_void_public_cubit_methods
 
 dart_code_metrics:
   formatter:
@@ -86,8 +93,6 @@ dart_code_metrics:
     - prefer-const-border-radius
     - prefer-correct-edge-insets-constructor
     - prefer-text-rich
-    - avoid-bloc-public-fields
-    - avoid-bloc-public-methods
     - avoid-duplicate-bloc-event-handlers
     - avoid-instantiating-in-bloc-value-provider
     - avoid-passing-bloc-to-bloc
@@ -101,6 +106,3 @@ dart_code_metrics:
     - prefer-immutable-bloc-state
     - prefer-multi-bloc-provider
     - prefer-sealed-bloc-events
-    
-
-

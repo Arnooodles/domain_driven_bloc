@@ -16,7 +16,6 @@ import 'package:{{project_name.snakeCase()}}/features/home/data/service/post_ser
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/interface/i_post_repository.dart';
 
-// ignore_for_file: avoid_dynamic_calls
 @LazySingleton(as: IPostRepository)
 class PostRepository implements IPostRepository {
   const PostRepository(this._postService);

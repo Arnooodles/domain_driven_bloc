@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_text_style.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 
@@ -14,7 +15,7 @@ class TestConfig {
   /// Added a goldens version to know when the golden files were last updated
   /// To update the golden files in the remote repository change goldensVersion
   /// Format: yyyyMMdd
-  static String get goldensVersion => '20250717';
+  static String get goldensVersion => '20251125';
 
   /// Customize your threshold here
   /// For example, the error threshold here is 15%
@@ -22,8 +23,21 @@ class TestConfig {
   static double get goldenTestsThreshold => 15 / 100;
 }
 
+/// Loads fonts within a test zone to prevent "There is no current invoker" errors
+Future<void> _loadFontsInTestZone() async {
+  await GoogleFonts.pendingFonts(<dynamic>[GoogleFonts.roboto()]);
+}
+
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
+  // Configure Google Fonts for tests to prevent async font loading errors
+  // Disable runtime fetching to prevent network calls in tests
+  GoogleFonts.config.allowRuntimeFetching = false;
+
   await Future.wait(<Future<void>>[setupInjection()]);
+
+  // Preload the font used by AppTextStyle within the test zone
+  // This prevents "There is no current invoker" errors
+  await _loadFontsInTestZone();
 
   if (goldenFileComparator is LocalFileComparator) {
     final Uri testUrl = (goldenFileComparator as LocalFileComparator).basedir;
@@ -50,15 +64,13 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
       goldenTestTheme:
           GoldenTestTheme.standard().copyWith(
                 backgroundColor: Colors.white,
+                borderColor: Colors.black,
                 padding: const EdgeInsets.all(16),
                 nameTextStyle: AppTextStyle.baseTextStyle,
               )
               as GoldenTestTheme,
-      platformGoldensConfig: PlatformGoldensConfig(
-        enabled: !const bool.fromEnvironment('CI', defaultValue: false),
-        theme: AppTheme.light,
-      ),
-      ciGoldensConfig: CiGoldensConfig(theme: AppTheme.light),
+      theme: AppTheme.light,
+      platformGoldensConfig: const PlatformGoldensConfig(enabled: !bool.fromEnvironment('CI', defaultValue: false)),
     ),
     run: testMain,
   );

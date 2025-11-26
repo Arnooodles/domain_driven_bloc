@@ -1,78 +1,37 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/hidable/hidable_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/app_scroll_controller.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_nav_bar.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/wrappers/connectivity_checker.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/wrappers/scroll_controller_provider.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   const MainScreen({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  final Map<AppScrollController, ScrollController> _controllers = <AppScrollController, ScrollController>{};
-
-  void _initScrollControllers() {
-    for (final AppScrollController appScrollController in AppScrollController.values) {
-      final ScrollController scrollController = ScrollController(debugLabel: appScrollController.name);
-      // ignore: always-remove-listener
-      scrollController.addListener(() => _addListener(scrollController, context.read<HidableBloc>()));
-      _controllers.putIfAbsent(appScrollController, () => scrollController);
-    }
-    context.read<AppCoreBloc>().setScrollControllers(_controllers);
-  }
-
-  void _addListener(ScrollController scrollController, HidableBloc hidableBloc) {
-    if (scrollController.position.userScrollDirection == ScrollDirection.forward) {
-      hidableBloc.setVisibility(isVisible: true);
-    } else if (scrollController.position.userScrollDirection == ScrollDirection.reverse) {
-      hidableBloc.setVisibility(isVisible: false);
-    }
-  }
-
-  void _onPopInvoked(bool didPop) {
+  Future<void> _onPopInvoked(BuildContext context, bool didPop) async {
     if (!didPop) {
-      if (widget.navigationShell.currentIndex != 0) {
-        widget.navigationShell.goBranch(0);
+      if (navigationShell.currentIndex != 0) {
+        navigationShell.goBranch(0);
       } else {
-        DialogUtils.showExitDialog(context);
+        await DialogUtils.showExitDialog(context);
+        if (!context.mounted) return;
       }
     }
   }
 
   @override
-  void initState() {
-    super.initState();
-    _initScrollControllers();
-  }
-
-  @override
   Widget build(BuildContext context) => PopScope(
     canPop: false,
-    onPopInvokedWithResult: (bool didPop, _) => _onPopInvoked(didPop),
-    child: ConnectivityChecker.scaffold(
-      body: widget.navigationShell,
-      bottomNavigationBar: {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar(navigationShell: widget.navigationShell),
+    onPopInvokedWithResult: (bool didPop, _) => _onPopInvoked(context, didPop),
+    child: ScrollControllerProvider(
+      child: ConnectivityChecker.scaffold(
+        body: navigationShell,
+        bottomNavigationBar: {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar(navigationShell: navigationShell),
+      ),
     ),
   );
-
-  @override
-  void dispose() {
-    _controllers.forEach((AppScrollController key, ScrollController scrollController) {
-      scrollController
-        ..removeListener(() => _addListener(scrollController, context.read<HidableBloc>()))
-        ..dispose();
-    });
-
-    super.dispose();
-  }
 }

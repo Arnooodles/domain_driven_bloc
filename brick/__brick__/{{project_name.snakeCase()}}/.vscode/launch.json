@@ -48,7 +48,7 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": ["--dart-define", "flavor=development", "--target", "lib/main.dart"]
+      "args": ["--dart-define", "flavor=development", "--target", "lib/main.dart", "--web-browser-flag", "--disable-web-security"]
     },
     {
       "name": "[Web][Debug] Launch staging",

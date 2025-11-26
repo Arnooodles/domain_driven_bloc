@@ -7,10 +7,12 @@ import 'package:safe_device/safe_device.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/app_core/app_core_cubit.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/app_localization/app_localization_cubit.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/theme/theme_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 class SplashScreen extends HookWidget {
   const SplashScreen({super.key});
@@ -22,12 +24,12 @@ class SplashScreen extends HookWidget {
   );
 
   Future<void> _initializeBlocs(BuildContext context) async {
-    if (context.mounted) {
-      await Future.wait(<Future<void>>[
-        context.read<AppCoreBloc>().initialize(),
-        context.read<AuthBloc>().initialize(),
-      ]);
-    }
+    await Future.wait(<Future<void>>[
+      context.read<AppCoreCubit>().initialize(),
+      context.read<AuthCubit>().initialize(),
+      context.read<ThemeCubit>().initialize(),
+      context.read<AppLocalizationCubit>().initialize(),
+    ]);
   }
 
   Future<void> _showUnsupportedDeviceDialog(BuildContext context) async {
