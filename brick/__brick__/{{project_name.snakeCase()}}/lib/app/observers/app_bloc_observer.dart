@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 
-// ignore_for_file: avoid_dynamic_calls
 @lazySingleton
 final class AppBlocObserver extends BlocObserver {
   final Logger _logger = getIt<Logger>();

@@ -6,11 +6,11 @@ import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_contex
 import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/theme/theme_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/theme/theme_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_avatar.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidget implements PreferredSizeWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar({
@@ -45,12 +45,12 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
 
   static List<Widget> buildCommonAppBarActions(BuildContext context) => <Widget>[
     IconButton(
-      onPressed: () => context.read<ThemeBloc>().switchTheme(context.theme.brightness),
+      onPressed: () => context.read<ThemeCubit>().switchTheme(context.theme.brightness),
       icon: context.theme.brightness == Brightness.dark
           ? {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.light_mode))
           : {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.dark_mode)),
     ),
-    BlocBuilder<AuthBloc, AuthState>(
+    BlocBuilder<AuthCubit, AuthState>(
       builder: (BuildContext context, AuthState state) => state.maybeWhen(
         authenticated: (User user) => GestureDetector(
           onTap: () => context.goRouter.goNamed(RouteName.profile.name),

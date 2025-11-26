@@ -10,16 +10,18 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/mixins/failure_handler.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/service/user_service.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_localization/app_localization_bloc.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/hidable/hidable_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/app_core/app_core_cubit.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/app_localization/app_localization_cubit.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/hidable/hidable_cubit.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_app_localization_repository.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_asset_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_user_repository.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/data/service/auth_service.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/domain/cubit/auth/auth_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_auth_repository.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/service/post_service.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/bloc/post/post_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/cubit/post/post_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/interface/i_post_repository.dart';
 
 @GenerateNiceMocks(<MockSpec<dynamic>>[
@@ -36,12 +38,14 @@ import 'package:{{project_name.snakeCase()}}/features/home/domain/interface/i_po
   MockSpec<IUserRepository>(),
   MockSpec<IAuthRepository>(),
   MockSpec<IPostRepository>(),
-  // Blocs
-  MockSpec<AuthBloc>(),
-  MockSpec<AppCoreBloc>(),
-  MockSpec<HidableBloc>(),
-  MockSpec<PostBloc>(),
-  MockSpec<AppLocalizationBloc>(),
+  MockSpec<IAssetRepository>(),
+  MockSpec<IAppLocalizationRepository>(),
+  // Cubits
+  MockSpec<AuthCubit>(),
+  MockSpec<AppCoreCubit>(),
+  MockSpec<HidableCubit>(),
+  MockSpec<PostCubit>(),
+  MockSpec<AppLocalizationCubit>(),
   // Others
   MockSpec<StreamSubscription<dynamic>>(),
   MockSpec<GoRouter>(),

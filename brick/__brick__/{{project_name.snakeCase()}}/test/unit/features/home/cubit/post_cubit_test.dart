@@ -1,0 +1,155 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mockito/mockito.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/cubit/post/post_cubit.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
+
+import '../../../../utils/generated_mocks.mocks.dart';
+
+void main() {
+  group(PostCubit, () {
+    late MockIPostRepository postRepository;
+    late MockFailureHandler failureHandler;
+    late Failure failure;
+    late List<Post> posts;
+
+    setUp(() {
+      postRepository = MockIPostRepository();
+      failureHandler = MockFailureHandler();
+      failure = const Failure.server(StatusCode.http500, 'INTERNAL SERVER ERROR');
+      posts = <Post>[
+        PostDTO(
+          uid: '1',
+          title: 'Test Post Title',
+          author: 'Test Author',
+          permalink: 'https://example.com/post/1',
+          createdUtc: DateTime.now(),
+        ).toDomain(),
+        PostDTO(
+          uid: '2',
+          title: 'Another Test Post',
+          author: 'Another Author',
+          permalink: 'https://example.com/post/2',
+          createdUtc: DateTime.now(),
+        ).toDomain(),
+      ];
+    });
+
+    tearDown(() {
+      reset(postRepository);
+      reset(failureHandler);
+    });
+
+    group('getPosts', () {
+      blocTest<PostCubit, PostState>(
+        'should emit success state with list of posts when API call succeeds',
+        build: () {
+          provideDummy(Either<Failure, List<Post>>.right(posts));
+          when(postRepository.getPosts()).thenAnswer((_) async => Either<Failure, List<Post>>.right(posts));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) => cubit.getPosts(),
+        expect: () => <PostState>[const PostState.loading(), PostState.onSuccess(posts)],
+        verify: (_) {
+          verify(postRepository.getPosts()).called(1);
+        },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should emit failure state when API call fails',
+        build: () {
+          provideDummy(Either<Failure, List<Post>>.left(failure));
+          when(postRepository.getPosts()).thenAnswer((_) async => Either<Failure, List<Post>>.left(failure));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) => cubit.getPosts(),
+        expect: () => <PostState>[const PostState.loading()],
+        verify: (_) {
+          verify(postRepository.getPosts()).called(1);
+        },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should emit failure state when unexpected error occurs',
+        build: () {
+          when(postRepository.getPosts()).thenThrow(Exception('Unexpected error'));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) => cubit.getPosts(),
+        expect: () => <PostState>[const PostState.loading()],
+        verify: (_) {
+          verify(postRepository.getPosts()).called(1);
+        },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should handle network timeout error',
+        build: () {
+          when(postRepository.getPosts()).thenThrow(Exception('Connection timeout'));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) => cubit.getPosts(),
+        expect: () => <PostState>[const PostState.loading()],
+        verify: (_) {
+          verify(postRepository.getPosts()).called(1);
+        },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should handle authentication failure',
+        build: () {
+          const Failure authFailure = Failure.authentication('Authentication required');
+          provideDummy(Either<Failure, List<Post>>.left(authFailure));
+          when(postRepository.getPosts()).thenAnswer((_) async => left(authFailure));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) => cubit.getPosts(),
+        expect: () => <PostState>[const PostState.loading()],
+        verify: (_) {
+          verify(postRepository.getPosts()).called(1);
+        },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should handle server error with different status codes',
+        build: () {
+          const Failure serverFailure = Failure.server(StatusCode.http404, 'Posts not found');
+          provideDummy(Either<Failure, List<Post>>.left(serverFailure));
+          when(postRepository.getPosts()).thenAnswer((_) async => left(serverFailure));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) => cubit.getPosts(),
+        expect: () => <PostState>[const PostState.loading()],
+        verify: (_) {
+          verify(postRepository.getPosts()).called(1);
+        },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should handle empty posts list',
+        build: () {
+          final List<Post> emptyPosts = <Post>[];
+          provideDummy(Either<Failure, List<Post>>.right(emptyPosts));
+          when(postRepository.getPosts()).thenAnswer((_) async => Either<Failure, List<Post>>.right(emptyPosts));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) => cubit.getPosts(),
+        expect: () => <PostState>[const PostState.loading(), const PostState.onSuccess(<Post>[])],
+        verify: (_) {
+          verify(postRepository.getPosts()).called(1);
+        },
+      );
+    });
+  });
+}

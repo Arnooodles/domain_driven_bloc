@@ -17,7 +17,6 @@ import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/env.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
-import 'package:{{project_name.snakeCase()}}/main.dart';
 
 import '../flutter_test_config.dart';
 import 'mock_path_provider_platform.dart';
@@ -29,7 +28,7 @@ Future<void> setupInjection() async {
   PathProviderPlatform.instance = MockPathProviderPlatform();
   SharedPreferences.setMockInitialValues(<String, Object>{});
   _mockPackageInfo();
-  await Future.wait(<Future<void>>[initializeEnvironmentConfig(Env.test), configureDependencies(Env.test)]);
+  await Future.wait(<Future<void>>[configureDependencies(Env.test)]);
 }
 
 void _mockPackageInfo() {

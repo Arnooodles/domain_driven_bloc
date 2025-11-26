@@ -5,5 +5,5 @@ import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/env.dart';
 
 final GetIt getIt = GetIt.instance;
 
-@InjectableInit(preferRelativeImports: false)
+@InjectableInit()
 Future<void> configureDependencies(Env env) => getIt.init(environment: env.name);

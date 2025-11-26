@@ -2,15 +2,15 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
-import 'package:{{project_name.snakeCase()}}/features/auth/domain/bloc/auth/auth_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 @lazySingleton
 final class RouteGuard {
-  RouteGuard(this._authBloc);
+  RouteGuard(this._authCubit);
 
-  final AuthBloc _authBloc;
+  final AuthCubit _authCubit;
 
-  String? guard(BuildContext context, GoRouterState goRouterState) => _authBloc.state.maybeWhen(
+  String? guard(BuildContext context, GoRouterState goRouterState) => _authCubit.state.maybeWhen(
     initial: () => RouteName.initial.path,
     unauthenticated: () => RouteName.login.path,
     authenticated: (_) => _authenticatedRouteGuard(goRouterState.matchedLocation),

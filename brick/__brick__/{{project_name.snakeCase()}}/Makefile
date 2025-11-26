@@ -5,12 +5,12 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Note: In windows, recommended terminal is cmd 
 
-ensure_flutter_version: ## Ensures flutter version is 3.32.7
-	fvm install 3.32.7
-	fvm use 3.32.7
-	fvm global 3.32.7
+ensure_flutter_version: ## Ensures flutter version is 3.38.3
+	fvm install 3.38.3
+	fvm use 3.38.3
+	fvm global 3.38.3
 
-## Note: If you are using a specific flutter version, change '3.24.4' to the desired '{flutter version}' you want to use
+## Note: If you are using a specific flutter version, change '3.38.3' to the desired '{flutter version}' you want to use
 
 clean: ## Delete the build/ and .dart_tool/ directories
 	fvm flutter clean
@@ -19,7 +19,7 @@ pub_clean: ## Empties the entire system cache to reclaim extra disk space or rem
 	fvm flutter pub cache clean	--force
 
 pub_get: ## Gets pubs
-	fvm flutter pub get
+	fvm flutter pub get --no-example
 
 pub_outdated: ## Check for outdated packages
 	fvm flutter pub outdated
@@ -40,9 +40,9 @@ build_runner_watch: ## This command generates the files for the code generated d
 	fvm dart run build_runner watch --delete-conflicting-outputs
 
 format: ## This command formats the codebase and run import sorter
-	fvm dart format $$(find lib test -name '*.dart' -not -name '*.g.dart' -and -not -name '*.freezed.dart' -and -not -name '*.config.dart' -and -not -name '*.chopper.dart' -and -not -name '*.gen.dart' -and -not -name '*.mocks.dart') --line-length=120 --set-exit-if-changed
-
-clean_rebuild: ensure_flutter_version clean pub_clean pub_get slang build_runner format lint fix_lint
+	fvm dart format lib test
+	
+clean_rebuild: ensure_flutter_version clean pub_clean delete_generated_files pub_get slang build_runner format lint fix_lint
 
 rebuild: ensure_flutter_version pub_get slang build_runner format lint fix_lint
 
@@ -114,3 +114,12 @@ delete_generated_files: ## Delete the generated files
 
 init_hooks:
 	git config core.hooksPath .githooks	
+
+create_feature:
+	sh scripts/create_feature.sh
+
+create_feature_tests:
+	sh scripts/create_feature_tests.sh
+
+init_ios:
+	cd ios && bundle install && pod install --repo-update	

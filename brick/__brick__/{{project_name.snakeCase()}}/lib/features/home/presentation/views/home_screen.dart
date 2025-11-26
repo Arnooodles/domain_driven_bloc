@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -6,10 +8,10 @@ import 'package:{{project_name.snakeCase()}}/app/constants/mock_data.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_core/app_core_bloc.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/app_scroll_controller.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_app_bar.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/domain/bloc/post/post_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/wrappers/scroll_controller_provider.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/domain/cubit/post/post_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/empty_post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/widgets/post_container.dart';
@@ -25,12 +27,16 @@ class HomeScreen extends StatelessWidget {
     body: Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: Constant.mobileBreakpoint),
-        child: BlocProvider<PostBloc>(
-          create: (BuildContext context) => getIt<PostBloc>()..getPosts(),
+        child: BlocProvider<PostCubit>(
+          create: (BuildContext context) {
+            final PostCubit cubit = getIt<PostCubit>();
+            unawaited(cubit.getPosts());
+            return cubit;
+          },
           child: Builder(
             builder: (BuildContext context) => RefreshIndicator(
-              onRefresh: () => context.read<PostBloc>().getPosts(),
-              child: BlocBuilder<PostBloc, PostState>(
+              onRefresh: () => context.read<PostCubit>().getPosts(),
+              child: BlocBuilder<PostCubit, PostState>(
                 builder: (BuildContext context, PostState state) => state.maybeWhen(
                   onSuccess: (List<Post> posts) => posts.isNotEmpty ? _PostList(posts: posts) : const EmptyPost(),
                   orElse: () => Skeletonizer(
@@ -55,17 +61,12 @@ class _PostList extends StatelessWidget {
   final List<Post> posts;
 
   @override
-  Widget build(BuildContext context) =>
-      BlocSelector<AppCoreBloc, AppCoreState, Map<AppScrollController, ScrollController>>(
-        selector: (AppCoreState state) => state.scrollControllers,
-        builder: (BuildContext context, Map<AppScrollController, ScrollController> scrollController) =>
-            ListView.separated(
-              padding: Paddings.topMedium,
-              controller: scrollController.isNotEmpty ? scrollController[AppScrollController.home] : ScrollController(),
-              physics: const ClampingScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) => PostContainer(post: posts[index]),
-              separatorBuilder: (BuildContext context, int index) => Gap.small(),
-              itemCount: posts.length,
-            ),
-      );
+  Widget build(BuildContext context) => ListView.separated(
+    padding: Paddings.topMedium,
+    controller: ScrollControllerProvider.of(context, AppScrollController.home),
+    physics: const ClampingScrollPhysics(),
+    itemBuilder: (BuildContext context, int index) => PostContainer(post: posts[index]),
+    separatorBuilder: (BuildContext context, int index) => Gap.small(),
+    itemCount: posts.length,
+  );
 }

@@ -16,5 +16,5 @@ sealed class Failure with _$Failure {
 
   const factory Failure.authentication(String? message) = AuthenticationError;
 
-  const factory Failure.validation(ValidationError message) = ValidationFailure;
+  const factory Failure.validation(ValidationError message, String value) = ValidationFailure;
 }

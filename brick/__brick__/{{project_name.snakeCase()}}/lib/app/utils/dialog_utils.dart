@@ -9,7 +9,7 @@ import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locat
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_sizes.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/app_utils.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/theme/theme_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/theme/theme_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/dialogs/confirmation_dialog.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text.dart';
@@ -34,8 +34,6 @@ final class DialogUtils {
     String? positiveButtonText,
     VoidCallback? onNegativePressed,
     VoidCallback? onPositivePressed,
-    Color? negativeButtonColor,
-    Color? positiveButtonColor,
     Color? negativeButtonTextColor,
     Color? positiveButtonTextColor,
     Color? titleColor,
@@ -49,8 +47,6 @@ final class DialogUtils {
       positiveButtonText: positiveButtonText,
       onNegativePressed: onNegativePressed,
       onPositivePressed: onPositivePressed,
-      negativeButtonColor: negativeButtonColor,
-      positiveButtonColor: positiveButtonColor,
       negativeButtonTextColor: negativeButtonTextColor,
       positiveButtonTextColor: positiveButtonTextColor,
     ),
@@ -78,7 +74,7 @@ final class DialogUtils {
     dismissDirection: isDismissable ? null : DismissDirection.none,
   );
 
-  static Color _getErrorColor() => getIt<ThemeBloc>().state == ThemeMode.dark
+  static Color _getErrorColor() => getIt<ThemeCubit>().state == ThemeMode.dark
       ? AppColors.darkColorScheme.errorContainer
       : AppColors.lightColorScheme.error;
 }

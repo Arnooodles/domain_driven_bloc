@@ -3,15 +3,17 @@ import 'package:toastification/toastification.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/localization.g.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/dialog_utils.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/bloc/app_localization/app_localization_bloc.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/cubit/app_localization/app_localization_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 
 mixin ErrorActions {
-  final I18n _localization = getIt<AppLocalizationBloc>().state;
   ToastificationItem? _activeToast;
+
+  I18n get _localization => getIt<AppLocalizationCubit>().state;
 
   void _showErrorOnce(String message) {
     if (_activeToast?.isRunning ?? false) return;
+
     _activeToast = DialogUtils.showError(message);
   }
 
@@ -29,7 +31,14 @@ mixin ErrorActions {
   }
 
   void onValidationError(ValidationFailure error) {
-    _showErrorOnce(error.message.message);
+    final String baseMessage = error.message.message;
+    if (!kDebugMode) {
+      _showErrorOnce(baseMessage);
+      return;
+    }
+
+    final String valueSuffix = error.value.isNotEmpty ? '\n(${error.value})' : '';
+    _showErrorOnce('$baseMessage$valueSuffix');
   }
 
   void onGenericError(Failure error) {

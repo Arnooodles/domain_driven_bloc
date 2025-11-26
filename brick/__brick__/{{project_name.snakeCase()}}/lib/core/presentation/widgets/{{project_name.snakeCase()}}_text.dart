@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
+import 'package:{{project_name.snakeCase()}}/app/helpers/mixins/failure_handler.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/url_launcher_utils.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/text_type.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}Text extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}Text({
@@ -101,9 +104,9 @@ class _StyledText extends StatelessWidget {
           decorationColor: AppColors.defaultTextUrl,
           color: AppColors.defaultTextUrl,
         ),
-        (_, Map<String?, String?> attributes) {
+        (_, Map<String?, String?> attributes) async {
           if (attributes['href'] != null) {
-            UrlLauncherUtils.openBrowser(attributes['href']!);
+            await _launchLink(attributes);
           }
         },
       ),
@@ -115,6 +118,17 @@ class _StyledText extends StatelessWidget {
         ),
     },
   );
+
+  Future<void> _launchLink(Map<String?, String?> attributes) async {
+    try {
+      final String? href = attributes['href'];
+      if (href != null) {
+        await UrlLauncherUtils.openBrowser(href);
+      }
+    } on Exception catch (error) {
+      getIt<FailureHandler>().handleFailure(Failure.unexpected(error.toString()));
+    }
+  }
 }
 
 class _MarkdownText extends StatelessWidget {
