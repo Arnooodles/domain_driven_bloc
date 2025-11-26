@@ -77,9 +77,9 @@ class VeryGoodCoreWebview extends HookWidget {
     return InAppWebView(
       initialUrlRequest: URLRequest(url: WebUri(url)),
       onWebViewCreated: onWebViewCreated,
-      onProgressChanged: (_, int progress) {
+      onProgressChanged: (_, int progress) async {
         if (progress == 100) {
-          unawaited(pullToRefreshController.value?.endRefreshing().logOnError());
+          await _endRefreshing(pullToRefreshController.value);
         }
         onProgressChanged(progress);
       },
@@ -104,13 +104,18 @@ class VeryGoodCoreWebview extends HookWidget {
       onReceivedError: (InAppWebViewController controller, WebResourceRequest request, WebResourceError error) =>
           _logger.e(error.description),
       onReceivedHttpError:
-          (InAppWebViewController controller, WebResourceRequest request, WebResourceResponse response) {
-            unawaited(pullToRefreshController.value?.endRefreshing().logOnError());
-            _logger.e(response.toString());
-          },
-      onLoadStop: (InAppWebViewController controller, WebUri? url) async {
-        await pullToRefreshController.value?.endRefreshing();
-      },
+          (InAppWebViewController controller, WebResourceRequest request, WebResourceResponse response) =>
+              _endRefreshing(pullToRefreshController.value, response: response),
+      onLoadStop: (InAppWebViewController controller, WebUri? url) => _endRefreshing(pullToRefreshController.value),
     );
+  }
+
+  Future<void> _endRefreshing(PullToRefreshController? refreshController, {WebResourceResponse? response}) async {
+    if (refreshController != null) {
+      await refreshController.endRefreshing().logOnError();
+    }
+    if (response != null && kDebugMode) {
+      _logger.e(response.toString());
+    }
   }
 }

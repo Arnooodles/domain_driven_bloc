@@ -34,8 +34,8 @@ final class DialogUtils {
     String? positiveButtonText,
     VoidCallback? onNegativePressed,
     VoidCallback? onPositivePressed,
-    Color? negativeButtonColor,
-    Color? positiveButtonColor,
+    Color? negativeButtonTextColor,
+    Color? positiveButtonTextColor,
     Color? titleColor,
   }) => showModal<bool?>(
     context: context,
@@ -47,8 +47,8 @@ final class DialogUtils {
       positiveButtonText: positiveButtonText,
       onNegativePressed: onNegativePressed,
       onPositivePressed: onPositivePressed,
-      negativeButtonColor: negativeButtonColor,
-      positiveButtonColor: positiveButtonColor,
+      negativeButtonTextColor: negativeButtonTextColor,
+      positiveButtonTextColor: positiveButtonTextColor,
     ),
   );
 

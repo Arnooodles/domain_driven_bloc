@@ -17,7 +17,7 @@
 - fix: resolve discarded_futures lint warnings
 - fix: disable formatting for freezed files
 - fix: apply auto-formatting to generated files
-- chore: update Flutter to version 3.38.1
+- chore: update Flutter to version 3.38.3
 - chore: update dependencies to latest compatible versions
 - chore(android): update Android project
   - run `scripts/update_android_project.sh` to update dependency versions

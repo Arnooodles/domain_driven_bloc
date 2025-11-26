@@ -36,7 +36,9 @@ void main() {
         ByteData? message,
       ) async {
         mockCalled = true;
-        final Uint8List svgBytes = utf8.encode('<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>');
+        final Uint8List svgBytes = Uint8List.fromList(
+          utf8.encode('<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>'),
+        );
         return ByteData.view(svgBytes.buffer);
       });
 

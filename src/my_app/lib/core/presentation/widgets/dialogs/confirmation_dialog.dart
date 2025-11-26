@@ -15,8 +15,8 @@ class ConfirmationDialog extends StatelessWidget {
     this.positiveButtonText,
     this.onNegativePressed,
     this.onPositivePressed,
-    this.negativeButtonColor,
-    this.positiveButtonColor,
+    this.negativeButtonTextColor,
+    this.positiveButtonTextColor,
     super.key,
   });
 
@@ -27,8 +27,8 @@ class ConfirmationDialog extends StatelessWidget {
   final String? positiveButtonText;
   final VoidCallback? onNegativePressed;
   final VoidCallback? onPositivePressed;
-  final Color? negativeButtonColor;
-  final Color? positiveButtonColor;
+  final Color? negativeButtonTextColor;
+  final Color? positiveButtonTextColor;
 
   @override
   Widget build(BuildContext context) => AlertDialog(
@@ -48,7 +48,7 @@ class ConfirmationDialog extends StatelessWidget {
         onPressed: onNegativePressed ?? () => context.navigator.pop(),
         padding: EdgeInsets.zero,
         contentPadding: EdgeInsets.zero,
-        textStyle: TextStyle(color: negativeButtonColor ?? context.colorScheme.primary),
+        textStyle: TextStyle(color: negativeButtonTextColor ?? context.colorScheme.primary),
       ),
       VeryGoodCoreButton(
         text: positiveButtonText ?? context.i18n.common.yes.toUpperCase(),
@@ -56,7 +56,7 @@ class ConfirmationDialog extends StatelessWidget {
         onPressed: onPositivePressed ?? () => context.navigator.pop(),
         padding: EdgeInsets.zero,
         contentPadding: EdgeInsets.zero,
-        textStyle: TextStyle(color: positiveButtonColor ?? context.colorScheme.primary),
+        textStyle: TextStyle(color: positiveButtonTextColor ?? context.colorScheme.primary),
       ),
     ],
     actionsPadding: Paddings.horizontalMedium,
