@@ -14,8 +14,25 @@ on:
 
 jobs:
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/dart_package.yml@v1
-    with:
-      working_directory: "brick/hooks"
-      analyze_directories: "test"
-      report_on: "pre_gen.dart"
+    defaults:
+      run:
+        working-directory: "brick/hooks/**"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+      - name: 🎯 Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: 📦 Install Dependencies
+        run: dart pub get --no-example
+      - name: ✨ Check Formatting
+        run: |
+          dart format .
+      - name: 🕵️ Analyze
+        run: 
+          dart analyze
+      - name: 🧪 Run Tests
+        run: dart test 
