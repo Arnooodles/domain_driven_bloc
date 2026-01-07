@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 
 part 'reddit_post.dto.freezed.dart';
@@ -8,7 +9,7 @@ part 'reddit_post.dto.g.dart';
 sealed class RedditPostDTO with _$RedditPostDTO {
   const factory RedditPostDTO({required RedditPostData data, String? kind}) = _RedditPostDTO;
 
-  factory RedditPostDTO.fromJson(Map<String, dynamic> json) => _$RedditPostDTOFromJson(json);
+  factory RedditPostDTO.fromJson(Json json) => _$RedditPostDTOFromJson(json);
 }
 
 @freezed
@@ -22,12 +23,12 @@ sealed class RedditPostData with _$RedditPostData {
     dynamic before,
   }) = _RedditPostData;
 
-  factory RedditPostData.fromJson(Map<String, dynamic> json) => _$RedditPostDataFromJson(json);
+  factory RedditPostData.fromJson(Json json) => _$RedditPostDataFromJson(json);
 }
 
 @freezed
 sealed class RedditPostDataChild with _$RedditPostDataChild {
   const factory RedditPostDataChild({required PostDTO data}) = _RedditPostDataChild;
 
-  factory RedditPostDataChild.fromJson(Map<String, dynamic> json) => _$RedditPostDataChildFromJson(json);
+  factory RedditPostDataChild.fromJson(Json json) => _$RedditPostDataChildFromJson(json);
 }

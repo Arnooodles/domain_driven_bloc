@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 
 part 'resource_error.g.dart';
 
@@ -8,7 +9,7 @@ class ResourceError {
   final String? type;
   final String? message;
 
-  static const ResourceError Function(Map<String, dynamic> json) fromJsonFactory = _$ResourceErrorFromJson;
+  static const ResourceError Function(Json json) fromJsonFactory = _$ResourceErrorFromJson;
 
-  Map<String, dynamic> toJson() => _$ResourceErrorToJson(this);
+  Json toJson() => _$ResourceErrorToJson(this);
 }

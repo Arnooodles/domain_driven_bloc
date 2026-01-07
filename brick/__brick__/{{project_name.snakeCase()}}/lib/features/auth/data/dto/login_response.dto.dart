@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/object_ext.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/entity/login_response.dart';
 
@@ -12,7 +13,7 @@ sealed class LoginResponseDTO with _$LoginResponseDTO {
 
   const LoginResponseDTO._();
 
-  factory LoginResponseDTO.fromJson(Map<String, dynamic> json) => _$LoginResponseDTOFromJson(json);
+  factory LoginResponseDTO.fromJson(Json json) => _$LoginResponseDTOFromJson(json);
 
   factory LoginResponseDTO.fromDomain(LoginResponse loginResponse) => LoginResponseDTO(
     accessToken: loginResponse.accessToken.getValue(),

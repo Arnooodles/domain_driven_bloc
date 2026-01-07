@@ -5,6 +5,7 @@ import 'package:{{project_name.snakeCase()}}/app/helpers/converters/timestamp_to
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/color_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/object_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_colors.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 
@@ -29,7 +30,7 @@ sealed class PostDTO with _$PostDTO {
 
   const PostDTO._();
 
-  factory PostDTO.fromJson(Map<String, dynamic> json) => _$PostDTOFromJson(json);
+  factory PostDTO.fromJson(Json json) => _$PostDTOFromJson(json);
 
   factory PostDTO.fromDomain(Post post) => PostDTO(
     uid: post.uid.getValue(),

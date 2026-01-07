@@ -10,6 +10,7 @@ import 'package:{{project_name.snakeCase()}}/core/data/dto/user.dto.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/service/user_service.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_user_repository.dart';
 
@@ -23,7 +24,7 @@ class UserRepository implements IUserRepository {
   FailureHandler get _failureHandler => getIt<FailureHandler>();
 
   @override
-  Future<Either<Failure, User>> get user async {
+  Future<Result<User>> get user async {
     try {
       final Response<UserDTO> response = await _userService.getCurrentUser();
 
@@ -40,7 +41,7 @@ class UserRepository implements IUserRepository {
     }
   }
 
-  Either<Failure, User> _validateUserData(UserDTO userDTO) {
+  Result<User> _validateUserData(UserDTO userDTO) {
     final User user = userDTO.toDomain();
 
     return user.validate.fold(() => right(user), left);

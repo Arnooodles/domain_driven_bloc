@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/fpdart_ext.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/dto/reddit_post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/repository/post_repository.dart';
@@ -38,7 +39,7 @@ void main() {
         provideDummy<chopper.Response<RedditPostDTO>>(generateMockResponse<RedditPostDTO>(data, 200));
         when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<RedditPostDTO>(data, 200));
 
-        final Either<Failure, List<Post>> result = await postRepository.getPosts();
+        final Result<List<Post>> result = await postRepository.getPosts();
 
         expect(result, isA<Right<Failure, List<Post>>>());
         expect(result.asRight(), isNotEmpty);
@@ -54,7 +55,7 @@ void main() {
         provideDummy<chopper.Response<RedditPostDTO>>(generateMockResponse<RedditPostDTO>(data, 200));
         when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<RedditPostDTO>(data, 200));
 
-        final Either<Failure, List<Post>> result = await postRepository.getPosts();
+        final Result<List<Post>> result = await postRepository.getPosts();
 
         expect(result, isA<Left<Failure, List<Post>>>());
       });
@@ -67,7 +68,7 @@ void main() {
         provideDummy<chopper.Response<RedditPostDTO>>(generateMockResponse<RedditPostDTO>(data, 500));
         when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<RedditPostDTO>(data, 500));
 
-        final Either<Failure, List<Post>> result = await postRepository.getPosts();
+        final Result<List<Post>> result = await postRepository.getPosts();
 
         expect(result, isA<Left<Failure, List<Post>>>());
       });
@@ -75,7 +76,7 @@ void main() {
       test('getPosts should return failure when unexpected error occurs', () async {
         when(postService.getPosts()).thenThrow(Exception('Unexpected error'));
 
-        final Either<Failure, List<Post>> result = await postRepository.getPosts();
+        final Result<List<Post>> result = await postRepository.getPosts();
 
         expect(result, isA<Left<Failure, List<Post>>>());
       });

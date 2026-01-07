@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,7 +44,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /// This will tell you which image is oversized by throwing an exception.
-    debugInvertOversizedImages = true;
+    debugInvertOversizedImages = kDebugMode;
     return MultiBlocProvider(
       providers: _globalProviders,
       child: Builder(

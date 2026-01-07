@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/object_ext.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/dto/address.dto.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/gender.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 
@@ -26,7 +27,7 @@ sealed class UserDTO with _$UserDTO {
 
   const UserDTO._();
 
-  factory UserDTO.fromJson(Map<String, dynamic> json) => _$UserDTOFromJson(json);
+  factory UserDTO.fromJson(Json json) => _$UserDTOFromJson(json);
 
   factory UserDTO.fromDomain(User user) => UserDTO(
     uid: int.parse(user.uid.getValue()),

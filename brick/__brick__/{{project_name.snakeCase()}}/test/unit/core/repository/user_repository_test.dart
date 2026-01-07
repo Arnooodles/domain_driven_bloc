@@ -5,6 +5,7 @@ import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/fpdart_ext.d
 import 'package:{{project_name.snakeCase()}}/core/data/dto/user.dto.dart';
 import 'package:{{project_name.snakeCase()}}/core/data/repository/user_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 
 import '../../../utils/generated_mocks.mocks.dart';
@@ -33,7 +34,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 200));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return a successful result with the user
         expect(result, isA<Right<Failure, User>>());
@@ -48,7 +49,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(invalidUser, 200));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return a failure due to validation error
         expect(result, isA<Left<Failure, User>>());
@@ -62,7 +63,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 500));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return a server failure
         expect(result, isA<Left<Failure, User>>());
@@ -76,7 +77,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 401));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return a server failure
         expect(result, isA<Left<Failure, User>>());
@@ -90,7 +91,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 404));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return a server failure
         expect(result, isA<Left<Failure, User>>());
@@ -103,7 +104,7 @@ void main() {
         when(userService.getCurrentUser()).thenThrow(Exception('Unexpected error'));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return an unexpected failure
         expect(result, isA<Left<Failure, User>>());
@@ -116,7 +117,7 @@ void main() {
         when(userService.getCurrentUser()).thenThrow(Exception('Connection timeout'));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return an unexpected failure
         expect(result, isA<Left<Failure, User>>());
@@ -135,7 +136,7 @@ void main() {
         ).thenAnswer((_) async => generateMockResponse<UserDTO>(invalidEmailUser, 200));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return validation failure
         expect(result, isA<Left<Failure, User>>());
@@ -149,7 +150,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(incompleteUser, 200));
 
         // When: Getting the current user
-        final Either<Failure, User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user;
 
         // Then: Should return validation failure
         expect(result, isA<Left<Failure, User>>());

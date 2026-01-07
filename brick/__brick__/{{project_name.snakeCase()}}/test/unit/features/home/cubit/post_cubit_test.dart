@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/cubit/post/post_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
@@ -48,8 +49,8 @@ void main() {
       blocTest<PostCubit, PostState>(
         'should emit success state with list of posts when API call succeeds',
         build: () {
-          provideDummy(Either<Failure, List<Post>>.right(posts));
-          when(postRepository.getPosts()).thenAnswer((_) async => Either<Failure, List<Post>>.right(posts));
+          provideDummy(Result<List<Post>>.right(posts));
+          when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.right(posts));
 
           return PostCubit(postRepository, failureHandler);
         },
@@ -63,8 +64,8 @@ void main() {
       blocTest<PostCubit, PostState>(
         'should emit failure state when API call fails',
         build: () {
-          provideDummy(Either<Failure, List<Post>>.left(failure));
-          when(postRepository.getPosts()).thenAnswer((_) async => Either<Failure, List<Post>>.left(failure));
+          provideDummy(Result<List<Post>>.left(failure));
+          when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.left(failure));
 
           return PostCubit(postRepository, failureHandler);
         },
@@ -78,6 +79,7 @@ void main() {
       blocTest<PostCubit, PostState>(
         'should emit failure state when unexpected error occurs',
         build: () {
+          provideDummy(Result<List<Post>>.left(failure));
           when(postRepository.getPosts()).thenThrow(Exception('Unexpected error'));
 
           return PostCubit(postRepository, failureHandler);
@@ -107,7 +109,7 @@ void main() {
         'should handle authentication failure',
         build: () {
           const Failure authFailure = Failure.authentication('Authentication required');
-          provideDummy(Either<Failure, List<Post>>.left(authFailure));
+          provideDummy(Result<List<Post>>.left(authFailure));
           when(postRepository.getPosts()).thenAnswer((_) async => left(authFailure));
 
           return PostCubit(postRepository, failureHandler);
@@ -123,7 +125,7 @@ void main() {
         'should handle server error with different status codes',
         build: () {
           const Failure serverFailure = Failure.server(StatusCode.http404, 'Posts not found');
-          provideDummy(Either<Failure, List<Post>>.left(serverFailure));
+          provideDummy(Result<List<Post>>.left(serverFailure));
           when(postRepository.getPosts()).thenAnswer((_) async => left(serverFailure));
 
           return PostCubit(postRepository, failureHandler);
@@ -139,8 +141,8 @@ void main() {
         'should handle empty posts list',
         build: () {
           final List<Post> emptyPosts = <Post>[];
-          provideDummy(Either<Failure, List<Post>>.right(emptyPosts));
-          when(postRepository.getPosts()).thenAnswer((_) async => Either<Failure, List<Post>>.right(emptyPosts));
+          provideDummy(Result<List<Post>>.right(emptyPosts));
+          when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.right(emptyPosts));
 
           return PostCubit(postRepository, failureHandler);
         },

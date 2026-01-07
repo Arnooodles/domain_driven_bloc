@@ -12,32 +12,34 @@ import 'package:{{project_name.snakeCase()}}/app/observers/app_bloc_observer.dar
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/env.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await configureDependencies(Env.fromFlavor(isWeb: kIsWeb));
-  urlConfig();
-  _handleErrors();
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await configureDependencies(Env.fromFlavor(isWeb: kIsWeb));
+    urlConfig();
+    _handleErrors();
 
-  if (kDebugMode) {
-    Bloc.observer = getIt<AppBlocObserver>();
-  }
+    if (kDebugMode) {
+      Bloc.observer = getIt<AppBlocObserver>();
+    }
 
-  runApp(App());
+    runApp(App());
+  }, _catchUnhandledErrors);
 }
 
 void _handleErrors() {
   FlutterError.onError = (FlutterErrorDetails details) {
-    if (kReleaseMode) {
-      //TODO: implement recordFlutterFatalError crashlytics
-    } else {
-      getIt<Logger>().f(details.exceptionAsString(), error: details, stackTrace: details.stack);
-    }
+    _catchUnhandledErrors(details.exception, details.stack);
   };
   PlatformDispatcher.instance.onError = (Object error, StackTrace stackTrace) {
-    if (kReleaseMode) {
-      //TODO: implement reportCrash crashlytics
-    } else {
-      getIt<Logger>().f(error.toString(), error: error, stackTrace: stackTrace);
-    }
+    _catchUnhandledErrors(error, stackTrace);
     return true;
   };
+}
+
+void _catchUnhandledErrors(Object error, StackTrace? stack) {
+  if (kReleaseMode) {
+    //TODO: implement reportCrash crashlytics
+  } else {
+    getIt<Logger>().f(error.toString(), error: error, stackTrace: stack);
+  }
 }
