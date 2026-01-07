@@ -1,11 +1,14 @@
 // ignore_for_file: avoid-returning-widgets, prefer-correct-edge-insets-constructor
 
 import 'package:flutter/material.dart';
+import 'package:flutter_event_limiter/flutter_event_limiter.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_sizes.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/core/domain/entity/enum/button_type.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
+
+typedef Throttler = void Function()? Function(void Function()?);
 
 class VeryGoodCoreButton extends StatelessWidget {
   const VeryGoodCoreButton({
@@ -37,61 +40,6 @@ class VeryGoodCoreButton extends StatelessWidget {
   final Widget? icon;
   final EdgeInsets? iconPadding;
 
-  @override
-  Widget build(BuildContext context) => Semantics(
-    key: Key(text),
-    enabled: isEnabled,
-    button: true,
-    label: text,
-    child: SizedBox(
-      width: isExpanded ? AppSizes.infinity : null,
-      child: Padding(
-        padding: padding ?? EdgeInsets.zero,
-        child: _ButtonType(
-          text: text,
-          buttonType: buttonType,
-          icon: icon,
-          isEnabled: isEnabled,
-          isExpanded: isExpanded,
-          isLoading: isLoading,
-          onPressed: onPressed,
-          buttonStyle: buttonStyle,
-          iconPadding: iconPadding,
-          contentPadding: contentPadding,
-          textStyle: textStyle,
-        ),
-      ),
-    ),
-  );
-}
-
-class _ButtonType extends StatelessWidget {
-  const _ButtonType({
-    required this.text,
-    required this.buttonType,
-    required this.icon,
-    this.isLoading = false,
-    this.isEnabled = true,
-    this.isExpanded = false,
-    this.onPressed,
-    this.buttonStyle,
-    this.iconPadding,
-    this.contentPadding,
-    this.textStyle,
-  });
-
-  final bool isEnabled;
-  final bool isLoading;
-  final VoidCallback? onPressed;
-  final ButtonStyle? buttonStyle;
-  final EdgeInsets? iconPadding;
-  final EdgeInsets? contentPadding;
-  final String text;
-  final TextStyle? textStyle;
-  final bool isExpanded;
-  final ButtonType buttonType;
-  final Widget? icon;
-
   Widget _buildContent(BuildContext context, {bool hasIcon = false, bool isTonal = false}) => _ButtonContent(
     contentPadding: contentPadding,
     isLoading: isLoading,
@@ -111,63 +59,71 @@ class _ButtonType extends StatelessWidget {
     );
   }
 
+  Widget _buildButton({
+    required BuildContext context,
+    required VoidCallback? callback,
+    required Widget? icon,
+    required Widget child,
+  }) => ThrottledBuilder(
+    builder: (BuildContext context, Throttler throttle) {
+      final VoidCallback? throttledCallback = throttle(callback);
+      return switch (buttonType) {
+        ButtonType.elevated =>
+          icon != null
+              ? ElevatedButton.icon(onPressed: throttledCallback, style: buttonStyle, icon: icon, label: child)
+              : ElevatedButton(onPressed: throttledCallback, style: buttonStyle, child: child),
+        ButtonType.filled =>
+          icon != null
+              ? FilledButton.icon(onPressed: throttledCallback, style: buttonStyle, icon: icon, label: child)
+              : FilledButton(onPressed: throttledCallback, style: buttonStyle, child: child),
+        ButtonType.tonal =>
+          icon != null
+              ? FilledButton.icon(
+                  onPressed: throttledCallback,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: context.colorScheme.secondaryContainer,
+                    foregroundColor: context.colorScheme.onSecondaryContainer,
+                  ).merge(buttonStyle),
+                  icon: icon,
+                  label: child,
+                )
+              : FilledButton(
+                  onPressed: throttledCallback,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: context.colorScheme.secondaryContainer,
+                    foregroundColor: context.colorScheme.onSecondaryContainer,
+                  ).merge(buttonStyle),
+                  child: child,
+                ),
+        ButtonType.outlined =>
+          icon != null
+              ? OutlinedButton.icon(onPressed: throttledCallback, style: buttonStyle, icon: icon, label: child)
+              : OutlinedButton(onPressed: throttledCallback, style: buttonStyle, child: child),
+        ButtonType.text =>
+          icon != null
+              ? TextButton.icon(onPressed: throttledCallback, style: buttonStyle, icon: icon, label: child)
+              : TextButton(onPressed: throttledCallback, style: buttonStyle, child: child),
+      };
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
     final Widget? iconWidget = _buildIcon();
     final VoidCallback? callback = (isEnabled && !isLoading) ? onPressed : null;
+    final bool isTonal = buttonType == ButtonType.tonal;
+    final Widget child = _buildContent(context, hasIcon: iconWidget != null, isTonal: isTonal);
+    final Widget button = _buildButton(context: context, callback: callback, icon: iconWidget, child: child);
 
-    switch (buttonType) {
-      case ButtonType.elevated:
-        return iconWidget != null
-            ? ElevatedButton.icon(
-                onPressed: callback,
-                style: buttonStyle,
-                icon: iconWidget,
-                label: _buildContent(context, hasIcon: true),
-              )
-            : ElevatedButton(onPressed: callback, style: buttonStyle, child: _buildContent(context));
-      case ButtonType.filled:
-        return iconWidget != null
-            ? FilledButton.icon(
-                onPressed: callback,
-                style: buttonStyle,
-                icon: iconWidget,
-                label: _buildContent(context, hasIcon: true),
-              )
-            : FilledButton(onPressed: callback, style: buttonStyle, child: _buildContent(context));
-      case ButtonType.tonal:
-        final ButtonStyle tonalStyle = FilledButton.styleFrom(
-          backgroundColor: context.colorScheme.secondaryContainer,
-          foregroundColor: context.colorScheme.onSecondaryContainer,
-        ).merge(buttonStyle);
-
-        return iconWidget != null
-            ? FilledButton.icon(
-                onPressed: callback,
-                style: tonalStyle,
-                icon: iconWidget,
-                label: _buildContent(context, hasIcon: true, isTonal: true),
-              )
-            : FilledButton(onPressed: callback, style: tonalStyle, child: _buildContent(context, isTonal: true));
-      case ButtonType.outlined:
-        return iconWidget != null
-            ? OutlinedButton.icon(
-                onPressed: callback,
-                style: buttonStyle,
-                icon: iconWidget,
-                label: _buildContent(context, hasIcon: true),
-              )
-            : OutlinedButton(onPressed: callback, style: buttonStyle, child: _buildContent(context));
-      case ButtonType.text:
-        return iconWidget != null
-            ? TextButton.icon(
-                onPressed: callback,
-                style: buttonStyle,
-                icon: iconWidget,
-                label: _buildContent(context, hasIcon: true),
-              )
-            : TextButton(onPressed: callback, style: buttonStyle, child: _buildContent(context));
-    }
+    return Semantics(
+      enabled: isEnabled,
+      button: true,
+      label: text,
+      child: SizedBox(
+        width: isExpanded ? AppSizes.infinity : null,
+        child: Padding(padding: padding ?? EdgeInsets.zero, child: button),
+      ),
+    );
   }
 }
 
@@ -175,7 +131,6 @@ class _ButtonContent extends StatelessWidget {
   const _ButtonContent({
     required this.isLoading,
     required this.text,
-
     this.hasIcon = false,
     this.textStyle,
     this.isExpanded = false,
@@ -186,7 +141,6 @@ class _ButtonContent extends StatelessWidget {
   final bool isLoading;
   final String text;
   final TextStyle? textStyle;
-
   final bool hasIcon;
   final bool isExpanded;
 

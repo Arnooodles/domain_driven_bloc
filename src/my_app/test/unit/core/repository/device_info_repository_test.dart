@@ -6,6 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/helpers/extensions/fpdart_ext.dart';
 import 'package:very_good_core/core/data/repository/device_info_repository.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 
 import '../../../utils/generated_mocks.mocks.dart';
 import '../../../utils/test_utils.dart';
@@ -32,7 +33,7 @@ void main() {
         const String version = '1.0.0';
         when(packageInfo.version).thenReturn(version);
 
-        final Either<Failure, String> result = deviceRepository.getAppVersion();
+        final Result<String> result = deviceRepository.getAppVersion();
         expect(result, isA<Right<Failure, String>>());
         expect(result.asRight(), version);
       });
@@ -40,7 +41,7 @@ void main() {
       test('should return DeviceInfoError when exception occurs', () async {
         when(packageInfo.version).thenThrow(Exception('Package info error'));
 
-        final Either<Failure, String> result = deviceRepository.getAppVersion();
+        final Result<String> result = deviceRepository.getAppVersion();
         expect(result, isA<Left<Failure, String>>());
         expect(result.asLeft(), isA<DeviceInfoError>());
         expect(result.asLeft().message, 'Exception: Package info error');
@@ -52,7 +53,7 @@ void main() {
         const String buildNumber = '123';
         when(packageInfo.buildNumber).thenReturn(buildNumber);
 
-        final Either<Failure, String> result = deviceRepository.getBuildNumber();
+        final Result<String> result = deviceRepository.getBuildNumber();
         expect(result, isA<Right<Failure, String>>());
         expect(result.asRight(), buildNumber);
       });
@@ -60,7 +61,7 @@ void main() {
       test('should return DeviceInfoError when exception occurs', () async {
         when(packageInfo.buildNumber).thenThrow(Exception('Build number error'));
 
-        final Either<Failure, String> result = deviceRepository.getBuildNumber();
+        final Result<String> result = deviceRepository.getBuildNumber();
         expect(result, isA<Left<Failure, String>>());
         expect(result.asLeft(), isA<DeviceInfoError>());
         expect(result.asLeft().message, 'Exception: Build number error');
@@ -76,7 +77,7 @@ void main() {
           deviceInfo.androidInfo,
         ).thenAnswer((_) => Future<AndroidDeviceInfo>.value(mockAndroidDeviceInfo(phoneModel: phoneModel)));
 
-        final Either<Failure, String> result = await deviceRepository.getPhoneModel();
+        final Result<String> result = await deviceRepository.getPhoneModel();
         expect(result, isA<Right<Failure, String>>());
         expect(result.asRight(), phoneModel);
       });
@@ -89,14 +90,14 @@ void main() {
           deviceInfo.iosInfo,
         ).thenAnswer((_) => Future<IosDeviceInfo>.value(mockIosDeviceInfo(phoneModel: phoneModel)));
 
-        final Either<Failure, String> result = await deviceRepository.getPhoneModel();
+        final Result<String> result = await deviceRepository.getPhoneModel();
         expect(result, isA<Right<Failure, String>>());
         expect(result.asRight(), phoneModel);
       });
 
-      test('should return DeviceInfoError when platform is not android or ios', () async {
+      test('should return unknown when platform is not android or ios', () async {
         debugDefaultTargetPlatformOverride = TargetPlatform.windows;
-        final Either<Failure, String> result = await deviceRepository.getPhoneModel();
+        final Result<String> result = await deviceRepository.getPhoneModel();
         expect(result, isA<Right<Failure, String>>());
         expect(result.asRight(), DeviceInfoRepository.unknown);
       });
@@ -105,7 +106,7 @@ void main() {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
         when(deviceInfo.androidInfo).thenThrow(Exception('Android device info error'));
 
-        final Either<Failure, String> result = await deviceRepository.getPhoneModel();
+        final Result<String> result = await deviceRepository.getPhoneModel();
         expect(result, isA<Left<Failure, String>>());
         expect(result.asLeft(), isA<DeviceInfoError>());
         expect(result.asLeft().message, 'Exception: Android device info error');
@@ -115,7 +116,7 @@ void main() {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
         when(deviceInfo.iosInfo).thenThrow(Exception('iOS device info error'));
 
-        final Either<Failure, String> result = await deviceRepository.getPhoneModel();
+        final Result<String> result = await deviceRepository.getPhoneModel();
         expect(result, isA<Left<Failure, String>>());
         expect(result.asLeft(), isA<DeviceInfoError>());
         expect(result.asLeft().message, 'Exception: iOS device info error');
@@ -132,7 +133,7 @@ void main() {
           deviceInfo.iosInfo,
         ).thenAnswer((_) => Future<IosDeviceInfo>.value(mockIosDeviceInfo(os: os, version: version)));
 
-        final Either<Failure, (String, String)> result = await deviceRepository.getPhoneOSVersion();
+        final Result<(String, String)> result = await deviceRepository.getPhoneOSVersion();
         expect(result, isA<Right<Failure, (String, String)>>());
         expect(result.asRight(), (os, version));
       });
@@ -145,14 +146,14 @@ void main() {
           deviceInfo.androidInfo,
         ).thenAnswer((_) => Future<AndroidDeviceInfo>.value(mockAndroidDeviceInfo(version: version)));
 
-        final Either<Failure, (String, String)> result = await deviceRepository.getPhoneOSVersion();
+        final Result<(String, String)> result = await deviceRepository.getPhoneOSVersion();
         expect(result, isA<Right<Failure, (String, String)>>());
         expect(result.asRight(), ('Android', version));
       });
 
-      test('should return DeviceInfoError when platform is not android or ios', () async {
+      test('should return unknown os and version when platform is not android or ios', () async {
         debugDefaultTargetPlatformOverride = TargetPlatform.windows;
-        final Either<Failure, (String, String)> result = await deviceRepository.getPhoneOSVersion();
+        final Result<(String, String)> result = await deviceRepository.getPhoneOSVersion();
         expect(result, isA<Right<Failure, (String, String)>>());
         expect(result.asRight(), (DeviceInfoRepository.unknown, DeviceInfoRepository.unknown));
       });
@@ -161,7 +162,7 @@ void main() {
         debugDefaultTargetPlatformOverride = TargetPlatform.android;
         when(deviceInfo.androidInfo).thenThrow(Exception('Android OS version error'));
 
-        final Either<Failure, (String, String)> result = await deviceRepository.getPhoneOSVersion();
+        final Result<(String, String)> result = await deviceRepository.getPhoneOSVersion();
         expect(result, isA<Left<Failure, (String, String)>>());
         expect(result.asLeft(), isA<DeviceInfoError>());
         expect(result.asLeft().message, 'Exception: Android OS version error');
@@ -171,7 +172,7 @@ void main() {
         debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
         when(deviceInfo.iosInfo).thenThrow(Exception('iOS OS version error'));
 
-        final Either<Failure, (String, String)> result = await deviceRepository.getPhoneOSVersion();
+        final Result<(String, String)> result = await deviceRepository.getPhoneOSVersion();
         expect(result, isA<Left<Failure, (String, String)>>());
         expect(result.asLeft(), isA<DeviceInfoError>());
         expect(result.asLeft().message, 'Exception: iOS OS version error');

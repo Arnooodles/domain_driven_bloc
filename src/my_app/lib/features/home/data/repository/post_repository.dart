@@ -10,6 +10,7 @@ import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
 import 'package:very_good_core/features/home/data/dto/reddit_post.dto.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';
@@ -25,7 +26,7 @@ class PostRepository implements IPostRepository {
   FailureHandler get _failureHandler => getIt<FailureHandler>();
 
   @override
-  Future<Either<Failure, List<Post>>> getPosts() async {
+  Future<Result<List<Post>>> getPosts() async {
     try {
       final chopper.Response<RedditPostDTO> response = await _postService.getPosts();
 
@@ -41,7 +42,7 @@ class PostRepository implements IPostRepository {
     }
   }
 
-  Either<Failure, List<Post>> _validatePostData(List<PostDTO> postDTOs) {
+  Result<List<Post>> _validatePostData(List<PostDTO> postDTOs) {
     final List<Post> posts = postDTOs.map((PostDTO postDTO) => postDTO.toDomain()).toList();
     // check if the post data does not have invalid values(if list is empty
     // then there are no invalid posts)

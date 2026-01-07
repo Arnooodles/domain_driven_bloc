@@ -1,5 +1,5 @@
-import 'package:fpvalidate/fpvalidate.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:trust_but_verify/trust_but_verify.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 
 part 'failure.freezed.dart';

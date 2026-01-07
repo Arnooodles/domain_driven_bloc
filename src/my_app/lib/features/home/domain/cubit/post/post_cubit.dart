@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
 
@@ -24,7 +24,7 @@ class PostCubit extends Cubit<PostState> {
     try {
       safeEmit(const PostState.loading());
 
-      final Either<Failure, List<Post>> possibleFailure = await _postRepository.getPosts();
+      final Result<List<Post>> possibleFailure = await _postRepository.getPosts();
 
       possibleFailure.fold(_failureHandler.handleFailure, (List<Post> posts) => safeEmit(PostState.onSuccess(posts)));
     } on Exception catch (error) {

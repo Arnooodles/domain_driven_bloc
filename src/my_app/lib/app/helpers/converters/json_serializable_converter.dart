@@ -4,16 +4,17 @@ import 'dart:convert';
 import 'package:chopper/chopper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:very_good_core/core/data/dto/resource_error.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 
 // ignore_for_file: argument_type_not_assignable,return_of_invalid_type_from_closure,
 // ignore_for_file: unnecessary_overrides,strict_raw_type,inference_failure_on_function_invocation
-typedef JsonFactory<T> = T Function(Map<String, dynamic> json);
+typedef JsonFactory<T> = T Function(Json json);
 
 final class JsonSerializableConverter extends JsonConverter {
   const JsonSerializableConverter(this.factories);
   final Map<Type, JsonFactory> factories;
 
-  T? _decodeMap<T>(Map<String, dynamic> values) {
+  T? _decodeMap<T>(Json values) {
     /// Get jsonFactory using Type parameters
     /// if not found or invalid, throw error or return null
     final JsonFactory? jsonFactory = factories[T];
@@ -31,7 +32,7 @@ final class JsonSerializableConverter extends JsonConverter {
   dynamic _decode<T>(dynamic entity) {
     if (entity is Iterable) return _decodeList<T>(entity as List<dynamic>);
 
-    if (entity is Map) return _decodeMap<T>(entity as Map<String, dynamic>);
+    if (entity is Map) return _decodeMap<T>(entity as Json);
 
     return entity;
   }

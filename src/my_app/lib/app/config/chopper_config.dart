@@ -13,6 +13,7 @@ import 'package:very_good_core/app/helpers/interceptors/auth_interceptor.dart';
 import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/core/domain/entity/enum/env.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/features/auth/data/dto/login_response.dto.dart';
 import 'package:very_good_core/features/auth/data/service/auth_service.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
@@ -33,13 +34,12 @@ final class ChopperConfig {
     PostService.create(),
   ];
 
-  JsonSerializableConverter get converter =>
-      const JsonSerializableConverter(<Type, dynamic Function(Map<String, dynamic>)>{
-        LoginResponseDTO: LoginResponseDTO.fromJson,
-        UserDTO: UserDTO.fromJson,
-        PostDTO: PostDTO.fromJson,
-        RedditPostDTO: RedditPostDTO.fromJson,
-      });
+  JsonSerializableConverter get converter => const JsonSerializableConverter(<Type, dynamic Function(Json)>{
+    LoginResponseDTO: LoginResponseDTO.fromJson,
+    UserDTO: UserDTO.fromJson,
+    PostDTO: PostDTO.fromJson,
+    RedditPostDTO: RedditPostDTO.fromJson,
+  });
 
   List<Interceptor> get _interceptors => <Interceptor>[
     const HeadersInterceptor(<String, String>{'Accept': 'application/json', 'Content-type': 'application/json'}),

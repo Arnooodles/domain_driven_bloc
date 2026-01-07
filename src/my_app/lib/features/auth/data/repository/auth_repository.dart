@@ -9,6 +9,7 @@ import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 import 'package:very_good_core/features/auth/data/dto/login_request.dto.dart';
 import 'package:very_good_core/features/auth/data/dto/login_response.dto.dart';
@@ -28,7 +29,7 @@ class AuthRepository implements IAuthRepository {
   FailureHandler get _failureHandler => getIt<FailureHandler>();
 
   @override
-  Future<Either<Failure, Unit>> login(LoginRequest loginRequest) async {
+  Future<Result<Unit>> login(LoginRequest loginRequest) async {
     try {
       final Response<LoginResponseDTO> response = await _authService.login(
         LoginRequestDTO.fromDomain(loginRequest).toJson(),
@@ -39,7 +40,7 @@ class AuthRepository implements IAuthRepository {
         final Option<Failure> possibleFailure = response.body!.toDomain().validate;
         return await possibleFailure.fold(() async {
           // Save tokens to local storage
-          final List<Either<Failure, Unit>> possibleFailures = await Future.wait(<Future<Either<Failure, Unit>>>[
+          final List<Result<Unit>> possibleFailures = await Future.wait(<Future<Result<Unit>>>[
             _localStorageRepository.setAccessToken(response.body!.accessToken),
             if (response.body!.refreshToken != null)
               _localStorageRepository.setRefreshToken(response.body!.refreshToken!),
@@ -59,13 +60,13 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> logout() async {
+  Future<Result<Unit>> logout() async {
     try {
       //TODO: add  service to logout
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
       //clear auth tokens from the local storage
-      final List<Either<Failure, Unit>> deleteResults = await Future.wait(<Future<Either<Failure, Unit>>>[
+      final List<Result<Unit>> deleteResults = await Future.wait(<Future<Result<Unit>>>[
         _localStorageRepository.deleteAccessToken(),
         _localStorageRepository.deleteRefreshToken(),
       ]);
@@ -79,9 +80,9 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> refreshToken() async {
+  Future<Result<Unit>> refreshToken() async {
     try {
-      final Either<Failure, String?> possibleFailure = await _localStorageRepository.getRefreshToken();
+      final Result<String?> possibleFailure = await _localStorageRepository.getRefreshToken();
       return await possibleFailure.fold(left, (String? refreshToken) async {
         if (refreshToken == null) return left(const Failure.deviceStorage('No refresh token found'));
 
@@ -92,13 +93,13 @@ class AuthRepository implements IAuthRepository {
 
         if (statusCode.isSuccess && response.body != null) {
           // Save tokens to local storage
-          final List<Either<Failure, Unit>> possibleFailure = await Future.wait(<Future<Either<Failure, Unit>>>[
+          final List<Result<Unit>> possibleFailures = await Future.wait(<Future<Result<Unit>>>[
             _localStorageRepository.setAccessToken(response.body!.accessToken),
             if (response.body!.refreshToken != null)
               _localStorageRepository.setRefreshToken(response.body!.refreshToken!),
           ]);
 
-          return _verifySaving(possibleFailure);
+          return _verifySaving(possibleFailures);
         } else {
           return _failureHandler.handleServerError<Unit>(statusCode, response.error);
         }
@@ -110,6 +111,6 @@ class AuthRepository implements IAuthRepository {
     }
   }
 
-  Either<Failure, Unit> _verifySaving(List<Either<Failure, Unit>> results) =>
-      results.firstWhere((Either<Failure, Unit> result) => result.isLeft(), orElse: () => right(unit));
+  Result<Unit> _verifySaving(List<Result<Unit>> results) =>
+      results.firstWhere((Result<Unit> result) => result.isLeft(), orElse: () => right(unit));
 }
