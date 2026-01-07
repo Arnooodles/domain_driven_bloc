@@ -1,18 +1,18 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 
 abstract interface class ILocalStorageRepository {
-  Future<Either<Failure, String?>> getAccessToken();
-  Future<Either<Failure, Unit>> setAccessToken(String accessToken);
-  Future<Either<Failure, Unit>> deleteAccessToken();
+  Future<Result<String?>> getAccessToken();
+  Future<Result<Unit>> setAccessToken(String accessToken);
+  Future<Result<Unit>> deleteAccessToken();
 
-  Future<Either<Failure, String?>> getRefreshToken();
-  Future<Either<Failure, Unit>> setRefreshToken(String refreshToken);
-  Future<Either<Failure, Unit>> deleteRefreshToken();
+  Future<Result<String?>> getRefreshToken();
+  Future<Result<Unit>> setRefreshToken(String refreshToken);
+  Future<Result<Unit>> deleteRefreshToken();
 
-  Future<Either<Failure, String?>> getLastLoggedInUsername();
-  Future<Either<Failure, Unit>> setLastLoggedInUsername(String username);
+  Future<Result<String?>> getLastLoggedInUsername();
+  Future<Result<Unit>> setLastLoggedInUsername(String username);
 
-  Future<Either<Failure, bool?>> getIsDarkMode();
-  Future<Either<Failure, Unit>> setIsDarkMode({required bool isDarkMode});
+  Future<Result<bool?>> getIsDarkMode();
+  Future<Result<Unit>> setIsDarkMode({required bool isDarkMode});
 }

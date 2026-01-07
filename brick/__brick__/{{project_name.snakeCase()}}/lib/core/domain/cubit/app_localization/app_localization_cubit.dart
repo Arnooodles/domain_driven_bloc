@@ -30,8 +30,8 @@ class AppLocalizationCubit extends Cubit<I18n> {
     //   if (remoteLocaleString == null) {
     //     throw Exception('Unable to fetch locale remote config');
     //   }
-    //   final Map<String, dynamic>? remoteLocale =
-    //       json.decode(remoteLocaleString) as Map<String, dynamic>?;
+    //   final Json? remoteLocale =
+    //       json.decode(remoteLocaleString) as Json?;
     //   if (remoteLocale == null) {
     //     throw Exception('Unable to decode remote config');
     //   }

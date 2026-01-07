@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/cubit_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/mixins/failure_handler.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_user_repository.dart';
@@ -26,7 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> initialize() async {
     try {
       safeEmit(const AuthState.initial());
-      final Either<Failure, String?> possibleFailure = await _localStorageRepository.getAccessToken();
+      final Result<String?> possibleFailure = await _localStorageRepository.getAccessToken();
       possibleFailure.fold(_failureHandler.handleFailure, (String? accessToken) async {
         if (accessToken == null) {
           safeEmit(const AuthState.unauthenticated());
@@ -60,7 +61,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> logout() async {
     try {
       safeEmit(const AuthState.loading());
-      final Either<Failure, Unit> possibleFailure = await _authRepository.logout();
+      final Result<Unit> possibleFailure = await _authRepository.logout();
       possibleFailure.fold(
         (Failure failure) => _emitError(left(failure)),
         (_) => safeEmit(const AuthState.unauthenticated()),
@@ -70,13 +71,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void _emitAuthState(Either<Failure, User> possibleFailure, {bool isLogout = false}) {
+  void _emitAuthState(Result<User> possibleFailure, {bool isLogout = false}) {
     possibleFailure.fold((Failure failure) {
       _emitError(left(failure), isLogout: isLogout);
     }, (User user) => safeEmit(AuthState.authenticated(user: user)));
   }
 
-  void _emitError(Either<Failure, Object> failureOrError, {bool isLogout = true}) {
+  void _emitError(Result<Object> failureOrError, {bool isLogout = true}) {
     if (isLogout) {
       safeEmit(const AuthState.unauthenticated());
     }

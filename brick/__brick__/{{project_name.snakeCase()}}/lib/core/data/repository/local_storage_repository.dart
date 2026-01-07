@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
 
 final class _Keys {
@@ -27,7 +28,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
 
   /// Secured Storage services
   @override
-  Future<Either<Failure, String?>> getAccessToken() async {
+  Future<Result<String?>> getAccessToken() async {
     try {
       return right(await _securedStorage.read(key: _Keys.accessToken));
     } on Exception catch (error) {
@@ -37,7 +38,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> setAccessToken(String value) async {
+  Future<Result<Unit>> setAccessToken(String value) async {
     try {
       if (value.isNotEmpty) {
         await _securedStorage.write(key: _Keys.accessToken, value: value);
@@ -51,7 +52,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> deleteAccessToken() async {
+  Future<Result<Unit>> deleteAccessToken() async {
     try {
       await _securedStorage.delete(key: _Keys.accessToken);
       return right(unit);
@@ -62,7 +63,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   }
 
   @override
-  Future<Either<Failure, String?>> getRefreshToken() async {
+  Future<Result<String?>> getRefreshToken() async {
     try {
       return right(await _securedStorage.read(key: _Keys.refreshToken));
     } on Exception catch (error) {
@@ -72,7 +73,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> setRefreshToken(String value) async {
+  Future<Result<Unit>> setRefreshToken(String value) async {
     try {
       if (value.isNotEmpty) {
         await _securedStorage.write(key: _Keys.refreshToken, value: value);
@@ -85,7 +86,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> deleteRefreshToken() async {
+  Future<Result<Unit>> deleteRefreshToken() async {
     try {
       await _securedStorage.delete(key: _Keys.refreshToken);
       return right(unit);
@@ -97,7 +98,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
 
   /// Unsecured storage services
   @override
-  Future<Either<Failure, String?>> getLastLoggedInUsername() async {
+  Future<Result<String?>> getLastLoggedInUsername() async {
     try {
       return right(_unsecuredStorage.getString(_Keys.emailAddress));
     } on Exception catch (error) {
@@ -107,7 +108,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> setLastLoggedInUsername(String value) async {
+  Future<Result<Unit>> setLastLoggedInUsername(String value) async {
     try {
       if (value.isNotEmpty) {
         await _unsecuredStorage.setString(_Keys.emailAddress, value);
@@ -120,7 +121,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   }
 
   @override
-  Future<Either<Failure, bool?>> getIsDarkMode() async {
+  Future<Result<bool?>> getIsDarkMode() async {
     try {
       return right(_unsecuredStorage.getBool(_Keys.isDarkMode));
     } on Exception catch (error) {
@@ -130,7 +131,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> setIsDarkMode({required bool isDarkMode}) async {
+  Future<Result<Unit>> setIsDarkMode({required bool isDarkMode}) async {
     try {
       await _unsecuredStorage.setBool(_Keys.isDarkMode, isDarkMode);
       return right(unit);

@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_device_info_repository.dart';
 
 @LazySingleton(as: IDeviceInfoRepository)
@@ -17,7 +18,7 @@ class DeviceInfoRepository implements IDeviceInfoRepository {
   static const String android = 'Android';
 
   @override
-  Either<Failure, String> getAppVersion() {
+  Result<String> getAppVersion() {
     try {
       return right(_packageInfo.version);
     } on Exception catch (error) {
@@ -26,7 +27,7 @@ class DeviceInfoRepository implements IDeviceInfoRepository {
   }
 
   @override
-  Either<Failure, String> getBuildNumber() {
+  Result<String> getBuildNumber() {
     try {
       return right(_packageInfo.buildNumber);
     } on Exception catch (error) {
@@ -35,7 +36,7 @@ class DeviceInfoRepository implements IDeviceInfoRepository {
   }
 
   @override
-  Future<Either<Failure, String>> getPhoneModel() async {
+  Future<Result<String>> getPhoneModel() async {
     try {
       if (defaultTargetPlatform case TargetPlatform.android) {
         return right((await _deviceInfo.androidInfo).model);
@@ -51,7 +52,7 @@ class DeviceInfoRepository implements IDeviceInfoRepository {
 
   /// Returns(OS, Version)
   @override
-  Future<Either<Failure, (String, String)>> getPhoneOSVersion() async {
+  Future<Result<(String, String)>> getPhoneOSVersion() async {
     try {
       if (defaultTargetPlatform case TargetPlatform.android) {
         return right((android, (await _deviceInfo.androidInfo).version.release));

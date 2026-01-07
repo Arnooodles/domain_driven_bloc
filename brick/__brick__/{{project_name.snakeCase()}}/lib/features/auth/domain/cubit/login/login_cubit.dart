@@ -10,6 +10,7 @@ import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/cubit_ext.da
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/fpdart_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/mixins/failure_handler.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/entity/login_request.dart';
@@ -28,7 +29,7 @@ class LoginCubit extends Cubit<LoginState> with BlocPresentationMixin<LoginState
 
   Future<void> initialize() async {
     try {
-      final Either<Failure, String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername();
+      final Result<String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername();
       possibleFailure.fold(_failureHandler.handleFailure, (String? username) {
         safeEmit(state.copyWith(username: username));
       });
@@ -47,7 +48,7 @@ class LoginCubit extends Cubit<LoginState> with BlocPresentationMixin<LoginState
       final ValueString validUsername = ValueString(username, fieldName: 'username');
 
       if (validUsername.isValid && validPassword.isValid) {
-        final Either<Failure, Unit> possibleFailure = await _authRepository.login(
+        final Result<Unit> possibleFailure = await _authRepository.login(
           LoginRequest(username: validUsername, password: validPassword),
         );
 

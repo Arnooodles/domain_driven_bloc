@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/fpdart_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/interface/i_local_storage_repository.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_auth_repository.dart';
 
@@ -33,10 +34,11 @@ class AuthInterceptor implements Interceptor {
   }
 
   bool _shouldIntercept(Request request) =>
-      request.uri.host.contains(_dummyJsonHost) && request.uri.path != _refreshPath && request.uri.path != _loginPath;
+      request.uri.host.contains(_dummyJsonHost) &&
+      !(request.uri.path.contains(_refreshPath) || request.uri.path.contains(_loginPath));
 
   Future<Response<BodyType>> _handleAuthenticatedRequest<BodyType>(Chain<BodyType> chain) async {
-    final Either<Failure, String> possibleFailure = await _getAccessToken();
+    final Result<String> possibleFailure = await _getAccessToken();
 
     return possibleFailure.fold(
       (Failure failure) {
@@ -55,8 +57,8 @@ class AuthInterceptor implements Interceptor {
     );
   }
 
-  Future<Either<Failure, String>> _getAccessToken() async {
-    final Either<Failure, String?> possibleFailure = await getIt<ILocalStorageRepository>().getAccessToken();
+  Future<Result<String>> _getAccessToken() async {
+    final Result<String?> possibleFailure = await getIt<ILocalStorageRepository>().getAccessToken();
     return possibleFailure.fold(
       left,
       (String? value) =>
@@ -71,14 +73,14 @@ class AuthInterceptor implements Interceptor {
     Chain<BodyType> chain,
     Request originalRequest,
   ) async {
-    final Either<Failure, Unit> refreshResult = await getIt<IAuthRepository>().refreshToken();
+    final Result<Unit> refreshResult = await getIt<IAuthRepository>().refreshToken();
 
     if (refreshResult.isLeft()) {
       final Failure failure = refreshResult.asLeft();
       throw Exception('Token refresh failed: ${failure.message}');
     }
 
-    final Either<Failure, String> tokenResult = await _getAccessToken();
+    final Result<String> tokenResult = await _getAccessToken();
 
     if (tokenResult.isLeft()) {
       final Failure failure = tokenResult.asLeft();

@@ -1,6 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/value_object.dart';
 
 extension ObjectExt<T> on T? {
@@ -15,5 +15,5 @@ extension ObjectExt<T> on T? {
 }
 
 extension NullableValueObjectX<T> on ValueObject<T>? {
-  Either<Failure, Unit> optionalValidation() => this?.validate ?? right(unit);
+  Result<Unit> optionalValidation() => this?.validate ?? right(unit);
 }

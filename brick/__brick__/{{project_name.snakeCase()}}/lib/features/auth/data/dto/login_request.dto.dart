@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:{{project_name.snakeCase()}}/app/config/chopper_config.dart';
+import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/entity/login_request.dart';
 
 part 'login_request.dto.freezed.dart';
@@ -12,7 +13,7 @@ sealed class LoginRequestDTO with _$LoginRequestDTO {
 
   const LoginRequestDTO._();
 
-  factory LoginRequestDTO.fromJson(Map<String, dynamic> json) => _$LoginRequestDTOFromJson(json);
+  factory LoginRequestDTO.fromJson(Json json) => _$LoginRequestDTOFromJson(json);
 
   factory LoginRequestDTO.fromDomain(LoginRequest loginRequest) => LoginRequestDTO(
     username: loginRequest.username.getValue(),
