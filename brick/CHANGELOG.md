@@ -1,3 +1,18 @@
+# 4.1.0
+
+- feat: migrate validation logic from `fpvalidate` to `trust_but_verify`
+- feat: add `flutter_event_limiter` and implement throttling in `VeryGoodCoreButton` for `onPressed`
+- feat: introduce `Result<T>` typedef as an alias for `Either<Failure, T>`
+- feat: introduce `Json` typedef as an alias for `Map<String, dynamic>`
+- refactor: update repositories and use cases to use `Result<T>` return type
+- feat: add `ResultExt` fpdart extensions
+- refactor: update `VeryGoodCoreButton` with `ThrottledBuilder` and switch expression for cleaner UI logic
+- refactor: add `typedefs` to `core/domain/entity/typedef.dart`
+- fix: restore pre_gen hooks for application_id
+- chore: remove `fpvalidate` dependency
+- chore: update dependencies to latest compatible versions
+- chore: update Flutter to version 3.38.5
+
 # 4.0.0
 
 - feat: add feature scaffolding scripts for Clean Architecture

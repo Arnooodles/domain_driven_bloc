@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:very_good_core/app/helpers/extensions/object_ext.dart';
 import 'package:very_good_core/core/domain/entity/address.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/core/domain/entity/value_object.dart';
 
 part 'address.dto.freezed.dart';
@@ -13,7 +14,7 @@ sealed class AddressDTO with _$AddressDTO {
 
   const AddressDTO._();
 
-  factory AddressDTO.fromJson(Map<String, dynamic> json) => _$AddressDTOFromJson(json);
+  factory AddressDTO.fromJson(Json json) => _$AddressDTOFromJson(json);
 
   factory AddressDTO.fromDomain(Address address) => AddressDTO(
     address: address.address?.getValue(),

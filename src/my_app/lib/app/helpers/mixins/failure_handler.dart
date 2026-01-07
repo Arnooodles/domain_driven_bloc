@@ -4,6 +4,7 @@ import 'package:very_good_core/app/helpers/mixins/error_actions.dart';
 import 'package:very_good_core/core/data/dto/resource_error.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 
 @lazySingleton
 class FailureHandler with ErrorActions {
@@ -24,7 +25,7 @@ class FailureHandler with ErrorActions {
     }
   }
 
-  Either<Failure, T> handleServerError<T>(StatusCode statusCode, Object? error) {
+  Result<T> handleServerError<T>(StatusCode statusCode, Object? error) {
     if (error is ResourceError) {
       return left(Failure.server(statusCode, error.message ?? error.toString()));
     }

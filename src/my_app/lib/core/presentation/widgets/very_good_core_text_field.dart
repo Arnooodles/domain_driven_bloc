@@ -59,7 +59,7 @@ class VeryGoodCoreTextField extends HookWidget {
   final bool readOnly;
   final VeryGoodCoreIcon? prefix;
   final bool isDisabled;
-  final String? Function(String?)? validator;
+  final FormFieldValidator<String>? validator;
   final List<TextInputFormatter>? inputFormatters;
   final FloatingLabelBehavior? floatingLabelBehavior;
   final BorderRadius? borderRadius;

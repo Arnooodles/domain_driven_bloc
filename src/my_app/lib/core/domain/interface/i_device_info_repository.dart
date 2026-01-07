@@ -1,12 +1,11 @@
-import 'package:fpdart/fpdart.dart';
-import 'package:very_good_core/core/domain/entity/failure.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 
 abstract interface class IDeviceInfoRepository {
-  Future<Either<Failure, String>> getPhoneModel();
+  Future<Result<String>> getPhoneModel();
 
-  Future<Either<Failure, (String, String)>> getPhoneOSVersion();
+  Future<Result<(String, String)>> getPhoneOSVersion();
 
-  Either<Failure, String> getAppVersion();
+  Result<String> getAppVersion();
 
-  Either<Failure, String> getBuildNumber();
+  Result<String> getBuildNumber();
 }

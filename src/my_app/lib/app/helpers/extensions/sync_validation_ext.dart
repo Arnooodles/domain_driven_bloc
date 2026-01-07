@@ -1,5 +1,4 @@
-import 'package:email_validator/email_validator.dart';
-import 'package:fpvalidate/fpvalidate.dart';
+import 'package:trust_but_verify/trust_but_verify.dart';
 
 extension SyncValidationExt on SyncValidationStep<String> {
   SyncValidationStep<String> isUrlStrict() => bind((String value) {
@@ -15,10 +14,4 @@ extension SyncValidationExt on SyncValidationStep<String> {
 
     return isValid ? pass(value) : fail(InvalidUrlValidationError.new, ValidationI18n.messages.invalidUrl(fieldName));
   });
-
-  SyncValidationStep<String> isEmailStrict() => bind(
-    (String value) => EmailValidator.validate(value.trim())
-        ? pass(value)
-        : fail(InvalidEmailValidationError.new, ValidationI18n.messages.invalidEmail(fieldName)),
-  );
 }

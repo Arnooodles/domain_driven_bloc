@@ -5,6 +5,7 @@ import 'package:very_good_core/app/helpers/converters/timestamp_to_datetime.dart
 import 'package:very_good_core/app/helpers/extensions/color_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/object_ext.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
+import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/core/domain/entity/value_object.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 
@@ -29,7 +30,7 @@ sealed class PostDTO with _$PostDTO {
 
   const PostDTO._();
 
-  factory PostDTO.fromJson(Map<String, dynamic> json) => _$PostDTOFromJson(json);
+  factory PostDTO.fromJson(Json json) => _$PostDTOFromJson(json);
 
   factory PostDTO.fromDomain(Post post) => PostDTO(
     uid: post.uid.getValue(),

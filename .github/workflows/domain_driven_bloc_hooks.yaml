@@ -1,0 +1,38 @@
+name: domain_driven_bloc_hooks
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/domain_driven_bloc_hooks.yaml"
+      - "brick/hooks/**"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/domain_driven_bloc_hooks.yaml"
+      - "brick/hooks/**"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: "./brick/hooks"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+      - name: 🎯 Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: 📦 Install Dependencies
+        run: dart pub get --no-example
+      - name: ✨ Check Formatting
+        run: |
+          dart format .
+      - name: 🕵️ Analyze
+        run: 
+          dart analyze
+      - name: 🧪 Run Tests
+        run: dart test 
