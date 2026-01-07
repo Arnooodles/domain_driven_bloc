@@ -47,6 +47,7 @@ class ThemeCubit extends Cubit<ThemeMode> {
                 ? Brightness.dark
                 : Brightness.light, // Only iOS (Note: light and dark are inverted for iOS)
             statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark, // Only Android
+            systemStatusBarContrastEnforced: false,
           ),
         );
       });
