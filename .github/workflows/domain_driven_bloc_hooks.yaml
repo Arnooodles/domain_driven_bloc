@@ -16,7 +16,7 @@ jobs:
   build:
     defaults:
       run:
-        working-directory: "brick/hooks/**"
+        working-directory: "./brick/hooks"
     runs-on: "ubuntu-latest"
 
     steps:
