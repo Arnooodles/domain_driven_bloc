@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:talker/talker.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/entity/typedef.dart';
@@ -24,7 +24,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
   final FlutterSecureStorage _securedStorage;
   final SharedPreferences _unsecuredStorage;
 
-  Logger get _logger => getIt<Logger>();
+  Talker get _talker => getIt<Talker>();
 
   /// Secured Storage services
   @override
@@ -32,7 +32,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
     try {
       return right(await _securedStorage.read(key: _Keys.accessToken));
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -46,7 +46,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
 
       return right(unit);
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -57,7 +57,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
       await _securedStorage.delete(key: _Keys.accessToken);
       return right(unit);
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -67,7 +67,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
     try {
       return right(await _securedStorage.read(key: _Keys.refreshToken));
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -80,7 +80,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
       }
       return right(unit);
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -91,7 +91,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
       await _securedStorage.delete(key: _Keys.refreshToken);
       return right(unit);
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -102,7 +102,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
     try {
       return right(_unsecuredStorage.getString(_Keys.emailAddress));
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -115,7 +115,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
       }
       return right(unit);
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -125,7 +125,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
     try {
       return right(_unsecuredStorage.getBool(_Keys.isDarkMode));
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }
@@ -136,7 +136,7 @@ class LocalStorageRepository implements ILocalStorageRepository {
       await _unsecuredStorage.setBool(_Keys.isDarkMode, isDarkMode);
       return right(unit);
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.deviceStorage(error.toString()));
     }
   }

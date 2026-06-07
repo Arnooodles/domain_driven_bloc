@@ -168,3 +168,6 @@ android/fastlane/report.xml
 .fvm/
 .cursor
 .fvmrc
+.agent
+.dart_skills
+outputs

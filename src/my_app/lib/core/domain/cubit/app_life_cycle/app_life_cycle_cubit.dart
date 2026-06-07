@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
+import 'package:talker/talker.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 
@@ -39,7 +39,7 @@ class AppLifeCycleCubit extends Cubit<AppLifeCycleState> with WidgetsBindingObse
         safeEmit(const AppLifeCycleState.hidden());
     }
     if (kDebugMode) {
-      getIt<Logger>().d('AppLifeCycleState: $state');
+      getIt<Talker>().debug('AppLifeCycleState: $state');
     }
   }
 }

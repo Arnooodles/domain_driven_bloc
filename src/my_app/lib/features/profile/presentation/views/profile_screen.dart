@@ -1,7 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/constants/mock_data.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
@@ -16,6 +15,7 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_button.d
 import 'package:very_good_core/core/presentation/widgets/very_good_core_info_text_field.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/core/presentation/widgets/wrappers/scroll_controller_provider.dart';
+import 'package:very_good_core/core/presentation/widgets/wrappers/shimmer.dart';
 import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -38,7 +38,7 @@ class ProfileScreen extends StatelessWidget {
                   child: BlocBuilder<AuthCubit, AuthState>(
                     builder: (BuildContext context, AuthState authState) => authState.maybeWhen(
                       authenticated: (User user) => _ProfileContent(user: user),
-                      orElse: () => Skeletonizer(child: _ProfileContent(user: MockData.user)),
+                      orElse: () => Shimmer(child: _ProfileContent(user: MockData.user)),
                     ),
                   ),
                 ),
@@ -101,7 +101,6 @@ class _ProfileDetails extends StatelessWidget {
         VeryGoodCoreInfoTextField(title: context.i18n.profile.label.phone_number, description: user.phone!.getValue()),
         Gap.small(),
       ],
-      Gap.small(),
       if (user.address != null && user.address!.fullAddress != null) ...<Widget>[
         VeryGoodCoreInfoTextField(title: context.i18n.profile.label.address, description: user.address!.fullAddress!),
         Gap.small(),

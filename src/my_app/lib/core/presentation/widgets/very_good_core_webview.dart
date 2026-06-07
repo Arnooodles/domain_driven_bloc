@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:logger/logger.dart';
+import 'package:talker/talker.dart';
 import 'package:very_good_core/app/helpers/extensions/future_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 
@@ -58,7 +58,7 @@ class VeryGoodCoreWebview extends HookWidget {
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
   final Future<NavigationActionPolicy?> Function(InAppWebViewController, NavigationAction)? shouldOverrideUrlLoading;
 
-  Logger get _logger => getIt<Logger>();
+  Talker get _talker => getIt<Talker>();
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,7 @@ class VeryGoodCoreWebview extends HookWidget {
       gestureRecognizers: gestureRecognizers,
       shouldOverrideUrlLoading: shouldOverrideUrlLoading,
       onReceivedError: (InAppWebViewController controller, WebResourceRequest request, WebResourceError error) =>
-          _logger.e(error.description),
+          _talker.error(error.description),
       onReceivedHttpError:
           (InAppWebViewController controller, WebResourceRequest request, WebResourceResponse response) =>
               _endRefreshing(pullToRefreshController.value, response: response),
@@ -115,7 +115,7 @@ class VeryGoodCoreWebview extends HookWidget {
       await refreshController.endRefreshing().logOnError();
     }
     if (response != null && kDebugMode) {
-      _logger.e(response.toString());
+      _talker.error(response.toString());
     }
   }
 }

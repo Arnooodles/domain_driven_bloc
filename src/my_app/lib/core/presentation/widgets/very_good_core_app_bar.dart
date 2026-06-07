@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/routes/route_name.dart';
+import 'package:very_good_core/app/routes/app_routes.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/domain/cubit/theme/theme_cubit.dart';
@@ -53,7 +53,7 @@ class VeryGoodCoreAppBar extends StatelessWidget implements PreferredSizeWidget 
     BlocBuilder<AuthCubit, AuthState>(
       builder: (BuildContext context, AuthState state) => state.maybeWhen(
         authenticated: (User user) => GestureDetector(
-          onTap: () => context.goRouter.goNamed(RouteName.profile.name),
+          onTap: () => const ProfileRoute().go(context),
           child: VeryGoodCoreAvatar(size: 32, imageUrl: user.image?.getValue(), padding: Paddings.allSmall),
         ),
         orElse: () => const SizedBox.shrink(),

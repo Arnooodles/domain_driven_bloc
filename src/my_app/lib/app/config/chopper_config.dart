@@ -5,10 +5,11 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/io_client.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pretty_chopper_logger/pretty_chopper_logger.dart';
+import 'package:talker_chopper_logger/talker_chopper_logger_interceptor.dart';
 import 'package:very_good_core/app/config/app_config.dart';
 import 'package:very_good_core/app/constants/trusted_cetificate.dart';
 import 'package:very_good_core/app/helpers/converters/json_serializable_converter.dart';
+import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/helpers/interceptors/auth_interceptor.dart';
 import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
@@ -17,7 +18,7 @@ import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/features/auth/data/dto/login_response.dto.dart';
 import 'package:very_good_core/features/auth/data/service/auth_service.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
-import 'package:very_good_core/features/home/data/dto/reddit_post.dto.dart';
+import 'package:very_good_core/features/home/data/dto/post_list.dto.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';
 
 @Singleton(order: -1)
@@ -38,14 +39,14 @@ final class ChopperConfig {
     LoginResponseDTO: LoginResponseDTO.fromJson,
     UserDTO: UserDTO.fromJson,
     PostDTO: PostDTO.fromJson,
-    RedditPostDTO: RedditPostDTO.fromJson,
+    PostReactionsDTO: PostReactionsDTO.fromJson,
+    PostListDTO: PostListDTO.fromJson,
   });
 
   List<Interceptor> get _interceptors => <Interceptor>[
     const HeadersInterceptor(<String, String>{'Accept': 'application/json', 'Content-type': 'application/json'}),
     _authInterceptor,
-    if (kDebugMode) PrettyChopperLogger(),
-    if (kDebugMode) CurlInterceptor(),
+    if (kDebugMode) getIt<TalkerChopperLogger>(),
   ];
 
   /// SSL Pinning

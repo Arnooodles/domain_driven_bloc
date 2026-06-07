@@ -12,7 +12,7 @@ import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/features/home/data/dto/post.dto.dart';
-import 'package:very_good_core/features/home/data/dto/reddit_post.dto.dart';
+import 'package:very_good_core/features/home/data/dto/post_list.dto.dart';
 import 'package:very_good_core/features/home/data/service/post_service.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/domain/interface/i_post_repository.dart';
@@ -26,14 +26,14 @@ class PostRepository implements IPostRepository {
   FailureHandler get _failureHandler => getIt<FailureHandler>();
 
   @override
-  Future<Result<List<Post>>> getPosts() async {
+  Future<Result<List<Post>>> getPosts({int skip = 0, int limit = 20}) async {
     try {
-      final chopper.Response<RedditPostDTO> response = await _postService.getPosts();
+      final chopper.Response<PostListDTO> response = await _postService.getPosts(skip: skip, limit: limit);
 
       final StatusCode statusCode = response.statusCode.statusCode;
 
-      return statusCode.isSuccess && response.body != null && response.body!.data.children.isNotEmpty
-          ? _validatePostData(response.body!.data.children.map((RedditPostDataChild value) => value.data).toList())
+      return statusCode.isSuccess && response.body != null && response.body!.posts.isNotEmpty
+          ? _validatePostData(response.body!.posts)
           : _failureHandler.handleServerError<List<Post>>(statusCode, response.error.toString());
     } on Exception catch (error) {
       log(error.toString());
@@ -44,14 +44,10 @@ class PostRepository implements IPostRepository {
 
   Result<List<Post>> _validatePostData(List<PostDTO> postDTOs) {
     final List<Post> posts = postDTOs.map((PostDTO postDTO) => postDTO.toDomain()).toList();
-    // check if the post data does not have invalid values(if list is empty
-    // then there are no invalid posts)
     final bool isPostsValid = posts.where((Post post) => post.validate.isSome()).toList().isEmpty;
 
     return isPostsValid
         ? right(posts)
-        : left(
-            posts.firstWhere((Post post) => post.validate.isSome()).validate.asSome(),
-          ); // return the first invalid post
+        : left(posts.firstWhere((Post post) => post.validate.isSome()).validate.asSome());
   }
 }

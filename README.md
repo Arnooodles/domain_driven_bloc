@@ -68,38 +68,39 @@ Everything you need for a modern, production-grade Flutter app:
 - 🛡 **Null Safety:** 100% sound null safety for safer, more reliable code.
 - 🔒 **Secure Storage:** Secure sensitive data with [flutter_secure_storage].
 - 🧪 **Testing Suite:** Extensive unit, widget, and golden tests; includes mocks, fakes, and golden tests for robust, reliable test suites.
-- 📝 **Extensible Logging:** Catch and log uncaught exceptions, plug in your own loggers, or use pretty logging for debugging and production.
+- 📝 **Extensible Logging & Diagnostics:** Advanced logging, network inspection, and Bloc observer built on [talker] for easier debugging and crash monitoring.
 - 🏎 **Performance Ready:** Responsive layouts and best practices for smooth UX on all platforms.
+- 💀 **Shimmer Loading:** Sleek, custom-themed loading states powered by [skeletonizer] for a premium user experience.
 - 🧑‍💻 **Developer Experience:** Makefile, FVM, and pre-configured analysis for fast onboarding and consistent code quality.
-- 🤖 **CI/CD Ready:** Lint, format, test, and coverage checks via GitHub Actions.
+- 🤖 **CI/CD & Deployment Ready:** Lint, format, test, and coverage checks via GitHub Actions, including a manual release workflow that signs and deploys Android (APK/AAB) and iOS (IPA) builds to **Firebase App Distribution**.
 - 🔄 **Automated Dependency Updates:** Dependabot keeps your dependencies fresh and secure.
-
 
 ### Key Packages 🗃
 
 - 🧠 **State Management:** [flutter_bloc](https://pub.dev/packages/flutter_bloc), [flutter_hooks](https://pub.dev/packages/flutter_hooks)
 - 🧮 **Functional Programming:** [fpdart](https://pub.dev/packages/fpdart), [fpvalidate](https://pub.dev/packages/fpvalidate)
 - 🗄️ **Model:** [freezed](https://pub.dev/packages/freezed), [json_serializable](https://pub.dev/packages/json_serializable)
-- 🧭 **Navigation:** [go_router](https://pub.dev/packages/go_router)
+- 🧭 **Navigation:** [go_router](https://pub.dev/packages/go_router), [go_router_builder](https://pub.dev/packages/go_router_builder)
 - 🧬 **DI:** [injectable](https://pub.dev/packages/injectable), [get_it](https://pub.dev/packages/get_it)
 - 📱 **Responsive:** [responsive_framework](https://pub.dev/packages/responsive_framework)
-- 🌱 **Env:** [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)
+- 🌱 **Env:** [envied](https://pub.dev/packages/envied)
 - 🌐 **HTTP:** [chopper](https://pub.dev/packages/chopper)
 - 💾 **Storage:** [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage), [shared_preferences](https://pub.dev/packages/shared_preferences)
 - 🛡 **Security:** [safe_device](https://pub.dev/packages/safe_device)
-- 📝 **Logging:** [logger](https://pub.dev/packages/logger), [pretty_chopper_logger](https://pub.dev/packages/pretty_chopper_logger)
+- 📝 **Logging:** [talker](https://pub.dev/packages/talker), [talker_flutter](https://pub.dev/packages/talker_flutter), [talker_bloc_logger](https://pub.dev/packages/talker_bloc_logger), [talker_chopper_logger](https://pub.dev/packages/talker_chopper_logger)
 - 🌍 **Localization:** [intl](https://pub.dev/packages/intl), [slang](https://pub.dev/packages/slang)
 - 🧾 **Device Info:** [package_info_plus](https://pub.dev/packages/package_info_plus), [device_info_plus](https://pub.dev/packages/device_info_plus)
 - 🖼 **Assets:** [flutter_svg](https://pub.dev/packages/flutter_svg), [flutter_gen](https://pub.dev/packages/flutter_gen)
+- 💀 **Shimmer:** [skeletonizer](https://pub.dev/packages/skeletonizer)
 - 🧪 **Testing:** [alchemist](https://pub.dev/packages/alchemist), [bloc_test](https://pub.dev/packages/bloc_test)
 - 🦾 **Mocking:** [mockito](https://pub.dev/packages/mockito), [mocktail_image_network](https://pub.dev/packages/mocktail_image_network), [faker](https://pub.dev/packages/faker)
-- 🧹 **Code Quality:** [very_good_analysis](https://pub.dev/packages/very_good_analysis), [dart_code_metrics](https://pub.dev/packages/dart_code_metrics)
+- 🧹 **Code Quality:** [very_good_analysis](https://pub.dev/packages/very_good_analysis), [dart_code_metrics](https://pub.dev/packages/dart_code_metrics), [dart_husky](https://pub.dev/packages/dart_husky)
 
 ## Output 🗂️
 
 ### Core Functionality 🏅
 
-- 🏠 **Home:** Live Reddit [FlutterDev][flutter_dev_link] feed integration—real-world API, pagination, error handling.
+- 🏠 **Home:** Mock posts using [DummyJSON](https://dummyjson.com/docs/posts) feed integration—real-world API mock, pagination, skeleton shimmer loading, error handling.
 - 🔐 **Auth:** Mock login using [DummyJSON](https://dummyjson.com/docs/auth)—prototype real auth flows with any [user](https://dummyjson.com/users).
 - 👤 **Profile:** Mock user profile via [DummyJSON](https://dummyjson.com/docs/auth#auth-me)—user state management and editing patterns.
 - 🌙 **Dark Mode:** Seamless theme switching with persistent user preference.
@@ -116,10 +117,18 @@ Everything you need for a modern, production-grade Flutter app:
 
 ```sh
 ├── .github
+│   ├── actions
+│   │   ├── deploy-build
+│   │   │   └── action.yml
+│   │   └── setup-flutter-project
+│   │       └── action.yml
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   ├── dependabot.yaml
 │   └── workflows
-│       └── main.yaml
+│       ├── build.yaml
+│       ├── license_check.yaml
+│       ├── verify.yaml
+│       └── vulnerability_check.yaml
 ├── .idea
 │   └── runConfigurations
 │       ├── development.xml
@@ -146,7 +155,6 @@ Everything you need for a modern, production-grade Flutter app:
 │   │   │   ├── converters
 │   │   │   ├── extensions
 │   │   │   └── injection
-│   │   ├── observers
 │   │   ├── routes
 │   │   ├── themes
 │   │   ├── utils
@@ -206,6 +214,13 @@ Everything you need for a modern, production-grade Flutter app:
 │   │
 │   ├── main.dart
 ├── scripts
+│   ├── MQSwiftSign
+│   ├── build.sh
+│   ├── common.sh
+│   ├── create_feature.sh
+│   ├── create_feature_tests.sh
+│   ├── delete_generated_files.sh
+│   └── update_android_project.sh
 ├── test
 │   ├── utils
 │   ├── unit
@@ -260,16 +275,19 @@ Everything you need for a modern, production-grade Flutter app:
   <tr>
     <td>Login Screen</td>
     <td>Home Screen</td>
+    <td>Post Details Screen</td>
     <td>Profile Screen</td>
   </tr>
   <tr>
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/login_screen.png" width=270 height=520></td>
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/home_screen.png" width=270 height=520></td>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/post_details.png" width=270 height=520></td>
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/profile_screen.png" width=270 height=520></td>
   </tr>
   <tr>
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_login_screen.png" width=270 height=520></td>
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_home_screen.png" width=270 height=520></td>
+    <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_post_details.png" width=270 height=520></td>
     <td><img src="https://raw.github.com/Arnooodles/domain_driven_bloc/main/screenshots/dark_profile_screen.png" width=270 height=520></td>
   </tr>
 </table>
@@ -320,13 +338,18 @@ If you have questions, suggestions, or want to discuss ideas, feel free to open 
 [injectable]: https://pub.dev/packages/injectable
 [get_it]: https://pub.dev/packages/get_it
 [responsive_framework]: https://pub.dev/packages/responsive_framework
-[flutter_dotenv]: https://pub.dev/packages/flutter_dotenv
+[envied]: https://pub.dev/packages/envied
 [chopper]: https://pub.dev/packages/chopper
 [flutter_secure_storage]: https://pub.dev/packages/flutter_secure_storage
 [shared_preferences]: https://pub.dev/packages/shared_preferences
 [safe_device]: https://pub.dev/packages/safe_device
-[logger]: https://pub.dev/packages/logger
-[pretty_chopper_logger]: https://pub.dev/packages/pretty_chopper_logger
+[talker]: https://pub.dev/packages/talker
+[talker_flutter]: https://pub.dev/packages/talker_flutter
+[talker_bloc_logger]: https://pub.dev/packages/talker_bloc_logger
+[talker_chopper_logger]: https://pub.dev/packages/talker_chopper_logger
+[skeletonizer]: https://pub.dev/packages/skeletonizer
+[go_router_builder]: https://pub.dev/packages/go_router_builder
+[dart_husky]: https://pub.dev/packages/dart_husky
 [flex_color_scheme]: https://pub.dev/packages/flex_color_scheme
 [intl]: https://pub.dev/packages/intl
 [slang]: https://pub.dev/packages/slang

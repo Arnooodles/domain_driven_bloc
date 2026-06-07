@@ -8,6 +8,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_sizes.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
+import 'package:very_good_core/core/presentation/widgets/wrappers/shimmer.dart';
 
 class VeryGoodCoreAvatar extends StatelessWidget {
   const VeryGoodCoreAvatar({
@@ -61,7 +62,7 @@ class VeryGoodCoreAvatar extends StatelessWidget {
                 height: size,
               ),
               errorWidget: (_, _, _) => _DefaultIcon(size: size),
-              placeholder: (_, _) => Skeletonizer(
+              placeholder: (_, _) => Shimmer(
                 enabled: isLoading,
                 child: _DefaultIcon(size: size),
               ),

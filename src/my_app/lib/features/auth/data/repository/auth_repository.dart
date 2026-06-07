@@ -1,7 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
+import 'package:talker/talker.dart';
 import 'package:very_good_core/app/config/chopper_config.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
@@ -25,7 +25,7 @@ class AuthRepository implements IAuthRepository {
   final ILocalStorageRepository _localStorageRepository;
   final AuthService _authService;
 
-  Logger get _logger => getIt<Logger>();
+  Talker get _talker => getIt<Talker>();
   FailureHandler get _failureHandler => getIt<FailureHandler>();
 
   @override
@@ -53,7 +53,7 @@ class AuthRepository implements IAuthRepository {
         return _failureHandler.handleServerError<Unit>(statusCode, response.error);
       }
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
 
       return left(Failure.unexpected(error.toString()));
     }
@@ -73,7 +73,7 @@ class AuthRepository implements IAuthRepository {
 
       return _verifySaving(deleteResults);
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
 
       return left(Failure.unexpected(error.toString()));
     }
@@ -105,7 +105,7 @@ class AuthRepository implements IAuthRepository {
         }
       });
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
 
       return left(Failure.unexpected(error.toString()));
     }

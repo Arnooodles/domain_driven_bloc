@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
+import 'package:talker/talker.dart';
+import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:very_good_core/app/app.dart';
 import 'package:very_good_core/app/config/url_strategy_native.dart'
     if (dart.library.html) 'package:very_good_core/app/config/url_strategy_web.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
-import 'package:very_good_core/app/observers/app_bloc_observer.dart';
 import 'package:very_good_core/core/domain/entity/enum/env.dart';
 
 Future<void> main() async {
@@ -19,7 +19,7 @@ Future<void> main() async {
     _handleErrors();
 
     if (kDebugMode) {
-      Bloc.observer = getIt<AppBlocObserver>();
+      Bloc.observer = getIt<TalkerBlocObserver>();
     }
 
     runApp(App());
@@ -40,6 +40,6 @@ void _catchUnhandledErrors(Object error, StackTrace? stack) {
   if (kReleaseMode) {
     //TODO: implement reportCrash crashlytics
   } else {
-    getIt<Logger>().f(error.toString(), error: error, stackTrace: stack);
+    getIt<Talker>().handle(error, stack);
   }
 }

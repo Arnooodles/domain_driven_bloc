@@ -1,7 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
+import 'package:talker/talker.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
@@ -20,7 +20,7 @@ class UserRepository implements IUserRepository {
 
   final UserService _userService;
 
-  Logger get _logger => getIt<Logger>();
+  Talker get _talker => getIt<Talker>();
   FailureHandler get _failureHandler => getIt<FailureHandler>();
 
   @override
@@ -36,7 +36,7 @@ class UserRepository implements IUserRepository {
 
       return _failureHandler.handleServerError<User>(statusCode, response.error);
     } on Exception catch (error) {
-      _logger.e(error.toString());
+      _talker.handle(error);
       return left(Failure.unexpected(error.toString()));
     }
   }

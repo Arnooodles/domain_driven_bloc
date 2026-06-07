@@ -1,3 +1,18 @@
+# 5.0.0
+
+- feat: migrate Post features and model schemas from Reddit API to DummyJSON
+- feat: implement infinite scroll pagination in the Post listing
+- feat: implement type-safe routing using `go_router_builder`
+- feat: add reusable `Shimmer` skeletonizer loading widget with custom theme colors
+- feat: replace custom observers and logger with `talker` (bloc, chopper, routing)
+- feat: add `dart_husky` pre-commit hooks and conventional commit validation
+- feat: automate Android and iOS builds, signing (MQSwiftSign), and Firebase App Distribution (CI/CD workflows & local scripts)
+- refactor: remove old git hooks, Fastlane configurations, and custom route name definitions
+- chore: upgrade Flutter SDK to 3.44.1, Gradle wrapper to 9.1.0, Java 18, and target/compile SDK 36
+- chore: update pub dependencies and generation tools to latest compatible versions
+- chore: update golden files
+- docs: update main, brick, and template README documentation to reflect the latest package updates, logging system, shimmer widgets, and build automation workflows
+
 # 4.1.0
 
 - feat: migrate validation logic from `fpvalidate` to `trust_but_verify`

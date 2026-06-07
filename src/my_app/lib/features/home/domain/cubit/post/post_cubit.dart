@@ -20,13 +20,48 @@ class PostCubit extends Cubit<PostState> {
   final IPostRepository _postRepository;
   final FailureHandler _failureHandler;
 
+  static const int _limit = 20;
+  int _skip = 0;
+
   Future<void> getPosts() async {
     try {
+      _skip = 0;
       safeEmit(const PostState.loading());
 
-      final Result<List<Post>> possibleFailure = await _postRepository.getPosts();
+      final Result<List<Post>> possibleFailure = await _postRepository.getPosts(skip: _skip);
 
-      possibleFailure.fold(_failureHandler.handleFailure, (List<Post> posts) => safeEmit(PostState.onSuccess(posts)));
+      possibleFailure.fold(_failureHandler.handleFailure, (List<Post> posts) {
+        _skip = posts.length;
+        safeEmit(PostState.onSuccess(posts, hasMore: posts.length >= _limit));
+      });
+    } on Exception catch (error) {
+      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
+    }
+  }
+
+  Future<void> loadMorePosts() async {
+    final PostState currentState = state;
+    // Only allow load more when currently in success state with more pages
+    if (currentState is! _Success || !currentState.hasMore) return;
+
+    try {
+      final List<Post> existingPosts = currentState.posts;
+      safeEmit(PostState.loadingMore(existingPosts));
+
+      final Result<List<Post>> possibleFailure = await _postRepository.getPosts(skip: _skip);
+
+      possibleFailure.fold(
+        (Failure failure) {
+          // Restore previous success state on error
+          safeEmit(PostState.onSuccess(existingPosts, hasMore: currentState.hasMore));
+          _failureHandler.handleFailure(failure);
+        },
+        (List<Post> newPosts) {
+          _skip += newPosts.length;
+          final List<Post> allPosts = <Post>[...existingPosts, ...newPosts];
+          safeEmit(PostState.onSuccess(allPosts, hasMore: newPosts.length >= _limit));
+        },
+      );
     } on Exception catch (error) {
       _failureHandler.handleFailure(Failure.unexpected(error.toString()));
     }

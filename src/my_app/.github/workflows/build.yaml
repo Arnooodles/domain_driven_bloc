@@ -1,0 +1,183 @@
+name: 🚀 Build & Distribute
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Triggered manually via GitHub UI or API.
+# Builds Android (APK/AAB) and/or iOS (IPA) with the selected flavor,
+# then uploads each artifact to Firebase App Distribution.
+# ──────────────────────────────────────────────────────────────────────────────
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: "App flavor"
+        required: true
+        default: "development"
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+      platform:
+        description: "Target platform"
+        required: true
+        default: "android"
+        type: choice
+        options:
+          - android
+          - ios
+          - all
+
+      android_output:
+        description: "Android output type"
+        required: false
+        default: "apk"
+        type: choice
+        options:
+          - apk
+          - appbundle
+
+      build_type:
+        description: "Build type"
+        required: false
+        default: "release"
+        type: choice
+        options:
+          - release
+          - debug
+
+      upload_to_firebase:
+        description: "Upload to Firebase App Distribution"
+        required: false
+        default: true
+        type: boolean
+
+      upload_artifact:
+        description: "Upload artifact to GitHub Actions"
+        required: false
+        default: false
+        type: boolean
+
+      tester_groups:
+        description: "Firebase tester groups (comma-separated, leave blank for all)"
+        required: false
+        default: ""
+        type: string
+
+concurrency:
+  group: "build-${{ github.ref_name }}-${{ inputs.flavor }}-${{ inputs.platform }}"
+  cancel-in-progress: true
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Common environment variables
+# ──────────────────────────────────────────────────────────────────────────────
+env:
+  FLUTTER_VERSION_FILE: .fvm/fvm_config.json
+  TESTER_GROUPS: ${{ inputs.tester_groups }}
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # Android build job
+  # ────────────────────────────────────────────────────────────────────────────
+  build-android:
+    name: "🤖 Android (${{ inputs.flavor }}) [${{ inputs.android_output }}]"
+    runs-on: ubuntu-latest
+    if: ${{ inputs.platform == 'android' || inputs.platform == 'all' }}
+
+    environment: ${{ inputs.flavor }}
+
+    steps:
+      - name: ⚙️ Setup Project
+        uses: ./.github/actions/setup-flutter-project
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "18"
+
+      - name: 🔨 Build Android ${{ inputs.android_output }}
+        shell: bash
+        run: |
+          bash ./scripts/build.sh --platform android \
+            --flavor ${{ inputs.flavor }} \
+            --type ${{ inputs.android_output }} \
+            --build-type ${{ inputs.build_type }} \
+            --build-number ${{ github.run_number }}
+        env:
+          ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD }}
+
+      - name: 📤 Deploy Build
+        uses: ./.github/actions/deploy-build
+        with:
+          platform: "android"
+          flavor: ${{ inputs.flavor }}
+          build_type: ${{ inputs.build_type }}
+          upload_artifact: ${{ inputs.upload_artifact }}
+          upload_to_firebase: ${{ inputs.upload_to_firebase }}
+          firebase_app_id: ${{ secrets[format('FIREBASE_ANDROID_APP_ID_{0}', inputs.flavor == 'production' && 'PROD' || inputs.flavor == 'staging' && 'STG' || 'DEV')] }}
+          firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+          tester_groups: ${{ inputs.tester_groups }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # iOS build job
+  # ────────────────────────────────────────────────────────────────────────────
+  build-ios:
+    name: "🍎 iOS (${{ inputs.flavor }})"
+    runs-on: macos-latest
+    if: ${{ inputs.platform == 'ios' || inputs.platform == 'all' }}
+
+    environment: ${{ inputs.flavor }}
+
+    steps:
+      - name: ⚙️ Setup Project
+        uses: ./.github/actions/setup-flutter-project
+
+      - name: 💎 Setup Ruby & Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: ios
+          bundler-cache: true
+
+      - name: 🏗️ Install CocoaPods
+        run: |
+          cd ios
+          pod install --repo-update
+
+      - name: 🔑 Prepare iOS Signing Configuration
+        if: ${{ inputs.build_type == 'release' }}
+        shell: bash
+        run: |
+          bash ./scripts/MQSwiftSign prepare '${{ secrets.IOS_SIGNING_CERT }}' \
+            --cert-password '${{ secrets.IOS_SIGNING_CERT_PASSWORD }}' \
+            --provisioning-path './ios/Provisionings'
+
+      - name: 🔨 Build iOS App
+        shell: bash
+        run: |
+          bash ./scripts/build.sh --platform ios \
+            --flavor ${{ inputs.flavor }} \
+            --build-type ${{ inputs.build_type }} \
+            --build-number ${{ github.run_number }}
+
+      - name: 📤 Deploy Build
+        uses: ./.github/actions/deploy-build
+        with:
+          platform: "ios"
+          flavor: ${{ inputs.flavor }}
+          build_type: ${{ inputs.build_type }}
+          upload_artifact: ${{ inputs.upload_artifact }}
+          upload_to_firebase: ${{ inputs.upload_to_firebase }}
+          firebase_app_id: ${{ secrets[format('FIREBASE_IOS_APP_ID_{0}', inputs.flavor == 'production' && 'PROD' || inputs.flavor == 'staging' && 'STG' || 'DEV')] }}
+          firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+          tester_groups: ${{ inputs.tester_groups }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧹 Cleanup signing config
+        if: ${{inputs.build_type == 'release' }}
+        shell: bash
+        run: |
+          bash ./scripts/MQSwiftSign cleanup || true
