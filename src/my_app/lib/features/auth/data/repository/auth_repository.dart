@@ -5,7 +5,6 @@ import 'package:talker/talker.dart';
 import 'package:very_good_core/app/config/chopper_config.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
-import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
@@ -20,13 +19,12 @@ import 'package:very_good_core/features/auth/domain/interface/i_auth_repository.
 
 @LazySingleton(as: IAuthRepository)
 class AuthRepository implements IAuthRepository {
-  const AuthRepository(this._authService, this._localStorageRepository);
+  const AuthRepository(this._authService, this._localStorageRepository, this._talker, this._failureHandler);
 
   final ILocalStorageRepository _localStorageRepository;
   final AuthService _authService;
-
-  Talker get _talker => getIt<Talker>();
-  FailureHandler get _failureHandler => getIt<FailureHandler>();
+  final Talker _talker;
+  final FailureHandler _failureHandler;
 
   @override
   Future<Result<Unit>> login(LoginRequest loginRequest) async {

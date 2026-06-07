@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/helpers/extensions/fpdart_ext.dart';
 import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/data/repository/user_repository.dart';
+import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
@@ -14,17 +15,23 @@ import '../../../utils/test_utils.dart';
 void main() {
   group(UserRepository, () {
     late MockUserService userService;
+    late MockTalker talker;
+    late MockFailureHandler failureHandler;
     late UserRepository userRepository;
     late UserDTO user;
 
     setUp(() {
       userService = MockUserService();
-      userRepository = UserRepository(userService);
+      talker = MockTalker();
+      failureHandler = MockFailureHandler();
+      userRepository = UserRepository(userService, talker, failureHandler);
       user = UserDTO.fromDomain(mockUser);
     });
 
     tearDown(() {
       reset(userService);
+      reset(talker);
+      reset(failureHandler);
     });
 
     group('user getter', () {
@@ -60,6 +67,10 @@ void main() {
       test('should return server failure when API returns 500 error', () async {
         // Given: A server error response
         provideDummy(generateMockResponse<UserDTO>(user, 500));
+        provideDummy<Result<User>>(left(const Failure.server(StatusCode.http500, 'Server error')));
+        when(
+          failureHandler.handleServerError<User>(any, any),
+        ).thenReturn(left(const Failure.server(StatusCode.http500, 'Server error')));
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 500));
 
         // When: Getting the current user
@@ -74,6 +85,10 @@ void main() {
       test('should return server failure when API returns 401 error', () async {
         // Given: An unauthorized error response
         provideDummy(generateMockResponse<UserDTO>(user, 401));
+        provideDummy<Result<User>>(left(const Failure.server(StatusCode.http401, 'Server error')));
+        when(
+          failureHandler.handleServerError<User>(any, any),
+        ).thenReturn(left(const Failure.server(StatusCode.http401, 'Server error')));
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 401));
 
         // When: Getting the current user
@@ -88,6 +103,10 @@ void main() {
       test('should return server failure when API returns 404 error', () async {
         // Given: A not found error response
         provideDummy(generateMockResponse<UserDTO>(user, 404));
+        provideDummy<Result<User>>(left(const Failure.server(StatusCode.http404, 'Server error')));
+        when(
+          failureHandler.handleServerError<User>(any, any),
+        ).thenReturn(left(const Failure.server(StatusCode.http404, 'Server error')));
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 404));
 
         // When: Getting the current user

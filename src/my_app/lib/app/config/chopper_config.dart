@@ -7,6 +7,7 @@ import 'package:http/io_client.dart';
 import 'package:injectable/injectable.dart';
 import 'package:talker_chopper_logger/talker_chopper_logger_interceptor.dart';
 import 'package:very_good_core/app/config/app_config.dart';
+import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/constants/trusted_cetificate.dart';
 import 'package:very_good_core/app/helpers/converters/json_serializable_converter.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
@@ -63,7 +64,8 @@ final class ChopperConfig {
         )
       : null;
 
-  ChopperClient get client => ChopperClient(
+  late final ChopperClient client = ChopperClient(
+    baseUrl: Uri.parse(Constant.baseUrl),
     client: _securedClient,
     interceptors: _interceptors,
     converter: converter,

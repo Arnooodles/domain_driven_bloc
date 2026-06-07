@@ -103,7 +103,7 @@ IosDeviceInfo mockIosDeviceInfo({String? phoneModel, String? os, String? version
 
 User get mockUser => const UserDTO(
   uid: 1,
-  email: 'exampe@email.com',
+  email: 'example@email.com',
   username: 'username',
   firstName: 'test',
   lastName: 'test',

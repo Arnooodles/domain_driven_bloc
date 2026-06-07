@@ -7,6 +7,7 @@ final class Constant {
   static const double tabletBreakpoint = 800;
   static const double desktopBreakpoint = 1200;
   static const String networkLookup = 'www.google.com';
+  static const String baseUrl = 'https://dummyjson.com';
   static const List<LocalizationsDelegate<dynamic>> localizationDelegates = <LocalizationsDelegate<dynamic>>[
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,

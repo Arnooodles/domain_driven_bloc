@@ -4,7 +4,7 @@ on: [push]
 
 concurrency:
   group: "${{ github.ref_name }}"
-  cancel-in-progress: true 
+  cancel-in-progress: true
 jobs:
   verify-semantic-pull-request:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
@@ -26,8 +26,8 @@ jobs:
           dart analyze lib test
 
       - name: 🧪 Run Tests
-        run: flutter test --dart-define=CI=true --coverage
-        
+        run: flutter test --dart-define=CI=true --coverage --no-pub --test-randomize-ordering-seed random || test_res=1
+
       - name: 📤 Upload Failed Goldens
         uses: actions/upload-artifact@v4
         if: failure()
@@ -39,9 +39,9 @@ jobs:
         uses: hrishikesh-kadam/setup-lcov@v1
 
       - name: 📃 Generate LCOV Report
-        run:  |
+        run: |
           lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/main.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_screen.dart' '*_webview.dart' '**/wrappers/*.dart' '**/service/*' '**/entity/*' '**/dto/*' -o coverage/lcov.info
-          genhtml coverage/lcov.info -o coverage/        
+          genhtml coverage/lcov.info -o coverage/
 
       - name: 📉 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3

@@ -17,7 +17,7 @@ final class MockData {
 
   static final User user = UserDTO(
     uid: 1,
-    email: 'exampe@email.com',
+    email: 'example@email.com',
     firstName: 'test',
     lastName: 'test',
     gender: 'Male',

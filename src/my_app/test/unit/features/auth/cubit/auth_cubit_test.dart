@@ -25,6 +25,11 @@ void main() {
       localStorageRepository = MockILocalStorageRepository();
       failureHandler = MockFailureHandler();
       authCubit = AuthCubit(userRepository, authRepository, localStorageRepository, failureHandler);
+
+      // Register dummy values to prevent Mockito's MissingDummyValueError under randomized ordering.
+      provideDummy(Result<User>.right(mockUser));
+      provideDummy(Result<String?>.right('access_token'));
+      provideDummy(Result<Unit>.right(unit));
     });
 
     tearDown(() async {

@@ -5,7 +5,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker/talker.dart';
-import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
@@ -19,12 +18,11 @@ final class _Keys {
 
 @LazySingleton(as: ILocalStorageRepository)
 class LocalStorageRepository implements ILocalStorageRepository {
-  const LocalStorageRepository(this._securedStorage, this._unsecuredStorage);
+  const LocalStorageRepository(this._securedStorage, this._unsecuredStorage, this._talker);
 
   final FlutterSecureStorage _securedStorage;
   final SharedPreferences _unsecuredStorage;
-
-  Talker get _talker => getIt<Talker>();
+  final Talker _talker;
 
   /// Secured Storage services
   @override

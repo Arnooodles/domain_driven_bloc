@@ -12,17 +12,20 @@ void main() {
   group(LocalStorageRepository, () {
     late MockSharedPreferences unsecuredStorage;
     late MockFlutterSecureStorage secureStorage;
+    late MockTalker talker;
     late LocalStorageRepository localStorageRepository;
 
     setUp(() {
       unsecuredStorage = MockSharedPreferences();
       secureStorage = MockFlutterSecureStorage();
-      localStorageRepository = LocalStorageRepository(secureStorage, unsecuredStorage);
+      talker = MockTalker();
+      localStorageRepository = LocalStorageRepository(secureStorage, unsecuredStorage, talker);
     });
 
     tearDown(() {
       reset(unsecuredStorage);
       reset(secureStorage);
+      reset(talker);
     });
 
     group('Secure Storage', () {

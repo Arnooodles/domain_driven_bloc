@@ -32,6 +32,9 @@ void main() {
       failureHandler = MockFailureHandler();
       failure = const Failure.server(StatusCode.http500, 'INTERNAL SERVER ERROR');
       posts = <Post>[_makePostDTO(1).toDomain(), _makePostDTO(2).toDomain()];
+
+      // Register dummy values to prevent Mockito's MissingDummyValueError under randomized ordering.
+      provideDummy(Result<List<Post>>.right(posts));
     });
 
     tearDown(() {
@@ -43,7 +46,6 @@ void main() {
       blocTest<PostCubit, PostState>(
         'should emit success state with list of posts when API call succeeds',
         build: () {
-          provideDummy(Result<List<Post>>.right(posts));
           when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.right(posts));
 
           return PostCubit(postRepository, failureHandler);
@@ -59,7 +61,6 @@ void main() {
         'should emit success with hasMore=true when posts.length equals limit',
         build: () {
           final List<Post> fullPage = List<Post>.generate(20, (int i) => _makePostDTO(i).toDomain());
-          provideDummy(Result<List<Post>>.right(fullPage));
           when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.right(fullPage));
 
           return PostCubit(postRepository, failureHandler);
@@ -82,7 +83,6 @@ void main() {
       blocTest<PostCubit, PostState>(
         'should emit failure state when API call fails',
         build: () {
-          provideDummy(Result<List<Post>>.left(failure));
           when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.left(failure));
 
           return PostCubit(postRepository, failureHandler);
@@ -97,7 +97,6 @@ void main() {
       blocTest<PostCubit, PostState>(
         'should emit failure state when unexpected error occurs',
         build: () {
-          provideDummy(Result<List<Post>>.left(failure));
           when(postRepository.getPosts()).thenThrow(Exception('Unexpected error'));
 
           return PostCubit(postRepository, failureHandler);
@@ -127,7 +126,6 @@ void main() {
         'should handle empty posts list',
         build: () {
           final List<Post> emptyPosts = <Post>[];
-          provideDummy(Result<List<Post>>.right(emptyPosts));
           when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.right(emptyPosts));
 
           return PostCubit(postRepository, failureHandler);
@@ -185,7 +183,6 @@ void main() {
       blocTest<PostCubit, PostState>(
         'should emit loadingMore and then restore onSuccess state when possibleFailure returns a Failure on loadMorePosts',
         build: () {
-          provideDummy(Result<List<Post>>.left(failure));
           when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.left(failure));
 
           return PostCubit(postRepository, failureHandler);

@@ -18,7 +18,7 @@ import 'package:very_good_core/features/home/presentation/widgets/post_container
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  List<Post> _generateFakePostData() => List<Post>.generate(8, (_) => MockData.post);
+  static final List<Post> _shimmerPosts = List<Post>.generate(8, (_) => MockData.post);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                   onSuccess: (List<Post> posts, bool hasMore) =>
                       posts.isNotEmpty ? _PostList(posts: posts, hasMore: hasMore) : const EmptyPost(),
                   loadingMore: (List<Post> posts) => _PostList(posts: posts, hasMore: true, isLoadingMore: true),
-                  orElse: () => Shimmer(child: _PostList(posts: _generateFakePostData(), hasMore: false)),
+                  orElse: () => Shimmer(child: _PostList(posts: _shimmerPosts, hasMore: false)),
                 ),
               ),
             ),
@@ -63,11 +63,14 @@ class _PostList extends StatefulWidget {
 }
 
 class _PostListState extends State<_PostList> {
-  late final ScrollController _scrollController;
+  late ScrollController _scrollController;
+  bool _listenerAttached = false;
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
+    if (_listenerAttached) {
+      _scrollController.removeListener(_onScroll);
+    }
     super.dispose();
   }
 
@@ -82,8 +85,13 @@ class _PostListState extends State<_PostList> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _scrollController = ScrollControllerProvider.of(context, AppScrollController.home);
+    final ScrollController newController = ScrollControllerProvider.of(context, AppScrollController.home);
+    if (_listenerAttached) {
+      _scrollController.removeListener(_onScroll);
+    }
+    _scrollController = newController;
     _scrollController.addListener(_onScroll);
+    _listenerAttached = true;
   }
 
   @override

@@ -6,7 +6,6 @@ import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/helpers/extensions/fpdart_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
-import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
@@ -19,11 +18,10 @@ import 'package:very_good_core/features/home/domain/interface/i_post_repository.
 
 @LazySingleton(as: IPostRepository)
 class PostRepository implements IPostRepository {
-  const PostRepository(this._postService);
+  const PostRepository(this._postService, this._failureHandler);
 
   final PostService _postService;
-
-  FailureHandler get _failureHandler => getIt<FailureHandler>();
+  final FailureHandler _failureHandler;
 
   @override
   Future<Result<List<Post>>> getPosts({int skip = 0, int limit = 20}) async {
@@ -44,10 +42,8 @@ class PostRepository implements IPostRepository {
 
   Result<List<Post>> _validatePostData(List<PostDTO> postDTOs) {
     final List<Post> posts = postDTOs.map((PostDTO postDTO) => postDTO.toDomain()).toList();
-    final bool isPostsValid = posts.where((Post post) => post.validate.isSome()).toList().isEmpty;
+    final Post? invalid = posts.cast<Post?>().firstWhere((Post? p) => p!.validate.isSome(), orElse: () => null);
 
-    return isPostsValid
-        ? right(posts)
-        : left(posts.firstWhere((Post post) => post.validate.isSome()).validate.asSome());
+    return invalid == null ? right(posts) : left(invalid.validate.asSome());
   }
 }

@@ -26,6 +26,10 @@ void main() {
       failureHandler = MockFailureHandler();
       username = 'username';
       password = 'password';
+
+      // Register dummy values to prevent Mockito's MissingDummyValueError under randomized ordering.
+      provideDummy(Result<String?>.right(null));
+      provideDummy(Result<Unit>.right(unit));
     });
 
     tearDown(() {

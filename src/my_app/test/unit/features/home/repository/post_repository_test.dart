@@ -16,12 +16,14 @@ import '../../../../utils/test_utils.dart';
 void main() {
   group(PostRepository, () {
     late MockPostService postService;
+    late MockFailureHandler failureHandler;
     late PostRepository postRepository;
     late PostDTO postDTO;
 
     setUp(() {
       postService = MockPostService();
-      postRepository = PostRepository(postService);
+      failureHandler = MockFailureHandler();
+      postRepository = PostRepository(postService, failureHandler);
       postDTO = const PostDTO(
         uid: 1,
         title: 'title',
@@ -31,18 +33,24 @@ void main() {
         views: 100,
         userId: 1,
       );
+
+      // Register dummy values to prevent Mockito's MissingDummyValueError under randomized ordering.
+      provideDummy(mockChopperClient);
+      provideDummy<chopper.Response<PostListDTO>>(generateMockResponse<PostListDTO>(
+        PostListDTO(posts: <PostDTO>[postDTO], total: 1, skip: 0, limit: 20),
+        200,
+      ));
     });
 
     tearDown(() {
-      provideDummy(mockChopperClient);
       reset(postService);
+      reset(failureHandler);
     });
 
     group('getPosts', () {
       test('getPosts should return list of posts when successful', () async {
         final PostListDTO data = PostListDTO(posts: <PostDTO>[postDTO], total: 1, skip: 0, limit: 20);
 
-        provideDummy<chopper.Response<PostListDTO>>(generateMockResponse<PostListDTO>(data, 200));
         when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<PostListDTO>(data, 200));
 
         final Result<List<Post>> result = await postRepository.getPosts();
@@ -56,7 +64,6 @@ void main() {
         final PostDTO invalidPostDTO = postDTO.copyWith(reactions: const PostReactionsDTO(likes: -1, dislikes: 0));
         final PostListDTO data = PostListDTO(posts: <PostDTO>[invalidPostDTO], total: 1, skip: 0, limit: 20);
 
-        provideDummy<chopper.Response<PostListDTO>>(generateMockResponse<PostListDTO>(data, 200));
         when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<PostListDTO>(data, 200));
 
         final Result<List<Post>> result = await postRepository.getPosts();
@@ -67,7 +74,10 @@ void main() {
       test('getPosts should return failure when server error occurs', () async {
         final PostListDTO data = PostListDTO(posts: <PostDTO>[postDTO], total: 1, skip: 0, limit: 20);
 
-        provideDummy<chopper.Response<PostListDTO>>(generateMockResponse<PostListDTO>(data, 500));
+        provideDummy<Result<List<Post>>>(left(const Failure.unexpected('Server error')));
+        when(
+          failureHandler.handleServerError<List<Post>>(any, any),
+        ).thenReturn(left(const Failure.unexpected('Server error')));
         when(postService.getPosts()).thenAnswer((_) async => generateMockResponse<PostListDTO>(data, 500));
 
         final Result<List<Post>> result = await postRepository.getPosts();
@@ -86,7 +96,6 @@ void main() {
       test('getPosts with pagination skip param is forwarded correctly', () async {
         final PostListDTO data = PostListDTO(posts: <PostDTO>[postDTO], total: 50, skip: 20, limit: 20);
 
-        provideDummy<chopper.Response<PostListDTO>>(generateMockResponse<PostListDTO>(data, 200));
         when(postService.getPosts(skip: 20)).thenAnswer((_) async => generateMockResponse<PostListDTO>(data, 200));
 
         final Result<List<Post>> result = await postRepository.getPosts(skip: 20);

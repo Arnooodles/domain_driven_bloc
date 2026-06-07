@@ -42,7 +42,7 @@ class VeryGoodCoreNavBar extends HookWidget implements PreferredSizeWidget {
 
   void _onItemTapped(BuildContext context, int index) {
     if (index != navigationShell.currentIndex) {
-      navigationShell.goBranch(index, initialLocation: index == navigationShell.currentIndex);
+      navigationShell.goBranch(index);
     }
   }
 }

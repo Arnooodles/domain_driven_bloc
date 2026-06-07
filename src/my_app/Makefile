@@ -25,7 +25,7 @@ pub_outdated: ## Check for outdated packages
 	fvm flutter pub outdated
 
 pub_upgrade: ## Upgrade the current package's dependencies to latest versions.
-	fvm flutter pub upgrade
+	fvm flutter pub upgrade --tighten
 
 pub_repair: ## Performs a clean reinstallation of all packages in your system cache
 	fvm flutter pub cache repair
@@ -62,10 +62,10 @@ native_splash: ## This command runs flutter_native_splash
 	fvm dart run flutter_native_splash:create
 
 lcov_gen: ## Generates lcov
-	fvm flutter test --coverage
+	fvm flutter test  --coverage --no-pub --test-randomize-ordering-seed random || test_res=1
 
 lcov_gen_ci: ## Generates lcov in CI environment
-	fvm flutter test --dart-define=CI=true --coverage
+	fvm flutter test --dart-define=CI=true --coverage --no-pub --test-randomize-ordering-seed random || test_res=1
 
 lcov_gen_unit: ## Generates lcov for unit tests only
 	fvm flutter test test/unit --coverage

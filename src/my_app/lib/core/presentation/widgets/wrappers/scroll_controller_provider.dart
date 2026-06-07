@@ -119,5 +119,5 @@ class _InheritedScrollControllerProvider extends InheritedWidget {
   ScrollController? getController(AppScrollController key) => controllers[key];
 
   @override
-  bool updateShouldNotify(_InheritedScrollControllerProvider oldWidget) => controllers != oldWidget.controllers;
+  bool updateShouldNotify(_InheritedScrollControllerProvider oldWidget) => true;
 }

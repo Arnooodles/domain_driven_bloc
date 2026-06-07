@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:talker/talker.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
-import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
@@ -16,12 +15,11 @@ import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
 
 @LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {
-  UserRepository(this._userService);
+  UserRepository(this._userService, this._talker, this._failureHandler);
 
   final UserService _userService;
-
-  Talker get _talker => getIt<Talker>();
-  FailureHandler get _failureHandler => getIt<FailureHandler>();
+  final Talker _talker;
+  final FailureHandler _failureHandler;
 
   @override
   Future<Result<User>> get user async {

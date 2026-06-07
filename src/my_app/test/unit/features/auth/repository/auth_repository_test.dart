@@ -15,26 +15,35 @@ void main() {
   group(AuthRepository, () {
     late MockAuthService authService;
     late MockILocalStorageRepository localStorageRepository;
+    late MockTalker talker;
+    late MockFailureHandler failureHandler;
     late AuthRepository authRepository;
     late LoginResponseDTO loginResponseDTO;
 
     setUp(() {
       authService = MockAuthService();
       localStorageRepository = MockILocalStorageRepository();
-      authRepository = AuthRepository(authService, localStorageRepository);
+      talker = MockTalker();
+      failureHandler = MockFailureHandler();
+      authRepository = AuthRepository(authService, localStorageRepository, talker, failureHandler);
       loginResponseDTO = const LoginResponseDTO(accessToken: 'accessToken', refreshToken: 'refreshToken');
+
+      // Register dummy values to prevent Mockito's MissingDummyValueError when stubbing/calling mocked methods.
+      provideDummy(mockChopperClient);
+      provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
+      provideDummy(Result<Unit>.right(unit));
+      provideDummy(Result<String?>.right('refreshToken'));
     });
 
     tearDown(() {
-      provideDummy(mockChopperClient);
       reset(authService);
       reset(localStorageRepository);
+      reset(talker);
+      reset(failureHandler);
     });
 
     group('login', () {
       test('login should return unit when successful', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        provideDummy(Result<Unit>.right(unit));
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
@@ -53,8 +62,9 @@ void main() {
       });
 
       test('login should return failure when server error occurs', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 500));
-        provideDummy(Result<Unit>.right(unit));
+        when(
+          failureHandler.handleServerError<Unit>(any, any),
+        ).thenReturn(left(const Failure.unexpected('Server error')));
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 500));
@@ -73,7 +83,6 @@ void main() {
       });
 
       test('login should return failure when unexpected error occurs', () async {
-        provideDummy(Result<Unit>.right(unit));
         when(authService.login(any)).thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
         when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
@@ -90,8 +99,6 @@ void main() {
       });
 
       test('login should return failure when saving access token fails', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        provideDummy(Result<Unit>.right(unit));
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
@@ -110,8 +117,6 @@ void main() {
       });
 
       test('login should return failure when saving refresh token fails', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        provideDummy(Result<Unit>.right(unit));
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
@@ -132,8 +137,6 @@ void main() {
       });
 
       test('login should return failure when saving last logged in email fails', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        provideDummy(Result<Unit>.right(unit));
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
@@ -154,7 +157,6 @@ void main() {
 
     group('logout', () {
       test('logout should return unit when successful', () async {
-        provideDummy(Result<Unit>.right(unit));
         when(localStorageRepository.deleteAccessToken()).thenAnswer((_) async => right(unit));
         when(localStorageRepository.deleteRefreshToken()).thenAnswer((_) async => right(unit));
 
@@ -164,7 +166,6 @@ void main() {
       });
 
       test('logout should return failure when unexpected error occurs', () async {
-        provideDummy(Result<Unit>.right(unit));
         when(localStorageRepository.deleteAccessToken()).thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.deleteRefreshToken()).thenAnswer((_) async => right(unit));
 
@@ -174,7 +175,6 @@ void main() {
       });
 
       test('logout should return failure when clearing access token fails', () async {
-        provideDummy(Result<Unit>.right(unit));
         when(localStorageRepository.deleteAccessToken()).thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.deleteRefreshToken()).thenAnswer((_) async => right(unit));
 
@@ -184,7 +184,6 @@ void main() {
       });
 
       test('logout should return failure when clearing refresh token fails', () async {
-        provideDummy(Result<Unit>.right(unit));
         when(localStorageRepository.deleteAccessToken()).thenAnswer((_) async => right(unit));
         when(localStorageRepository.deleteRefreshToken()).thenThrow(Exception('Unexpected error'));
 
@@ -196,9 +195,6 @@ void main() {
 
     group('refreshToken', () {
       test('refreshToken should return unit when successful', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        provideDummy(Result<String?>.right('refreshToken'));
-        provideDummy(Result<Unit>.right(unit));
         when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
         when(
           authService.refreshToken(any),
@@ -212,7 +208,6 @@ void main() {
       });
 
       test('refreshToken should return failure when no refresh token is found', () async {
-        provideDummy(Result<String?>.right(null));
         when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right(null));
 
         final Result<Unit> result = await authRepository.refreshToken();
@@ -221,9 +216,9 @@ void main() {
       });
 
       test('refreshToken should return failure when server error occurs', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 500));
-        provideDummy(Result<String?>.right('refreshToken'));
-        provideDummy(Result<Unit>.right(unit));
+        when(
+          failureHandler.handleServerError<Unit>(any, any),
+        ).thenReturn(left(const Failure.unexpected('Server error')));
         when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
         when(
           authService.refreshToken(any),
@@ -237,8 +232,6 @@ void main() {
       });
 
       test('refreshToken should return failure when unexpected error occurs', () async {
-        provideDummy(Result<String?>.right('refreshToken'));
-        provideDummy(Result<Unit>.right(unit));
         when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
         when(authService.refreshToken(any)).thenThrow(Exception('Unexpected error'));
         when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
@@ -250,9 +243,6 @@ void main() {
       });
 
       test('refreshToken should return failure when saving access token fails', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        provideDummy(Result<String?>.right('refreshToken'));
-        provideDummy(Result<Unit>.right(unit));
         when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
         when(
           authService.refreshToken(any),
@@ -266,9 +256,6 @@ void main() {
       });
 
       test('refreshToken should return failure when saving refresh token fails', () async {
-        provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        provideDummy(Result<String?>.right('refreshToken'));
-        provideDummy(Result<Unit>.right(unit));
         when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
         when(
           authService.refreshToken(any),
