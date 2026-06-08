@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
           },
           child: Builder(
             builder: (BuildContext context) => RefreshIndicator(
-              onRefresh: () => context.read<PostCubit>().getPosts(),
+              onRefresh: () => context.read<PostCubit>().getPosts(forceRefresh: true),
               child: BlocBuilder<PostCubit, PostState>(
                 builder: (BuildContext context, PostState state) => state.maybeWhen(
                   onSuccess: (List<Post> posts, bool hasMore) =>

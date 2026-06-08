@@ -64,12 +64,7 @@ class _ScrollControllerProviderState extends State<ScrollControllerProvider> {
 
   void _onScrollChanged(ScrollController scrollController) {
     if (!scrollController.hasClients) return;
-    HidableCubit hidableCubit;
-    try {
-      hidableCubit = context.read<HidableCubit>();
-    } on Exception catch (_) {
-      return;
-    }
+    final HidableCubit hidableCubit = context.read<HidableCubit>();
     final ScrollDirection direction = scrollController.position.userScrollDirection;
 
     if (direction == ScrollDirection.forward) {

@@ -15,12 +15,11 @@ class AppLocalizationCubit extends Cubit<I18n> {
   final IAppLocalizationRepository _appLocalizationRepository;
 
   Future<void> initialize() async {
-    try {
-      safeEmit(await _appLocalizationRepository.findDeviceLocale().build());
-    } on Exception catch (_) {
+    await safeRun(
+      action: () async => safeEmit(await _appLocalizationRepository.findDeviceLocale().build()),
       // Fallback to first locale if device locale detection fails
-      safeEmit(AppLocale.values.first.buildSync());
-    }
+      onError: (Exception _) => safeEmit(AppLocale.values.first.buildSync()),
+    );
 
     // TODO: Example on how to implement remote localization
     // try {

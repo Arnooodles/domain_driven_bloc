@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/interface/i_asset_repository.dart';
@@ -20,10 +21,9 @@ class AppCoreCubit extends Cubit<AppCoreState> {
   final IAssetRepository _assetRepository;
 
   Future<void> initialize() async {
-    try {
-      await _assetRepository.preloadSVGs();
-    } on Exception catch (error) {
-      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
-    }
+    await safeRun(
+      action: _assetRepository.preloadSVGs,
+      onError: (Exception error) => _failureHandler.handleFailure(Failure.unexpected(error.toString())),
+    );
   }
 }

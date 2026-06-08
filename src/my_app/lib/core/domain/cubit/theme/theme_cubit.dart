@@ -21,38 +21,40 @@ class ThemeCubit extends Cubit<ThemeMode> {
   final FailureHandler _failureHandler;
 
   Future<void> initialize() async {
-    try {
-      final Result<bool?> possibleFailure = await _localStorageRepository.getIsDarkMode();
-      possibleFailure.fold(_failureHandler.handleFailure, (bool? isDarkMode) {
-        if (isDarkMode != null) {
-          safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
-        }
-      });
-    } on Exception catch (error) {
-      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
-    }
+    await safeRun(
+      action: () async {
+        final Result<bool?> possibleFailure = await _localStorageRepository.getIsDarkMode();
+        possibleFailure.fold(_failureHandler.handleFailure, (bool? isDarkMode) {
+          if (isDarkMode != null) {
+            safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
+          }
+        });
+      },
+      onError: (Exception error) => _failureHandler.handleFailure(Failure.unexpected(error.toString())),
+    );
   }
 
   Future<void> switchTheme(Brightness currentBrightness) async {
-    try {
-      final bool isDarkMode = currentBrightness != Brightness.dark;
-      final Result<Unit> possibleFailure = await _localStorageRepository.setIsDarkMode(isDarkMode: isDarkMode);
-      possibleFailure.fold(_failureHandler.handleFailure, (_) {
-        safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
-        // Change system bar brightness
-        SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent, // Only Android
-            statusBarBrightness: isDarkMode
-                ? Brightness.dark
-                : Brightness.light, // Only iOS (Note: light and dark are inverted for iOS)
-            statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark, // Only Android
-            systemStatusBarContrastEnforced: false,
-          ),
-        );
-      });
-    } on Exception catch (error) {
-      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
-    }
+    await safeRun(
+      action: () async {
+        final bool isDarkMode = currentBrightness != Brightness.dark;
+        final Result<Unit> possibleFailure = await _localStorageRepository.setIsDarkMode(isDarkMode: isDarkMode);
+        possibleFailure.fold(_failureHandler.handleFailure, (_) {
+          safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
+          // Change system bar brightness
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent, // Only Android
+              statusBarBrightness: isDarkMode
+                  ? Brightness.dark
+                  : Brightness.light, // Only iOS (Note: light and dark are inverted for iOS)
+              statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark, // Only Android
+              systemStatusBarContrastEnforced: false,
+            ),
+          );
+        });
+      },
+      onError: (Exception error) => _failureHandler.handleFailure(Failure.unexpected(error.toString())),
+    );
   }
 }

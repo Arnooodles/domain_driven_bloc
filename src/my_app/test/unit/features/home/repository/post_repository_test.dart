@@ -36,10 +36,9 @@ void main() {
 
       // Register dummy values to prevent Mockito's MissingDummyValueError under randomized ordering.
       provideDummy(mockChopperClient);
-      provideDummy<chopper.Response<PostListDTO>>(generateMockResponse<PostListDTO>(
-        PostListDTO(posts: <PostDTO>[postDTO], total: 1, skip: 0, limit: 20),
-        200,
-      ));
+      provideDummy<chopper.Response<PostListDTO>>(
+        generateMockResponse<PostListDTO>(PostListDTO(posts: <PostDTO>[postDTO], total: 1, skip: 0, limit: 20), 200),
+      );
     });
 
     tearDown(() {
