@@ -26,8 +26,7 @@ jobs:
           dart analyze lib test
 
       - name: 🧪 Run Tests
-        run: flutter test --dart-define=CI=true --coverage --no-pub --test-randomize-ordering-seed random || test_res=1
-
+        run: flutter test --dart-define=CI=true --coverage --no-pub --test-randomize-ordering-seed random
       - name: 📤 Upload Failed Goldens
         uses: actions/upload-artifact@v4
         if: failure()

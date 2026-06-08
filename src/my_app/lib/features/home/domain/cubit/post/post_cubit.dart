@@ -56,10 +56,12 @@ class PostCubit extends Cubit<PostState> {
 
         possibleFailure.fold(
           (Failure failure) {
+            if (state is! _LoadingMore) return;
             safeEmit(PostState.onSuccess(existingPosts, hasMore: currentState.hasMore));
             _failureHandler.handleFailure(failure);
           },
           (List<Post> newPosts) {
+            if (state is! _LoadingMore) return;
             _skip += newPosts.length;
             final List<Post> allPosts = <Post>[...existingPosts, ...newPosts];
             safeEmit(PostState.onSuccess(allPosts, hasMore: newPosts.length >= _limit));

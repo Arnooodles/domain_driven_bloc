@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:chopper/chopper.dart' as chopper;
+import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/helpers/extensions/fpdart_ext.dart';
@@ -60,7 +61,7 @@ class PostRepository implements IPostRepository {
 
   Result<List<Post>> _validatePostData(List<PostDTO> postDTOs) {
     final List<Post> posts = postDTOs.map((PostDTO postDTO) => postDTO.toDomain()).toList();
-    final Post? invalid = posts.cast<Post?>().firstWhere((Post? p) => p!.validate.isSome(), orElse: () => null);
+    final Post? invalid = posts.firstOrNullWhere((Post p) => p.validate.isSome());
 
     return invalid == null ? right(posts) : left(invalid.validate.asSome());
   }

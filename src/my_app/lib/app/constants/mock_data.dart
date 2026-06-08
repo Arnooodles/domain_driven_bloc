@@ -12,7 +12,6 @@ final class MockData {
     tags: <String>['flutter', 'dart', 'mobile'],
     reactions: PostReactionsDTO(likes: 192, dislikes: 5),
     views: 1024,
-    userId: 1,
   ).toDomain();
 
   static final User user = UserDTO(

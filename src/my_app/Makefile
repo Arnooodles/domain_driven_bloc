@@ -62,10 +62,10 @@ native_splash: ## This command runs flutter_native_splash
 	fvm dart run flutter_native_splash:create
 
 lcov_gen: ## Generates lcov
-	fvm flutter test  --coverage --no-pub --test-randomize-ordering-seed random || test_res=1
+	fvm flutter test  --coverage --no-pub --test-randomize-ordering-seed random
 
 lcov_gen_ci: ## Generates lcov in CI environment
-	fvm flutter test --dart-define=CI=true --coverage --no-pub --test-randomize-ordering-seed random || test_res=1
+	fvm flutter test --dart-define=CI=true --coverage --no-pub --test-randomize-ordering-seed random
 
 lcov_gen_unit: ## Generates lcov for unit tests only
 	fvm flutter test test/unit --coverage

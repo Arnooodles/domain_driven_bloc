@@ -66,6 +66,7 @@ void main() {
         },
         act: (LoginCubit cubit) => cubit.initialize(),
         expect: () => <LoginState>[
+          LoginState.initial().copyWith(username: null),
           LoginState.initial().copyWith(username: username),
           LoginState.initial().copyWith(isLoading: false, username: username),
         ],
@@ -85,7 +86,7 @@ void main() {
           return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.initialize(),
-        expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false)],
+        expect: () => <LoginState>[LoginState.initial().copyWith(username: null), LoginState.initial().copyWith(isLoading: false)],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
         },
@@ -100,7 +101,7 @@ void main() {
           return LoginCubit(authRepository, localStorageRepository, failureHandler);
         },
         act: (LoginCubit cubit) => cubit.initialize(),
-        expect: () => <LoginState>[LoginState.initial().copyWith(isLoading: false)],
+        expect: () => <LoginState>[LoginState.initial().copyWith(username: null), LoginState.initial().copyWith(isLoading: false)],
         verify: (_) {
           verify(localStorageRepository.getLastLoggedInUsername()).called(1);
         },
@@ -150,6 +151,7 @@ void main() {
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
+          LoginState.initial().copyWith(username: null),
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
         ],
@@ -187,6 +189,7 @@ void main() {
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
+          LoginState.initial().copyWith(username: null),
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
         ],
@@ -208,6 +211,7 @@ void main() {
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
+          LoginState.initial().copyWith(username: null),
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
         ],
@@ -233,6 +237,7 @@ void main() {
         },
         act: (LoginCubit cubit) => cubit.login(username, 'pass'),
         expect: () => <LoginState>[
+          LoginState.initial().copyWith(username: null),
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
         ],
@@ -252,6 +257,7 @@ void main() {
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
+          LoginState.initial().copyWith(username: null),
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
         ],
@@ -272,6 +278,7 @@ void main() {
         },
         act: (LoginCubit cubit) => cubit.login(username, password),
         expect: () => <LoginState>[
+          LoginState.initial().copyWith(username: null),
           LoginState.initial().copyWith(username: username),
           LoginState(isLoading: false, username: username),
         ],

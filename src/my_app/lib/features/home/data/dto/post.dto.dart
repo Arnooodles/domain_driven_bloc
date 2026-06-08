@@ -9,13 +9,12 @@ part 'post.dto.g.dart';
 @freezed
 sealed class PostDTO with _$PostDTO {
   const factory PostDTO({
-    @JsonKey(name: 'id') required int uid,
+    @JsonKey(name: 'userId') required int uid,
     required String title,
     @JsonKey(name: 'body') required String body,
     @JsonKey(defaultValue: <String>[]) required List<String> tags,
     @JsonKey(name: 'reactions') required PostReactionsDTO reactions,
     @JsonKey(defaultValue: 0) required int views,
-    required int userId,
   }) = _PostDTO;
 
   const PostDTO._();
@@ -29,7 +28,6 @@ sealed class PostDTO with _$PostDTO {
     tags: post.tags,
     reactions: PostReactionsDTO(likes: post.likes.getValue().toInt(), dislikes: post.dislikes.getValue().toInt()),
     views: post.views.getValue().toInt(),
-    userId: 0,
   );
 
   Post toDomain() => Post(

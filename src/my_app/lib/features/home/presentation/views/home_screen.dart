@@ -75,7 +75,8 @@ class _PostListState extends State<_PostList> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
+    if (_scrollController.hasClients &&
+        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
         widget.hasMore &&
         !widget.isLoadingMore) {
       unawaited(context.read<PostCubit>().loadMorePosts());

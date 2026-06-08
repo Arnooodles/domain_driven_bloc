@@ -5,7 +5,7 @@ import 'package:very_good_core/app/generated/localization.g.dart';
 import 'package:very_good_core/core/domain/cubit/app_localization/app_localization_cubit.dart';
 
 extension BuildContextExt on BuildContext {
-  I18n get i18n => watch<AppLocalizationCubit>().state;
+  I18n get i18n => read<AppLocalizationCubit>().state;
 
   ThemeData get theme => Theme.of(this);
 

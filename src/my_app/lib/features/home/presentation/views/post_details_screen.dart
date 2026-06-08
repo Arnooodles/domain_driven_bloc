@@ -13,7 +13,7 @@ class PostDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: VeryGoodCoreAppBar(leading: BackButton(onPressed: () => context.goRouter.pop())),
+    appBar: const VeryGoodCoreAppBar(leading: BackButton()),
     body: SingleChildScrollView(
       padding: Paddings.allLarge,
       child: Column(

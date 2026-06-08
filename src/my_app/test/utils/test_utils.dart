@@ -129,7 +129,6 @@ Post get mockPost => const PostDTO(
   tags: <String>['flutter', 'dart', 'mobile'],
   reactions: PostReactionsDTO(likes: 10, dislikes: 2),
   views: 1024,
-  userId: 1,
 ).toDomain();
 
 chopper.Response<T> generateMockResponse<T>(T body, int statusCode) =>
