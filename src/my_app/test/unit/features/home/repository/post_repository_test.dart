@@ -158,6 +158,29 @@ void main() {
         expect(secondResult, isA<Right<Failure, List<Post>>>());
         expect(secondResult.asRight(), isNotEmpty);
       });
+
+      test('getPosts should fallback to cached posts when exception is thrown and skip is 0', () async {
+        final PostListDTO data = PostListDTO(posts: <PostDTO>[postDTO], total: 1, skip: 0, limit: 20);
+
+        when(
+          postService.getPosts(skip: anyNamed('skip'), limit: anyNamed('limit')),
+        ).thenAnswer((_) async => generateMockResponse<PostListDTO>(data, 200));
+
+        // First call to populate cache
+        final Result<List<Post>> firstResult = await postRepository.getPosts().run();
+        expect(firstResult, isA<Right<Failure, List<Post>>>());
+
+        // Now simulate an exception on a forced refresh
+        when(
+          postService.getPosts(skip: anyNamed('skip'), limit: anyNamed('limit')),
+        ).thenThrow(Exception('Unexpected network error'));
+
+        final Result<List<Post>> secondResult = await postRepository.getPosts(forceRefresh: true).run();
+
+        // It should return the cached posts instead of a failure
+        expect(secondResult, isA<Right<Failure, List<Post>>>());
+        expect(secondResult.asRight(), isNotEmpty);
+      });
     });
   });
 }

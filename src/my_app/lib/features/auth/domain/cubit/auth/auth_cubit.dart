@@ -89,11 +89,7 @@ class AuthCubit extends Cubit<AuthState> {
       safeEmit(const AuthState.unauthenticated());
     }
     failureOrError.fold(_failureHandler.handleFailure, (Object error) {
-      if (error is Exception && stackTrace != null) {
-        _failureHandler.handleException(error, stackTrace);
-      } else {
-        _failureHandler.handleFailure(Failure.unexpected(error.toString()));
-      }
+      _failureHandler.handleException(error as Exception, stackTrace);
     });
   }
 }
