@@ -104,9 +104,7 @@ void main() {
         expect: () => <ThemeMode>[],
         verify: (_) {
           verify(localStorageRepository.getIsDarkMode()).called(1);
-          verify(
-            failureHandler.handleException(any, any),
-          ).called(1);
+          verify(failureHandler.handleException(any, any)).called(1);
         },
       );
 
@@ -230,9 +228,7 @@ void main() {
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
         expect: () => <ThemeMode>[],
         verify: (_) {
-          verify(
-            failureHandler.handleException(any, any),
-          ).called(1);
+          verify(failureHandler.handleException(any, any)).called(1);
         },
       );
     });

@@ -47,45 +47,42 @@ class ScrollControllerProvider extends HookWidget {
       <Object?>[],
     );
 
-    useEffect(
-      () {
-        final Map<AppScrollController, VoidCallback> listeners = <AppScrollController, VoidCallback>{};
+    useEffect(() {
+      final Map<AppScrollController, VoidCallback> listeners = <AppScrollController, VoidCallback>{};
 
-        for (final AppScrollController appScrollController in AppScrollController.values) {
-          final ScrollController scrollController = ScrollController(debugLabel: appScrollController.name);
+      for (final AppScrollController appScrollController in AppScrollController.values) {
+        final ScrollController scrollController = ScrollController(debugLabel: appScrollController.name);
 
-          void listener() {
-            if (!scrollController.hasClients || !context.mounted) return;
-            final HidableCubit hidableCubit = context.read<HidableCubit>();
-            final ScrollDirection direction = scrollController.position.userScrollDirection;
+        void listener() {
+          if (!scrollController.hasClients || !context.mounted) return;
+          final HidableCubit hidableCubit = context.read<HidableCubit>();
+          final ScrollDirection direction = scrollController.position.userScrollDirection;
 
-            if (direction == ScrollDirection.forward) {
-              hidableCubit.setVisibility(isVisible: true);
-            } else if (direction == ScrollDirection.reverse) {
-              hidableCubit.setVisibility(isVisible: false);
-            }
+          if (direction == ScrollDirection.forward) {
+            hidableCubit.setVisibility(isVisible: true);
+          } else if (direction == ScrollDirection.reverse) {
+            hidableCubit.setVisibility(isVisible: false);
           }
-
-          scrollController.addListener(listener);
-          controllers[appScrollController] = scrollController;
-          listeners[appScrollController] = listener;
         }
 
-        return () {
-          for (final MapEntry<AppScrollController, ScrollController> entry in controllers.entries) {
-            final ScrollController controller = entry.value;
-            final VoidCallback? listener = listeners[entry.key];
-            if (listener != null) {
-              controller.removeListener(listener);
-            }
-            controller.dispose();
+        scrollController.addListener(listener);
+        controllers[appScrollController] = scrollController;
+        listeners[appScrollController] = listener;
+      }
+
+      return () {
+        for (final MapEntry<AppScrollController, ScrollController> entry in controllers.entries) {
+          final ScrollController controller = entry.value;
+          final VoidCallback? listener = listeners[entry.key];
+          if (listener != null) {
+            controller.removeListener(listener);
           }
-          controllers.clear();
-          listeners.clear();
-        };
-      },
-      <Object?>[],
-    );
+          controller.dispose();
+        }
+        controllers.clear();
+        listeners.clear();
+      };
+    }, <Object?>[]);
 
     return _InheritedScrollControllerProvider(controllers: controllers, child: child);
   }

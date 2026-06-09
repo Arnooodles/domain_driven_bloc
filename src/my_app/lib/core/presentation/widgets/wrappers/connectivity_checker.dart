@@ -45,41 +45,39 @@ class ConnectivityChecker extends HookWidget {
     final ConnectivityUtils connectivityUtils = getIt<ConnectivityUtils>();
     final ObjectRef<ToastificationItem?> toastificationItemRef = useRef<ToastificationItem?>(null);
 
-    useEffect(
-      () {
-        Future<ToastificationItem> showOfflineDialog() async => DialogUtils.showError(
-          context.i18n.common.error.no_internet_connection,
-          icon: VeryGoodCoreIcon(icon: fpdart.right(Icons.wifi_off)),
-          isDismissable: false,
-        );
+    useEffect(() {
+      Future<ToastificationItem> showOfflineDialog() async => DialogUtils.showError(
+        context.i18n.common.error.no_internet_connection,
+        icon: VeryGoodCoreIcon(icon: fpdart.right(Icons.wifi_off)),
+        isDismissable: false,
+      );
 
-        Future<void> onStatusChanged(ConnectionStatus connectionStatus) async {
-          if (!context.mounted) return;
-          switch (connectionStatus) {
-            case ConnectionStatus.offline:
-              if (toastificationItemRef.value?.isRunning ?? false) return;
-              toastificationItemRef.value ??= await showOfflineDialog();
-            case ConnectionStatus.online:
-              if (toastificationItemRef.value != null) {
-                toastification.dismiss(toastificationItemRef.value!);
-                toastificationItemRef.value = null;
-              }
-          }
+      Future<void> onStatusChanged(ConnectionStatus connectionStatus) async {
+        if (!context.mounted) return;
+        switch (connectionStatus) {
+          case ConnectionStatus.offline:
+            if (toastificationItemRef.value?.isRunning ?? false) return;
+            toastificationItemRef.value ??= await showOfflineDialog();
+          case ConnectionStatus.online:
+            if (toastificationItemRef.value != null) {
+              toastification.dismiss(toastificationItemRef.value!);
+              toastificationItemRef.value = null;
+            }
         }
+      }
 
-        final StreamSubscription<ConnectionStatus> connectionSubscription =
-            connectivityUtils.internetStatus.listen(onStatusChanged);
+      final StreamSubscription<ConnectionStatus> connectionSubscription = connectivityUtils.internetStatus.listen(
+        onStatusChanged,
+      );
 
-        return () {
-          unawaited(connectionSubscription.cancel().logOnError());
-          if (toastificationItemRef.value != null) {
-            toastification.dismiss(toastificationItemRef.value!);
-            toastificationItemRef.value = null;
-          }
-        };
-      },
-      <Object?>[connectivityUtils],
-    );
+      return () {
+        unawaited(connectionSubscription.cancel().logOnError());
+        if (toastificationItemRef.value != null) {
+          toastification.dismiss(toastificationItemRef.value!);
+          toastificationItemRef.value = null;
+        }
+      };
+    }, <Object?>[connectivityUtils]);
 
     return child;
   }

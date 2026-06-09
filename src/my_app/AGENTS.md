@@ -47,6 +47,7 @@ Flutter application using **Clean Architecture** (Feature-driven isolation: `cor
 
 - **Zero sibling dependencies** in the same layer.
 - **Naming Conventions:** Follow standard Dart naming conventions: `UpperCamelCase` for classes, enums, and typedefs. `lowerCamelCase` for variables, methods, and parameters. `snake_case` for file names and directories. Suffix classes correctly (e.g., `UserRepository`, `AuthCubit`, `UserEntity`, `UserDto`). Avoid single-character names such as "e", "i", "l", etc.
+- **Code Formatting:** Set line length/page width to 120 characters instead of the standard 80. Trailing commas should be automated. Always run `make format` to format the codebase.
 - **No Magic Numbers:** Avoid using "magic numbers" (hardcoded unnamed numerical values) in code. Extract them to named constants with descriptive names. If a magic number must be used and cannot be extracted (very rare), it **must** be accompanied by an explanatory comment.
 - **Variable/Constant Extraction:** If there are similar values used across files or components (widgets, services, etc.), extract them into variables or constants so they can be reused.
 - **Dependency Injection:** Use constructor injection with `GetIt` and `injectable`.

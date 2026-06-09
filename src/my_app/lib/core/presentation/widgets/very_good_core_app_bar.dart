@@ -57,7 +57,11 @@ class VeryGoodCoreAppBar extends StatelessWidget implements PreferredSizeWidget 
       builder: (BuildContext context, AuthState state) => state.maybeWhen(
         authenticated: (User user) => GestureDetector(
           onTap: () => const ProfileRoute().go(context),
-          child: VeryGoodCoreAvatar(size: AppSizes.xLarge, imageUrl: user.image?.getValue(), padding: Paddings.allSmall),
+          child: VeryGoodCoreAvatar(
+            size: AppSizes.xLarge,
+            imageUrl: user.image?.getValue(),
+            padding: Paddings.allSmall,
+          ),
         ),
         orElse: () => const SizedBox.shrink(),
       ),

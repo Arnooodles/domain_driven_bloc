@@ -59,26 +59,25 @@ class _PostList extends HookWidget {
   final bool hasMore;
   final bool isLoadingMore;
 
+  static const double _scrollThreshold = 200;
+
   @override
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollControllerProvider.of(context, AppScrollController.home);
 
-    useEffect(
-      () {
-        void onScroll() {
-          if (scrollController.hasClients &&
-              scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200 &&
-              hasMore &&
-              !isLoadingMore) {
-            unawaited(context.read<PostCubit>().loadMorePosts());
-          }
+    useEffect(() {
+      void onScroll() {
+        if (scrollController.hasClients &&
+            scrollController.position.pixels >= scrollController.position.maxScrollExtent - _scrollThreshold &&
+            hasMore &&
+            !isLoadingMore) {
+          unawaited(context.read<PostCubit>().loadMorePosts());
         }
+      }
 
-        scrollController.addListener(onScroll);
-        return () => scrollController.removeListener(onScroll);
-      },
-      <Object?>[scrollController, hasMore, isLoadingMore],
-    );
+      scrollController.addListener(onScroll);
+      return () => scrollController.removeListener(onScroll);
+    }, <Object?>[scrollController, hasMore, isLoadingMore]);
 
     return ListView.separated(
       padding: Paddings.topMedium,

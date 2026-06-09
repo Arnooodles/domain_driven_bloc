@@ -26,37 +26,49 @@ class PostRepository implements IPostRepository {
   List<Post>? _cachedPosts;
 
   @override
-  TaskResult<List<Post>> getPosts({int skip = 0, int limit = Constant.defaultPaginationLimit, bool forceRefresh = false}) =>
-      TaskResult<List<Post>>.tryCatch(
-        () async {
-          if (!forceRefresh && skip == 0 && _cachedPosts != null && _cachedPosts!.isNotEmpty) {
-            return _cachedPosts!;
-          }
+  TaskResult<List<Post>> getPosts({
+    int skip = 0,
+    int limit = Constant.defaultPaginationLimit,
+    bool forceRefresh = false,
+  }) => TaskResult<List<Post>>.tryCatch(
+    () async {
+      if (!forceRefresh && skip == 0 && _cachedPosts != null && _cachedPosts!.isNotEmpty) {
+        return _cachedPosts!;
+      }
 
-          final chopper.Response<PostListDTO> response = await _postService.getPosts(skip: skip, limit: limit);
-
-          final StatusCode statusCode = response.statusCode.statusCode;
-
-          if (statusCode.isSuccess && response.body != null && response.body!.posts.isNotEmpty) {
-            final Result<List<Post>> validatedPosts = _validatePostData(response.body!.posts);
-            if (skip == 0 && validatedPosts.isRight()) {
-              _cachedPosts = validatedPosts.getOrElse((Failure _) => <Post>[]);
-            }
-            return validatedPosts.getOrElse((Failure failure) => throw failure);
-          } else {
-            return _getCachedPostsOrFailure(
-              statusCode,
-              response.error.toString(),
-              skip,
-            ).getOrElse((Failure failure) => throw failure);
-          }
-        },
-        (Object error, StackTrace stackTrace) {
+      final chopper.Response<PostListDTO> response;
+      try {
+        response = await _postService.getPosts(skip: skip, limit: limit);
+      } catch (error, stackTrace) {
+        if (skip == 0 && _cachedPosts != null && _cachedPosts!.isNotEmpty) {
           _talker.handle(error, stackTrace);
-          if (error is Failure) return error;
-          return Failure.unexpected(error.toString());
-        },
-      );
+          return _cachedPosts!;
+        }
+        rethrow;
+      }
+
+      final StatusCode statusCode = response.statusCode.statusCode;
+
+      if (statusCode.isSuccess && response.body != null && response.body!.posts.isNotEmpty) {
+        final Result<List<Post>> validatedPosts = _validatePostData(response.body!.posts);
+        if (skip == 0 && validatedPosts.isRight()) {
+          _cachedPosts = validatedPosts.getOrElse((Failure _) => <Post>[]);
+        }
+        return validatedPosts.getOrElse((Failure failure) => throw failure);
+      } else {
+        return _getCachedPostsOrFailure(
+          statusCode,
+          response.error.toString(),
+          skip,
+        ).getOrElse((Failure failure) => throw failure);
+      }
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      if (error is Failure) return error;
+      return Failure.unexpected(error.toString());
+    },
+  );
 
   Result<List<Post>> _getCachedPostsOrFailure(StatusCode statusCode, String errorMessage, int skip) {
     if (skip == 0 && _cachedPosts != null && _cachedPosts!.isNotEmpty) {
