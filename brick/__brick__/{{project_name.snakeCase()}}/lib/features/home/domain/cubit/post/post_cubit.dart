@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/cubit_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/mixins/failure_handler.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
@@ -20,15 +21,53 @@ class PostCubit extends Cubit<PostState> {
   final IPostRepository _postRepository;
   final FailureHandler _failureHandler;
 
-  Future<void> getPosts() async {
-    try {
-      safeEmit(const PostState.loading());
+  int _skip = 0;
 
-      final Result<List<Post>> possibleFailure = await _postRepository.getPosts();
+  Future<void> getPosts({bool forceRefresh = false}) async {
+    await safeRun(
+      action: () async {
+        _skip = 0;
+        safeEmit(const PostState.loading());
 
-      possibleFailure.fold(_failureHandler.handleFailure, (List<Post> posts) => safeEmit(PostState.onSuccess(posts)));
-    } on Exception catch (error) {
-      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
-    }
+        final Result<List<Post>> possibleFailure = await _postRepository
+            .getPosts(skip: _skip, forceRefresh: forceRefresh)
+            .run();
+
+        possibleFailure.fold(_failureHandler.handleFailure, (List<Post> posts) {
+          _skip = posts.length;
+          safeEmit(PostState.onSuccess(posts, hasMore: posts.length >= Constant.defaultPaginationLimit));
+        });
+      },
+      onException: _failureHandler.handleException,
+    );
+  }
+
+  Future<void> loadMorePosts() async {
+    final PostState currentState = state;
+    if (currentState is! _Success || !currentState.hasMore) return;
+    final List<Post> existingPosts = currentState.posts;
+
+    await safeRun(
+      action: () async {
+        safeEmit(PostState.loadingMore(existingPosts));
+
+        final Result<List<Post>> possibleFailure = await _postRepository.getPosts(skip: _skip).run();
+
+        possibleFailure.fold(
+          (Failure failure) {
+            if (state is! _LoadingMore) return;
+            safeEmit(PostState.onSuccess(existingPosts, hasMore: currentState.hasMore));
+            _failureHandler.handleFailure(failure);
+          },
+          (List<Post> newPosts) {
+            if (state is! _LoadingMore) return;
+            _skip += newPosts.length;
+            final List<Post> allPosts = <Post>[...existingPosts, ...newPosts];
+            safeEmit(PostState.onSuccess(allPosts, hasMore: newPosts.length >= Constant.defaultPaginationLimit));
+          },
+        );
+      },
+      onException: _failureHandler.handleException,
+    );
   }
 }

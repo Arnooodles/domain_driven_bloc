@@ -49,9 +49,12 @@ class LoginScreen extends HookWidget {
           child: BlocBuilder<LoginCubit, LoginState>(
             builder: (BuildContext context, LoginState state) {
               final String currentUsername = state.username ?? '';
-              usernameTextController
-                ..value = TextEditingValue(text: currentUsername)
-                ..selection = TextSelection.fromPosition(TextPosition(offset: currentUsername.length));
+              if (usernameTextController.text != currentUsername) {
+                usernameTextController.value = TextEditingValue(
+                  text: currentUsername,
+                  selection: TextSelection.fromPosition(TextPosition(offset: currentUsername.length)),
+                );
+              }
 
               return ConnectivityChecker.scaffold(
                 isUnfocusable: true,

@@ -4,7 +4,8 @@ part of 'post_cubit.dart';
 sealed class PostState with _$PostState {
   const factory PostState.initial() = _Initial;
   const factory PostState.loading() = _Loading;
-  const factory PostState.onSuccess(List<Post> posts) = _Success;
+  const factory PostState.loadingMore(List<Post> posts) = _LoadingMore;
+  const factory PostState.onSuccess(List<Post> posts, {required bool hasMore}) = _Success;
 
   const PostState._();
 }

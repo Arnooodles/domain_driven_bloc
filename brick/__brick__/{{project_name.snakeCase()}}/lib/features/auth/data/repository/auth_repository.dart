@@ -1,12 +1,11 @@
 import 'package:chopper/chopper.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
+import 'package:talker/talker.dart';
 import 'package:{{project_name.snakeCase()}}/app/config/chopper_config.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/mixins/failure_handler.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
@@ -20,17 +19,15 @@ import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_au
 
 @LazySingleton(as: IAuthRepository)
 class AuthRepository implements IAuthRepository {
-  const AuthRepository(this._authService, this._localStorageRepository);
+  const AuthRepository(this._authService, this._localStorageRepository, this._talker);
 
   final ILocalStorageRepository _localStorageRepository;
   final AuthService _authService;
-
-  Logger get _logger => getIt<Logger>();
-  FailureHandler get _failureHandler => getIt<FailureHandler>();
+  final Talker _talker;
 
   @override
-  Future<Result<Unit>> login(LoginRequest loginRequest) async {
-    try {
+  TaskResult<Unit> login(LoginRequest loginRequest) => TaskResult<Unit>.tryCatch(
+    () async {
       final Response<LoginResponseDTO> response = await _authService.login(
         LoginRequestDTO.fromDomain(loginRequest).toJson(),
       );
@@ -41,50 +38,52 @@ class AuthRepository implements IAuthRepository {
         return await possibleFailure.fold(() async {
           // Save tokens to local storage
           final List<Result<Unit>> possibleFailures = await Future.wait(<Future<Result<Unit>>>[
-            _localStorageRepository.setAccessToken(response.body!.accessToken),
+            _localStorageRepository.setAccessToken(response.body!.accessToken).run(),
             if (response.body!.refreshToken != null)
-              _localStorageRepository.setRefreshToken(response.body!.refreshToken!),
-            _localStorageRepository.setLastLoggedInUsername(loginRequest.username.getValue()),
+              _localStorageRepository.setRefreshToken(response.body!.refreshToken!).run(),
+            _localStorageRepository.setLastLoggedInUsername(loginRequest.username.getValue()).run(),
           ]);
 
-          return _verifySaving(possibleFailures);
-        }, left);
+          return _verifySaving(possibleFailures).getOrElse((Failure failure) => throw failure);
+        }, (Failure failure) => throw failure);
       } else {
-        return _failureHandler.handleServerError<Unit>(statusCode, response.error);
+        throw Failure.server(statusCode, response.error.toString());
       }
-    } on Exception catch (error) {
-      _logger.e(error.toString());
-
-      return left(Failure.unexpected(error.toString()));
-    }
-  }
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      if (error is Failure) return error;
+      return Failure.unexpected(error.toString());
+    },
+  );
 
   @override
-  Future<Result<Unit>> logout() async {
-    try {
+  TaskResult<Unit> logout() => TaskResult<Unit>.tryCatch(
+    () async {
       //TODO: add  service to logout
-      await Future<void>.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(Constant.shortDelay);
 
       //clear auth tokens from the local storage
       final List<Result<Unit>> deleteResults = await Future.wait(<Future<Result<Unit>>>[
-        _localStorageRepository.deleteAccessToken(),
-        _localStorageRepository.deleteRefreshToken(),
+        _localStorageRepository.deleteAccessToken().run(),
+        _localStorageRepository.deleteRefreshToken().run(),
       ]);
 
-      return _verifySaving(deleteResults);
-    } on Exception catch (error) {
-      _logger.e(error.toString());
-
-      return left(Failure.unexpected(error.toString()));
-    }
-  }
+      return _verifySaving(deleteResults).getOrElse((Failure failure) => throw failure);
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      if (error is Failure) return error;
+      return Failure.unexpected(error.toString());
+    },
+  );
 
   @override
-  Future<Result<Unit>> refreshToken() async {
-    try {
-      final Result<String?> possibleFailure = await _localStorageRepository.getRefreshToken();
-      return await possibleFailure.fold(left, (String? refreshToken) async {
-        if (refreshToken == null) return left(const Failure.deviceStorage('No refresh token found'));
+  TaskResult<Unit> refreshToken() => TaskResult<Unit>.tryCatch(
+    () async {
+      final Result<String?> possibleFailure = await _localStorageRepository.getRefreshToken().run();
+      return await possibleFailure.fold((Failure failure) => throw failure, (String? refreshToken) async {
+        if (refreshToken == null) throw const Failure.deviceStorage('No refresh token found');
 
         final Response<LoginResponseDTO> response = await _authService.refreshToken(
           RefreshTokenRequestDTO(refreshToken: refreshToken, expiresInMins: ChopperConfig.sessionTimeout).toJson(),
@@ -94,22 +93,23 @@ class AuthRepository implements IAuthRepository {
         if (statusCode.isSuccess && response.body != null) {
           // Save tokens to local storage
           final List<Result<Unit>> possibleFailures = await Future.wait(<Future<Result<Unit>>>[
-            _localStorageRepository.setAccessToken(response.body!.accessToken),
+            _localStorageRepository.setAccessToken(response.body!.accessToken).run(),
             if (response.body!.refreshToken != null)
-              _localStorageRepository.setRefreshToken(response.body!.refreshToken!),
+              _localStorageRepository.setRefreshToken(response.body!.refreshToken!).run(),
           ]);
 
-          return _verifySaving(possibleFailures);
+          return _verifySaving(possibleFailures).getOrElse((Failure failure) => throw failure);
         } else {
-          return _failureHandler.handleServerError<Unit>(statusCode, response.error);
+          throw Failure.server(statusCode, response.error.toString());
         }
       });
-    } on Exception catch (error) {
-      _logger.e(error.toString());
-
-      return left(Failure.unexpected(error.toString()));
-    }
-  }
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      if (error is Failure) return error;
+      return Failure.unexpected(error.toString());
+    },
+  );
 
   Result<Unit> _verifySaving(List<Result<Unit>> results) =>
       results.firstWhere((Result<Unit> result) => result.isLeft(), orElse: () => right(unit));

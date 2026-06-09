@@ -5,12 +5,12 @@ LCOV=C:\ProgramData\chocolatey\lib\lcov\tools\bin\lcov
 
 ## Note: In windows, recommended terminal is cmd 
 
-ensure_flutter_version: ## Ensures flutter version is 3.38.5
-	fvm install 3.38.5
-	fvm use 3.38.5
-	fvm global 3.38.5
+ensure_flutter_version: ## Ensures flutter version is 3.44.1
+	fvm install 3.44.1
+	fvm use 3.44.1
+	fvm global 3.44.1
 
-## Note: If you are using a specific flutter version, change '3.38.5' to the desired '{flutter version}' you want to use
+## Note: If you are using a specific flutter version, change '3.44.1' to the desired '{flutter version}' you want to use
 
 clean: ## Delete the build/ and .dart_tool/ directories
 	fvm flutter clean
@@ -25,7 +25,7 @@ pub_outdated: ## Check for outdated packages
 	fvm flutter pub outdated
 
 pub_upgrade: ## Upgrade the current package's dependencies to latest versions.
-	fvm flutter pub upgrade
+	fvm flutter pub upgrade --tighten
 
 pub_repair: ## Performs a clean reinstallation of all packages in your system cache
 	fvm flutter pub cache repair
@@ -62,10 +62,10 @@ native_splash: ## This command runs flutter_native_splash
 	fvm dart run flutter_native_splash:create
 
 lcov_gen: ## Generates lcov
-	fvm flutter test --coverage
+	fvm flutter test  --coverage --no-pub --test-randomize-ordering-seed random
 
 lcov_gen_ci: ## Generates lcov in CI environment
-	fvm flutter test --dart-define=CI=true --coverage
+	fvm flutter test --dart-define=CI=true --coverage --no-pub --test-randomize-ordering-seed random
 
 lcov_gen_unit: ## Generates lcov for unit tests only
 	fvm flutter test test/unit --coverage
@@ -112,8 +112,8 @@ update_android_project: ## Update the android project versions and dependencies
 delete_generated_files: ## Delete the generated files
 	sh scripts/delete_generated_files.sh	
 
-init_hooks:
-	git config core.hooksPath .githooks	
+pre_commit:
+	dart run dart_husky run pre-commit
 
 create_feature:
 	sh scripts/create_feature.sh
@@ -123,3 +123,5 @@ create_feature_tests:
 
 init_ios:
 	cd ios && bundle install && pod install --repo-update	
+
+

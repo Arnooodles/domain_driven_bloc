@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
-import 'package:{{project_name.snakeCase()}}/app/observers/go_route_observer.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/app_routes.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/route_guard.dart';
-import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/route_navigator_keys.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/route_refresh_listener.dart';
 
 abstract final class AppRouter {
   static final GoRouter router = GoRouter(
-    routes: AppRoutes.routes,
+    routes: $appRoutes,
     redirect: getIt<RouteGuard>().guard,
     refreshListenable: getIt<RouteRefreshListener>(),
-    initialLocation: RouteName.initial.path,
-    observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: RouteNavigatorKeys.debugLabel)],
+    initialLocation: const SplashRoute().location,
+    observers: <NavigatorObserver>[getIt<TalkerRouteObserver>()],
     navigatorKey: RouteNavigatorKeys.root,
   );
 }

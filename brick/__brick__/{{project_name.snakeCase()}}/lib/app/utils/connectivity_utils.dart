@@ -17,7 +17,7 @@ import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/connection_
 final class ConnectivityUtils {
   ConnectivityUtils() {
     _connectionSubscription = _connectivity.onConnectivityChanged
-        .debounceTime(const Duration(milliseconds: 300))
+        .debounceTime(Constant.debounceDelay)
         .listen(_checkInternetConnection);
     unawaited(_checkInternetConnection());
   }

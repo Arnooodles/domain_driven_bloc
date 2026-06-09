@@ -77,7 +77,7 @@ class App extends StatelessWidget {
             darkTheme: AppTheme.dark,
             themeMode: context.watch<ThemeCubit>().state,
             themeAnimationCurve: Curves.fastOutSlowIn,
-            themeAnimationDuration: const Duration(milliseconds: 500),
+            themeAnimationDuration: Constant.shortDelay,
             locale: context.watch<AppLocalizationCubit>().state.$meta.locale.flutterLocale,
             supportedLocales: AppLocaleUtils.supportedLocales,
             localizationsDelegates: Constant.localizationDelegates,

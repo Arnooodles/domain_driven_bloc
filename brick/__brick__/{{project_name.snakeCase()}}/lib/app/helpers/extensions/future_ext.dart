@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:logger/logger.dart';
+import 'package:talker/talker.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
 
 extension FutureExt<T> on Future<T> {
@@ -10,7 +10,7 @@ extension FutureExt<T> on Future<T> {
   /// Returns the original future for chaining.
   Future<T> logOnError() => catchError((Object error, StackTrace stackTrace) {
     if (kDebugMode) {
-      getIt<Logger>().e('Error: $error', stackTrace: stackTrace);
+      getIt<Talker>().handle(error, stackTrace);
     } else {
       //TODO: implement reportCrash crashlytics
     }

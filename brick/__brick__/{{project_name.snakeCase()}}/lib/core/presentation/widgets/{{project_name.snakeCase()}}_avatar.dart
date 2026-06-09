@@ -8,6 +8,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_sizes.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/wrappers/shimmer.dart';
 
 class {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar extends StatelessWidget {
   const {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar({
@@ -61,7 +62,7 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar extends StatelessWidg
                 height: size,
               ),
               errorWidget: (_, _, _) => _DefaultIcon(size: size),
-              placeholder: (_, _) => Skeletonizer(
+              placeholder: (_, _) => Shimmer(
                 enabled: isLoading,
                 child: _DefaultIcon(size: size),
               ),

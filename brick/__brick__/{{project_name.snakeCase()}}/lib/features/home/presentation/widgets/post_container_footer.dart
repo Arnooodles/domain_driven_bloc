@@ -15,38 +15,31 @@ class PostContainerFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     children: <Widget>[
-      _FooterItems(
-        leftIcon: Icons.arrow_upward_rounded,
-        value: post.upvotes.getValue() == 0 ? context.i18n.post.label.vote : post.upvotes.getValue().toString(),
-        rightIcon: Icons.arrow_downward_rounded,
-      ),
-      _FooterItems(leftIcon: Icons.chat_bubble_outline, value: post.comments.getValue().toString()),
+      _FooterItems(leftIcon: Icons.thumb_up_outlined, value: post.likes.getValue().toString()),
+      _FooterItems(leftIcon: Icons.thumb_down_outlined, value: post.dislikes.getValue().toString()),
+      _FooterItems(leftIcon: Icons.remove_red_eye_outlined, value: post.views.getValue().toString()),
     ],
   );
 }
 
 class _FooterItems extends StatelessWidget {
-  const _FooterItems({required this.leftIcon, required this.value, this.rightIcon});
+  const _FooterItems({required this.leftIcon, required this.value});
 
   final IconData leftIcon;
-  final IconData? rightIcon;
-
   final String value;
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: Paddings.horizontalXSmall,
+    padding: Paddings.horizontalSmall,
     decoration: const BoxDecoration(borderRadius: AppTheme.defaultBorderRadius),
-    margin: Paddings.horizontalXxSmall,
+    margin: Paddings.horizontalSmall,
     child: Row(
       children: <Widget>[
-        {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(leftIcon), size: (context.textTheme.bodySmall?.fontSize ?? 14) * 1.5),
+        {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(leftIcon), size: context.textTheme.bodyLarge?.fontSize ?? 14),
         Padding(
           padding: Paddings.allXSmall,
-          child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(text: value, style: context.textTheme.bodySmall),
+          child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(text: value, style: context.textTheme.bodyMedium),
         ),
-        if (rightIcon != null)
-          {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(rightIcon!), size: (context.textTheme.bodySmall?.fontSize ?? 14) * 1.5),
       ],
     ),
   );

@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:{{project_name.snakeCase()}}/app/generated/localization.g.dart';
-import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
+import 'package:{{project_name.snakeCase()}}/app/routes/app_routes.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/cubit/app_core/app_core_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/cubit/hidable/hidable_cubit.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_nav_bar.dart';
@@ -85,12 +85,12 @@ void main() {
           GoldenTestScenario(
             name: 'home tab is selected',
             constraints: const BoxConstraints(minWidth: 400),
-            child: buildNavBar(setUpRouter(RouteName.home.path, 0)),
+            child: buildNavBar(setUpRouter(const HomeRoute().location, 0)),
           ),
           GoldenTestScenario(
             name: 'profile tab is selected',
             constraints: const BoxConstraints(minWidth: 400),
-            child: buildNavBar(setUpRouter(RouteName.profile.path, 1)),
+            child: buildNavBar(setUpRouter(const ProfileRoute().location, 1)),
           ),
         ],
       ),

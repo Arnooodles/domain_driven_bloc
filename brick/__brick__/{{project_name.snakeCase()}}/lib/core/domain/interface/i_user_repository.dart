@@ -2,5 +2,5 @@ import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/user.dart';
 
 abstract interface class IUserRepository {
-  Future<Result<User>> get user;
+  TaskResult<User> get user;
 }

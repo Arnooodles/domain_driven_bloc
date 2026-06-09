@@ -16,6 +16,9 @@
   - [Running the App](#running-the-app)
     - [Android/iOS](#androidios)
     - [Web](#web)
+  - [Build \& Distribute](#build--distribute)
+    - [CI/CD (GitHub Actions)](#cicd-github-actions)
+    - [Local Build Script](#local-build-script)
   - [Code Quality \& Metrics](#code-quality--metrics)
     - [Install DCM](#install-dcm)
     - [Activate License](#activate-license)
@@ -73,6 +76,44 @@ flutter run --dart-define flavor=development --target lib/main.dart
 flutter run --dart-define flavor=staging --target lib/main.dart
 flutter run --dart-define flavor=production --target lib/main.dart
 ```
+
+---
+
+## Build & Distribute
+
+### CI/CD (GitHub Actions)
+
+This project includes pre-configured GitHub Actions workflows for build automation and deployment:
+- **Build & Distribute (`build.yaml`):** A manual release workflow (`workflow_dispatch`) that:
+  - Builds Android (APK/AAB) or iOS (IPA) for the selected flavor (`development`, `staging`, `production`).
+  - Automatically handles signing for iOS via `scripts/MQSwiftSign`.
+  - Deploys the built artifacts directly to **Firebase App Distribution** based on the environment secrets.
+
+### Local Build Script
+
+You can also build the application locally using the provided `./scripts/build.sh` script.
+
+#### Prerequisites (iOS only)
+Before building for iOS locally:
+- Make sure Xcode is installed and set up.
+- Provide the flavor-specific provisioning profiles and export options under `ios/ExportOptions/` and `ios/Provisionings/`.
+
+#### Running the script
+```sh
+# Show help and usage
+./scripts/build.sh --help
+
+# Build Android APK for staging
+./scripts/build.sh --platform android --flavor staging --type apk --build-number 42
+
+# Build Android App Bundle (AAB) for production
+./scripts/build.sh --platform android --flavor production --type appbundle --build-number 100
+
+# Build iOS IPA for staging
+./scripts/build.sh --platform ios --flavor staging --build-number 42
+```
+
+The output artifacts will be copied to the `outputs/` folder.
 
 ---
 

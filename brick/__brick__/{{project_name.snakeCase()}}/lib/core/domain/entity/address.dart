@@ -38,8 +38,8 @@ sealed class Address with _$Address {
     addPart(address?.getValue());
     addPart(state?.getValue());
     addPart(stateCode?.getValue());
-    addPart(country?.getValue());
     addPart(postalCode?.getValue());
+    addPart(country?.getValue());
     return buffer.isNotEmpty ? buffer.toString() : null;
   }
 }

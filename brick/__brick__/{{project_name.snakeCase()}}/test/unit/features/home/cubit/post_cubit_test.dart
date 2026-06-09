@@ -11,6 +11,15 @@ import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.da
 
 import '../../../../utils/generated_mocks.mocks.dart';
 
+PostDTO _makePostDTO(int id) => PostDTO(
+  uid: id,
+  title: 'Test Post Title $id',
+  body: 'Test body content',
+  tags: <String>['flutter', 'test'],
+  reactions: const PostReactionsDTO(likes: 10, dislikes: 1),
+  views: 100,
+);
+
 void main() {
   group(PostCubit, () {
     late MockIPostRepository postRepository;
@@ -22,22 +31,11 @@ void main() {
       postRepository = MockIPostRepository();
       failureHandler = MockFailureHandler();
       failure = const Failure.server(StatusCode.http500, 'INTERNAL SERVER ERROR');
-      posts = <Post>[
-        PostDTO(
-          uid: '1',
-          title: 'Test Post Title',
-          author: 'Test Author',
-          permalink: 'https://example.com/post/1',
-          createdUtc: DateTime.now(),
-        ).toDomain(),
-        PostDTO(
-          uid: '2',
-          title: 'Another Test Post',
-          author: 'Another Author',
-          permalink: 'https://example.com/post/2',
-          createdUtc: DateTime.now(),
-        ).toDomain(),
-      ];
+      posts = <Post>[_makePostDTO(1).toDomain(), _makePostDTO(2).toDomain()];
+
+      // Register dummy values to prevent Mockito's MissingDummyValueError under randomized ordering.
+      provideDummy(Result<List<Post>>.right(posts));
+      provideDummy(TaskEither<Failure, List<Post>>.right(posts));
     });
 
     tearDown(() {
@@ -49,91 +47,137 @@ void main() {
       blocTest<PostCubit, PostState>(
         'should emit success state with list of posts when API call succeeds',
         build: () {
-          provideDummy(Result<List<Post>>.right(posts));
-          when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.right(posts));
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenReturn(TaskEither<Failure, List<Post>>.right(posts));
 
           return PostCubit(postRepository, failureHandler);
         },
         act: (PostCubit cubit) => cubit.getPosts(),
-        expect: () => <PostState>[const PostState.loading(), PostState.onSuccess(posts)],
+        expect: () => <PostState>[const PostState.loading(), PostState.onSuccess(posts, hasMore: false)],
         verify: (_) {
-          verify(postRepository.getPosts()).called(1);
+          verify(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).called(1);
         },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should emit success with hasMore=true when posts.length equals limit',
+        build: () {
+          final List<Post> fullPage = List<Post>.generate(20, (int i) => _makePostDTO(i).toDomain());
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenReturn(TaskEither<Failure, List<Post>>.right(fullPage));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) => cubit.getPosts(),
+        expect: () => <dynamic>[
+          isA<PostState>().having(
+            (PostState s) => s.maybeMap(loading: (_) => true, orElse: () => false),
+            'isLoading',
+            true,
+          ),
+          isA<PostState>().having(
+            (PostState s) => s.maybeWhen(onSuccess: (_, bool hasMore) => hasMore, orElse: () => false),
+            'hasMore',
+            true,
+          ),
+        ],
       );
 
       blocTest<PostCubit, PostState>(
         'should emit failure state when API call fails',
         build: () {
-          provideDummy(Result<List<Post>>.left(failure));
-          when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.left(failure));
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenReturn(TaskEither<Failure, List<Post>>.left(failure));
 
           return PostCubit(postRepository, failureHandler);
         },
         act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading()],
         verify: (_) {
-          verify(postRepository.getPosts()).called(1);
+          verify(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).called(1);
         },
       );
 
       blocTest<PostCubit, PostState>(
         'should emit failure state when unexpected error occurs',
         build: () {
-          provideDummy(Result<List<Post>>.left(failure));
-          when(postRepository.getPosts()).thenThrow(Exception('Unexpected error'));
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenThrow(Exception('Unexpected error'));
+          when(failureHandler.handleException(any, any)).thenReturn(null);
 
           return PostCubit(postRepository, failureHandler);
         },
         act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading()],
         verify: (_) {
-          verify(postRepository.getPosts()).called(1);
+          verify(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).called(1);
+          verify(failureHandler.handleException(any, any)).called(1);
         },
       );
 
       blocTest<PostCubit, PostState>(
         'should handle network timeout error',
         build: () {
-          when(postRepository.getPosts()).thenThrow(Exception('Connection timeout'));
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenThrow(Exception('Connection timeout'));
+          when(failureHandler.handleException(any, any)).thenReturn(null);
 
           return PostCubit(postRepository, failureHandler);
         },
         act: (PostCubit cubit) => cubit.getPosts(),
         expect: () => <PostState>[const PostState.loading()],
         verify: (_) {
-          verify(postRepository.getPosts()).called(1);
-        },
-      );
-
-      blocTest<PostCubit, PostState>(
-        'should handle authentication failure',
-        build: () {
-          const Failure authFailure = Failure.authentication('Authentication required');
-          provideDummy(Result<List<Post>>.left(authFailure));
-          when(postRepository.getPosts()).thenAnswer((_) async => left(authFailure));
-
-          return PostCubit(postRepository, failureHandler);
-        },
-        act: (PostCubit cubit) => cubit.getPosts(),
-        expect: () => <PostState>[const PostState.loading()],
-        verify: (_) {
-          verify(postRepository.getPosts()).called(1);
-        },
-      );
-
-      blocTest<PostCubit, PostState>(
-        'should handle server error with different status codes',
-        build: () {
-          const Failure serverFailure = Failure.server(StatusCode.http404, 'Posts not found');
-          provideDummy(Result<List<Post>>.left(serverFailure));
-          when(postRepository.getPosts()).thenAnswer((_) async => left(serverFailure));
-
-          return PostCubit(postRepository, failureHandler);
-        },
-        act: (PostCubit cubit) => cubit.getPosts(),
-        expect: () => <PostState>[const PostState.loading()],
-        verify: (_) {
-          verify(postRepository.getPosts()).called(1);
+          verify(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).called(1);
+          verify(failureHandler.handleException(any, any)).called(1);
         },
       );
 
@@ -141,15 +185,134 @@ void main() {
         'should handle empty posts list',
         build: () {
           final List<Post> emptyPosts = <Post>[];
-          provideDummy(Result<List<Post>>.right(emptyPosts));
-          when(postRepository.getPosts()).thenAnswer((_) async => Result<List<Post>>.right(emptyPosts));
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenReturn(TaskEither<Failure, List<Post>>.right(emptyPosts));
 
           return PostCubit(postRepository, failureHandler);
         },
         act: (PostCubit cubit) => cubit.getPosts(),
-        expect: () => <PostState>[const PostState.loading(), const PostState.onSuccess(<Post>[])],
+        expect: () => <PostState>[const PostState.loading(), const PostState.onSuccess(<Post>[], hasMore: false)],
         verify: (_) {
-          verify(postRepository.getPosts()).called(1);
+          verify(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).called(1);
+        },
+      );
+    });
+
+    group('loadMorePosts', () {
+      blocTest<PostCubit, PostState>(
+        'should append new posts to existing list',
+        build: () {
+          // First page returns 20 posts (full page) → hasMore=true
+          final List<Post> page1 = List<Post>.generate(20, (int i) => _makePostDTO(i).toDomain());
+          final List<Post> page2 = <Post>[_makePostDTO(20).toDomain()];
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenReturn(TaskEither<Failure, List<Post>>.right(page1));
+          when(
+            postRepository.getPosts(skip: 20, limit: anyNamed('limit'), forceRefresh: anyNamed('forceRefresh')),
+          ).thenReturn(TaskEither<Failure, List<Post>>.right(page2));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        act: (PostCubit cubit) async {
+          await cubit.getPosts();
+          await cubit.loadMorePosts();
+        },
+        skip: 2,
+        expect: () => <dynamic>[
+          isA<PostState>().having(
+            (PostState s) => s.maybeMap(loadingMore: (_) => true, orElse: () => false),
+            'isLoadingMore',
+            true,
+          ),
+          isA<PostState>().having(
+            (PostState s) => s.maybeWhen(onSuccess: (List<Post> posts, _) => posts.length, orElse: () => 0),
+            'totalPosts',
+            21,
+          ),
+        ],
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should not load more when hasMore is false',
+        build: () => PostCubit(postRepository, failureHandler),
+        seed: () => PostState.onSuccess(posts, hasMore: false),
+        act: (PostCubit cubit) => cubit.loadMorePosts(),
+        expect: () => <PostState>[],
+        verify: (_) {
+          verifyNever(postRepository.getPosts(skip: anyNamed('skip'), limit: anyNamed('limit')));
+        },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should emit loadingMore and then restore onSuccess state when possibleFailure returns a Failure on loadMorePosts',
+        build: () {
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenReturn(TaskEither<Failure, List<Post>>.left(failure));
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        seed: () => PostState.onSuccess(posts, hasMore: true),
+        act: (PostCubit cubit) => cubit.loadMorePosts(),
+        expect: () => <PostState>[PostState.loadingMore(posts), PostState.onSuccess(posts, hasMore: true)],
+        verify: (_) {
+          verify(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).called(1);
+          verify(failureHandler.handleFailure(failure)).called(1);
+        },
+      );
+
+      blocTest<PostCubit, PostState>(
+        'should emit loadingMore and call failureHandler when unexpected error occurs on loadMorePosts',
+        build: () {
+          when(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).thenThrow(Exception('Unexpected error'));
+          when(failureHandler.handleException(any, any)).thenReturn(null);
+
+          return PostCubit(postRepository, failureHandler);
+        },
+        seed: () => PostState.onSuccess(posts, hasMore: true),
+        act: (PostCubit cubit) => cubit.loadMorePosts(),
+        expect: () => <PostState>[PostState.loadingMore(posts)],
+        verify: (_) {
+          verify(
+            postRepository.getPosts(
+              skip: anyNamed('skip'),
+              limit: anyNamed('limit'),
+              forceRefresh: anyNamed('forceRefresh'),
+            ),
+          ).called(1);
+          verify(failureHandler.handleException(any, any)).called(1);
         },
       );
     });

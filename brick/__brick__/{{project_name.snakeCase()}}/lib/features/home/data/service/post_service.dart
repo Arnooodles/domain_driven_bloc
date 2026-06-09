@@ -1,12 +1,12 @@
 import 'package:chopper/chopper.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/data/dto/reddit_post.dto.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post_list.dto.dart';
 
 part 'post_service.chopper.dart';
 
-@ChopperApi(baseUrl: 'https://reddit.com/r')
+@ChopperApi()
 abstract interface class PostService extends ChopperService {
-  @GET(path: '/FlutterDev.json')
-  Future<Response<RedditPostDTO>> getPosts();
+  @GET(path: '/posts')
+  Future<Response<PostListDTO>> getPosts({@Query('limit') int limit = 20, @Query('skip') int skip = 0});
 
   static PostService create() => _$PostService();
 }

@@ -1,57 +1,86 @@
-import 'dart:developer';
-
 import 'package:chopper/chopper.dart' as chopper;
+import 'package:dartx/dartx.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
+import 'package:talker/talker.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/fpdart_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/int_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/status_code_ext.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/mixins/failure_handler.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/status_code.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/failure.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/typedef.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post.dto.dart';
-import 'package:{{project_name.snakeCase()}}/features/home/data/dto/reddit_post.dto.dart';
+import 'package:{{project_name.snakeCase()}}/features/home/data/dto/post_list.dto.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/data/service/post_service.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/interface/i_post_repository.dart';
 
 @LazySingleton(as: IPostRepository)
 class PostRepository implements IPostRepository {
-  const PostRepository(this._postService);
+  PostRepository(this._postService, this._talker);
 
   final PostService _postService;
+  final Talker _talker;
 
-  FailureHandler get _failureHandler => getIt<FailureHandler>();
+  List<Post>? _cachedPosts;
 
   @override
-  Future<Result<List<Post>>> getPosts() async {
-    try {
-      final chopper.Response<RedditPostDTO> response = await _postService.getPosts();
+  TaskResult<List<Post>> getPosts({
+    int skip = 0,
+    int limit = Constant.defaultPaginationLimit,
+    bool forceRefresh = false,
+  }) => TaskResult<List<Post>>.tryCatch(
+    () async {
+      if (!forceRefresh && skip == 0 && _cachedPosts != null && _cachedPosts!.isNotEmpty) {
+        return _cachedPosts!;
+      }
+
+      final chopper.Response<PostListDTO> response;
+      try {
+        response = await _postService.getPosts(skip: skip, limit: limit);
+      } catch (error, stackTrace) {
+        if (skip == 0 && _cachedPosts != null && _cachedPosts!.isNotEmpty) {
+          _talker.handle(error, stackTrace);
+          return _cachedPosts!;
+        }
+        rethrow;
+      }
 
       final StatusCode statusCode = response.statusCode.statusCode;
 
-      return statusCode.isSuccess && response.body != null && response.body!.data.children.isNotEmpty
-          ? _validatePostData(response.body!.data.children.map((RedditPostDataChild value) => value.data).toList())
-          : _failureHandler.handleServerError<List<Post>>(statusCode, response.error.toString());
-    } on Exception catch (error) {
-      log(error.toString());
+      if (statusCode.isSuccess && response.body != null && response.body!.posts.isNotEmpty) {
+        final Result<List<Post>> validatedPosts = _validatePostData(response.body!.posts);
+        if (skip == 0 && validatedPosts.isRight()) {
+          _cachedPosts = validatedPosts.getOrElse((Failure _) => <Post>[]);
+        }
+        return validatedPosts.getOrElse((Failure failure) => throw failure);
+      } else {
+        return _getCachedPostsOrFailure(
+          statusCode,
+          response.error.toString(),
+          skip,
+        ).getOrElse((Failure failure) => throw failure);
+      }
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      if (error is Failure) return error;
+      return Failure.unexpected(error.toString());
+    },
+  );
 
-      return left(Failure.unexpected(error.toString()));
+  Result<List<Post>> _getCachedPostsOrFailure(StatusCode statusCode, String errorMessage, int skip) {
+    if (skip == 0 && _cachedPosts != null && _cachedPosts!.isNotEmpty) {
+      return right(_cachedPosts!);
     }
+    return left(Failure.server(statusCode, errorMessage));
   }
 
   Result<List<Post>> _validatePostData(List<PostDTO> postDTOs) {
     final List<Post> posts = postDTOs.map((PostDTO postDTO) => postDTO.toDomain()).toList();
-    // check if the post data does not have invalid values(if list is empty
-    // then there are no invalid posts)
-    final bool isPostsValid = posts.where((Post post) => post.validate.isSome()).toList().isEmpty;
+    final Post? invalid = posts.firstOrNullWhere((Post p) => p.validate.isSome());
 
-    return isPostsValid
-        ? right(posts)
-        : left(
-            posts.firstWhere((Post post) => post.validate.isSome()).validate.asSome(),
-          ); // return the first invalid post
+    return invalid == null ? right(posts) : left(invalid.validate.asSome());
   }
 }

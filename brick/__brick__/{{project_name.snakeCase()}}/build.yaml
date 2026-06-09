@@ -40,11 +40,11 @@ targets:
       mockito|mockBuilder:
         generate_for:
           - test/utils/generated_mocks.dart
-      flutter_gen:
+      flutter_gen_runner:
         options:
+          output: lib/app/generated/
           integrations:
             flutter_svg: true
-          output: lib/app/generated/
           line_length: 120
       slang_build_runner:
         options:
@@ -67,3 +67,6 @@ targets:
           - lib/app/config/app_config.dart
         options:
           override: true
+      go_router_builder:
+        generate_for:
+          - lib/app/routes/app_routes.dart
