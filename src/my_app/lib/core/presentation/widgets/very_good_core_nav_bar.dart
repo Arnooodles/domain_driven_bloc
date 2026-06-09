@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
+import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
@@ -19,7 +20,7 @@ class VeryGoodCoreNavBar extends HookWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => ConstrainedBox(
-    constraints: const BoxConstraints(maxWidth: 800),
+    constraints: const BoxConstraints(maxWidth: Constant.tabletBreakpoint),
     child: Hidable(
       child: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
@@ -42,7 +43,7 @@ class VeryGoodCoreNavBar extends HookWidget implements PreferredSizeWidget {
 
   void _onItemTapped(BuildContext context, int index) {
     if (index != navigationShell.currentIndex) {
-      navigationShell.goBranch(index, initialLocation: index == navigationShell.currentIndex);
+      navigationShell.goBranch(index);
     }
   }
 }

@@ -9,6 +9,8 @@ import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dar
 class EmptyPost extends StatelessWidget {
   const EmptyPost({super.key});
 
+  static const double _iconSize = 200;
+
   @override
   Widget build(BuildContext context) => CustomScrollView(
     slivers: <Widget>[
@@ -20,7 +22,7 @@ class EmptyPost extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                VeryGoodCoreIcon(icon: right(Icons.list_alt), size: 200),
+                VeryGoodCoreIcon(icon: right(Icons.list_alt), size: _iconSize),
                 Padding(
                   padding: const EdgeInsets.only(top: AppSizes.small, bottom: AppSizes.xSmall),
                   child: VeryGoodCoreText(

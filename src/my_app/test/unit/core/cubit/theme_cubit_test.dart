@@ -6,7 +6,6 @@ import 'package:mockito/mockito.dart';
 import 'package:trust_but_verify/trust_but_verify.dart';
 import 'package:very_good_core/core/domain/cubit/theme/theme_cubit.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
-import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 
 import '../../../utils/generated_mocks.mocks.dart';
@@ -32,10 +31,8 @@ void main() {
       blocTest<ThemeCubit, ThemeMode>(
         'should emit dark theme mode when dark mode is enabled',
         setUp: () {
-          provideDummy(Result<bool?>.right(true));
-          when(
-            localStorageRepository.getIsDarkMode(),
-          ).thenAnswer((_) async => Future<Result<bool?>>.value(right(true)));
+          provideDummy(TaskEither<Failure, bool?>.right(true));
+          when(localStorageRepository.getIsDarkMode()).thenReturn(TaskEither<Failure, bool?>.right(true));
         },
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         act: (ThemeCubit cubit) => cubit.initialize(),
@@ -48,10 +45,8 @@ void main() {
       blocTest<ThemeCubit, ThemeMode>(
         'should emit light theme mode when dark mode is disabled',
         setUp: () {
-          provideDummy(Result<bool?>.right(false));
-          when(
-            localStorageRepository.getIsDarkMode(),
-          ).thenAnswer((_) async => Future<Result<bool?>>.value(right(false)));
+          provideDummy(TaskEither<Failure, bool?>.right(false));
+          when(localStorageRepository.getIsDarkMode()).thenReturn(TaskEither<Failure, bool?>.right(false));
         },
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         act: (ThemeCubit cubit) => cubit.initialize(),
@@ -65,10 +60,8 @@ void main() {
         'should handle device storage failure during initialize',
         setUp: () {
           const Failure failure = Failure.deviceStorage('Storage access denied');
-          provideDummy(Result<bool?>.left(failure));
-          when(
-            localStorageRepository.getIsDarkMode(),
-          ).thenAnswer((_) async => Future<Result<bool?>>.value(left(failure)));
+          provideDummy(TaskEither<Failure, bool?>.left(failure));
+          when(localStorageRepository.getIsDarkMode()).thenReturn(TaskEither<Failure, bool?>.left(failure));
           when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
@@ -84,11 +77,10 @@ void main() {
         'should handle unexpected failure during initialize',
         setUp: () {
           const Failure failure = Failure.unexpected('Unknown error occurred');
-          provideDummy(Result<bool?>.left(failure));
-          when(
-            localStorageRepository.getIsDarkMode(),
-          ).thenAnswer((_) async => Future<Result<bool?>>.value(left(failure)));
+          provideDummy(TaskEither<Failure, bool?>.left(failure));
+          when(localStorageRepository.getIsDarkMode()).thenReturn(TaskEither<Failure, bool?>.left(failure));
           when(failureHandler.handleFailure(any)).thenReturn(null);
+          when(failureHandler.handleException(any, any)).thenReturn(null);
         },
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         act: (ThemeCubit cubit) => cubit.initialize(),
@@ -103,7 +95,7 @@ void main() {
         'should handle thrown exception during initialize',
         setUp: () {
           const Failure failure = Failure.unexpected('Exception: Unexpected storage crash');
-          provideDummy(Result<bool?>.left(failure));
+          provideDummy(TaskEither<Failure, bool?>.left(failure));
           when(localStorageRepository.getIsDarkMode()).thenThrow(Exception('Unexpected storage crash'));
           when(failureHandler.handleFailure(any)).thenReturn(null);
         },
@@ -112,19 +104,15 @@ void main() {
         expect: () => <ThemeMode>[],
         verify: (_) {
           verify(localStorageRepository.getIsDarkMode()).called(1);
-          verify(
-            failureHandler.handleFailure(const Failure.unexpected('Exception: Unexpected storage crash')),
-          ).called(1);
+          verify(failureHandler.handleException(any, any)).called(1);
         },
       );
 
       blocTest<ThemeCubit, ThemeMode>(
         'should handle null value during initialize',
         setUp: () {
-          provideDummy(Result<bool?>.right(null));
-          when(
-            localStorageRepository.getIsDarkMode(),
-          ).thenAnswer((_) async => Future<Result<bool?>>.value(right(null)));
+          provideDummy(TaskEither<Failure, bool?>.right(null));
+          when(localStorageRepository.getIsDarkMode()).thenReturn(TaskEither<Failure, bool?>.right(null));
         },
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         act: (ThemeCubit cubit) => cubit.initialize(),
@@ -140,10 +128,10 @@ void main() {
         'should switch to dark theme when current brightness is light',
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         setUp: () {
-          provideDummy(Result<Unit>.right(unit));
+          provideDummy(TaskEither<Failure, Unit>.right(unit));
           when(
             localStorageRepository.setIsDarkMode(isDarkMode: false),
-          ).thenAnswer((_) async => Future<Result<Unit>>.value(right(unit)));
+          ).thenReturn(TaskEither<Failure, Unit>.right(unit));
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
         expect: () => <ThemeMode>[ThemeMode.dark],
@@ -156,10 +144,10 @@ void main() {
         'should switch to light theme when current brightness is dark',
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         setUp: () {
-          provideDummy(Result<Unit>.right(unit));
+          provideDummy(TaskEither<Failure, Unit>.right(unit));
           when(
             localStorageRepository.setIsDarkMode(isDarkMode: true),
-          ).thenAnswer((_) async => Future<Result<Unit>>.value(right(unit)));
+          ).thenReturn(TaskEither<Failure, Unit>.right(unit));
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.dark),
         expect: () => <ThemeMode>[ThemeMode.light],
@@ -173,10 +161,10 @@ void main() {
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         setUp: () {
           const Failure failure = Failure.deviceStorage('Failed to save theme preference');
-          provideDummy(Result<Unit>.left(failure));
+          provideDummy(TaskEither<Failure, Unit>.left(failure));
           when(
             localStorageRepository.setIsDarkMode(isDarkMode: false),
-          ).thenAnswer((_) async => Future<Result<Unit>>.value(left(failure)));
+          ).thenReturn(TaskEither<Failure, Unit>.left(failure));
           when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
@@ -193,11 +181,12 @@ void main() {
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         setUp: () {
           const Failure failure = Failure.unexpected('Network error during theme switch');
-          provideDummy(Result<Unit>.left(failure));
+          provideDummy(TaskEither<Failure, Unit>.left(failure));
           when(
             localStorageRepository.setIsDarkMode(isDarkMode: true),
-          ).thenAnswer((_) async => Future<Result<Unit>>.value(left(failure)));
+          ).thenReturn(TaskEither<Failure, Unit>.left(failure));
           when(failureHandler.handleFailure(any)).thenReturn(null);
+          when(failureHandler.handleException(any, any)).thenReturn(null);
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.dark),
         expect: () => <ThemeMode>[],
@@ -211,10 +200,10 @@ void main() {
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         setUp: () {
           const Failure failure = Failure.validation(EmptyStringValidationError('theme', 'Invalid theme value'), '');
-          provideDummy(Result<Unit>.left(failure));
+          provideDummy(TaskEither<Failure, Unit>.left(failure));
           when(
             localStorageRepository.setIsDarkMode(isDarkMode: false),
-          ).thenAnswer((_) async => Future<Result<Unit>>.value(left(failure)));
+          ).thenReturn(TaskEither<Failure, Unit>.left(failure));
           when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
@@ -232,16 +221,14 @@ void main() {
         build: () => themeCubit = ThemeCubit(localStorageRepository, failureHandler),
         setUp: () {
           const Failure failure = Failure.unexpected('Exception: Unexpected network error');
-          provideDummy(Result<Unit>.left(failure));
+          provideDummy(TaskEither<Failure, Unit>.left(failure));
           when(localStorageRepository.setIsDarkMode(isDarkMode: true)).thenThrow(Exception('Unexpected network error'));
           when(failureHandler.handleFailure(any)).thenReturn(null);
         },
         act: (ThemeCubit cubit) => cubit.switchTheme(Brightness.light),
         expect: () => <ThemeMode>[],
         verify: (_) {
-          verify(
-            failureHandler.handleFailure(const Failure.unexpected('Exception: Unexpected network error')),
-          ).called(1);
+          verify(failureHandler.handleException(any, any)).called(1);
         },
       );
     });

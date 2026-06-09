@@ -4,9 +4,9 @@
 # To use `sed` on Windows install `sed for Windows` from https://gnuwin32.sourceforge.net/packages/sed.htm
 
 # See: https://gradle.org/releases/
-GRADLE_WRAPPER="9.0.0"
+GRADLE_WRAPPER="9.1.0"
 # Build errors often show the required Java version
-JAVA_VERSION="21"
+JAVA_VERSION="18"
 # The minimum Android SDK version
 MIN_SDK_VERSION="26"
 # Google Play Stores requires a minimum target SDK version
@@ -17,7 +17,7 @@ COMPILE_SDK="36"
 ANDROID_GRADLE_PLUGIN="8.13.0"
 # The minimum Kotlin version
 # See: https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
-KOTLIN_VERSION="2.2.21"
+KOTLIN_VERSION="2.3.20"
 # See: https://developer.android.com/ndk/downloads
 NDK_VERSION="29.0.14206865"
 
@@ -107,7 +107,7 @@ fi
 if [ -n "$NDK_VERSION" ]; then
   echo "Updating ndkVersion to $NDK_VERSION"
   if [[ "$PLATFORM" == "windows" ]]; then
-    sed -i "s/ndkVersion = \".*\"/ndkVersion = \"${NDK_VERSION}\"/" app/build.gradle.kts
+    sed -i "s/ndkVersion =  \".*\"/ndkVersion = \"${NDK_VERSION}\"/" app/build.gradle.kts
   else  
     sed -i '' "s/ndkVersion = \".*\"/ndkVersion = \"${NDK_VERSION}\"/" app/build.gradle.kts
   fi

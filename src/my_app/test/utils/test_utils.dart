@@ -86,6 +86,7 @@ IosDeviceInfo mockIosDeviceInfo({String? phoneModel, String? os, String? version
       'modelName': 'modelName',
       'localizedModel': 'localizedModel',
       'isiOSAppOnMac': false,
+      'isiOSAppOnVision': false,
       'isPhysicalDevice': false,
       'physicalRamSize': 1,
       'availableRamSize': 1,
@@ -102,7 +103,7 @@ IosDeviceInfo mockIosDeviceInfo({String? phoneModel, String? os, String? version
 
 User get mockUser => const UserDTO(
   uid: 1,
-  email: 'exampe@email.com',
+  email: 'example@email.com',
   username: 'username',
   firstName: 'test',
   lastName: 'test',
@@ -120,18 +121,14 @@ final Map<AppScrollController, ScrollController> mockScrollControllers = <AppScr
   AppScrollController.profile: ScrollController(),
 };
 
-Post get mockPost => PostDTO(
-  uid: '1',
+Post get mockPost => const PostDTO(
+  uid: 1,
   title: 'Turpis in eu mi bibendum neque egestas congue.',
-  author: 'Tempus egestas',
-  permalink: '/r/FlutterDev/comments/123456/',
-  selftext:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  createdUtc: DateTime.fromMillisecondsSinceEpoch(1672689610000),
-  linkFlairBackgroundColor: '#7b35f0',
-  linkFlairText: 'Lorem',
-  upvotes: 10,
-  comments: 2,
+  body:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  tags: <String>['flutter', 'dart', 'mobile'],
+  reactions: PostReactionsDTO(likes: 10, dislikes: 2),
+  views: 1024,
 ).toDomain();
 
 chopper.Response<T> generateMockResponse<T>(T body, int statusCode) =>

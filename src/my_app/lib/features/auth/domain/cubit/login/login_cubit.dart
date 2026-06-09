@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_presentation/bloc_presentation.dart';
@@ -28,45 +27,44 @@ class LoginCubit extends Cubit<LoginState> with BlocPresentationMixin<LoginState
   final FailureHandler _failureHandler;
 
   Future<void> initialize() async {
-    try {
-      final Result<String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername();
-      possibleFailure.fold(_failureHandler.handleFailure, (String? username) {
-        safeEmit(state.copyWith(username: username));
-      });
-    } on Exception catch (error) {
-      _failureHandler.handleFailure(Failure.unexpected(error.toString()));
-    } finally {
-      safeEmit(state.copyWith(isLoading: false));
-    }
+    await safeRun(
+      action: () async {
+        final Result<String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername().run();
+        possibleFailure.fold(_failureHandler.handleFailure, (String? username) {
+          safeEmit(state.copyWith(username: username));
+        });
+      },
+      onException: _failureHandler.handleException,
+      onLoading: (bool isLoading) => safeEmit(state.copyWith(isLoading: isLoading)),
+    );
   }
 
   Future<void> login(String username, String password) async {
-    try {
-      safeEmit(state.copyWith(isLoading: true, username: username));
+    await safeRun(
+      action: () async {
+        safeEmit(state.copyWith(username: username));
 
-      final Password validPassword = Password(password);
-      final ValueString validUsername = ValueString(username, fieldName: 'username');
+        final Password validPassword = Password(password);
+        final ValueString validUsername = ValueString(username, fieldName: 'username');
 
-      if (validUsername.isValid && validPassword.isValid) {
-        final Result<Unit> possibleFailure = await _authRepository.login(
-          LoginRequest(username: validUsername, password: validPassword),
-        );
+        if (validUsername.isValid && validPassword.isValid) {
+          final Result<Unit> possibleFailure = await _authRepository
+              .login(LoginRequest(username: validUsername, password: validPassword))
+              .run();
 
-        possibleFailure.fold(_emitFailure, (_) {
-          safeEmit(state.copyWith(isLoading: false));
-          emitPresentation(const LoginPresentationEvent.onSuccess());
-        });
-      } else {
-        _emitFailure(!validUsername.isValid ? validUsername.value.asLeft() : validPassword.value.asLeft());
-      }
-    } on Exception catch (error) {
-      log(error.toString());
-      _emitFailure(Failure.unexpected(error.toString()));
-    }
+          possibleFailure.fold(_emitFailure, (_) {
+            safeEmitPresentation(const LoginPresentationEvent.onSuccess());
+          });
+        } else {
+          _emitFailure(!validUsername.isValid ? validUsername.value.asLeft() : validPassword.value.asLeft());
+        }
+      },
+      onException: _failureHandler.handleException,
+      onLoading: (bool isLoading) => safeEmit(state.copyWith(isLoading: isLoading)),
+    );
   }
 
   void _emitFailure(Failure failure) {
-    safeEmit(state.copyWith(isLoading: false));
     _failureHandler.handleFailure(failure);
   }
 

@@ -4,6 +4,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:toastification/toastification.dart';
+import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
 import 'package:very_good_core/app/themes/app_colors.dart';
@@ -64,7 +65,7 @@ final class DialogUtils {
       padding: const EdgeInsets.only(left: AppSizes.small, right: AppSizes.xSmall),
       child: icon ?? VeryGoodCoreIcon(icon: right(Icons.error_outline)),
     ),
-    autoCloseDuration: isDismissable ? duration ?? const Duration(seconds: 5) : null,
+    autoCloseDuration: isDismissable ? duration ?? Constant.longDelay : null,
     style: ToastificationStyle.flatColored,
     type: ToastificationType.custom('app_error', _getErrorColor(), Icons.error_outline),
     alignment: alignment,

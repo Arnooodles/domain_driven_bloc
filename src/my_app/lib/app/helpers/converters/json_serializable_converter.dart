@@ -27,7 +27,7 @@ final class JsonSerializableConverter extends JsonConverter {
   }
 
   List<T> _decodeList<T>(Iterable<dynamic> values) =>
-      values.where((dynamic v) => v != null).map<T>((dynamic v) => _decode<T>(v)).toList();
+      values.where((dynamic value) => value != null).map<T>((dynamic value) => _decode<T>(value)).toList();
 
   dynamic _decode<T>(dynamic entity) {
     if (entity is Iterable) return _decodeList<T>(entity as List<dynamic>);
@@ -61,8 +61,8 @@ final class JsonSerializableConverter extends JsonConverter {
   FutureOr<dynamic> tryDecodeJson(String data) async {
     try {
       return compute(jsonDecode, data);
-    } on Exception catch (error) {
-      chopperLogger.warning(error);
+    } on Exception catch (error, stackTrace) {
+      chopperLogger.warning(error, stackTrace);
       rethrow;
     }
   }

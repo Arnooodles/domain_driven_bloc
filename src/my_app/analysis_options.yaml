@@ -43,6 +43,7 @@ linter:
     one_member_abstracts: false
     omit_local_variable_types: false
     avoid_classes_with_only_static_members: false
+    avoid_types_on_closure_parameters: false
     lines_longer_than_80_chars: false
     no_default_cases: false
     document_ignores: false

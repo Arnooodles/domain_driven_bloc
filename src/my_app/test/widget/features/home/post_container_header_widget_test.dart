@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
-import 'package:very_good_core/app/themes/app_colors.dart';
-import 'package:very_good_core/core/domain/entity/value_object.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_header.dart';
 
 import '../../../utils/generated_mocks.mocks.dart';
@@ -35,23 +33,7 @@ void main() {
             name: 'default',
             child: MockLocalization(
               appLocalizationCubit: appLocalizationCubit,
-              child: PostContainerHeader(post: mockPost),
-            ),
-          ),
-          GoldenTestScenario(
-            name: 'default with transparent link flair',
-            child: MockLocalization(
-              appLocalizationCubit: appLocalizationCubit,
-              child: PostContainerHeader(post: mockPost.copyWith(linkFlairBackgroundColor: AppColors.transparent)),
-            ),
-          ),
-          GoldenTestScenario(
-            name: 'without tag',
-            child: MockLocalization(
-              appLocalizationCubit: appLocalizationCubit,
-              child: PostContainerHeader(
-                post: mockPost.copyWith(linkFlairText: ValueString('linkFlairText', fieldName: 'linkFlairText')),
-              ),
+              child: PostContainerHeader(title: mockPost.title.getValue()),
             ),
           ),
         ],

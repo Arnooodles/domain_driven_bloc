@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/app/generated/localization.g.dart';
-import 'package:very_good_core/core/domain/entity/value_object.dart';
+
 import 'package:very_good_core/features/home/presentation/widgets/post_container.dart';
 
 import '../../../utils/generated_mocks.mocks.dart';
@@ -45,17 +45,12 @@ void main() {
             ),
           ),
           GoldenTestDeviceScenario(
-            name: 'default',
+            name: 'without tags',
             builder: () => MockLocalization(
               appLocalizationCubit: appLocalizationCubit,
               child: Column(
                 children: <Widget>[
-                  PostContainer(
-                    post: mockPost.copyWith(
-                      urlOverriddenByDest: Url('https://www.google.com/'),
-                      selftext: ValueString('post', fieldName: 'selfText'),
-                    ),
-                  ),
+                  PostContainer(post: mockPost.copyWith(tags: <String>[])),
                   const Spacer(),
                 ],
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/core/domain/cubit/hidable/hidable_cubit.dart';
 
 class Hidable extends StatelessWidget {
@@ -10,7 +11,7 @@ class Hidable extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AnimatedAlign(
     alignment: Alignment.topCenter,
-    duration: const Duration(milliseconds: 500),
+    duration: Constant.shortDelay,
     heightFactor: context.watch<HidableCubit>().state ? 1.0 : 0.0,
     child: child,
   );

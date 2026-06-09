@@ -1,12 +1,10 @@
-import 'package:dartx/dartx.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
-import 'package:very_good_core/app/routes/route_name.dart';
+import 'package:very_good_core/app/routes/app_routes.dart';
+import 'package:very_good_core/app/themes/app_sizes.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
-import 'package:very_good_core/app/utils/url_launcher_utils.dart';
-import 'package:very_good_core/core/domain/entity/enum/text_type.dart';
+import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_text.dart';
 import 'package:very_good_core/features/home/domain/entity/post.dart';
 import 'package:very_good_core/features/home/presentation/widgets/post_container_footer.dart';
@@ -15,15 +13,15 @@ import 'package:very_good_core/features/home/presentation/widgets/post_container
 class PostContainer extends StatelessWidget {
   const PostContainer({required this.post, super.key});
 
-  final Post post;
+  static const int _maxBodyLines = 5;
 
-  String _generateStyledLinkText(String url) => '<link href="$url">$url</link>';
+  final Post post;
 
   @override
   Widget build(BuildContext context) => Padding(
     padding: Paddings.horizontalSmall,
     child: GestureDetector(
-      onTap: () => launchPostDetails(context),
+      onTap: () => _launchPostDetails(context),
       child: Card(
         child: Padding(
           padding: Paddings.allXSmall,
@@ -31,30 +29,39 @@ class PostContainer extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              PostContainerHeader(post: post),
-              if (post.urlOverriddenByDest != null)
+              PostContainerHeader(title: post.title.getValue()),
+              Padding(
+                padding: Paddings.horizontalSmall,
+                child: VeryGoodCoreText(
+                  text: post.body.getValue(),
+                  style: context.textTheme.titleSmall,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: _maxBodyLines,
+                ),
+              ),
+              Gap.small(),
+              if (post.tags.isNotEmpty)
                 Padding(
-                  padding: Paddings.allMedium,
-                  child: VeryGoodCoreText(
-                    textType: TextType.styled,
-                    text: _generateStyledLinkText(post.urlOverriddenByDest!.getValue()),
+                  padding: Paddings.horizontalSmall,
+                  child: Wrap(
+                    spacing: AppSizes.xxSmall,
+                    children: post.tags
+                        .take(3)
+                        .map(
+                          (String tag) => Skeleton.leaf(
+                            child: Chip(
+                              label: Text('#$tag', style: context.textTheme.bodySmall),
+                              padding: Paddings.allXxSmall,
+                              visualDensity: VisualDensity.compact,
+                              backgroundColor: context.colorScheme.surfaceContainerLow,
+                              shape: const RoundedRectangleBorder(borderRadius: AppTheme.defaultBorderRadius),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
-              if (post.selftext?.getValue().isNotNullOrBlank ?? false)
-                Flexible(
-                  child: Container(
-                    padding: Paddings.bottomXSmall,
-                    constraints: const BoxConstraints(maxHeight: 200),
-                    child: IgnorePointer(
-                      child: Markdown(
-                        data: post.selftext!.getValue(),
-                        styleSheet: MarkdownStyleSheet(p: context.textTheme.bodyMedium),
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                      ),
-                    ),
-                  ),
-                ),
+              Gap.xSmall(),
               PostContainerFooter(post: post),
             ],
           ),
@@ -63,15 +70,7 @@ class PostContainer extends StatelessWidget {
     ),
   );
 
-  Future<void> launchPostDetails(BuildContext context) async {
-    if (kIsWeb) {
-      await UrlLauncherUtils.launch(Uri.parse(post.permalink.getValue()), webOnlyWindowName: '_blank');
-    } else {
-      context.goRouter.goNamed(
-        RouteName.postDetails.name,
-        pathParameters: <String, String>{'postId': post.uid.getValue()},
-        extra: post,
-      );
-    }
+  void _launchPostDetails(BuildContext context) {
+    PostDetailsRoute(postId: post.uid.getValue(), $extra: post).go(context);
   }
 }

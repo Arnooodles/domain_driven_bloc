@@ -25,7 +25,7 @@ abstract class ValueObject<T> {
     return other is ValueObject<T> && other.value == value;
   }
 
-  Result<Unit> get validate => value.fold(left, (T r) => right(unit));
+  Result<Unit> get validate => value.fold(left, (_) => right(unit));
 
   T getValue() => value.fold((Failure failure) => throw Exception(failure.message), identity);
 

@@ -4,7 +4,7 @@ import 'package:very_good_core/features/auth/data/dto/login_response.dto.dart';
 
 part 'auth_service.chopper.dart';
 
-@ChopperApi(baseUrl: 'https://dummyjson.com/auth')
+@ChopperApi(baseUrl: '/auth')
 abstract interface class AuthService extends ChopperService {
   @POST(path: '/login')
   Future<Response<LoginResponseDTO>> login(@Body() Json loginCredentials);

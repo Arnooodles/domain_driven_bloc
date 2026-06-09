@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fpdart/fpdart.dart' as fpdart;
 import 'package:toastification/toastification.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
@@ -12,7 +13,7 @@ import 'package:very_good_core/core/domain/entity/enum/connection_status.dart';
 import 'package:very_good_core/core/presentation/widgets/very_good_core_icon.dart';
 import 'package:very_good_core/core/presentation/widgets/wrappers/unfocusable_scaffold.dart';
 
-class ConnectivityChecker extends StatefulWidget {
+class ConnectivityChecker extends HookWidget {
   const ConnectivityChecker({required this.child, super.key});
 
   final Widget child;
@@ -40,52 +41,44 @@ class ConnectivityChecker extends StatefulWidget {
   );
 
   @override
-  State<ConnectivityChecker> createState() => _ConnectivityCheckerState();
-}
+  Widget build(BuildContext context) {
+    final ConnectivityUtils connectivityUtils = getIt<ConnectivityUtils>();
+    final ObjectRef<ToastificationItem?> toastificationItemRef = useRef<ToastificationItem?>(null);
 
-class _ConnectivityCheckerState extends State<ConnectivityChecker> {
-  final ConnectivityUtils _connectivityUtils = getIt<ConnectivityUtils>();
-  late final StreamSubscription<ConnectionStatus> _connectionSubscription;
-  ToastificationItem? _toastificationItem;
+    useEffect(() {
+      Future<ToastificationItem> showOfflineDialog() async => DialogUtils.showError(
+        context.i18n.common.error.no_internet_connection,
+        icon: VeryGoodCoreIcon(icon: fpdart.right(Icons.wifi_off)),
+        isDismissable: false,
+      );
 
-  Future<ToastificationItem> _showOfflineDialog(BuildContext context) async => DialogUtils.showError(
-    context.i18n.common.error.no_internet_connection,
-    icon: VeryGoodCoreIcon(icon: fpdart.right(Icons.wifi_off)),
-    isDismissable: false,
-  );
-
-  Future<void> _onStatusChanged(ConnectionStatus connectionStatus) async {
-    if (!mounted) return;
-    switch (connectionStatus) {
-      case ConnectionStatus.offline:
-        if (_toastificationItem?.isRunning ?? false) return;
-        _toastificationItem ??= await _showOfflineDialog(context);
-      case ConnectionStatus.online:
-        if (_toastificationItem != null) {
-          toastification.dismiss(_toastificationItem!);
-          _toastificationItem = null;
+      Future<void> onStatusChanged(ConnectionStatus connectionStatus) async {
+        if (!context.mounted) return;
+        switch (connectionStatus) {
+          case ConnectionStatus.offline:
+            if (toastificationItemRef.value?.isRunning ?? false) return;
+            toastificationItemRef.value ??= await showOfflineDialog();
+          case ConnectionStatus.online:
+            if (toastificationItemRef.value != null) {
+              toastification.dismiss(toastificationItemRef.value!);
+              toastificationItemRef.value = null;
+            }
         }
-    }
-  }
+      }
 
-  @override
-  void initState() {
-    super.initState();
-    _connectionSubscription = _connectivityUtils.internetStatus.listen(_onStatusChanged);
-  }
+      final StreamSubscription<ConnectionStatus> connectionSubscription = connectivityUtils.internetStatus.listen(
+        onStatusChanged,
+      );
 
-  @override
-  Widget build(BuildContext context) => widget.child;
+      return () {
+        unawaited(connectionSubscription.cancel().logOnError());
+        if (toastificationItemRef.value != null) {
+          toastification.dismiss(toastificationItemRef.value!);
+          toastificationItemRef.value = null;
+        }
+      };
+    }, <Object?>[connectivityUtils]);
 
-  @override
-  void dispose() {
-    unawaited(_connectionSubscription.cancel().logOnError());
-
-    ///Dismiss active toast upon dispose
-    if (_toastificationItem != null) {
-      toastification.dismiss(_toastificationItem!);
-      _toastificationItem = null;
-    }
-    super.dispose();
+    return child;
   }
 }

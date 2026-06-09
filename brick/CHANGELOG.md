@@ -1,3 +1,36 @@
+# 5.0.0
+
+- feat: migrate Post features and model schemas from Reddit API to DummyJSON
+- feat: implement infinite scroll pagination in the Post listing
+- feat: implement type-safe routing using `go_router_builder`
+- feat: add reusable `Shimmer` skeletonizer loading widget with custom theme colors
+- feat: replace custom observers and logger with `talker` (bloc, chopper, routing)
+- feat: add `dart_husky` pre-commit hooks and conventional commit validation
+- feat: automate Android and iOS builds, signing (MQSwiftSign), and Firebase App Distribution (CI/CD workflows & local scripts)
+- feat: implement Post API caching and force refresh on pull-to-refresh
+- feat: add AGENTS.md for AI instructions
+- feat: implement `safeEmitPresentation` extension for Cubits to safely emit presentation states
+- refactor: introduce `TaskResult` typedef and migrate core repositories to use `TaskEither` for improved functional asynchronous error handling
+- refactor: remove old git hooks, Fastlane configurations, and custom route name definitions
+- refactor: implement constructor dependency injection for `Talker` and `FailureHandler` across repositories and cubits, removing direct service location getters
+- refactor: optimize post validation in `PostRepository` to short-circuit on the first invalid item
+- refactor: implement `safeRun` for robust error handling in Cubits
+- refactor: use `Constant.defaultPaginationLimit` for default post pagination limit instead of hardcoded value
+- fix: resolve cursor resetting and text input jumps in `LoginScreen` username field
+- fix: resolve memory leak and duplicate scroll listeners in `HomeScreen` `_PostListState`
+- fix: correct `User.name` getter to call `.getValue()` on firstName and lastName value objects
+- fix: correct the ordering of `postalCode` and `country` in `Address.displayAddress` format
+- ios: integrate `SceneDelegate.swift` and automate flavor-specific app icon building via `IconComposer`
+- test: resolve randomized test execution failures by registering robust mock dummy values in test setup
+- chore: upgrade Flutter SDK to 3.44.1, Gradle wrapper to 9.1.0, Java 18, and target/compile SDK 36
+- chore: update pub dependencies and generation tools to latest compatible versions
+- chore: update golden files
+- chore: clean up unused dependencies (`email_validator`, `faker`, `html_unescape`) in `pubspec.yaml`
+- chore: simplify and standardize `.gitignore` files across the workspace and app submodule
+- chore: update GitHub Actions workflows with latest action versions (`setup-java@v5`, `flutter-action@v2.17.0`, etc.)
+- chore: configure CI tests to run with randomize-ordering seed to catch unstable tests
+- docs: update main, brick, and template README documentation to reflect the latest package updates, logging system, shimmer widgets, and build automation workflows
+
 # 4.1.0
 
 - feat: migrate validation logic from `fpvalidate` to `trust_but_verify`

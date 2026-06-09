@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:talker/talker.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/core/domain/cubit/app_core/app_core_cubit.dart';
@@ -53,5 +54,6 @@ import 'package:very_good_core/features/home/domain/interface/i_post_repository.
   MockSpec<StatefulNavigationShell>(),
   MockSpec<RouteMatchList>(),
   MockSpec<FailureHandler>(),
+  MockSpec<Talker>(),
 ])
 void main() {}

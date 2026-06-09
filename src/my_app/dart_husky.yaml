@@ -1,0 +1,15 @@
+dart_husky:
+  verbose: true # print detailed output (default: true)
+  staged_only: false # run on staged files only (default: false)
+
+pre-commit:
+  commands:
+    format:
+      run: make format
+    analyze:
+      run: make lint
+
+commit-msg:
+  commands:
+    conventional:
+      preset: conventional

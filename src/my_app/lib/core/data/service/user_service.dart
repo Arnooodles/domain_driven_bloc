@@ -3,7 +3,7 @@ import 'package:very_good_core/core/data/dto/user.dto.dart';
 
 part 'user_service.chopper.dart';
 
-@ChopperApi(baseUrl: 'https://dummyjson.com/auth')
+@ChopperApi(baseUrl: '/auth')
 abstract interface class UserService extends ChopperService {
   @GET(path: '/me')
   Future<Response<UserDTO>> getCurrentUser();

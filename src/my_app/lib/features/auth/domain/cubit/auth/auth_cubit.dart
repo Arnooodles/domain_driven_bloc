@@ -25,50 +25,57 @@ class AuthCubit extends Cubit<AuthState> {
   final FailureHandler _failureHandler;
 
   Future<void> initialize() async {
-    try {
-      safeEmit(const AuthState.initial());
-      final Result<String?> possibleFailure = await _localStorageRepository.getAccessToken();
-      possibleFailure.fold(_failureHandler.handleFailure, (String? accessToken) async {
-        if (accessToken == null) {
-          safeEmit(const AuthState.unauthenticated());
-        } else {
-          _emitAuthState(await _userRepository.user, isLogout: true);
-        }
-      });
-    } on Exception catch (error) {
-      _emitError(right(error));
-    }
+    await safeRun(
+      action: () async {
+        safeEmit(const AuthState.initial());
+        final Result<String?> possibleFailure = await _localStorageRepository.getAccessToken().run();
+        await possibleFailure.fold((Failure failure) async => _failureHandler.handleFailure(failure), (
+          String? accessToken,
+        ) async {
+          if (accessToken == null) {
+            safeEmit(const AuthState.unauthenticated());
+          } else {
+            _emitAuthState(await _userRepository.user.run(), isLogout: true);
+          }
+        });
+      },
+      onException: (Exception error, StackTrace? stackTrace) => _emitError(right(error), stackTrace: stackTrace),
+    );
   }
 
   Future<void> getUser() async {
-    try {
-      safeEmit(const AuthState.loading());
-      _emitAuthState(await _userRepository.user);
-    } on Exception catch (error) {
-      _emitError(right(error), isLogout: false);
-    }
+    await safeRun(
+      action: () async {
+        safeEmit(const AuthState.loading());
+        _emitAuthState(await _userRepository.user.run());
+      },
+      onException: (Exception error, StackTrace? stackTrace) =>
+          _emitError(right(error), isLogout: false, stackTrace: stackTrace),
+    );
   }
 
   Future<void> authenticate() async {
-    try {
-      safeEmit(const AuthState.loading());
-      _emitAuthState(await _userRepository.user, isLogout: true);
-    } on Exception catch (error) {
-      _emitError(right(error));
-    }
+    await safeRun(
+      action: () async {
+        safeEmit(const AuthState.loading());
+        _emitAuthState(await _userRepository.user.run(), isLogout: true);
+      },
+      onException: (Exception error, StackTrace? stackTrace) => _emitError(right(error), stackTrace: stackTrace),
+    );
   }
 
   Future<void> logout() async {
-    try {
-      safeEmit(const AuthState.loading());
-      final Result<Unit> possibleFailure = await _authRepository.logout();
-      possibleFailure.fold(
-        (Failure failure) => _emitError(left(failure)),
-        (_) => safeEmit(const AuthState.unauthenticated()),
-      );
-    } on Exception catch (error) {
-      _emitError(right(error));
-    }
+    await safeRun(
+      action: () async {
+        safeEmit(const AuthState.loading());
+        final Result<Unit> possibleFailure = await _authRepository.logout().run();
+        possibleFailure.fold(
+          (Failure failure) => _emitError(left(failure)),
+          (_) => safeEmit(const AuthState.unauthenticated()),
+        );
+      },
+      onException: (Exception error, StackTrace? stackTrace) => _emitError(right(error), stackTrace: stackTrace),
+    );
   }
 
   void _emitAuthState(Result<User> possibleFailure, {bool isLogout = false}) {
@@ -77,12 +84,12 @@ class AuthCubit extends Cubit<AuthState> {
     }, (User user) => safeEmit(AuthState.authenticated(user: user)));
   }
 
-  void _emitError(Result<Object> failureOrError, {bool isLogout = true}) {
+  void _emitError(Result<Object> failureOrError, {bool isLogout = true, StackTrace? stackTrace}) {
     if (isLogout) {
       safeEmit(const AuthState.unauthenticated());
     }
-    _failureHandler.handleFailure(
-      failureOrError.fold((Failure failure) => failure, (Object error) => Failure.unexpected(error.toString())),
-    );
+    failureOrError.fold(_failureHandler.handleFailure, (Object error) {
+      _failureHandler.handleException(error as Exception, stackTrace);
+    });
   }
 }
