@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:go_router/go_router.dart';
+import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_icon.dart';
@@ -19,7 +20,7 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends HookWidget im
 
   @override
   Widget build(BuildContext context) => ConstrainedBox(
-    constraints: const BoxConstraints(maxWidth: 800),
+    constraints: const BoxConstraints(maxWidth: Constant.tabletBreakpoint),
     child: Hidable(
       child: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
@@ -42,7 +43,7 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}NavBar extends HookWidget im
 
   void _onItemTapped(BuildContext context, int index) {
     if (index != navigationShell.currentIndex) {
-      navigationShell.goBranch(index, initialLocation: index == navigationShell.currentIndex);
+      navigationShell.goBranch(index);
     }
   }
 }

@@ -39,11 +39,11 @@ void main() {
             ),
           ),
           GoldenTestScenario(
-            name: 'with zero votes',
+            name: 'with zero likes',
             child: MockLocalization(
               appLocalizationCubit: appLocalizationCubit,
               child: PostContainerFooter(
-                post: mockPost.copyWith(upvotes: ValueNumeric(0, fieldName: 'upvotes')),
+                post: mockPost.copyWith(likes: ValueNumeric(0, fieldName: 'likes')),
               ),
             ),
           ),

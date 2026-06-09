@@ -1,69 +1,95 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_sizes.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_app_bar.dart';
-import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_webview.dart';
-import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/wrappers/connectivity_checker.dart';
 import 'package:{{project_name.snakeCase()}}/features/home/domain/entity/post.dart';
 
-class PostDetailsScreen extends HookWidget {
+class PostDetailsScreen extends StatelessWidget {
   const PostDetailsScreen({required this.post, super.key});
 
   final Post post;
 
-  Future<void> _onPopInvoked(BuildContext context, InAppWebViewController? controller, bool didPop) async {
-    if (!didPop) {
-      if (await controller?.canGoBack() ?? false) {
-        await controller?.goBack();
-      } else {
-        if (!context.mounted) return;
-        context.navigator.pop();
-      }
-    }
-  }
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: const {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(leading: BackButton()),
+    body: SingleChildScrollView(
+      padding: Paddings.allLarge,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(post.title.getValue(), style: context.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+          Gap.medium(),
+          if (post.tags.isNotEmpty) ...<Widget>[
+            Wrap(
+              spacing: AppSizes.xSmall,
+              runSpacing: AppSizes.xxSmall,
+              children: post.tags
+                  .map(
+                    (String tag) => Chip(
+                      label: Text('#$tag', style: context.textTheme.bodySmall),
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                      shape: const RoundedRectangleBorder(borderRadius: AppTheme.defaultBorderRadius),
+                    ),
+                  )
+                  .toList(),
+            ),
+            Gap.medium(),
+          ],
+          Text(post.body.getValue(), style: context.textTheme.bodyLarge),
+          Gap.large(),
+          const Divider(),
+          Gap.small(),
+          _ReactionsRow(post: post),
+        ],
+      ),
+    ),
+  );
+}
 
-  Future<void> _onRefresh(InAppWebViewController? webViewController) async {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      await webViewController?.reload();
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      await webViewController?.loadUrl(urlRequest: URLRequest(url: await webViewController.getUrl()));
-    }
-  }
+class _ReactionsRow extends StatelessWidget {
+  const _ReactionsRow({required this.post});
+
+  final Post post;
 
   @override
-  Widget build(BuildContext context) {
-    final ValueNotifier<InAppWebViewController?> webViewController = useState<InAppWebViewController?>(null);
-    final ValueNotifier<int> loadingProgress = useState<int>(0);
-
-    return Builder(
-      builder: (BuildContext context) => PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (bool didPop, _) async => _onPopInvoked(context, webViewController.value, didPop),
-        child: ConnectivityChecker.scaffold(
-          appBar: {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar(leading: BackButton(onPressed: () => context.goRouter.pop())),
-          body: Center(
-            child: Stack(
-              children: <Widget>[
-                {{#pascalCase}}{{project_name}}{{/pascalCase}}Webview(
-                  url: post.permalink.getValue(),
-                  onRefresh: () => _onRefresh(webViewController.value),
-
-                  onWebViewCreated: (InAppWebViewController controller) => webViewController.value = controller,
-                  onProgressChanged: (int progress) => loadingProgress.value = progress,
-                ),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: loadingProgress.value < 100
-                      ? LinearProgressIndicator(value: loadingProgress.value / 100)
-                      : const SizedBox.shrink(),
-                ),
-              ],
-            ),
-          ),
-        ),
+  Widget build(BuildContext context) => Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: <Widget>[
+      _ReactionItem(
+        icon: Icons.thumb_up_outlined,
+        color: context.colorScheme.primary,
+        label: post.likes.getValue().toString(),
       ),
-    );
-  }
+      _ReactionItem(
+        icon: Icons.thumb_down_outlined,
+        color: context.colorScheme.error,
+        label: post.dislikes.getValue().toString(),
+      ),
+      _ReactionItem(
+        icon: Icons.remove_red_eye_outlined,
+        color: context.colorScheme.primary,
+        label: post.views.getValue().toString(),
+      ),
+    ],
+  );
+}
+
+class _ReactionItem extends StatelessWidget {
+  const _ReactionItem({required this.icon, required this.color, required this.label});
+
+  final IconData icon;
+  final Color color;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    children: <Widget>[
+      Icon(icon, color: color, size: AppSizes.large),
+      Gap.xSmall(),
+      Text(label, style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+    ],
+  );
 }

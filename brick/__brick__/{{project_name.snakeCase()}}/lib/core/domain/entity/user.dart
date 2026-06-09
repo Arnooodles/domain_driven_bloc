@@ -25,7 +25,7 @@ sealed class User with _$User {
 
   const User._();
 
-  String get name => '$firstName $lastName';
+  String get name => '${firstName.getValue()} ${lastName.getValue()}';
 
   int? get age => birthDate != null ? (DateTime.now().difference(birthDate!).inDays ~/ 365) : null;
 

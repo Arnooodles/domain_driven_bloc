@@ -9,6 +9,8 @@ import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project
 class EmptyPost extends StatelessWidget {
   const EmptyPost({super.key});
 
+  static const double _iconSize = 200;
+
   @override
   Widget build(BuildContext context) => CustomScrollView(
     slivers: <Widget>[
@@ -20,7 +22,7 @@ class EmptyPost extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.list_alt), size: 200),
+                {{#pascalCase}}{{project_name}}{{/pascalCase}}Icon(icon: right(Icons.list_alt), size: _iconSize),
                 Padding(
                   padding: const EdgeInsets.only(top: AppSizes.small, bottom: AppSizes.xSmall),
                   child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Text(

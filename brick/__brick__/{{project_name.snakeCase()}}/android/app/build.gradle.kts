@@ -35,7 +35,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 kotlin {
-  jvmToolchain(21)
+  jvmToolchain(18)
 }
 
 android {
@@ -44,12 +44,8 @@ android {
     ndkVersion = "29.0.14206865"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString()
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
 
     

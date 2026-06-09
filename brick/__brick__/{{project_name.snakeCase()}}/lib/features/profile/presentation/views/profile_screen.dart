@@ -1,7 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/mock_data.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
@@ -16,6 +15,7 @@ import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_info_text_field.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/{{project_name.snakeCase()}}_text.dart';
 import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/wrappers/scroll_controller_provider.dart';
+import 'package:{{project_name.snakeCase()}}/core/presentation/widgets/wrappers/shimmer.dart';
 import 'package:{{project_name.snakeCase()}}/features/auth/domain/cubit/auth/auth_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -38,7 +38,7 @@ class ProfileScreen extends StatelessWidget {
                   child: BlocBuilder<AuthCubit, AuthState>(
                     builder: (BuildContext context, AuthState authState) => authState.maybeWhen(
                       authenticated: (User user) => _ProfileContent(user: user),
-                      orElse: () => Skeletonizer(child: _ProfileContent(user: MockData.user)),
+                      orElse: () => Shimmer(child: _ProfileContent(user: MockData.user)),
                     ),
                   ),
                 ),
@@ -101,7 +101,6 @@ class _ProfileDetails extends StatelessWidget {
         {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(title: context.i18n.profile.label.phone_number, description: user.phone!.getValue()),
         Gap.small(),
       ],
-      Gap.small(),
       if (user.address != null && user.address!.fullAddress != null) ...<Widget>[
         {{#pascalCase}}{{project_name}}{{/pascalCase}}InfoTextField(title: context.i18n.profile.label.address, description: user.address!.fullAddress!),
         Gap.small(),
@@ -125,13 +124,15 @@ class _ProfileName extends StatelessWidget {
 
   final User user;
 
+  static const double _avatarSize = 80;
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? nameStyle = context.textTheme.headlineMedium;
 
     return Row(
       children: <Widget>[
-        {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(size: 80, imageUrl: user.image?.getValue()),
+        {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(size: _avatarSize, imageUrl: user.image?.getValue()),
         Expanded(
           child: Padding(
             padding: Paddings.allLarge,

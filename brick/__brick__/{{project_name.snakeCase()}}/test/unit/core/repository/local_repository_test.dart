@@ -12,17 +12,20 @@ void main() {
   group(LocalStorageRepository, () {
     late MockSharedPreferences unsecuredStorage;
     late MockFlutterSecureStorage secureStorage;
+    late MockTalker talker;
     late LocalStorageRepository localStorageRepository;
 
     setUp(() {
       unsecuredStorage = MockSharedPreferences();
       secureStorage = MockFlutterSecureStorage();
-      localStorageRepository = LocalStorageRepository(secureStorage, unsecuredStorage);
+      talker = MockTalker();
+      localStorageRepository = LocalStorageRepository(secureStorage, unsecuredStorage, talker);
     });
 
     tearDown(() {
       reset(unsecuredStorage);
       reset(secureStorage);
+      reset(talker);
     });
 
     group('Secure Storage', () {
@@ -31,7 +34,7 @@ void main() {
           const String expectedToken = 'accessToken';
           when(secureStorage.read(key: 'access_token')).thenAnswer((_) async => expectedToken);
 
-          final Result<String?> result = await localStorageRepository.getAccessToken();
+          final Result<String?> result = await localStorageRepository.getAccessToken().run();
 
           expect(result, isA<Right<Failure, String?>>());
           expect(result.asRight(), expectedToken);
@@ -40,7 +43,7 @@ void main() {
         test('getAccessToken should return DeviceStorageError when exception occurs', () async {
           when(secureStorage.read(key: 'access_token')).thenThrow(Exception('Secure storage read error'));
 
-          final Result<String?> result = await localStorageRepository.getAccessToken();
+          final Result<String?> result = await localStorageRepository.getAccessToken().run();
 
           expect(result, isA<Left<Failure, String?>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -50,7 +53,7 @@ void main() {
         test('setAccessToken should save the access token successfully', () async {
           when(secureStorage.write(key: 'access_token', value: anyNamed('value'))).thenAnswer((_) async => true);
 
-          final Result<Unit> result = await localStorageRepository.setAccessToken('access_token');
+          final Result<Unit> result = await localStorageRepository.setAccessToken('access_token').run();
 
           expect(result, isA<Right<Failure, Unit>>());
           verify(secureStorage.write(key: 'access_token', value: 'access_token')).called(1);
@@ -61,7 +64,7 @@ void main() {
             secureStorage.write(key: 'access_token', value: anyNamed('value')),
           ).thenThrow(Exception('Unexpected error'));
 
-          final Result<Unit> result = await localStorageRepository.setAccessToken('access_token');
+          final Result<Unit> result = await localStorageRepository.setAccessToken('access_token').run();
 
           expect(result, isA<Left<Failure, Unit>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -71,7 +74,7 @@ void main() {
         test('deleteAccessToken should delete the access token successfully', () async {
           when(secureStorage.delete(key: 'access_token')).thenAnswer((_) async => true);
 
-          final Result<Unit> result = await localStorageRepository.deleteAccessToken();
+          final Result<Unit> result = await localStorageRepository.deleteAccessToken().run();
 
           expect(result, isA<Right<Failure, Unit>>());
           verify(secureStorage.delete(key: 'access_token')).called(1);
@@ -80,7 +83,7 @@ void main() {
         test('deleteAccessToken should return DeviceStorageError when exception occurs', () async {
           when(secureStorage.delete(key: 'access_token')).thenThrow(Exception('Delete token error'));
 
-          final Result<Unit> result = await localStorageRepository.deleteAccessToken();
+          final Result<Unit> result = await localStorageRepository.deleteAccessToken().run();
 
           expect(result, isA<Left<Failure, Unit>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -93,7 +96,7 @@ void main() {
           const String expectedToken = 'refreshToken';
           when(secureStorage.read(key: 'refresh_token')).thenAnswer((_) async => expectedToken);
 
-          final Result<String?> result = await localStorageRepository.getRefreshToken();
+          final Result<String?> result = await localStorageRepository.getRefreshToken().run();
 
           expect(result, isA<Right<Failure, String?>>());
           expect(result.asRight(), expectedToken);
@@ -102,7 +105,7 @@ void main() {
         test('getRefreshToken should return DeviceStorageError when exception occurs', () async {
           when(secureStorage.read(key: 'refresh_token')).thenThrow(Exception('Refresh token read error'));
 
-          final Result<String?> result = await localStorageRepository.getRefreshToken();
+          final Result<String?> result = await localStorageRepository.getRefreshToken().run();
 
           expect(result, isA<Left<Failure, String?>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -112,7 +115,7 @@ void main() {
         test('setRefreshToken should save the refresh token successfully', () async {
           when(secureStorage.write(key: 'refresh_token', value: anyNamed('value'))).thenAnswer((_) async => true);
 
-          final Result<Unit> result = await localStorageRepository.setRefreshToken('refresh_token');
+          final Result<Unit> result = await localStorageRepository.setRefreshToken('refresh_token').run();
 
           expect(result, isA<Right<Failure, Unit>>());
           verify(secureStorage.write(key: 'refresh_token', value: 'refresh_token')).called(1);
@@ -123,7 +126,7 @@ void main() {
             secureStorage.write(key: 'refresh_token', value: anyNamed('value')),
           ).thenThrow(Exception('Unexpected error'));
 
-          final Result<Unit> result = await localStorageRepository.setRefreshToken('refresh_token');
+          final Result<Unit> result = await localStorageRepository.setRefreshToken('refresh_token').run();
 
           expect(result, isA<Left<Failure, Unit>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -133,7 +136,7 @@ void main() {
         test('deleteRefreshToken should delete the refresh token successfully', () async {
           when(secureStorage.delete(key: 'refresh_token')).thenAnswer((_) async => true);
 
-          final Result<Unit> result = await localStorageRepository.deleteRefreshToken();
+          final Result<Unit> result = await localStorageRepository.deleteRefreshToken().run();
 
           expect(result, isA<Right<Failure, Unit>>());
           verify(secureStorage.delete(key: 'refresh_token')).called(1);
@@ -142,7 +145,7 @@ void main() {
         test('deleteRefreshToken should return DeviceStorageError when exception occurs', () async {
           when(secureStorage.delete(key: 'refresh_token')).thenThrow(Exception('Delete refresh token error'));
 
-          final Result<Unit> result = await localStorageRepository.deleteRefreshToken();
+          final Result<Unit> result = await localStorageRepository.deleteRefreshToken().run();
 
           expect(result, isA<Left<Failure, Unit>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -157,7 +160,7 @@ void main() {
           const String expectedEmail = 'email@example.com';
           when(unsecuredStorage.getString('email_address')).thenReturn(expectedEmail);
 
-          final Result<String?> result = await localStorageRepository.getLastLoggedInUsername();
+          final Result<String?> result = await localStorageRepository.getLastLoggedInUsername().run();
 
           expect(result, isA<Right<Failure, String?>>());
           expect(result.asRight(), expectedEmail);
@@ -166,7 +169,7 @@ void main() {
         test('getLastLoggedInUsername should return DeviceStorageError when exception occurs', () async {
           when(unsecuredStorage.getString('email_address')).thenThrow(Exception('Email read error'));
 
-          final Result<String?> result = await localStorageRepository.getLastLoggedInUsername();
+          final Result<String?> result = await localStorageRepository.getLastLoggedInUsername().run();
 
           expect(result, isA<Left<Failure, String?>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -176,7 +179,7 @@ void main() {
         test('setLastLoggedInUsername should save the email successfully', () async {
           when(unsecuredStorage.setString('email_address', any)).thenAnswer((_) async => true);
 
-          final Result<Unit> result = await localStorageRepository.setLastLoggedInUsername('email@example.com');
+          final Result<Unit> result = await localStorageRepository.setLastLoggedInUsername('email@example.com').run();
 
           expect(result, isA<Right<Failure, Unit>>());
           verify(unsecuredStorage.setString('email_address', 'email@example.com')).called(1);
@@ -185,7 +188,7 @@ void main() {
         test('setLastLoggedInUsername should return failure when an unexpected error occurs', () async {
           when(unsecuredStorage.setString('email_address', any)).thenThrow(Exception('Unexpected error'));
 
-          final Result<Unit> result = await localStorageRepository.setLastLoggedInUsername('email@example.com');
+          final Result<Unit> result = await localStorageRepository.setLastLoggedInUsername('email@example.com').run();
 
           expect(result, isA<Left<Failure, Unit>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -197,7 +200,7 @@ void main() {
         test('getIsDarkMode should return true when dark mode is enabled', () async {
           when(unsecuredStorage.getBool('is_dark_mode')).thenReturn(true);
 
-          final Result<bool?> result = await localStorageRepository.getIsDarkMode();
+          final Result<bool?> result = await localStorageRepository.getIsDarkMode().run();
 
           expect(result, isA<Right<Failure, bool?>>());
           expect(result.asRight(), true);
@@ -206,7 +209,7 @@ void main() {
         test('getIsDarkMode should return DeviceStorageError when exception occurs', () async {
           when(unsecuredStorage.getBool('is_dark_mode')).thenThrow(Exception('Dark mode read error'));
 
-          final Result<bool?> result = await localStorageRepository.getIsDarkMode();
+          final Result<bool?> result = await localStorageRepository.getIsDarkMode().run();
 
           expect(result, isA<Left<Failure, bool?>>());
           expect(result.asLeft(), isA<DeviceStorageError>());
@@ -216,7 +219,7 @@ void main() {
         test('setIsDarkMode should save the dark mode value successfully', () async {
           when(unsecuredStorage.setBool('is_dark_mode', any)).thenAnswer((_) async => true);
 
-          final Result<Unit> result = await localStorageRepository.setIsDarkMode(isDarkMode: true);
+          final Result<Unit> result = await localStorageRepository.setIsDarkMode(isDarkMode: true).run();
 
           expect(result, isA<Right<Failure, Unit>>());
           verify(unsecuredStorage.setBool('is_dark_mode', true)).called(1);
@@ -225,7 +228,7 @@ void main() {
         test('setIsDarkMode should return failure when an unexpected error occurs', () async {
           when(unsecuredStorage.setBool('is_dark_mode', any)).thenThrow(Exception('Unexpected error'));
 
-          final Result<Unit> result = await localStorageRepository.setIsDarkMode(isDarkMode: true);
+          final Result<Unit> result = await localStorageRepository.setIsDarkMode(isDarkMode: true).run();
 
           expect(result, isA<Left<Failure, Unit>>());
           expect(result.asLeft(), isA<DeviceStorageError>());

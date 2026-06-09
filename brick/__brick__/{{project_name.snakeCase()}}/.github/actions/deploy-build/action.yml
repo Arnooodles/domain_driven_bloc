@@ -1,0 +1,87 @@
+name: "Upload Build Artifacts"
+description: "Locates the built app artifact, uploads it to GitHub Actions, generates release notes, and deploys to Firebase App Distribution."
+inputs:
+  platform:
+    description: "Target platform (android or ios)"
+    required: true
+  flavor:
+    description: "App flavor (development, staging, or production)"
+    required: true
+  build_type:
+    description: "Build type (release or debug)"
+    required: true
+  upload_artifact:
+    description: "Whether to upload artifact to GitHub Actions"
+    required: false
+    default: "true"
+  upload_to_firebase:
+    description: "Whether to upload to Firebase App Distribution"
+    required: false
+    default: "true"
+  firebase_app_id:
+    description: "Firebase App ID"
+    required: false
+  firebase_token:
+    description: "Firebase CLI Token"
+    required: false
+  tester_groups:
+    description: "Firebase tester groups"
+    required: false
+  github_token:
+    description: "GitHub Token for fetching last successful commit"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: 📦 Locate Artifact
+      id: locate_artifact
+      run: |
+        ARTIFACT_PATH=$(find outputs -type f \( -name "*.apk" -o -name "*.aab" -o -name "*.ipa" -o -name "*.xcarchive" \) 2>/dev/null | head -n 1)
+        if [[ -z "$ARTIFACT_PATH" ]]; then
+          echo "Artifact not found!" >&2
+          exit 1
+        fi
+        echo "path=$ARTIFACT_PATH" >> $GITHUB_OUTPUT
+        echo "Artifact path: $ARTIFACT_PATH"
+      shell: bash
+
+    - name: 📤 Upload Artifact to GitHub Actions
+      if: ${{ inputs.upload_artifact == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.platform }}-${{ inputs.flavor }}-${{ inputs.build_type }}
+        path: ${{ steps.locate_artifact.outputs.path }}
+        retention-days: 7
+
+    - name: 🔍 Get last successful commit
+      uses: nrwl/last-successful-commit-action@v1
+      id: last_successful_commit
+      with:
+        branch: ${{ github.ref_name }}
+        workflow_id: distribute.yaml
+        github_token: ${{ inputs.github_token }}
+
+    - name: 📝 Generate Release Notes
+      run: |
+        echo "Build Version: ${{ github.run_number }}" > release_notes.txt
+        echo "Flavor: ${{ inputs.flavor }}" >> release_notes.txt
+        echo "Platform: ${{ inputs.platform }}" >> release_notes.txt
+        echo "" >> release_notes.txt
+        echo "Changelog:" >> release_notes.txt
+        if [ -n "${{ steps.last_successful_commit.outputs.commit_hash }}" ] && git merge-base --is-ancestor ${{ steps.last_successful_commit.outputs.commit_hash }} HEAD 2>/dev/null; then
+          git log --oneline ${{ steps.last_successful_commit.outputs.commit_hash }}..HEAD >> release_notes.txt
+        else
+          git log --oneline -n 10 >> release_notes.txt
+        fi
+      shell: bash
+
+    - name: 🚀 Deploy to Firebase App Distribution
+      if: ${{ inputs.upload_to_firebase == 'true' }}
+      uses: emertozd/Firebase-Distribution-Github-Action@v6
+      with:
+        appId: ${{ inputs.firebase_app_id }}
+        token: ${{ inputs.firebase_token }}
+        groups: ${{ inputs.tester_groups }}
+        releaseNotesFile: release_notes.txt
+        file: ${{ steps.locate_artifact.outputs.path }}

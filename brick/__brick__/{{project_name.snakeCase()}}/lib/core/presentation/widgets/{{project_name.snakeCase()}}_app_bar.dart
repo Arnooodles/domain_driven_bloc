@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:{{project_name.snakeCase()}}/app/constants/constant.dart';
 import 'package:{{project_name.snakeCase()}}/app/helpers/extensions/build_context_ext.dart';
-import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
+import 'package:{{project_name.snakeCase()}}/app/routes/app_routes.dart';
+import 'package:{{project_name.snakeCase()}}/app/themes/app_sizes.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_spacing.dart';
 import 'package:{{project_name.snakeCase()}}/app/themes/app_theme.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/cubit/theme/theme_cubit.dart';
@@ -22,7 +23,7 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
     this.backgroundColor,
     this.leading,
     this.automaticallyImplyLeading = false,
-    this.scrolledUnderElevation = 2,
+    this.scrolledUnderElevation = _defaultElevation,
     this.showTitle = true,
     this.bottom,
     this.size,
@@ -40,6 +41,8 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
   final double scrolledUnderElevation;
   final bool showTitle;
 
+  static const double _defaultElevation = 2;
+
   @override
   Size get preferredSize => size ?? Size.fromHeight(AppTheme.defaultAppBarHeight);
 
@@ -53,8 +56,12 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
     BlocBuilder<AuthCubit, AuthState>(
       builder: (BuildContext context, AuthState state) => state.maybeWhen(
         authenticated: (User user) => GestureDetector(
-          onTap: () => context.goRouter.goNamed(RouteName.profile.name),
-          child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(size: 32, imageUrl: user.image?.getValue(), padding: Paddings.allSmall),
+          onTap: () => const ProfileRoute().go(context),
+          child: {{#pascalCase}}{{project_name}}{{/pascalCase}}Avatar(
+            size: AppSizes.xLarge,
+            imageUrl: user.image?.getValue(),
+            padding: Paddings.allSmall,
+          ),
         ),
         orElse: () => const SizedBox.shrink(),
       ),
@@ -63,7 +70,7 @@ class {{#pascalCase}}{{project_name}}{{/pascalCase}}AppBar extends StatelessWidg
 
   @override
   Widget build(BuildContext context) => AppBar(
-    elevation: 2,
+    elevation: _defaultElevation,
     leading: leading,
     automaticallyImplyLeading: automaticallyImplyLeading,
     title: showTitle ? Padding(padding: Paddings.leftXSmall, child: Text(title ?? Constant.appName)) : null,

@@ -1,8 +1,7 @@
+// ignore_for_file: prefer-match-file-name
+
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:{{project_name.snakeCase()}}/app/helpers/injection/service_locator.dart';
-import 'package:{{project_name.snakeCase()}}/app/observers/go_route_observer.dart';
-import 'package:{{project_name.snakeCase()}}/app/routes/route_name.dart';
 import 'package:{{project_name.snakeCase()}}/app/routes/route_navigator_keys.dart';
 import 'package:{{project_name.snakeCase()}}/app/utils/transition_page_utils.dart';
 import 'package:{{project_name.snakeCase()}}/core/domain/entity/enum/slide_transition_type.dart';
@@ -14,60 +13,94 @@ import 'package:{{project_name.snakeCase()}}/features/home/presentation/views/ho
 import 'package:{{project_name.snakeCase()}}/features/home/presentation/views/post_details_screen.dart';
 import 'package:{{project_name.snakeCase()}}/features/profile/presentation/views/profile_screen.dart';
 
-abstract final class AppRoutes {
-  static List<RouteBase> get routes => <RouteBase>[
-    GoRoute(
-      path: RouteName.initial.path,
-      name: RouteName.initial.name,
-      builder: (BuildContext context, GoRouterState state) => const SplashScreen(),
-    ),
-    GoRoute(
-      path: RouteName.login.path,
-      name: RouteName.login.name,
-      builder: (BuildContext context, GoRouterState state) => const LoginScreen(),
-    ),
-    StatefulShellRoute.indexedStack(
-      builder: (BuildContext context, GoRouterState state, StatefulNavigationShell navigationShell) =>
-          MainScreen(navigationShell: navigationShell),
-      branches: <StatefulShellBranch>[
-        // The route branch for the first tab of the bottom navigation bar.
-        StatefulShellBranch(
-          observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: RouteName.home.name)],
-          routes: <RouteBase>[
-            GoRoute(
-              path: RouteName.home.path,
-              name: RouteName.home.name,
-              builder: (BuildContext context, GoRouterState state) => const HomeScreen(),
-              routes: <RouteBase>[
-                GoRoute(
-                  path: RouteName.postDetails.path,
-                  name: RouteName.postDetails.name,
-                  parentNavigatorKey: RouteNavigatorKeys.root,
-                  pageBuilder: (BuildContext context, GoRouterState state) {
-                    final Post post = state.extra! as Post;
-                    return SlideTransitionPage(
-                      key: state.pageKey,
-                      transitionType: SlideTransitionType.rightToLeft,
-                      child: PostDetailsScreen(post: post),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-        // The route branch for the second tab of the bottom navigation bar.
-        StatefulShellBranch(
-          observers: <NavigatorObserver>[getIt<GoRouteObserver>(param1: RouteName.profile.name)],
-          routes: <RouteBase>[
-            GoRoute(
-              path: RouteName.profile.path,
-              name: RouteName.profile.name,
-              builder: (BuildContext context, GoRouterState state) => const ProfileScreen(),
-            ),
-          ],
+part 'app_routes.g.dart';
+
+// ---------------------------------------------------------------------------
+// Top-level typed route declarations consumed by go_router_builder.
+// The generator produces:
+//   • $appRoutes – the List<RouteBase> to pass to GoRouter(routes: …)
+//   • go() / push() helpers via the generated $ClassName mixins
+// ---------------------------------------------------------------------------
+
+@TypedGoRoute<SplashRoute>(path: '/')
+class SplashRoute extends GoRouteData with $SplashRoute {
+  const SplashRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const SplashScreen();
+}
+
+@TypedGoRoute<LoginRoute>(path: '/login')
+class LoginRoute extends GoRouteData with $LoginRoute {
+  const LoginRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const LoginScreen();
+}
+
+@TypedStatefulShellRoute<MainShellRoute>(
+  branches: <TypedStatefulShellBranch<StatefulShellBranchData>>[
+    TypedStatefulShellBranch<HomeBranch>(
+      routes: <TypedRoute<RouteData>>[
+        TypedGoRoute<HomeRoute>(
+          path: '/home',
+          routes: <TypedRoute<RouteData>>[TypedGoRoute<PostDetailsRoute>(path: ':postId')],
         ),
       ],
     ),
-  ];
+    TypedStatefulShellBranch<ProfileBranch>(
+      routes: <TypedRoute<RouteData>>[TypedGoRoute<ProfileRoute>(path: '/profile')],
+    ),
+  ],
+)
+class MainShellRoute extends StatefulShellRouteData {
+  const MainShellRoute();
+
+  @override
+  Widget builder(BuildContext context, GoRouterState state, StatefulNavigationShell navigationShell) =>
+      MainScreen(navigationShell: navigationShell);
+}
+
+class HomeBranch extends StatefulShellBranchData {
+  const HomeBranch();
+}
+
+class ProfileBranch extends StatefulShellBranchData {
+  const ProfileBranch();
+}
+
+class HomeRoute extends GoRouteData with $HomeRoute {
+  const HomeRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
+}
+
+/// Navigates to the post-details screen.
+///
+/// [postId] is carried in the URL path as `:postId`.
+/// [Post] is passed as `$extra` since it is not URL-serialisable.
+class PostDetailsRoute extends GoRouteData with $PostDetailsRoute {
+  const PostDetailsRoute({required this.postId, required this.$extra});
+
+  final String postId;
+
+  final Post $extra;
+
+  /// Push above the shell (full-screen) by using the root navigator key.
+  static final GlobalKey<NavigatorState> $parentNavigatorKey = RouteNavigatorKeys.root;
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) => SlideTransitionPage(
+    key: state.pageKey,
+    transitionType: SlideTransitionType.rightToLeft,
+    child: PostDetailsScreen(post: $extra),
+  );
+}
+
+class ProfileRoute extends GoRouteData with $ProfileRoute {
+  const ProfileRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const ProfileScreen();
 }

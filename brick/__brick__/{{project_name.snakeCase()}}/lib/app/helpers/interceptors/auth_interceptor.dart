@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_constructors_over_static_methods
+
 import 'dart:async';
 
 import 'package:chopper/chopper.dart';
@@ -13,9 +15,21 @@ import 'package:{{project_name.snakeCase()}}/features/auth/domain/interface/i_au
 
 @Singleton(order: -1)
 class AuthInterceptor implements Interceptor {
-  const AuthInterceptor();
+  const AuthInterceptor({
+    ILocalStorageRepository Function()? localStorageRepository,
+    IAuthRepository Function()? authRepository,
+  }) : _localStorageRepository = localStorageRepository ?? _defaultLocalStorageRepository,
+       _authRepository = authRepository ?? _defaultAuthRepository;
 
-  static const String _dummyJsonHost = 'dummyjson.com';
+  final ILocalStorageRepository Function() _localStorageRepository;
+  final IAuthRepository Function() _authRepository;
+
+  static ILocalStorageRepository _defaultLocalStorageRepository() => getIt<ILocalStorageRepository>();
+  static IAuthRepository _defaultAuthRepository() => getIt<IAuthRepository>();
+
+  @factoryMethod
+  static AuthInterceptor create() => const AuthInterceptor();
+
   static const String _refreshPath = '/refresh';
   static const String _loginPath = '/login';
   static const String _authorizationHeader = 'Authorization';
@@ -25,20 +39,18 @@ class AuthInterceptor implements Interceptor {
   FutureOr<Response<BodyType>> intercept<BodyType>(Chain<BodyType> chain) async {
     final Request request = chain.request;
 
-    // Skip interceptor for non-dummyjson requests or refresh requests
-    if (!_shouldIntercept(request)) {
-      return await chain.proceed(request);
+    // Skip refresh and login requests
+    if (_shouldIntercept(request)) {
+      return await _handleAuthenticatedRequest(chain);
     }
-
-    return await _handleAuthenticatedRequest(chain);
+    return await chain.proceed(request);
   }
 
   bool _shouldIntercept(Request request) =>
-      request.uri.host.contains(_dummyJsonHost) &&
       !(request.uri.path.contains(_refreshPath) || request.uri.path.contains(_loginPath));
 
   Future<Response<BodyType>> _handleAuthenticatedRequest<BodyType>(Chain<BodyType> chain) async {
-    final Result<String> possibleFailure = await _getAccessToken();
+    final Result<String> possibleFailure = await _getAccessToken().run();
 
     return possibleFailure.fold(
       (Failure failure) {
@@ -57,14 +69,14 @@ class AuthInterceptor implements Interceptor {
     );
   }
 
-  Future<Result<String>> _getAccessToken() async {
-    final Result<String?> possibleFailure = await getIt<ILocalStorageRepository>().getAccessToken();
+  TaskResult<String> _getAccessToken() => TaskResult<String>(() async {
+    final Result<String?> possibleFailure = await _localStorageRepository().getAccessToken().run();
     return possibleFailure.fold(
       left,
       (String? value) =>
           value.isNotNullOrBlank ? right(value!) : left(const Failure.authentication('Access token not found')),
     );
-  }
+  });
 
   Request _addAuthorizationHeader(Request request, String token) =>
       applyHeader(request, _authorizationHeader, 'Bearer $token');
@@ -73,14 +85,14 @@ class AuthInterceptor implements Interceptor {
     Chain<BodyType> chain,
     Request originalRequest,
   ) async {
-    final Result<Unit> refreshResult = await getIt<IAuthRepository>().refreshToken();
+    final Result<Unit> refreshResult = await _authRepository().refreshToken().run();
 
     if (refreshResult.isLeft()) {
       final Failure failure = refreshResult.asLeft();
       throw Exception('Token refresh failed: ${failure.message}');
     }
 
-    final Result<String> tokenResult = await _getAccessToken();
+    final Result<String> tokenResult = await _getAccessToken().run();
 
     if (tokenResult.isLeft()) {
       final Failure failure = tokenResult.asLeft();
