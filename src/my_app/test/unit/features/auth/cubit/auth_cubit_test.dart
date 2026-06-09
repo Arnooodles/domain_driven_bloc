@@ -4,7 +4,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mockito/mockito.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
-import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/core/domain/entity/user.dart';
 import 'package:very_good_core/features/auth/domain/cubit/auth/auth_cubit.dart';
 
@@ -27,9 +26,9 @@ void main() {
       authCubit = AuthCubit(userRepository, authRepository, localStorageRepository, failureHandler);
 
       // Register dummy values to prevent Mockito's MissingDummyValueError under randomized ordering.
-      provideDummy(Result<User>.right(mockUser));
-      provideDummy(Result<String?>.right('access_token'));
-      provideDummy(Result<Unit>.right(unit));
+      provideDummy(TaskEither<Failure, User>.right(mockUser));
+      provideDummy(TaskEither<Failure, String?>.right('access_token'));
+      provideDummy(TaskEither<Failure, Unit>.right(unit));
     });
 
     tearDown(() async {
@@ -44,12 +43,12 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should emit unauthenticated state when no access token exists',
         build: () {
-          provideDummy(Result<User>.left(const Failure.authentication('Authentication Failed')));
-          provideDummy(Result<String?>.right(null));
+          provideDummy(TaskEither<Failure, User>.left(const Failure.authentication('Authentication Failed')));
+          provideDummy(TaskEither<Failure, String?>.right(null));
           when(
             userRepository.user,
-          ).thenAnswer((_) async => Result<User>.left(const Failure.authentication('Authentication Failed')));
-          when(localStorageRepository.getAccessToken()).thenAnswer((_) async => right(null));
+          ).thenReturn(TaskEither<Failure, User>.left(const Failure.authentication('Authentication Failed')));
+          when(localStorageRepository.getAccessToken()).thenReturn(TaskEither<Failure, String?>.right(null));
 
           return authCubit;
         },
@@ -63,12 +62,12 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should emit unauthenticated state when access token exists but user fetch fails',
         build: () {
-          provideDummy(Result<User>.left(const Failure.authentication('Authentication Failed')));
-          provideDummy(Result<String?>.right('access_token'));
+          provideDummy(TaskEither<Failure, User>.left(const Failure.authentication('Authentication Failed')));
+          provideDummy(TaskEither<Failure, String?>.right('access_token'));
           when(
             userRepository.user,
-          ).thenAnswer((_) async => Result<User>.left(const Failure.authentication('Authentication Failed')));
-          when(localStorageRepository.getAccessToken()).thenAnswer((_) async => right('access_token'));
+          ).thenReturn(TaskEither<Failure, User>.left(const Failure.authentication('Authentication Failed')));
+          when(localStorageRepository.getAccessToken()).thenReturn(TaskEither<Failure, String?>.right('access_token'));
 
           return authCubit;
         },
@@ -83,10 +82,10 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should emit authenticated state when user is successfully fetched',
         build: () {
-          provideDummy(Result<User>.right(mockUser));
-          provideDummy(Result<String?>.right('access_token'));
-          when(userRepository.user).thenAnswer((_) async => Result<User>.right(mockUser));
-          when(localStorageRepository.getAccessToken()).thenAnswer((_) async => right('access_token'));
+          provideDummy(TaskEither<Failure, User>.right(mockUser));
+          provideDummy(TaskEither<Failure, String?>.right('access_token'));
+          when(userRepository.user).thenReturn(TaskEither<Failure, User>.right(mockUser));
+          when(localStorageRepository.getAccessToken()).thenReturn(TaskEither<Failure, String?>.right('access_token'));
 
           return authCubit;
         },
@@ -101,11 +100,11 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should handle server error during initialization',
         build: () {
-          provideDummy(Result<String?>.right('access_token'));
-          when(
-            userRepository.user,
-          ).thenAnswer((_) async => left(const Failure.server(StatusCode.http500, 'Internal server error')));
-          when(localStorageRepository.getAccessToken()).thenAnswer((_) async => right('access_token'));
+          provideDummy(TaskEither<Failure, String?>.right('access_token'));
+          when(userRepository.user).thenReturn(
+            TaskEither<Failure, User>.left(const Failure.server(StatusCode.http500, 'Internal server error')),
+          );
+          when(localStorageRepository.getAccessToken()).thenReturn(TaskEither<Failure, String?>.right('access_token'));
 
           return authCubit;
         },
@@ -122,7 +121,7 @@ void main() {
         build: () {
           when(
             localStorageRepository.getAccessToken(),
-          ).thenAnswer((_) async => left(const Failure.deviceInfo('Storage access failed')));
+          ).thenReturn(TaskEither<Failure, String?>.left(const Failure.deviceInfo('Storage access failed')));
 
           return authCubit;
         },
@@ -137,11 +136,11 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should handle network error during initialization',
         build: () {
-          provideDummy(Result<String?>.right('access_token'));
+          provideDummy(TaskEither<Failure, String?>.right('access_token'));
           when(
             userRepository.user,
-          ).thenAnswer((_) async => left(const Failure.server(StatusCode.http404, 'User not found')));
-          when(localStorageRepository.getAccessToken()).thenAnswer((_) async => right('access_token'));
+          ).thenReturn(TaskEither<Failure, User>.left(const Failure.server(StatusCode.http404, 'User not found')));
+          when(localStorageRepository.getAccessToken()).thenReturn(TaskEither<Failure, String?>.right('access_token'));
 
           return authCubit;
         },
@@ -156,8 +155,8 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should handle unexpected exception during initialization',
         build: () {
-          provideDummy(Result<String?>.right('access_token'));
-          provideDummy(Result<User>.right(mockUser));
+          provideDummy(TaskEither<Failure, String?>.right('access_token'));
+          provideDummy(TaskEither<Failure, User>.right(mockUser));
           when(localStorageRepository.getAccessToken()).thenThrow(Exception('Unexpected storage error'));
 
           return authCubit;
@@ -174,15 +173,15 @@ void main() {
     group('getUser', () {
       setUp(() async {
         authCubit = AuthCubit(userRepository, authRepository, localStorageRepository, failureHandler);
-        provideDummy(Result<User>.right(mockUser));
-        when(userRepository.user).thenAnswer((_) async => Result<User>.right(mockUser));
+        provideDummy(TaskEither<Failure, User>.right(mockUser));
+        when(userRepository.user).thenReturn(TaskEither<Failure, User>.right(mockUser));
       });
 
       blocTest<AuthCubit, AuthState>(
         'should emit authenticated state when user is successfully fetched',
         build: () {
-          provideDummy(Result<User>.right(mockUser));
-          when(userRepository.user).thenAnswer((_) async => Result<User>.right(mockUser));
+          provideDummy(TaskEither<Failure, User>.right(mockUser));
+          when(userRepository.user).thenReturn(TaskEither<Failure, User>.right(mockUser));
 
           return authCubit;
         },
@@ -196,10 +195,10 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should emit loading state and stop when user fetch returns unauthorized',
         build: () {
-          provideDummy(Result<User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
+          provideDummy(TaskEither<Failure, User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
           when(
             userRepository.user,
-          ).thenAnswer((_) async => Result<User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
+          ).thenReturn(TaskEither<Failure, User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
 
           return authCubit;
         },
@@ -242,15 +241,15 @@ void main() {
     group('logout', () {
       setUp(() async {
         authCubit = AuthCubit(userRepository, authRepository, localStorageRepository, failureHandler);
-        provideDummy(Result<User>.right(mockUser));
-        when(userRepository.user).thenAnswer((_) async => Result<User>.right(mockUser));
+        provideDummy(TaskEither<Failure, User>.right(mockUser));
+        when(userRepository.user).thenReturn(TaskEither<Failure, User>.right(mockUser));
       });
 
       blocTest<AuthCubit, AuthState>(
         'should emit unauthenticated state when logout is successful',
         build: () {
-          provideDummy(Result<Unit>.right(unit));
-          when(authRepository.logout()).thenAnswer((_) async => Result<Unit>.right(unit));
+          provideDummy(TaskEither<Failure, Unit>.right(unit));
+          when(authRepository.logout()).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
           return authCubit;
         },
@@ -264,10 +263,10 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should emit unauthenticated state when logout fails',
         build: () {
-          provideDummy(Result<Unit>.left(Failure.unexpected(Exception('Unexpected error').toString())));
+          provideDummy(TaskEither<Failure, Unit>.left(Failure.unexpected(Exception('Unexpected error').toString())));
           when(
             authRepository.logout(),
-          ).thenAnswer((_) async => Result<Unit>.left(Failure.unexpected(Exception('Unexpected error').toString())));
+          ).thenReturn(TaskEither<Failure, Unit>.left(Failure.unexpected(Exception('Unexpected error').toString())));
           when(failureHandler.handleFailure(any)).thenReturn(null);
           return authCubit;
         },
@@ -296,8 +295,8 @@ void main() {
     group('authenticate', () {
       setUp(() async {
         authCubit = AuthCubit(userRepository, authRepository, localStorageRepository, failureHandler);
-        provideDummy(Result<User>.right(mockUser));
-        when(userRepository.user).thenAnswer((_) async => Result<User>.right(mockUser));
+        provideDummy(TaskEither<Failure, User>.right(mockUser));
+        when(userRepository.user).thenReturn(TaskEither<Failure, User>.right(mockUser));
       });
 
       blocTest<AuthCubit, AuthState>(
@@ -313,10 +312,10 @@ void main() {
       blocTest<AuthCubit, AuthState>(
         'should emit unauthenticated state when authentication fails',
         build: () {
-          provideDummy(Result<User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
+          provideDummy(TaskEither<Failure, User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
           when(
             userRepository.user,
-          ).thenAnswer((_) async => Result<User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
+          ).thenReturn(TaskEither<Failure, User>.left(const Failure.server(StatusCode.http401, 'unauthorized')));
 
           return authCubit;
         },

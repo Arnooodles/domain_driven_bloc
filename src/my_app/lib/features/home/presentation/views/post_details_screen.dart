@@ -58,8 +58,16 @@ class _ReactionsRow extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
-      _ReactionItem(icon: Icons.thumb_up_outlined, color: Colors.green, label: post.likes.getValue().toString()),
-      _ReactionItem(icon: Icons.thumb_down_outlined, color: Colors.red, label: post.dislikes.getValue().toString()),
+      _ReactionItem(
+        icon: Icons.thumb_up_outlined,
+        color: context.colorScheme.primary,
+        label: post.likes.getValue().toString(),
+      ),
+      _ReactionItem(
+        icon: Icons.thumb_down_outlined,
+        color: context.colorScheme.error,
+        label: post.dislikes.getValue().toString(),
+      ),
       _ReactionItem(
         icon: Icons.remove_red_eye_outlined,
         color: context.colorScheme.primary,

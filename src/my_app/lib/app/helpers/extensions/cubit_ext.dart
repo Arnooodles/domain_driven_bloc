@@ -2,7 +2,8 @@
 
 import 'dart:async';
 
-import 'package:flutter/services.dart';
+import 'package:bloc_presentation/bloc_presentation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 extension CubitExt<S> on Cubit<S> {
@@ -15,10 +16,10 @@ extension CubitExt<S> on Cubit<S> {
   ///
   /// [onLoading] is only required if [action] is a [Future].
   ///
-  /// Returns TRUE when [onError] is NOT called.
+  /// Returns TRUE when [onException] is NOT called.
   Future<bool> safeRun({
     required FutureOr<void> Function() action,
-    required ValueChanged<Exception> onError,
+    required void Function(Exception, StackTrace?) onException,
     ValueChanged<bool>? onLoading,
   }) async {
     try {
@@ -30,11 +31,18 @@ extension CubitExt<S> on Cubit<S> {
         await result;
       }
       return true;
-    } on Exception catch (e) {
-      onError.call(e);
+    } on Exception catch (error, stackTrace) {
+      onException(error, stackTrace);
       return false;
     } finally {
       onLoading?.call(false);
     }
+  }
+}
+
+extension BlocPresentationMixinExt<S, P> on BlocPresentationMixin<S, P> {
+  void safeEmitPresentation(P event) {
+    if (isClosed) return;
+    emitPresentation(event);
   }
 }

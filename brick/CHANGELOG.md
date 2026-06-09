@@ -9,16 +9,19 @@
 - feat: automate Android and iOS builds, signing (MQSwiftSign), and Firebase App Distribution (CI/CD workflows & local scripts)
 - feat: implement Post API caching and force refresh on pull-to-refresh
 - feat: add AGENTS.md for AI instructions
-- fix: resolve cursor resetting and text input jumps in `LoginScreen` username field
-- fix: resolve memory leak and duplicate scroll listeners in `HomeScreen` `_PostListState`
-- fix: correct `User.name` getter to call `.getValue()` on firstName and lastName value objects
-- fix: correct the ordering of `postalCode` and `country` in `Address.displayAddress` format
+- feat: implement `safeEmitPresentation` extension for Cubits to safely emit presentation states
+- refactor: introduce `TaskResult` typedef and migrate core repositories to use `TaskEither` for improved functional asynchronous error handling
 - refactor: remove old git hooks, Fastlane configurations, and custom route name definitions
 - refactor: implement constructor dependency injection for `Talker` and `FailureHandler` across repositories and cubits, removing direct service location getters
 - refactor: optimize post validation in `PostRepository` to short-circuit on the first invalid item
 - refactor: implement `safeRun` for robust error handling in Cubits
-- test: resolve randomized test execution failures by registering robust mock dummy values in test setup
+- refactor: use `Constant.defaultPaginationLimit` for default post pagination limit instead of hardcoded value
+- fix: resolve cursor resetting and text input jumps in `LoginScreen` username field
+- fix: resolve memory leak and duplicate scroll listeners in `HomeScreen` `_PostListState`
+- fix: correct `User.name` getter to call `.getValue()` on firstName and lastName value objects
+- fix: correct the ordering of `postalCode` and `country` in `Address.displayAddress` format
 - ios: integrate `SceneDelegate.swift` and automate flavor-specific app icon building via `IconComposer`
+- test: resolve randomized test execution failures by registering robust mock dummy values in test setup
 - chore: upgrade Flutter SDK to 3.44.1, Gradle wrapper to 9.1.0, Java 18, and target/compile SDK 36
 - chore: update pub dependencies and generation tools to latest compatible versions
 - chore: update golden files

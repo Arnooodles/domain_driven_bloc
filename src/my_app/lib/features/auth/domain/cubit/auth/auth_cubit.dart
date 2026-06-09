@@ -28,18 +28,18 @@ class AuthCubit extends Cubit<AuthState> {
     await safeRun(
       action: () async {
         safeEmit(const AuthState.initial());
-        final Result<String?> possibleFailure = await _localStorageRepository.getAccessToken();
+        final Result<String?> possibleFailure = await _localStorageRepository.getAccessToken().run();
         await possibleFailure.fold((Failure failure) async => _failureHandler.handleFailure(failure), (
           String? accessToken,
         ) async {
           if (accessToken == null) {
             safeEmit(const AuthState.unauthenticated());
           } else {
-            _emitAuthState(await _userRepository.user, isLogout: true);
+            _emitAuthState(await _userRepository.user.run(), isLogout: true);
           }
         });
       },
-      onError: (Exception error) => _emitError(right(error)),
+      onException: (Exception error, StackTrace? stackTrace) => _emitError(right(error), stackTrace: stackTrace),
     );
   }
 
@@ -47,9 +47,10 @@ class AuthCubit extends Cubit<AuthState> {
     await safeRun(
       action: () async {
         safeEmit(const AuthState.loading());
-        _emitAuthState(await _userRepository.user);
+        _emitAuthState(await _userRepository.user.run());
       },
-      onError: (Exception error) => _emitError(right(error), isLogout: false),
+      onException: (Exception error, StackTrace? stackTrace) =>
+          _emitError(right(error), isLogout: false, stackTrace: stackTrace),
     );
   }
 
@@ -57,9 +58,9 @@ class AuthCubit extends Cubit<AuthState> {
     await safeRun(
       action: () async {
         safeEmit(const AuthState.loading());
-        _emitAuthState(await _userRepository.user, isLogout: true);
+        _emitAuthState(await _userRepository.user.run(), isLogout: true);
       },
-      onError: (Exception error) => _emitError(right(error)),
+      onException: (Exception error, StackTrace? stackTrace) => _emitError(right(error), stackTrace: stackTrace),
     );
   }
 
@@ -67,13 +68,13 @@ class AuthCubit extends Cubit<AuthState> {
     await safeRun(
       action: () async {
         safeEmit(const AuthState.loading());
-        final Result<Unit> possibleFailure = await _authRepository.logout();
+        final Result<Unit> possibleFailure = await _authRepository.logout().run();
         possibleFailure.fold(
           (Failure failure) => _emitError(left(failure)),
           (_) => safeEmit(const AuthState.unauthenticated()),
         );
       },
-      onError: (Exception error) => _emitError(right(error)),
+      onException: (Exception error, StackTrace? stackTrace) => _emitError(right(error), stackTrace: stackTrace),
     );
   }
 
@@ -83,12 +84,16 @@ class AuthCubit extends Cubit<AuthState> {
     }, (User user) => safeEmit(AuthState.authenticated(user: user)));
   }
 
-  void _emitError(Result<Object> failureOrError, {bool isLogout = true}) {
+  void _emitError(Result<Object> failureOrError, {bool isLogout = true, StackTrace? stackTrace}) {
     if (isLogout) {
       safeEmit(const AuthState.unauthenticated());
     }
-    _failureHandler.handleFailure(
-      failureOrError.fold((Failure failure) => failure, (Object error) => Failure.unexpected(error.toString())),
-    );
+    failureOrError.fold(_failureHandler.handleFailure, (Object error) {
+      if (error is Exception && stackTrace != null) {
+        _failureHandler.handleException(error, stackTrace);
+      } else {
+        _failureHandler.handleFailure(Failure.unexpected(error.toString()));
+      }
+    });
   }
 }

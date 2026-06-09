@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import 'package:talker/talker.dart';
 import 'package:very_good_core/app/helpers/extensions/int_ext.dart';
 import 'package:very_good_core/app/helpers/extensions/status_code_ext.dart';
-import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/data/dto/user.dto.dart';
 import 'package:very_good_core/core/data/service/user_service.dart';
 import 'package:very_good_core/core/domain/entity/enum/status_code.dart';
@@ -15,29 +14,30 @@ import 'package:very_good_core/core/domain/interface/i_user_repository.dart';
 
 @LazySingleton(as: IUserRepository)
 class UserRepository implements IUserRepository {
-  UserRepository(this._userService, this._talker, this._failureHandler);
+  UserRepository(this._userService, this._talker);
 
   final UserService _userService;
   final Talker _talker;
-  final FailureHandler _failureHandler;
 
   @override
-  Future<Result<User>> get user async {
-    try {
+  TaskResult<User> get user => TaskResult<User>.tryCatch(
+    () async {
       final Response<UserDTO> response = await _userService.getCurrentUser();
 
       final StatusCode statusCode = response.statusCode.statusCode;
 
       if (statusCode.isSuccess && response.body != null) {
-        return _validateUserData(response.body!);
+        return _validateUserData(response.body!).getOrElse((Failure failure) => throw failure);
+      } else {
+        throw Failure.server(statusCode, response.error.toString());
       }
-
-      return _failureHandler.handleServerError<User>(statusCode, response.error);
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.unexpected(error.toString()));
-    }
-  }
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      if (error is Failure) return error;
+      return Failure.unexpected(error.toString());
+    },
+  );
 
   Result<User> _validateUserData(UserDTO userDTO) {
     final User user = userDTO.toDomain();

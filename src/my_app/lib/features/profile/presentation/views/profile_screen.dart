@@ -124,13 +124,15 @@ class _ProfileName extends StatelessWidget {
 
   final User user;
 
+  static const double _avatarSize = 80;
+
   @override
   Widget build(BuildContext context) {
     final TextStyle? nameStyle = context.textTheme.headlineMedium;
 
     return Row(
       children: <Widget>[
-        VeryGoodCoreAvatar(size: 80, imageUrl: user.image?.getValue()),
+        VeryGoodCoreAvatar(size: _avatarSize, imageUrl: user.image?.getValue()),
         Expanded(
           child: Padding(
             padding: Paddings.allLarge,

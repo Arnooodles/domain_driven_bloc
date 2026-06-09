@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
@@ -26,116 +24,117 @@ class LocalStorageRepository implements ILocalStorageRepository {
 
   /// Secured Storage services
   @override
-  Future<Result<String?>> getAccessToken() async {
-    try {
-      return right(await _securedStorage.read(key: _Keys.accessToken));
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+  TaskResult<String?> getAccessToken() => TaskResult<String?>.tryCatch(
+    () => _securedStorage.read(key: _Keys.accessToken),
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   @override
-  Future<Result<Unit>> setAccessToken(String value) async {
-    try {
+  TaskResult<Unit> setAccessToken(String value) => TaskResult<Unit>.tryCatch(
+    () async {
       if (value.isNotEmpty) {
         await _securedStorage.write(key: _Keys.accessToken, value: value);
       }
-
-      return right(unit);
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+      return unit;
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   @override
-  Future<Result<Unit>> deleteAccessToken() async {
-    try {
+  TaskResult<Unit> deleteAccessToken() => TaskResult<Unit>.tryCatch(
+    () async {
       await _securedStorage.delete(key: _Keys.accessToken);
-      return right(unit);
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+      return unit;
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   @override
-  Future<Result<String?>> getRefreshToken() async {
-    try {
-      return right(await _securedStorage.read(key: _Keys.refreshToken));
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+  TaskResult<String?> getRefreshToken() => TaskResult<String?>.tryCatch(
+    () => _securedStorage.read(key: _Keys.refreshToken),
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   @override
-  Future<Result<Unit>> setRefreshToken(String value) async {
-    try {
+  TaskResult<Unit> setRefreshToken(String value) => TaskResult<Unit>.tryCatch(
+    () async {
       if (value.isNotEmpty) {
         await _securedStorage.write(key: _Keys.refreshToken, value: value);
       }
-      return right(unit);
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+      return unit;
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   @override
-  Future<Result<Unit>> deleteRefreshToken() async {
-    try {
+  TaskResult<Unit> deleteRefreshToken() => TaskResult<Unit>.tryCatch(
+    () async {
       await _securedStorage.delete(key: _Keys.refreshToken);
-      return right(unit);
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+      return unit;
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   /// Unsecured storage services
   @override
-  Future<Result<String?>> getLastLoggedInUsername() async {
-    try {
-      return right(_unsecuredStorage.getString(_Keys.emailAddress));
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+  TaskResult<String?> getLastLoggedInUsername() => TaskResult<String?>.tryCatch(
+    () async => _unsecuredStorage.getString(_Keys.emailAddress),
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   @override
-  Future<Result<Unit>> setLastLoggedInUsername(String value) async {
-    try {
+  TaskResult<Unit> setLastLoggedInUsername(String value) => TaskResult<Unit>.tryCatch(
+    () async {
       if (value.isNotEmpty) {
         await _unsecuredStorage.setString(_Keys.emailAddress, value);
       }
-      return right(unit);
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+      return unit;
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   @override
-  Future<Result<bool?>> getIsDarkMode() async {
-    try {
-      return right(_unsecuredStorage.getBool(_Keys.isDarkMode));
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+  TaskResult<bool?> getIsDarkMode() => TaskResult<bool?>.tryCatch(
+    () async => _unsecuredStorage.getBool(_Keys.isDarkMode),
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 
   @override
-  Future<Result<Unit>> setIsDarkMode({required bool isDarkMode}) async {
-    try {
+  TaskResult<Unit> setIsDarkMode({required bool isDarkMode}) => TaskResult<Unit>.tryCatch(
+    () async {
       await _unsecuredStorage.setBool(_Keys.isDarkMode, isDarkMode);
-      return right(unit);
-    } on Exception catch (error) {
-      _talker.handle(error);
-      return left(Failure.deviceStorage(error.toString()));
-    }
-  }
+      return unit;
+    },
+    (Object error, StackTrace stackTrace) {
+      _talker.handle(error, stackTrace);
+      return Failure.deviceStorage(error.toString());
+    },
+  );
 }

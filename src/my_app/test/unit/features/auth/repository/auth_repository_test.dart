@@ -25,14 +25,15 @@ void main() {
       localStorageRepository = MockILocalStorageRepository();
       talker = MockTalker();
       failureHandler = MockFailureHandler();
-      authRepository = AuthRepository(authService, localStorageRepository, talker, failureHandler);
+      authRepository = AuthRepository(authService, localStorageRepository, talker);
       loginResponseDTO = const LoginResponseDTO(accessToken: 'accessToken', refreshToken: 'refreshToken');
 
       // Register dummy values to prevent Mockito's MissingDummyValueError when stubbing/calling mocked methods.
       provideDummy(mockChopperClient);
       provideDummy(generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-      provideDummy(Result<Unit>.right(unit));
-      provideDummy(Result<String?>.right('refreshToken'));
+      provideDummy(TaskEither<Failure, Unit>.right(unit));
+      provideDummy(TaskEither<Failure, String?>.right('refreshToken'));
+      provideDummy<Either<Failure, Unit>>(right(unit));
     });
 
     tearDown(() {
@@ -47,16 +48,18 @@ void main() {
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setLastLoggedInUsername(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setLastLoggedInUsername(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.login(
-          LoginRequest(
-            username: ValueString('username', fieldName: 'username'),
-            password: Password('password'),
-          ),
-        );
+        final Result<Unit> result = await authRepository
+            .login(
+              LoginRequest(
+                username: ValueString('username', fieldName: 'username'),
+                password: Password('password'),
+              ),
+            )
+            .run();
 
         expect(result, isA<Right<Failure, Unit>>());
       });
@@ -68,32 +71,36 @@ void main() {
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 500));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setLastLoggedInUsername(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setLastLoggedInUsername(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.login(
-          LoginRequest(
-            username: ValueString('username', fieldName: 'username'),
-            password: Password('password'),
-          ),
-        );
+        final Result<Unit> result = await authRepository
+            .login(
+              LoginRequest(
+                username: ValueString('username', fieldName: 'username'),
+                password: Password('password'),
+              ),
+            )
+            .run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
 
       test('login should return failure when unexpected error occurs', () async {
         when(authService.login(any)).thenThrow(Exception('Unexpected error'));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setLastLoggedInUsername(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setLastLoggedInUsername(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.login(
-          LoginRequest(
-            username: ValueString('username', fieldName: 'username'),
-            password: Password('password'),
-          ),
-        );
+        final Result<Unit> result = await authRepository
+            .login(
+              LoginRequest(
+                username: ValueString('username', fieldName: 'username'),
+                password: Password('password'),
+              ),
+            )
+            .run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
@@ -103,15 +110,17 @@ void main() {
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
         when(localStorageRepository.setAccessToken(any)).thenThrow(Exception('Unexpected error'));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setLastLoggedInUsername(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setLastLoggedInUsername(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.login(
-          LoginRequest(
-            username: ValueString('username', fieldName: 'username'),
-            password: Password('password'),
-          ),
-        );
+        final Result<Unit> result = await authRepository
+            .login(
+              LoginRequest(
+                username: ValueString('username', fieldName: 'username'),
+                password: Password('password'),
+              ),
+            )
+            .run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
@@ -120,18 +129,20 @@ void main() {
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
         when(
           localStorageRepository.setRefreshToken(any),
-        ).thenAnswer((_) async => left(const Failure.deviceStorage('Storage access failed')));
-        when(localStorageRepository.setLastLoggedInUsername(any)).thenAnswer((_) async => right(unit));
+        ).thenReturn(TaskEither<Failure, Unit>.left(const Failure.deviceStorage('Storage access failed')));
+        when(localStorageRepository.setLastLoggedInUsername(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.login(
-          LoginRequest(
-            username: ValueString('username', fieldName: 'username'),
-            password: Password('password'),
-          ),
-        );
+        final Result<Unit> result = await authRepository
+            .login(
+              LoginRequest(
+                username: ValueString('username', fieldName: 'username'),
+                password: Password('password'),
+              ),
+            )
+            .run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
@@ -140,16 +151,39 @@ void main() {
         when(
           authService.login(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
         when(localStorageRepository.setLastLoggedInUsername(any)).thenThrow(Exception('Unexpected error'));
 
-        final Result<Unit> result = await authRepository.login(
-          LoginRequest(
-            username: ValueString('username', fieldName: 'username'),
-            password: Password('password'),
-          ),
+        final Result<Unit> result = await authRepository
+            .login(
+              LoginRequest(
+                username: ValueString('username', fieldName: 'username'),
+                password: Password('password'),
+              ),
+            )
+            .run();
+
+        expect(result, isA<Left<Failure, Unit>>());
+      });
+
+      test('login should return failure when LoginResponse entity is invalid', () async {
+        const LoginResponseDTO invalidLoginResponseDTO = LoginResponseDTO(
+          accessToken: '',
+          refreshToken: 'refreshToken',
         );
+        when(
+          authService.login(any),
+        ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(invalidLoginResponseDTO, 200));
+
+        final Result<Unit> result = await authRepository
+            .login(
+              LoginRequest(
+                username: ValueString('username', fieldName: 'username'),
+                password: Password('password'),
+              ),
+            )
+            .run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
@@ -157,37 +191,28 @@ void main() {
 
     group('logout', () {
       test('logout should return unit when successful', () async {
-        when(localStorageRepository.deleteAccessToken()).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.deleteRefreshToken()).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.deleteAccessToken()).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.deleteRefreshToken()).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.logout();
+        final Result<Unit> result = await authRepository.logout().run();
 
         expect(result, isA<Right<Failure, Unit>>());
       });
 
       test('logout should return failure when unexpected error occurs', () async {
         when(localStorageRepository.deleteAccessToken()).thenThrow(Exception('Unexpected error'));
-        when(localStorageRepository.deleteRefreshToken()).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.deleteRefreshToken()).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.logout();
-
-        expect(result, isA<Left<Failure, Unit>>());
-      });
-
-      test('logout should return failure when clearing access token fails', () async {
-        when(localStorageRepository.deleteAccessToken()).thenThrow(Exception('Unexpected error'));
-        when(localStorageRepository.deleteRefreshToken()).thenAnswer((_) async => right(unit));
-
-        final Result<Unit> result = await authRepository.logout();
+        final Result<Unit> result = await authRepository.logout().run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
 
       test('logout should return failure when clearing refresh token fails', () async {
-        when(localStorageRepository.deleteAccessToken()).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.deleteAccessToken()).thenReturn(TaskEither<Failure, Unit>.right(unit));
         when(localStorageRepository.deleteRefreshToken()).thenThrow(Exception('Unexpected error'));
 
-        final Result<Unit> result = await authRepository.logout();
+        final Result<Unit> result = await authRepository.logout().run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
@@ -195,22 +220,22 @@ void main() {
 
     group('refreshToken', () {
       test('refreshToken should return unit when successful', () async {
-        when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
+        when(localStorageRepository.getRefreshToken()).thenReturn(TaskEither<Failure, String?>.right('refreshToken'));
         when(
           authService.refreshToken(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.refreshToken();
+        final Result<Unit> result = await authRepository.refreshToken().run();
 
         expect(result, isA<Right<Failure, Unit>>());
       });
 
       test('refreshToken should return failure when no refresh token is found', () async {
-        when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right(null));
+        when(localStorageRepository.getRefreshToken()).thenReturn(TaskEither<Failure, String?>.right(null));
 
-        final Result<Unit> result = await authRepository.refreshToken();
+        final Result<Unit> result = await authRepository.refreshToken().run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
@@ -219,53 +244,53 @@ void main() {
         when(
           failureHandler.handleServerError<Unit>(any, any),
         ).thenReturn(left(const Failure.unexpected('Server error')));
-        when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
+        when(localStorageRepository.getRefreshToken()).thenReturn(TaskEither<Failure, String?>.right('refreshToken'));
         when(
           authService.refreshToken(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 500));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.refreshToken();
+        final Result<Unit> result = await authRepository.refreshToken().run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
 
       test('refreshToken should return failure when unexpected error occurs', () async {
-        when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
+        when(localStorageRepository.getRefreshToken()).thenReturn(TaskEither<Failure, String?>.right('refreshToken'));
         when(authService.refreshToken(any)).thenThrow(Exception('Unexpected error'));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.refreshToken();
+        final Result<Unit> result = await authRepository.refreshToken().run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
 
       test('refreshToken should return failure when saving access token fails', () async {
-        when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
+        when(localStorageRepository.getRefreshToken()).thenReturn(TaskEither<Failure, String?>.right('refreshToken'));
         when(
           authService.refreshToken(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
         when(localStorageRepository.setAccessToken(any)).thenThrow(Exception('Unexpected error'));
-        when(localStorageRepository.setRefreshToken(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setRefreshToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
 
-        final Result<Unit> result = await authRepository.refreshToken();
+        final Result<Unit> result = await authRepository.refreshToken().run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });
 
       test('refreshToken should return failure when saving refresh token fails', () async {
-        when(localStorageRepository.getRefreshToken()).thenAnswer((_) async => right('refreshToken'));
+        when(localStorageRepository.getRefreshToken()).thenReturn(TaskEither<Failure, String?>.right('refreshToken'));
         when(
           authService.refreshToken(any),
         ).thenAnswer((_) async => generateMockResponse<LoginResponseDTO>(loginResponseDTO, 200));
-        when(localStorageRepository.setAccessToken(any)).thenAnswer((_) async => right(unit));
+        when(localStorageRepository.setAccessToken(any)).thenReturn(TaskEither<Failure, Unit>.right(unit));
         when(
           localStorageRepository.setRefreshToken(any),
-        ).thenAnswer((_) async => left(const Failure.deviceStorage('Storage access failed')));
+        ).thenReturn(TaskEither<Failure, Unit>.left(const Failure.deviceStorage('Storage access failed')));
 
-        final Result<Unit> result = await authRepository.refreshToken();
+        final Result<Unit> result = await authRepository.refreshToken().run();
 
         expect(result, isA<Left<Failure, Unit>>());
       });

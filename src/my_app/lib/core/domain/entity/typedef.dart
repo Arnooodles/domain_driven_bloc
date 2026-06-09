@@ -9,6 +9,7 @@ import 'package:very_good_core/core/domain/entity/failure.dart';
 ///
 /// This is a semantic alias for `Either<Failure, T>` that makes the intent clearer
 typedef Result<T> = Either<Failure, T>;
+typedef TaskResult<T> = TaskEither<Failure, T>;
 
 // ============================================================================
 // JSON Types

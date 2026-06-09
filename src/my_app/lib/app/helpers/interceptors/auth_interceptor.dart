@@ -50,7 +50,7 @@ class AuthInterceptor implements Interceptor {
       !(request.uri.path.contains(_refreshPath) || request.uri.path.contains(_loginPath));
 
   Future<Response<BodyType>> _handleAuthenticatedRequest<BodyType>(Chain<BodyType> chain) async {
-    final Result<String> possibleFailure = await _getAccessToken();
+    final Result<String> possibleFailure = await _getAccessToken().run();
 
     return possibleFailure.fold(
       (Failure failure) {
@@ -69,14 +69,14 @@ class AuthInterceptor implements Interceptor {
     );
   }
 
-  Future<Result<String>> _getAccessToken() async {
-    final Result<String?> possibleFailure = await _localStorageRepository().getAccessToken();
+  TaskResult<String> _getAccessToken() => TaskResult<String>(() async {
+    final Result<String?> possibleFailure = await _localStorageRepository().getAccessToken().run();
     return possibleFailure.fold(
       left,
       (String? value) =>
           value.isNotNullOrBlank ? right(value!) : left(const Failure.authentication('Access token not found')),
     );
-  }
+  });
 
   Request _addAuthorizationHeader(Request request, String token) =>
       applyHeader(request, _authorizationHeader, 'Bearer $token');
@@ -85,14 +85,14 @@ class AuthInterceptor implements Interceptor {
     Chain<BodyType> chain,
     Request originalRequest,
   ) async {
-    final Result<Unit> refreshResult = await _authRepository().refreshToken();
+    final Result<Unit> refreshResult = await _authRepository().refreshToken().run();
 
     if (refreshResult.isLeft()) {
       final Failure failure = refreshResult.asLeft();
       throw Exception('Token refresh failed: ${failure.message}');
     }
 
-    final Result<String> tokenResult = await _getAccessToken();
+    final Result<String> tokenResult = await _getAccessToken().run();
 
     if (tokenResult.isLeft()) {
       final Failure failure = tokenResult.asLeft();

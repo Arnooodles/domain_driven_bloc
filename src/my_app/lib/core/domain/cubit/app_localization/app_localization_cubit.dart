@@ -18,7 +18,7 @@ class AppLocalizationCubit extends Cubit<I18n> {
     await safeRun(
       action: () async => safeEmit(await _appLocalizationRepository.findDeviceLocale().build()),
       // Fallback to first locale if device locale detection fails
-      onError: (Exception _) => safeEmit(AppLocale.values.first.buildSync()),
+      onException: (Exception _, StackTrace? _) => safeEmit(AppLocale.values.first.buildSync()),
     );
 
     // TODO: Example on how to implement remote localization

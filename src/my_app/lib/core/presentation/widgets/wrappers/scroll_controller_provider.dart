@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:very_good_core/core/domain/cubit/hidable/hidable_cubit.dart';
 import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dart';
 
@@ -10,7 +11,7 @@ import 'package:very_good_core/core/domain/entity/enum/app_scroll_controller.dar
 /// by creating them in initState and disposing them in dispose.
 ///
 /// Controllers are provided to descendant widgets via [ScrollControllerProvider.of].
-class ScrollControllerProvider extends StatefulWidget {
+class ScrollControllerProvider extends HookWidget {
   const ScrollControllerProvider({required this.child, super.key});
 
   final Widget child;
@@ -40,68 +41,54 @@ class ScrollControllerProvider extends StatefulWidget {
   }
 
   @override
-  State<ScrollControllerProvider> createState() => _ScrollControllerProviderState();
-}
+  Widget build(BuildContext context) {
+    final Map<AppScrollController, ScrollController> controllers = useMemoized(
+      () => <AppScrollController, ScrollController>{},
+      <Object?>[],
+    );
 
-class _ScrollControllerProviderState extends State<ScrollControllerProvider> {
-  final Map<AppScrollController, ScrollController> _controllers = <AppScrollController, ScrollController>{};
-  final Map<AppScrollController, VoidCallback> _listeners = <AppScrollController, VoidCallback>{};
+    useEffect(
+      () {
+        final Map<AppScrollController, VoidCallback> listeners = <AppScrollController, VoidCallback>{};
 
-  void _initScrollControllers() {
-    for (final AppScrollController appScrollController in AppScrollController.values) {
-      final ScrollController scrollController = ScrollController(debugLabel: appScrollController.name);
-      _addController(appScrollController, scrollController);
-    }
+        for (final AppScrollController appScrollController in AppScrollController.values) {
+          final ScrollController scrollController = ScrollController(debugLabel: appScrollController.name);
+
+          void listener() {
+            if (!scrollController.hasClients || !context.mounted) return;
+            final HidableCubit hidableCubit = context.read<HidableCubit>();
+            final ScrollDirection direction = scrollController.position.userScrollDirection;
+
+            if (direction == ScrollDirection.forward) {
+              hidableCubit.setVisibility(isVisible: true);
+            } else if (direction == ScrollDirection.reverse) {
+              hidableCubit.setVisibility(isVisible: false);
+            }
+          }
+
+          scrollController.addListener(listener);
+          controllers[appScrollController] = scrollController;
+          listeners[appScrollController] = listener;
+        }
+
+        return () {
+          for (final MapEntry<AppScrollController, ScrollController> entry in controllers.entries) {
+            final ScrollController controller = entry.value;
+            final VoidCallback? listener = listeners[entry.key];
+            if (listener != null) {
+              controller.removeListener(listener);
+            }
+            controller.dispose();
+          }
+          controllers.clear();
+          listeners.clear();
+        };
+      },
+      <Object?>[],
+    );
+
+    return _InheritedScrollControllerProvider(controllers: controllers, child: child);
   }
-
-  void _addController(AppScrollController appScrollController, ScrollController scrollController) {
-    void listener() => _onScrollChanged(scrollController);
-    // ignore: always-remove-listener
-    scrollController.addListener(listener);
-    _controllers.putIfAbsent(appScrollController, () => scrollController);
-    _listeners.putIfAbsent(appScrollController, () => listener);
-  }
-
-  void _onScrollChanged(ScrollController scrollController) {
-    if (!scrollController.hasClients) return;
-    final HidableCubit hidableCubit = context.read<HidableCubit>();
-    final ScrollDirection direction = scrollController.position.userScrollDirection;
-
-    if (direction == ScrollDirection.forward) {
-      hidableCubit.setVisibility(isVisible: true);
-    } else if (direction == ScrollDirection.reverse) {
-      hidableCubit.setVisibility(isVisible: false);
-    }
-  }
-
-  void _disposeScrollControllers() {
-    for (final MapEntry<AppScrollController, ScrollController> entry in _controllers.entries) {
-      final ScrollController controller = entry.value;
-      final VoidCallback? listener = _listeners[entry.key];
-      if (listener != null) {
-        controller.removeListener(listener);
-      }
-      controller.dispose();
-    }
-    _controllers.clear();
-    _listeners.clear();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initScrollControllers();
-  }
-
-  @override
-  void dispose() {
-    _disposeScrollControllers();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) =>
-      _InheritedScrollControllerProvider(controllers: _controllers, child: widget.child);
 }
 
 /// InheritedWidget that provides ScrollControllers to descendant widgets.
@@ -114,5 +101,5 @@ class _InheritedScrollControllerProvider extends InheritedWidget {
   ScrollController? getController(AppScrollController key) => controllers[key];
 
   @override
-  bool updateShouldNotify(_InheritedScrollControllerProvider oldWidget) => true;
+  bool updateShouldNotify(_InheritedScrollControllerProvider oldWidget) => controllers != oldWidget.controllers;
 }

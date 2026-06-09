@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 
@@ -37,7 +38,7 @@ class Shimmer extends StatelessWidget {
       textBoneBorderRadius: textBoneBorderRadius,
       containersColor: containersColor,
       ignoreContainers: ignoreContainers,
-      effect: ShimmerEffect(baseColor: baseColor, highlightColor: highlightColor, duration: const Duration(seconds: 1)),
+      effect: ShimmerEffect(baseColor: baseColor, highlightColor: highlightColor, duration: Constant.mediumDelay),
       child: child,
     );
   }

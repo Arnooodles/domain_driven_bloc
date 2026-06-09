@@ -17,16 +17,18 @@ Flutter application using **Clean Architecture** (Feature-driven isolation: `cor
 **Presentation Layer(UI)**
 
 - Keep business logic out. Use stateless widgets + `flutter_hooks` over stateful widgets.
+  - **When to use StatefulWidget:** Only use `StatefulWidget` in rare edge cases where `flutter_hooks` cannot easily replicate the native `State` lifecycle. For example, when using `AutomaticKeepAliveClientMixin` (to preserve state in a `TabBarView`/`PageView`) or when building highly complex custom animations that require a standard `TickerProviderStateMixin` (multiple tickers).
 - **Reusable Components:** Extract reusable widgets, dialogs, and wrappers into `core/presentation/`. **Emphasize using these reusables as much as possible.**
 - **Views (Screens vs Pages):** Place top-level UI components under the `views/` folder. If a distinction is needed, a **Screen** is typically a full-screen layout, while a **Page** might be a sub-route, tab view, or nested layout. If both exist, clearly separate them into `pages/` and `screens/` folders.
 - Use `BlocBuilder`, `BlocConsumer`, and `BlocSelector` for reactive UI, and `BlocPresentationListener` for side effects.
 - **Loading States:** Use `skeletonizer` for sleek loading states instead of plain progress indicators when waiting for data, and utilize the reusable wrapper (shimmer).
 - **Never** perform direct data fetching, direct repository interactions, or complex data transformations here.
+- **Responsiveness:** Always make UIs responsive. Take advantage of `responsive_framework`, `LayoutBuilder`, `MediaQuery`, or any other tools/packages to ensure the app adapts well to different screen sizes and orientations.
 
 **Domain Layer(Business Logic)**
 
 - Use `bloc` or `cubit` for state management (prefer cubits). Utilize `freezed` for union types in states (e.g., `const factory MyState.loading()`).
-- **State Emission:** Use `safeEmit` when emitting states to prevent emitting after the bloc/cubit is closed.
+- **State Emission:** Use `safeEmit` when emitting states and `safeEmitPresentation` for presentation events to prevent emitting after the bloc/cubit is closed.
 - **Async Execution:** Use `safeRun` to safely execute and manage asynchronous operations within a bloc/cubit.
 - **Entities (`*/domain/entities/*`):** Add validations and value objects to entities. Entities must remain pure Dart, completely decoupled from any framework, serialization, or JSON logic. Use `@freezed` to generate immutable entity classes.
 - **Value Objects & Validation:** Encapsulate validation logic inside value objects. Utilize the `trust_but_verify` package for fluent validation chains (e.g., `input.trust('field').isNotEmpty().verifyEither()`).
@@ -36,18 +38,22 @@ Flutter application using **Clean Architecture** (Feature-driven isolation: `cor
 **Data Layer(Infrastructure)**
 
 - **Services:** Handle API communication, third-party integrations, external hardware interfaces, or independent external operations.
-- **Repositories:** Deterministic data handling. They are mostly dependent on services and handle mapping external data to domain entities.
+- **Repositories:** Deterministic data handling. They are mostly dependent on services and handle mapping external data to domain entities. Functions in repositories should use functional programming as return types, returning only a `Failure` or a value `T`.
 - **DTOs (`*.dto.dart`):** Models/DTOs mirror entities but handle serialization. Use `@freezed` and `json_serializable` annotations and rely on generated `_$ClassNameFromJson` functions. Use `toDomain()` and `fromDomain()` methods to seamlessly convert between DTOs and domain entities.
 - Repositories must catch all external exceptions, securely map them to appropriate domain `Failure`s, and return them safely without leaking unhandled exceptions upwards.
+- **Always log failures:** Any caught exception or failure within a repository must be logged using the designated logging mechanism before returning the `Failure`.
 
 ## Rules & Tooling
 
 - **Zero sibling dependencies** in the same layer.
+- **Naming Conventions:** Follow standard Dart naming conventions: `UpperCamelCase` for classes, enums, and typedefs. `lowerCamelCase` for variables, methods, and parameters. `snake_case` for file names and directories. Suffix classes correctly (e.g., `UserRepository`, `AuthCubit`, `UserEntity`, `UserDto`). Avoid single-character names such as "e", "i", "l", etc.
+- **No Magic Numbers:** Avoid using "magic numbers" (hardcoded unnamed numerical values) in code. Extract them to named constants with descriptive names. If a magic number must be used and cannot be extracted (very rare), it **must** be accompanied by an explanatory comment.
+- **Variable/Constant Extraction:** If there are similar values used across files or components (widgets, services, etc.), extract them into variables or constants so they can be reused.
 - **Dependency Injection:** Use constructor injection with `GetIt` and `injectable`.
 - **Environment & Config:** Never hardcode API URLs or sensitive keys. Strictly use `.env` files located in `assets/env/` alongside the `envied` generated environment classes or centralized configurations.
 - **Functional Programming:** Heavily rely on functional programming principles using the `fpdart` package. Use pure functions, immutability, and handle side effects and exceptions using monadic types like `TaskEither`, `Either`, or `Option` rather than throwing and catching errors.
 - **Typedefs:** Take advantage of `typedef`s (like custom `Result` types built on `Either`) to securely handle success/failure states without throwing runtime exceptions.
-- **Error Handling:** Map all external exceptions to domain-specific `Failure` classes. Use a `FailureHandler` to process failures and clearly define `ErrorActions` for consistent error UI rendering, retries, and logging.
+- **Error Handling:** Map all external exceptions to domain-specific `Failure` classes. Use a `FailureHandler` to process failures and clearly define `ErrorActions` for consistent error UI rendering, retries, and logging. `FailureHandler` should only be used in the Domain Layer.
 - **Class Modifiers:** Implement Dart class modifiers (e.g., `sealed`, `final`, `abstract interface class`) to explicitly define class capabilities and prevent unintended inheritance or implementation.
 - **HTTP (`chopper`):** Use Chopper for building type-safe HTTP API clients. Define API interfaces and generate the corresponding implementations.
 - **Utils:** Create reusable pure functional utilities in the `utils/` folder.
@@ -58,7 +64,7 @@ Flutter application using **Clean Architecture** (Feature-driven isolation: `cor
 - **Localization (`slang`):** Do not hardcode strings in UI. Add and modify translations in the JSON files located within `assets/i18n/`, and use generated translation getters via the `slang` package.
 - **Theming:** Use the centralized app theme. Do not hardcode colors, text styles, spacings, or paddings in widgets; strictly rely on `Theme.of(context)` and predefined theme constants.
 - **Testing:**
-  - Strive for at least **~90% test coverage**.
+  - Strive for **100% test coverage** in unit tests, but total code coverage can at least be at **~90%**.
   - **Unit Tests:** Focus on `bloc`/`cubit` logic and `repository` implementations.
   - **Widget Tests:** Use **Golden testing** heavily via `alchemist` to catch UI regressions.
 
@@ -84,7 +90,7 @@ Understand where to place and organize files:
    4. Update directives/docs with your learnings (API limits, timing, edge cases).
    5. The system is now stronger.
 3. **Update directives as you learn:** Directives are living documents. When you discover constraints or better approaches—update them. But don't overwrite directives without asking unless explicitly told to.
-4. **Deliverables vs Intermediates:** Local files or `.tmp/` directories are only for your intermediate processing. Deliverables (the actual Flutter code, tests, etc.) should be placed in their correct project structure so the user can access and run them.
+4. **Deliverables vs Intermediates:** Local files or `.tmp/` directories are only for your intermediate processing. Deliverables (the actual Flutter code, tests, etc.) should be placed in their correct project structure so the user can access and run them. If you create temporary files, you must delete them after use.
 5. **Keep it minimal:** Do not add redundant documentation, automatically generated context files, or extra instructions that increase work without improving success.
 
 ## Common Commands

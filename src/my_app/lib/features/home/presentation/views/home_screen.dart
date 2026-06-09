@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/constants/mock_data.dart';
 import 'package:very_good_core/app/helpers/injection/service_locator.dart';
@@ -51,7 +52,7 @@ class HomeScreen extends StatelessWidget {
   );
 }
 
-class _PostList extends StatefulWidget {
+class _PostList extends HookWidget {
   const _PostList({required this.posts, required this.hasMore, this.isLoadingMore = false});
 
   final List<Post> posts;
@@ -59,57 +60,41 @@ class _PostList extends StatefulWidget {
   final bool isLoadingMore;
 
   @override
-  State<_PostList> createState() => _PostListState();
-}
+  Widget build(BuildContext context) {
+    final ScrollController scrollController = ScrollControllerProvider.of(context, AppScrollController.home);
 
-class _PostListState extends State<_PostList> {
-  late ScrollController _scrollController;
-  bool _listenerAttached = false;
+    useEffect(
+      () {
+        void onScroll() {
+          if (scrollController.hasClients &&
+              scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200 &&
+              hasMore &&
+              !isLoadingMore) {
+            unawaited(context.read<PostCubit>().loadMorePosts());
+          }
+        }
 
-  @override
-  void dispose() {
-    if (_listenerAttached) {
-      _scrollController.removeListener(_onScroll);
-    }
-    super.dispose();
+        scrollController.addListener(onScroll);
+        return () => scrollController.removeListener(onScroll);
+      },
+      <Object?>[scrollController, hasMore, isLoadingMore],
+    );
+
+    return ListView.separated(
+      padding: Paddings.topMedium,
+      controller: scrollController,
+      physics: const ClampingScrollPhysics(),
+      itemCount: posts.length + (isLoadingMore ? 1 : 0),
+      separatorBuilder: (BuildContext context, int index) => Gap.small(),
+      itemBuilder: (BuildContext context, int index) {
+        if (index == posts.length) {
+          return const Padding(
+            padding: Paddings.verticalMedium,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+        return PostContainer(post: posts[index]);
+      },
+    );
   }
-
-  void _onScroll() {
-    if (_scrollController.hasClients &&
-        _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
-        widget.hasMore &&
-        !widget.isLoadingMore) {
-      unawaited(context.read<PostCubit>().loadMorePosts());
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final ScrollController newController = ScrollControllerProvider.of(context, AppScrollController.home);
-    if (_listenerAttached) {
-      _scrollController.removeListener(_onScroll);
-    }
-    _scrollController = newController;
-    _scrollController.addListener(_onScroll);
-    _listenerAttached = true;
-  }
-
-  @override
-  Widget build(BuildContext context) => ListView.separated(
-    padding: Paddings.topMedium,
-    controller: _scrollController,
-    physics: const ClampingScrollPhysics(),
-    itemCount: widget.posts.length + (widget.isLoadingMore ? 1 : 0),
-    separatorBuilder: (BuildContext context, int index) => Gap.small(),
-    itemBuilder: (BuildContext context, int index) {
-      if (index == widget.posts.length) {
-        return const Padding(
-          padding: EdgeInsets.symmetric(vertical: 16),
-          child: Center(child: CircularProgressIndicator()),
-        );
-      }
-      return PostContainer(post: widget.posts[index]);
-    },
-  );
 }

@@ -24,8 +24,11 @@ void main() {
       userService = MockUserService();
       talker = MockTalker();
       failureHandler = MockFailureHandler();
-      userRepository = UserRepository(userService, talker, failureHandler);
+      userRepository = UserRepository(userService, talker);
       user = UserDTO.fromDomain(mockUser);
+
+      // Register dummy value to prevent Mockito's MissingDummyValueError when stubbing/calling mocked methods.
+      provideDummy(generateMockResponse<UserDTO>(user, 200));
     });
 
     tearDown(() {
@@ -41,7 +44,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 200));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return a successful result with the user
         expect(result, isA<Right<Failure, User>>());
@@ -56,7 +59,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(invalidUser, 200));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return a failure due to validation error
         expect(result, isA<Left<Failure, User>>());
@@ -74,7 +77,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 500));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return a server failure
         expect(result, isA<Left<Failure, User>>());
@@ -92,7 +95,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 401));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return a server failure
         expect(result, isA<Left<Failure, User>>());
@@ -110,7 +113,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(user, 404));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return a server failure
         expect(result, isA<Left<Failure, User>>());
@@ -123,7 +126,7 @@ void main() {
         when(userService.getCurrentUser()).thenThrow(Exception('Unexpected error'));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return an unexpected failure
         expect(result, isA<Left<Failure, User>>());
@@ -136,7 +139,7 @@ void main() {
         when(userService.getCurrentUser()).thenThrow(Exception('Connection timeout'));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return an unexpected failure
         expect(result, isA<Left<Failure, User>>());
@@ -155,7 +158,7 @@ void main() {
         ).thenAnswer((_) async => generateMockResponse<UserDTO>(invalidEmailUser, 200));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return validation failure
         expect(result, isA<Left<Failure, User>>());
@@ -169,7 +172,7 @@ void main() {
         when(userService.getCurrentUser()).thenAnswer((_) async => generateMockResponse<UserDTO>(incompleteUser, 200));
 
         // When: Getting the current user
-        final Result<User> result = await userRepository.user;
+        final Result<User> result = await userRepository.user.run();
 
         // Then: Should return validation failure
         expect(result, isA<Left<Failure, User>>());

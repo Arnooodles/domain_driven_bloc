@@ -9,7 +9,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
-import 'package:very_good_core/core/domain/entity/failure.dart';
 import 'package:very_good_core/core/domain/entity/typedef.dart';
 import 'package:very_good_core/core/domain/interface/i_local_storage_repository.dart';
 
@@ -23,14 +22,14 @@ class ThemeCubit extends Cubit<ThemeMode> {
   Future<void> initialize() async {
     await safeRun(
       action: () async {
-        final Result<bool?> possibleFailure = await _localStorageRepository.getIsDarkMode();
+        final Result<bool?> possibleFailure = await _localStorageRepository.getIsDarkMode().run();
         possibleFailure.fold(_failureHandler.handleFailure, (bool? isDarkMode) {
           if (isDarkMode != null) {
             safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
           }
         });
       },
-      onError: (Exception error) => _failureHandler.handleFailure(Failure.unexpected(error.toString())),
+      onException: _failureHandler.handleException,
     );
   }
 
@@ -38,7 +37,7 @@ class ThemeCubit extends Cubit<ThemeMode> {
     await safeRun(
       action: () async {
         final bool isDarkMode = currentBrightness != Brightness.dark;
-        final Result<Unit> possibleFailure = await _localStorageRepository.setIsDarkMode(isDarkMode: isDarkMode);
+        final Result<Unit> possibleFailure = await _localStorageRepository.setIsDarkMode(isDarkMode: isDarkMode).run();
         possibleFailure.fold(_failureHandler.handleFailure, (_) {
           safeEmit(isDarkMode ? ThemeMode.dark : ThemeMode.light);
           // Change system bar brightness
@@ -54,7 +53,7 @@ class ThemeCubit extends Cubit<ThemeMode> {
           );
         });
       },
-      onError: (Exception error) => _failureHandler.handleFailure(Failure.unexpected(error.toString())),
+      onException: _failureHandler.handleException,
     );
   }
 }

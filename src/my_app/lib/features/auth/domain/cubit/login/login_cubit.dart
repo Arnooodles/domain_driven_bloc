@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_presentation/bloc_presentation.dart';
@@ -30,12 +29,12 @@ class LoginCubit extends Cubit<LoginState> with BlocPresentationMixin<LoginState
   Future<void> initialize() async {
     await safeRun(
       action: () async {
-        final Result<String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername();
+        final Result<String?> possibleFailure = await _localStorageRepository.getLastLoggedInUsername().run();
         possibleFailure.fold(_failureHandler.handleFailure, (String? username) {
           safeEmit(state.copyWith(username: username));
         });
       },
-      onError: (Exception error) => _failureHandler.handleFailure(Failure.unexpected(error.toString())),
+      onException: _failureHandler.handleException,
       onLoading: (bool isLoading) => safeEmit(state.copyWith(isLoading: isLoading)),
     );
   }
@@ -49,19 +48,18 @@ class LoginCubit extends Cubit<LoginState> with BlocPresentationMixin<LoginState
         final ValueString validUsername = ValueString(username, fieldName: 'username');
 
         if (validUsername.isValid && validPassword.isValid) {
-          final Result<Unit> possibleFailure = await _authRepository.login(
-            LoginRequest(username: validUsername, password: validPassword),
-          );
+          final Result<Unit> possibleFailure = await _authRepository
+              .login(LoginRequest(username: validUsername, password: validPassword))
+              .run();
 
-          possibleFailure.fold(_emitFailure, (_) => emitPresentation(const LoginPresentationEvent.onSuccess()));
+          possibleFailure.fold(_emitFailure, (_) {
+            safeEmitPresentation(const LoginPresentationEvent.onSuccess());
+          });
         } else {
           _emitFailure(!validUsername.isValid ? validUsername.value.asLeft() : validPassword.value.asLeft());
         }
       },
-      onError: (Exception error) {
-        log(error.toString());
-        _emitFailure(Failure.unexpected(error.toString()));
-      },
+      onException: _failureHandler.handleException,
       onLoading: (bool isLoading) => safeEmit(state.copyWith(isLoading: isLoading)),
     );
   }

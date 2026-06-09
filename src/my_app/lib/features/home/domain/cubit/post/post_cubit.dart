@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/cubit_ext.dart';
 import 'package:very_good_core/app/helpers/mixins/failure_handler.dart';
 import 'package:very_good_core/core/domain/entity/failure.dart';
@@ -20,7 +21,6 @@ class PostCubit extends Cubit<PostState> {
   final IPostRepository _postRepository;
   final FailureHandler _failureHandler;
 
-  static const int _limit = 20;
   int _skip = 0;
 
   Future<void> getPosts({bool forceRefresh = false}) async {
@@ -29,17 +29,16 @@ class PostCubit extends Cubit<PostState> {
         _skip = 0;
         safeEmit(const PostState.loading());
 
-        final Result<List<Post>> possibleFailure = await _postRepository.getPosts(
-          skip: _skip,
-          forceRefresh: forceRefresh,
-        );
+        final Result<List<Post>> possibleFailure = await _postRepository
+            .getPosts(skip: _skip, forceRefresh: forceRefresh)
+            .run();
 
         possibleFailure.fold(_failureHandler.handleFailure, (List<Post> posts) {
           _skip = posts.length;
-          safeEmit(PostState.onSuccess(posts, hasMore: posts.length >= _limit));
+          safeEmit(PostState.onSuccess(posts, hasMore: posts.length >= Constant.defaultPaginationLimit));
         });
       },
-      onError: (Exception error) => _failureHandler.handleFailure(Failure.unexpected(error.toString())),
+      onException: _failureHandler.handleException,
     );
   }
 
@@ -52,7 +51,7 @@ class PostCubit extends Cubit<PostState> {
       action: () async {
         safeEmit(PostState.loadingMore(existingPosts));
 
-        final Result<List<Post>> possibleFailure = await _postRepository.getPosts(skip: _skip);
+        final Result<List<Post>> possibleFailure = await _postRepository.getPosts(skip: _skip).run();
 
         possibleFailure.fold(
           (Failure failure) {
@@ -64,13 +63,11 @@ class PostCubit extends Cubit<PostState> {
             if (state is! _LoadingMore) return;
             _skip += newPosts.length;
             final List<Post> allPosts = <Post>[...existingPosts, ...newPosts];
-            safeEmit(PostState.onSuccess(allPosts, hasMore: newPosts.length >= _limit));
+            safeEmit(PostState.onSuccess(allPosts, hasMore: newPosts.length >= Constant.defaultPaginationLimit));
           },
         );
       },
-      onError: (Exception error) {
-        _failureHandler.handleFailure(Failure.unexpected(error.toString()));
-      },
+      onException: _failureHandler.handleException,
     );
   }
 }

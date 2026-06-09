@@ -13,4 +13,9 @@ final class Constant {
     GlobalCupertinoLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
   ];
+  static const Duration shortDelay = Duration(milliseconds: 500);
+  static const Duration mediumDelay = Duration(seconds: 1);
+  static const Duration longDelay = Duration(seconds: 5);
+  static const Duration debounceDelay = Duration(milliseconds: 300);
+  static const int defaultPaginationLimit = 20;
 }

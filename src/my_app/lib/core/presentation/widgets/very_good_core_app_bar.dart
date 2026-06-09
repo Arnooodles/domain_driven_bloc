@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:very_good_core/app/constants/constant.dart';
 import 'package:very_good_core/app/helpers/extensions/build_context_ext.dart';
 import 'package:very_good_core/app/routes/app_routes.dart';
+import 'package:very_good_core/app/themes/app_sizes.dart';
 import 'package:very_good_core/app/themes/app_spacing.dart';
 import 'package:very_good_core/app/themes/app_theme.dart';
 import 'package:very_good_core/core/domain/cubit/theme/theme_cubit.dart';
@@ -22,7 +23,7 @@ class VeryGoodCoreAppBar extends StatelessWidget implements PreferredSizeWidget 
     this.backgroundColor,
     this.leading,
     this.automaticallyImplyLeading = false,
-    this.scrolledUnderElevation = 2,
+    this.scrolledUnderElevation = _defaultElevation,
     this.showTitle = true,
     this.bottom,
     this.size,
@@ -40,6 +41,8 @@ class VeryGoodCoreAppBar extends StatelessWidget implements PreferredSizeWidget 
   final double scrolledUnderElevation;
   final bool showTitle;
 
+  static const double _defaultElevation = 2;
+
   @override
   Size get preferredSize => size ?? Size.fromHeight(AppTheme.defaultAppBarHeight);
 
@@ -54,7 +57,7 @@ class VeryGoodCoreAppBar extends StatelessWidget implements PreferredSizeWidget 
       builder: (BuildContext context, AuthState state) => state.maybeWhen(
         authenticated: (User user) => GestureDetector(
           onTap: () => const ProfileRoute().go(context),
-          child: VeryGoodCoreAvatar(size: 32, imageUrl: user.image?.getValue(), padding: Paddings.allSmall),
+          child: VeryGoodCoreAvatar(size: AppSizes.xLarge, imageUrl: user.image?.getValue(), padding: Paddings.allSmall),
         ),
         orElse: () => const SizedBox.shrink(),
       ),
@@ -63,7 +66,7 @@ class VeryGoodCoreAppBar extends StatelessWidget implements PreferredSizeWidget 
 
   @override
   Widget build(BuildContext context) => AppBar(
-    elevation: 2,
+    elevation: _defaultElevation,
     leading: leading,
     automaticallyImplyLeading: automaticallyImplyLeading,
     title: showTitle ? Padding(padding: Paddings.leftXSmall, child: Text(title ?? Constant.appName)) : null,

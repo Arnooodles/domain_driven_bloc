@@ -13,6 +13,8 @@ import 'package:very_good_core/features/home/presentation/widgets/post_container
 class PostContainer extends StatelessWidget {
   const PostContainer({required this.post, super.key});
 
+  static const int _maxBodyLines = 5;
+
   final Post post;
 
   @override
@@ -34,7 +36,7 @@ class PostContainer extends StatelessWidget {
                   text: post.body.getValue(),
                   style: context.textTheme.titleSmall,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 5,
+                  maxLines: _maxBodyLines,
                 ),
               ),
               Gap.small(),
