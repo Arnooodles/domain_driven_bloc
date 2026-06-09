@@ -20,7 +20,7 @@ on:
 
 concurrency:
   group: "domain-driven-bloc-${{ github.ref_name }}"
-  cancel-in-progress: true      
+  cancel-in-progress: true
 
 jobs:
   verify-semantic-pull-request:
@@ -40,7 +40,7 @@ jobs:
       - name: 🔧 Get Flutter SDK version from fvm_config.json
         uses: kuhnroyal/flutter-fvm-config-action@v3
         with:
-          path: src/my_app/.fvm/fvm_config.json  
+          path: src/my_app/.fvm/fvm_config.json
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2.17.0
@@ -49,7 +49,7 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: flutter pub get
-         
+
       - name: ⚙️ Run Setup
         run: |
           dart run slang	
@@ -65,8 +65,8 @@ jobs:
           dart analyze lib test
 
       - name: 🧪 Run Tests
-        run: flutter test --dart-define=CI=true --coverage
-        
+        run: flutter test --dart-define=CI=true --coverage --no-pub --test-randomize-ordering-seed random
+
       - name: 📤 Upload Failed Goldens
         uses: actions/upload-artifact@v4
         if: failure()
@@ -78,12 +78,12 @@ jobs:
         uses: hrishikesh-kadam/setup-lcov@v1
 
       - name: 📃 Generate LCOV Report
-        run:  |
+        run: |
           lcov --ignore-errors unused --remove  coverage/lcov.info  'lib/app/*' 'lib/main.dart' '*.g.dart'  '*.freezed.dart' '*.dto.dart' '*.config.dart' '*.chopper.dart' '*_screen.dart' '*_webview.dart' '**/wrappers/*.dart' '*_state.dart' '**/pages/*' '**/service/*' '**/entity/*' '**/dto/*' -o coverage/lcov.info
-          genhtml coverage/lcov.info -o coverage/   
+          genhtml coverage/lcov.info -o coverage/
 
       - name: 📉 Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: ./src/my_app/coverage/lcov.info
-          min_coverage: 80
+          min_coverage: 90
